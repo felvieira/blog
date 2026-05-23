@@ -26,6 +26,8 @@
     <span class="tag">9 min read</span>
   </p>
 
+  <img src="../assets/images/2026-05-23-top-1-claude-code-cover.jpg" alt="Ilustração de cover: developer setup dual-monitor com dashboard estruturado mostrando checkmarks verdes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
   <article>
 <blockquote>
   <p><strong>Inspirado em:</strong> <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">"Becoming a top 1% Claude Code user"</a> de <a href="https://medium.com/@allglenn">allglenn</a> (Towards AI, abril/2026). Este post não traduz nem resume o original — converso com ele, adiciono o que ele não cobriu, e mostro o que aprendi aplicando essas ideias na prática até virar um kit open-source de 41 skills.</p>
@@ -58,6 +60,8 @@
 
 <h2>Os 6 padrões que importam (e o que falta dizer sobre cada um)</h2>
 
+<p><img src="../assets/images/2026-05-23-top-1-claude-code-1-claudemd.jpg" alt="CLAUDE.md como documento com orçamento limitado de instruções: medidor mostrando 150/200 capacidade"></p>
+
 <h3>1. CLAUDE.md: orçamento de instruções, não dump de docs</h3>
 
 <p>O allglenn cita um número que dói: <strong>CLAUDE.md tem orçamento de ~150–200 instruções. O system prompt já come 50.</strong> Cada linha que você adiciona sem o Claude precisar dilui as que importam.</p>
@@ -81,6 +85,8 @@
 <p>Isso multiplica o budget. Em vez de empilhar tudo na raiz, você fragmenta por área. O Claude carrega só o que importa pro arquivo que está editando.</p>
 
 <p><strong>Geração automática de CLAUDE.md específico.</strong> Existe uma skill no <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a> (skill 28) que faz auditoria do repo e gera um CLAUDE.md já adaptado ao stack real (sem inventar). É a forma de não cair na armadilha "escrevi CLAUDE.md genérico que não bate com nada".</p>
+
+<p><img src="../assets/images/2026-05-23-top-1-claude-code-2-hooks.jpg" alt="12 engrenagens interconectadas em fluxo circular representando os 12 eventos de lifecycle de hooks do Claude Code"></p>
 
 <h3>2. Hooks: a infra invisível que separa amador de pro</h3>
 
@@ -107,6 +113,8 @@
 </ul>
 
 <p>O ponto: hooks não são só pra lint. Eles são <strong>onde você codifica julgamento que o modelo não tem</strong>.</p>
+
+<p><img src="../assets/images/2026-05-23-top-1-claude-code-3-subagents.jpg" alt="Quatro agentes paralelos trabalhando simultaneamente em aspectos diferentes do código: security, tests, style, writing"></p>
 
 <h3>3. Subagents: o pattern "duas Claudes" é só o começo</h3>
 
