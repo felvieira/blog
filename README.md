@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-05-23** — [Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo)](posts/2026-05-23-top-1-claude-code.html) (🇧🇷 PT)
 <!-- BLOG_INDEX_END -->
 
 ## Estrutura

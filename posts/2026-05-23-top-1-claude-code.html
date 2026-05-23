@@ -1,0 +1,243 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo) — felvieira's blog</title>
+<meta name="description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Comentário sobre o playbook do allglenn no Towards AI, com o que ele não cobriu + bench público de 53 cenários (pass rate 92.6%).">
+<meta property="og:title" content="Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo)">
+<meta property="og:description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Comentário sobre o playbook do allglenn no Towards AI, com o que ele não cobriu + bench público de 53 cenários (pass rate 92.6%).">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-top-1-claude-code-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo)</h1>
+  <p class="meta">
+    <span>22 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <article>
+<blockquote>
+  <p><strong>Inspirado em:</strong> <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">"Becoming a top 1% Claude Code user"</a> de <a href="https://medium.com/@allglenn">allglenn</a> (Towards AI, abril/2026). Este post não traduz nem resume o original — converso com ele, adiciono o que ele não cobriu, e mostro o que aprendi aplicando essas ideias na prática até virar um kit open-source de 41 skills.</p>
+</blockquote>
+
+<p><strong>TL;DR:</strong> A diferença entre quem está no top 1% do Claude Code e quem está usando como um Stack Overflow turbinado não é prompting melhor. É <em>mentalidade de infraestrutura</em> aplicada a uma ferramenta de IA. Este post mostra os 6 padrões que separam os dois grupos — e prova com números medidos: pass rate de 92.6% num bench público de 53 cenários, +1.84 de delta médio de qualidade, 98% de redução de tokens em loops autônomos.</p>
+
+<hr>
+
+<h2>O problema que ninguém quer admitir</h2>
+
+<p>Você abre o terminal. Digita <code>claude</code>. Descreve uma feature. O Claude escreve uns arquivos. Você revisa, empurra um ou outro ajuste, e dá ship. Sente que produziu. Conta isso no daily.</p>
+
+<p>Mas o que está acontecendo de verdade é: você está usando o Claude Code como um <strong>Stack Overflow mais rápido</strong>. Continua sendo você quem segura todos os fios, gerencia toda mudança de contexto, baby-sitta cada decisão. A ferramenta é impressionante. Seu workflow com ela, não.</p>
+
+<p>O <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">artigo do allglenn no Towards AI</a> abre exatamente nesse ponto, e ele tem razão. Mas o problema não é só de awareness. É de <strong>onde botar o esforço</strong>.</p>
+
+<p>O top 1% não é melhor em prompting. Ele construiu <em>sistema</em>:</p>
+
+<ul>
+  <li><code>CLAUDE.md</code> que carrega contexto perfeito toda sessão</li>
+  <li><strong>Hooks</strong> que aplicam quality gates sem perguntar</li>
+  <li><strong>Subagents</strong> rodando em paralelo, cada um atacando uma parte</li>
+  <li><strong>MCP servers</strong> dando ao Claude acesso real ao banco, GitHub, ferramentas internas</li>
+</ul>
+
+<p>Eu segui esse caminho durante meses. Fiz cada um desses passos. E aí descobri uma coisa que o artigo do allglenn deixa de fora: <strong>existe um próximo nível depois de ter o sistema montado</strong>. É quando você para de só <em>usar</em> o sistema e começa a <em>medir</em> se ele realmente funciona.</p>
+
+<hr>
+
+<h2>Os 6 padrões que importam (e o que falta dizer sobre cada um)</h2>
+
+<h3>1. CLAUDE.md: orçamento de instruções, não dump de docs</h3>
+
+<p>O allglenn cita um número que dói: <strong>CLAUDE.md tem orçamento de ~150–200 instruções. O system prompt já come 50.</strong> Cada linha que você adiciona sem o Claude precisar dilui as que importam.</p>
+
+<p>O teste que ele propõe é cirúrgico:</p>
+
+<blockquote>
+  <p>"Antes de commitar qualquer linha, pergunte: o Claude erraria no meu codebase sem isso? Se a resposta for não, apague a linha."</p>
+</blockquote>
+
+<p>Funciona. Mas tem 2 coisas que ele não explora:</p>
+
+<p><strong>Hierarquia de arquivos.</strong> O Claude Code carrega CLAUDE.md em cascata. Subdiretórios têm seus próprios CLAUDE.md carregados <em>sob demanda</em>:</p>
+
+<pre><code>~/.claude/CLAUDE.md          ← global
+./CLAUDE.md                  ← raiz do repo (commit)
+./CLAUDE.local.md            ← override pessoal (gitignore)
+./src/api/CLAUDE.md          ← carregado quando trabalhar em api/
+./src/db/CLAUDE.md           ← carregado quando trabalhar em db/</code></pre>
+
+<p>Isso multiplica o budget. Em vez de empilhar tudo na raiz, você fragmenta por área. O Claude carrega só o que importa pro arquivo que está editando.</p>
+
+<p><strong>Geração automática de CLAUDE.md específico.</strong> Existe uma skill no <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a> (skill 28) que faz auditoria do repo e gera um CLAUDE.md já adaptado ao stack real (sem inventar). É a forma de não cair na armadilha "escrevi CLAUDE.md genérico que não bate com nada".</p>
+
+<h3>2. Hooks: a infra invisível que separa amador de pro</h3>
+
+<p>Aqui o artigo do allglenn é bom mas conservador. Ele mostra 3 hooks (PostToolUse pra lint, PreToolUse pra bloquear comandos perigosos, Stop pra session summary). Funciona. Mas o ecossistema de hooks vai muito além.</p>
+
+<p><strong>12 eventos de lifecycle</strong> que o Claude Code expõe:</p>
+
+<ul>
+  <li><code>UserPromptSubmit</code> — antes do prompt sair</li>
+  <li><code>PreToolUse</code> / <code>PostToolUse</code> — antes/depois de qualquer tool</li>
+  <li><code>SessionStart</code> / <code>Stop</code> — abertura e fechamento</li>
+  <li><code>SubagentStop</code> — quando subagent termina (pra encadear pipelines)</li>
+  <li>...e mais 6</li>
+</ul>
+
+<p>Onde isso fica interessante é quando você combina hooks pra <strong>compensar fraquezas conhecidas do modelo</strong>. Exemplos reais que rodam no kit que mantenho:</p>
+
+<ul>
+  <li><strong>pre-execution-gate</strong> — detecta prompt vago e pede confirmação antes de gastar tokens em algo errado</li>
+  <li><strong>keyword-detector</strong> — injeta automaticamente a skill certa baseado em keywords do prompt</li>
+  <li><strong>context-guard</strong> — alerta em 50% de uso de contexto, bloqueia em 75% com resumo inteligente</li>
+  <li><strong>pre-tool-enforcer</strong> — relê o arquivo antes de editar (combate context decay em conversas longas)</li>
+  <li><strong>intent-classifier</strong> — classifica intent do prompt (feature/bug/refactor/spike) e sugere o pipeline certo</li>
+</ul>
+
+<p>O ponto: hooks não são só pra lint. Eles são <strong>onde você codifica julgamento que o modelo não tem</strong>.</p>
+
+<h3>3. Subagents: o pattern "duas Claudes" é só o começo</h3>
+
+<p>O artigo descreve o <strong>two-Claude review</strong>: sessão A implementa, sessão B revisa o diff cold. Concordo 100% — é uma das técnicas mais úteis e subutilizadas.</p>
+
+<p>Mas existe um pattern mais poderoso que ele não toca: <strong>multi-agent paralelo em worktrees isolados</strong>.</p>
+
+<p>Em vez de uma sessão de review, você dispara 4 reviewers em paralelo, cada um focado num eixo diferente:</p>
+
+<ul>
+  <li><code>code-reviewer</code> — clean code, DRY, SOLID</li>
+  <li><code>security-auditor</code> — OWASP Top 10 + PoC obrigatório pra criticals</li>
+  <li><code>test-engineer</code> — coverage + edge cases não cobertos</li>
+  <li><code>anti-ai-writing</code> — varre os 29 padrões de "prosa de IA" em docs/PRDs/comentários</li>
+</ul>
+
+<p>Cada um roda em <code>isolation: worktree</code> (git worktree separado, sem contaminação cross-agent). Volta um relatório estruturado. Você sintetiza.</p>
+
+<p>Por que isso importa: <strong>contexto fresco por dimensão</strong>. O reviewer de segurança não vê o blob de discussão sobre performance, então não relativiza um finding crítico só porque "tem trade-off". Cada agente está laser-focado.</p>
+
+<p>Na <a href="https://github.com/felvieira/claude-skills-fv/blob/main/programs/comprehensive-review.yml">implementação do kit</a>, isso virou um program YAML executável de 5 fases — não precisa lembrar o setup toda vez.</p>
+
+<h3>4. MCP: o princípio do least-privilege é não-negociável</h3>
+
+<p>Aqui o allglenn acerta o ponto crítico: <strong>read-only por padrão</strong>. Você configura dois servidores: um read-only pra exploração e debugging, outro read-write atrás de permissão explícita.</p>
+
+<p>O que falta no artigo é tratar MCP como <strong>superfície de ataque</strong>. Cada MCP server é código de terceiros que tem acesso aos seus dados. Recomendações práticas:</p>
+
+<ul>
+  <li><strong>Audit antes de instalar.</strong> O servidor é open-source? Tem revisão pública? Há quanto tempo o último commit?</li>
+  <li><strong>Tokens com escopo mínimo.</strong> GitHub MCP não precisa de admin scope. Postgres MCP não precisa de superuser.</li>
+  <li><strong>Logs estruturados de chamadas MCP.</strong> Pra você auditar depois.</li>
+  <li><strong>Servidor próprio em vez de público quando dados são sensíveis.</strong> Roda local, sob seu controle.</li>
+</ul>
+
+<p>O <a href="https://modelcontextprotocol.io">spec do MCP</a> é razoavelmente novo e o ecossistema está em consolidação. Não baixe servidor de qualquer um.</p>
+
+<h3>5. Skills vs MCP: a heurística que o artigo dá funciona até um ponto</h3>
+
+<p>O allglenn dá uma regra clara:</p>
+
+<ul>
+  <li><strong>Skill</strong> = workflow, padrão, conhecimento de domínio</li>
+  <li><strong>MCP</strong> = dado vivo ou ação</li>
+  <li>Quando em dúvida, prefere skill (auditável, código aberto)</li>
+</ul>
+
+<p>Vou um passo além: <strong>skills são código auditável; MCP é black box</strong>. Por isso o kit que mantenho tem 41 skills e MCPs são opt-in. Skill é markdown que você lê em 30 segundos. MCP é processo Node/Python rodando com permissões.</p>
+
+<p>A composição que funciona: skill chama MCP quando precisa de dado vivo, mas a <em>política</em> do que fazer com esse dado mora na skill (auditável).</p>
+
+<h3>6. Os patterns avançados que ninguém ensina</h3>
+
+<p>O artigo lista alguns: <code>/compact</code> manual em 50% de contexto, <code>/loop</code> pra monitoramento background, model selection per task (Haiku/Sonnet/Opus), remote-control, <code>/voice</code>.</p>
+
+<p>Vou adicionar 3 que mudaram meu workflow:</p>
+
+<p><strong>Cross-call output dedup com MinHash.</strong> Em loops autônomos, você re-roda <code>npm test</code> e <code>git status</code> dezenas de vezes. Cada vez paga o custo total do output. Com cross-call dedup (janela deslizante de 16 chamadas + Jaccard ≥0.85), runs idênticos ou ~85% similares viram um marker curto. <strong>Resultado medido: 98% de redução de tokens em second-run.</strong> Existe um <a href="https://github.com/felvieira/claude-skills-fv/tree/main/bench">benchmark público</a> que você roda em 30s.</p>
+
+<p><strong>Loops autônomos com circuit breaker.</strong> Não basta ter <code>/loop</code>. Você precisa de detecção de "mesmo erro 3x" (loop infinito), stall detection (3 iterações sem <code>git diff</code>), token cap, e exit codes classificados pra integração com CI. Sem isso, você dorme e acorda com a fatura da Anthropic em 4 dígitos.</p>
+
+<p><strong>Eval bench público dos seus próprios agents.</strong> Esse é o nível que o artigo não toca. Cada skill que você criou: ela realmente melhora o output, ou é placebo? <a href="https://github.com/felvieira/claude-skills-fv/blob/main/analyze-doc/index.pt-BR.html">Rodamos um bench em 53 cenários</a> (Pass A = modelo frio sem skill, Pass B = skill carregada, rubrica de 5 critérios × 1-5). Pass rate medido: 92.6%, delta médio de +1.84. Quando uma skill falha o bench, vira fix concreto na próxima versão — não justificamos achados.</p>
+
+<hr>
+
+<h2>O que separa quem só lê esse tipo de artigo de quem aplica</h2>
+
+<p>Vou ser direto: <strong>ler artigos como o do allglenn não muda nada</strong>. O que muda é tratar isso como engenharia de infra — sistemática, iterativa, mensurável.</p>
+
+<p>O artigo dele propõe um plano de 5 dias (CLAUDE.md → hook → two-Claude review → subagent → MCP). É um bom plano. Mas a parte que ele não enfatiza é a <strong>compounding</strong>: cada setup que você faz hoje compounda em cada sessão futura.</p>
+
+<p>Se você investe 30 minutos hoje configurando um hook que roda <code>npm run lint --fix</code> em PostToolUse, vai economizar 30 minutos <em>por dia</em> pelo resto do tempo que esse projeto existir. Em 6 meses, são 90 horas que não estão indo pra lint manual.</p>
+
+<p>É por isso que vale a pena fazer isso <strong>antes</strong> de você precisar. O sistema só funciona se estiver pronto quando a pressão chegar.</p>
+
+<hr>
+
+<h2>O atalho que existe</h2>
+
+<p>O artigo do allglenn lista vários repos da comunidade no final: <a href="https://github.com/shanraisshan/claude-code-best-practice">claude-code-best-practice</a> (20k+ stars), <a href="https://github.com/hesreallyhim/awesome-claude-code">awesome-claude-code</a>, e outros. Vale visitar todos.</p>
+
+<p>Mas existe outro caminho que eu construí pessoalmente: o <a href="https://github.com/felvieira/claude-skills-fv"><strong>Dev Team Kit</strong></a>, plugin Apache-2.0 que materializa todos esses padrões num único install:</p>
+
+<ul>
+  <li>41 skills (PO, designer, backend, frontend, QA, security, SRE, refactor, release, …) — incluindo <code>blog-publisher</code> e <code>blog-screenshot</code> que estão publicando este post agora</li>
+  <li>15 subagents dispatcháveis em paralelo (code-reviewer, security-auditor, debugger, 4 detective subagents pra legado)</li>
+  <li>32 slash commands (<code>/spec</code>, <code>/plan</code>, <code>/build</code>, <code>/test</code>, <code>/review</code>, <code>/swarm</code>, <code>/auto</code>, …)</li>
+  <li>7 pipelines YAML executáveis (incl. <code>comprehensive-review</code> com 5 agentes paralelos, <code>adversarial-dev</code> GAN-inspired, <code>detective-spec</code> pra reverse-engineering de legado)</li>
+  <li>19 hooks de lifecycle configuráveis em 4 níveis de autonomia</li>
+  <li>Bench público de qualidade com 53 cenários, reprodutível</li>
+  <li>Apache-2.0 + NOTICE com atribuição preservada a 17+ projetos open-source que inspiraram ele</li>
+</ul>
+
+<p>Install:</p>
+
+<pre><code>claude plugin install https://github.com/felvieira/claude-skills-fv</code></pre>
+
+<p>Funciona em Claude Code, Cursor, Windsurf, Copilot, Gemini CLI, OpenCode.</p>
+
+<hr>
+
+<h2>O que fica</h2>
+
+<p>O <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">artigo do allglenn</a> é o melhor playbook gratuito que vi pra quem está saindo do nível "Claude Code = Stack Overflow rápido". Recomendo ler na íntegra.</p>
+
+<p>Mas se você levar uma frase desse post pra casa, que seja esta: <strong>o top 1% não é melhor em prompting. É melhor em design de sistemas. E sistemas só ficam bons quando você mede se funcionam.</strong></p>
+
+<p>Construa o CLAUDE.md (curto). Bote os hooks. Defina os subagents. Conecte os MCPs. <em>E depois</em> meça. Bench público, números reais, fix derivado do bench, re-bench.</p>
+
+<p>O 1% não é um clube fechado. É só quem trata isso como engenharia.</p>
+
+<hr>
+
+<h3>Recursos pra continuar</h3>
+
+<ul>
+  <li><strong>Artigo original:</strong> <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">"Becoming a top 1% Claude Code user"</a> — allglenn no Towards AI</li>
+  <li><strong>Docs oficiais:</strong> <a href="https://docs.claude.com/en/docs/claude-code/overview">code.claude.com/docs</a></li>
+  <li><strong>Best practices da Anthropic:</strong> <a href="https://docs.claude.com/en/docs/claude-code/overview">code.claude.com/docs/en/best-practices</a></li>
+  <li><strong>MCP Protocol spec:</strong> <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></li>
+  <li><strong>Lista da comunidade:</strong> <a href="https://github.com/hesreallyhim/awesome-claude-code">awesome-claude-code</a></li>
+  <li><strong>Dev Team Kit (o sistema que mantenho):</strong> <a href="https://github.com/felvieira/claude-skills-fv">github.com/felvieira/claude-skills-fv</a></li>
+  <li><strong>Bench público do kit:</strong> <a href="https://felvieira.github.io/claude-skills-fv/analyze-doc/index.pt-BR.html">analyze-doc/index.pt-BR.html</a></li>
+</ul>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-23 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-top-1-claude-code.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>
