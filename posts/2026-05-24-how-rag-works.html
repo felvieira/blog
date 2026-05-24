@@ -1,0 +1,239 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do deep dive de Neo Kim e Eric Roby sobre Retrieval-Augmented Generation — por que long context e fine-tuning falham, como embeddings habilitam busca semântica, pipelines de ingestão e retrieval, hybrid search, agentic RAG e a stack pra começar.">
+<meta property="og:title" content="Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do deep dive de Neo Kim e Eric Roby sobre Retrieval-Augmented Generation — por que long context e fine-tuning falham, como embeddings habilitam busca semântica, pipelines de ingestão e retrieval, hybrid search, agentic RAG e a stack pra começar.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-how-rag-works-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-23-how-rag-works-cover.jpg" alt="Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo LLM que você já usou mentiu pra você — com confiança, fluência e frequência. Pergunte a qualquer modelo sobre algo que aconteceu semana passada. Ele não sabe. <strong>Não pode saber</strong>. O conhecimento dele foi congelado meses atrás. Se tentar responder, alucina.</p>
+
+<p>Isso não é bug. É limitação arquitetural fundamental. LLMs guardam conhecimento em <em>parameters</em> — bilhões de pesos numéricos aprendidos durante o treino. Quando o treino acaba, o conhecimento fica trancado. <strong>O modelo não sabe o que não sabe</strong>, então preenche as lacunas com fabricação confiante. Estudos mostram que taxas de hallucination podem ser tão baixas quanto 1% pra summarização simples — mas passam de 58% em tarefas complexas (<a href="https://arxiv.org/abs/2202.03629" target="_blank" rel="noopener">survey de hallucination da ACM</a>).</p>
+
+<p>É exatamente isso que <strong>Retrieval-Augmented Generation (RAG)</strong> resolve. RAG não embute conhecimento no modelo — em vez disso, puxa contexto relevante quando você faz a pergunta. O modelo continua inteligente, seus dados ficam atualizados, e cada resposta é rastreável até a fonte.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-rag-works" target="_blank" rel="noopener">deep dive de Neo Kim e Eric Roby no The System Design Newsletter</a>, com adições próprias sobre frameworks, vector DBs e armadilhas que vejo em produção.</p>
+
+<h2>O problema do conhecimento — por que LLMs sozinhos não bastam</h2>
+
+<h3>Conhecimento congelado no tempo</h3>
+
+<p>Todo LLM tem uma data de corte. Tudo que ele sabe foi raspado, processado e comprimido em parameters durante o treino. <strong>Depois dessa data, o modelo é cego</strong> — não sabe do lançamento do seu produto, do incidente de segurança de ontem, da mudança da política de RH desta manhã.</p>
+
+<p>Em negócios, precisão importa. Customer support, análise jurídica, busca interna, compliance — modelo que não acessa informação atual é <em>liability</em>, não asset.</p>
+
+<h3>"Context windows enormes resolvem" — não, não resolvem</h3>
+
+<p>A abordagem força-bruta é tentadora: joga tudo no prompt. Context windows cresceram muito — alguns modelos já lidam com mais de um milhão de tokens. Mas tem três problemas fatais:</p>
+
+<ol>
+<li><strong>É caro</strong>. Você paga por token. Mandar a base de conhecimento inteira em toda query queima o budget rapidamente.</li>
+<li><strong>Tem limite duro</strong>. 1M de tokens não cobre os documentos de uma enterprise grande, muito menos os databases.</li>
+<li><strong>Modelos pioram com mais contexto</strong> — e essa é a que a maioria ignora.</li>
+</ol>
+
+<p>Pesquisa de Stanford e UC Berkeley mostra que performance de LLM segue curva <strong>em U</strong>. Modelos vão bem quando informação-chave está no início ou no fim, mas a acurácia despenca quando fatos importantes estão enterrados no meio. Nos experimentos de multi-document QA de <a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener">Liu et al. ("Lost in the Middle")</a>, acurácia caiu pra ~25% quando a informação-chave foi colocada no meio de 20 documentos. Ou seja: <strong>mais contexto não garante que o modelo vai usar</strong>.</p>
+
+<h3>"Então fine-tune" — também não</h3>
+
+<p>Fine-tuning ajusta os pesos do modelo pra incorporar novo conhecimento. Em teoria, dá pra ensinar o modelo sobre o seu domínio. Na prática, gera mais problemas que resolve:</p>
+
+<ul>
+<li>Exige GPU, expertise em ML, dados de treino cuidadosamente preparados.</li>
+<li>Demora dias ou semanas pra rodar.</li>
+<li>O resultado é um snapshot. <strong>Quando seu dado mudar, o modelo vira lixo.</strong></li>
+<li>Custo recorrente: precisa retreinar a cada atualização significativa.</li>
+</ul>
+
+<p>O que se precisa: fornecer ao LLM a informação certa no momento certo pra cada query, <strong>sem mudar o modelo</strong>. Isso é RAG.</p>
+
+<h2>O que RAG realmente é — a analogia da prova com consulta</h2>
+
+<p>RAG é um padrão arquitetural, não produto. A melhor analogia: <strong>prova com consulta vs. prova sem consulta</strong>.</p>
+
+<p>Estudante em prova sem consulta depende do que decorou — esse é o LLM padrão. É inteligente, sabe raciocinar, mas está limitado ao que está nos parameters. Estudante em prova com consulta tem a mesma capacidade de raciocínio, mas pode checar páginas relevantes antes de responder. <strong>Esse é RAG</strong>.</p>
+
+<p>A definição formal vem do <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">paper de 2020 de Patrick Lewis e equipe no Facebook AI Research e University College London</a>. Modelos RAG combinam <em>parametric memory</em> (o modelo pretreinado) com <em>non-parametric memory</em> (um índice externo de conhecimento) acessado por um <em>neural retriever</em>.</p>
+
+<p>Você atualiza o conhecimento do modelo apenas trocando o índice de retrieval. Sem retraining. Loop de 3 passos:</p>
+
+<ol>
+<li><strong>Query chega</strong>: usuário faz pergunta.</li>
+<li><strong>Retrieve</strong>: sistema busca na base externa os melhores chunks de informação.</li>
+<li><strong>Pergunta + contexto → LLM</strong>: o modelo gera resposta baseada nos documentos recuperados.</li>
+</ol>
+
+<p>Você não está mudando o modelo. Está mudando <strong>o que ele vê</strong>. Essa distinção é o que torna RAG tão poderoso e prático.</p>
+
+<h2>Como RAG funciona por baixo do capô</h2>
+
+<p>Um sistema RAG tem duas partes principais:</p>
+
+<ul>
+<li><strong>Pipeline de ingestão offline</strong>: prepara seus dados.</li>
+<li><strong>Pipeline de retrieval online</strong>: responde às queries.</li>
+</ul>
+
+<h3>Embeddings — o mecanismo central</h3>
+
+<img src="../assets/images/2026-05-23-how-rag-works-2-semantic.jpg" alt="Espaço vetorial mostrando duas frases diferentes mapeadas para pontos próximos por similaridade semântica, com visualização do ângulo cosseno entre vetores" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Antes de qualquer coisa, você precisa entender <strong>embeddings</strong>. É o conceito que habilita <em>semantic search</em>.</p>
+
+<p>Text embeddings transformam texto em vetores densos de números (arrays de floats, tipicamente 1.536 ou 3.072 dimensões) que capturam o <em>significado</em>. Palavras e sentenças com intenção similar ficam próximas no espaço vetorial — mesmo com palavras diferentes.</p>
+
+<p>Considere: "Como eu redefino minha senha?" e "Não consigo entrar na minha conta" usam palavras completamente diferentes. Quando convertidas em embeddings, produzem vetores quase idênticos. A distância entre eles é minúscula porque <strong>os significados são similares</strong>. Medido via <em>cosine similarity</em>, dot product ou distância Euclidiana.</p>
+
+<p>O insight chave: o sistema acha conteúdo relevante mesmo quando a pergunta do usuário não usa as palavras exatas do documento. <strong>Busca por significado, não por keyword.</strong> Provedores populares de embeddings em 2026:</p>
+
+<ul>
+<li><a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" rel="noopener">OpenAI text-embedding-3-large</a> — 3.072 dim, $0.13/1M tokens.</li>
+<li><a href="https://docs.voyageai.com/" target="_blank" rel="noopener">Voyage voyage-3</a> — referência em qualidade.</li>
+<li><a href="https://cohere.com/embed" target="_blank" rel="noopener">Cohere embed-multilingual-v3</a> — forte em PT-BR.</li>
+<li>Open-source: <a href="https://huggingface.co/BAAI/bge-large-en-v1.5" target="_blank" rel="noopener">BGE-large</a>, <a href="https://huggingface.co/nomic-ai/nomic-embed-text-v1.5" target="_blank" rel="noopener">Nomic Embed</a>, <a href="https://huggingface.co/intfloat/multilingual-e5-large" target="_blank" rel="noopener">E5-multilingual</a>.</li>
+</ul>
+
+<h3>Pipeline de ingestão (offline)</h3>
+
+<img src="../assets/images/2026-05-23-how-rag-works-1-ingestion.jpg" alt="Pipeline de ingestão de 5 passos — load, chunk, embed, store, tag — com setas brilhantes conectando os estágios" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Quando rodar? Quando documento novo entra, quando documento existente é editado, quando database muda, ou em schedule (nightly, weekly). Times mais avançados disparam re-ingestion automaticamente quando a qualidade do retrieval cai.</p>
+
+<p>Cinco passos:</p>
+
+<ol>
+<li><strong>Load</strong>: carregar documentos de qualquer fonte (PDFs, databases, APIs, wikis, Slack, Confluence). <a href="https://python.langchain.com/docs/integrations/document_loaders/" target="_blank" rel="noopener">LangChain</a> e <a href="https://docs.llamaindex.ai/" target="_blank" rel="noopener">LlamaIndex</a> oferecem conectores prontos pra dezenas de fontes.</li>
+<li><strong>Chunking</strong>: dividir documentos em pedaços semanticamente coerentes. <strong>Este é o passo de maior alavanca</strong>. Estratégias: tamanho fixo (simples mas quebra parágrafos), sentence-based (NLTK/spaCy), recursive (LangChain default), semantic (custosa mas melhor qualidade), late chunking (técnica de 2024 que embedda o doc todo antes de cortar).</li>
+<li><strong>Embedding</strong>: converter cada chunk em vetor com o modelo escolhido.</li>
+<li><strong>Storage</strong>: armazenar os vetores em vector DB otimizado pra similarity search. Top picks: <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>, <a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a>, <a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a>, <a href="https://milvus.io/" target="_blank" rel="noopener">Milvus</a>, <a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a> (sobre Postgres).</li>
+<li><strong>Metadata tagging</strong>: tagear cada chunk com fonte, timestamp, categoria, ACL. Essa metadata vira crítica depois pra filtering, attribution e security.</li>
+</ol>
+
+<h3>Pipeline de retrieval (online)</h3>
+
+<img src="../assets/images/2026-05-23-how-rag-works-3-hybrid.jpg" alt="Arquitetura de retrieval híbrido combinando busca por keyword esparsa e busca vetorial densa, fundidas via RRF, output como lista ranqueada" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Quando o usuário pergunta, o pipeline de retrieval dispara:</p>
+
+<ol>
+<li><strong>Query embedding</strong>: pergunta vira vetor, usando o <em>mesmo modelo</em> de embedding da ingestão. Crítico: query e documentos têm que viver no mesmo vector space.</li>
+<li><strong>Similarity search</strong>: encontra os top-K chunks mais similares comparando o vetor da query com cada vetor no DB.</li>
+<li><strong>Retrieval strategy</strong>: aqui é onde decisões reais de engenharia acontecem. Três abordagens primárias:
+    <ul>
+    <li><strong>Sparse retrieval</strong> (BM25): método estatístico que casa keywords exatas via TF-IDF.</li>
+    <li><strong>Dense retrieval</strong> (embeddings): busca semântica via vetores. Acha conteúdo conceitualmente relevante mesmo com palavras diferentes.</li>
+    <li><strong>Hybrid search</strong>: usa os dois e funde resultados com <a href="https://plg.uwaterloo.ca/~gvcormac/cormacksigir09-rrf.pdf" target="_blank" rel="noopener">Reciprocal Rank Fusion (RRF)</a>. Documentos que ranqueiam alto nos dois sistemas ganham boost.</li>
+    </ul>
+</li>
+<li><strong>Re-ranking</strong>: depois de recuperar, um modelo cross-encoder (ex: <a href="https://cohere.com/rerank" target="_blank" rel="noopener">Cohere Rerank</a>, <a href="https://huggingface.co/BAAI/bge-reranker-large" target="_blank" rel="noopener">BGE Reranker</a>) re-pontua os top-K. Cross-encoders processam query + documento como input único, capturando relevância fina que bi-encoders perdem.</li>
+</ol>
+
+<h3>Generation phase</h3>
+
+<p>Com os chunks mais relevantes em mão, o sistema monta o prompt final:</p>
+
+<ul>
+<li><strong>System prompt</strong>: instruções de como o LLM deve se comportar ("Você é assistente de suporte. Use apenas a documentação fornecida...").</li>
+<li><strong>Retrieved context chunks</strong>: os pedaços relevantes da base de conhecimento.</li>
+<li><strong>Query original do usuário</strong>: exatamente como foi digitada.</li>
+</ul>
+
+<p>O modelo gera resposta <em>grounded</em> nos documentos recuperados. Os fatos-chave estão no prompt — o modelo usa-os pra raciocinar em vez de depender da memória de treino.</p>
+
+<p><strong>Citation e attribution</strong>: bom RAG sempre mostra de qual documento veio cada afirmação ("Baseado na Seção 3.2 do Manual do Funcionário..."). Essa é uma das maiores vantagens de RAG sobre fine-tuning: <em>transparência</em>.</p>
+
+<h2>RAG vs. alternativas — quando usar (e quando não)</h2>
+
+<h3>RAG vs. Fine-tuning</h3>
+
+<p>A comparação mais comum. <strong>Nuance importante: não são competidores, são complementares</strong>.</p>
+
+<ul>
+<li><strong>Fine-tuning</strong>: melhor pra ajustar <em>comportamento, estilo, formato de output</em>. Ex: ensinar o modelo a produzir JSON estruturado num esquema específico, ou adotar tom da empresa.</li>
+<li><strong>RAG</strong>: melhor pra fornecer <em>conhecimento dinâmico</em>. Documentação que muda, FAQ que atualiza, base de produto que evolui.</li>
+</ul>
+
+<p>Os melhores sistemas em produção fazem os dois: <em>fine-tune pra estilo + RAG pra conhecimento</em>.</p>
+
+<h3>RAG vs. Long Context</h3>
+
+<p>Por que não jogar tudo na context window enorme? <strong>Custo e precisão</strong>. RAG retrieva só os 5-20 chunks mais relevantes. Long context enfia tudo e torce pro modelo achar a agulha. RAG é mais barato por query, mais preciso no que encontra, e pode buscar em milhões de documentos sem limite de tokens.</p>
+
+<p>Funcionam bem juntos: <em>primeiro RAG pra trazer os 20 chunks certos, depois long context pra processar todos de uma vez</em>. A pesquisa "lost in the middle" mostra que chunks pequenos e relevantes funcionam melhor que context windows gigantes.</p>
+
+<h2>Traditional RAG vs. Agentic RAG — o salto de 2024-2026</h2>
+
+<p>Traditional RAG segue o loop linear: query → retrieve → generate → done. <strong>Agentic RAG</strong> adiciona uma camada de raciocínio que decide:</p>
+
+<ul>
+<li>"A query precisa de retrieval ou eu sei responder direto?"</li>
+<li>"O resultado do retrieval foi bom? Preciso refazer com query diferente?"</li>
+<li>"Preciso quebrar essa query em sub-queries (multi-hop)?"</li>
+<li>"Preciso combinar múltiplas fontes (vector DB + SQL + API)?"</li>
+</ul>
+
+<p>Frameworks pra agentic RAG: <a href="https://docs.llamaindex.ai/en/stable/use_cases/agents/" target="_blank" rel="noopener">LlamaIndex Agents</a>, <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a>, <a href="https://docs.haystack.deepset.ai/" target="_blank" rel="noopener">Haystack</a>. <a href="https://arxiv.org/abs/2310.11511" target="_blank" rel="noopener">Self-RAG</a> e <a href="https://arxiv.org/abs/2401.15884" target="_blank" rel="noopener">CRAG (Corrective RAG)</a> são as duas variantes mais influentes.</p>
+
+<h2>Erros comuns que vi em produção</h2>
+
+<ol>
+<li><strong>Chunk size errado</strong>. Chunks grandes demais (>1.000 tokens) diluem o sinal. Pequenos demais (<100) perdem contexto. Comece com 256-512 tokens com overlap de 50-100.</li>
+<li><strong>Não fazer rerank</strong>. Top-5 puro de vector search é mediano. Rerank com cross-encoder dobra precisão sem custo proibitivo.</li>
+<li><strong>Ignorar metadata filtering</strong>. Buscar "política de férias" sem filtrar por <code>company_id</code> retorna lixo cross-tenant.</li>
+<li><strong>Não monitorar drift</strong>. Quando seus docs mudam, índice envelhece. Reembedding agendado ou triggered por evento é obrigatório.</li>
+<li><strong>Pular eval</strong>. "Pareceu bom no demo" não vale. Use <a href="https://docs.ragas.io/" target="_blank" rel="noopener">Ragas</a>, <a href="https://github.com/truera/trulens" target="_blank" rel="noopener">TruLens</a> ou golden test set custom pra medir <em>faithfulness, answer relevancy, context precision</em>.</li>
+</ol>
+
+<h2>Stack recomendada pra começar</h2>
+
+<ul>
+<li><strong>Framework</strong>: LangChain ou LlamaIndex pra prototipar; LangGraph quando precisar de agentic.</li>
+<li><strong>Embeddings</strong>: OpenAI text-embedding-3-large pra prod; BGE/E5 pra self-hosted.</li>
+<li><strong>Vector DB</strong>: pgvector se já tem Postgres (mais simples); Qdrant ou Weaviate pra escala; Pinecone se quiser SaaS gerenciado.</li>
+<li><strong>Reranker</strong>: Cohere Rerank (API barata) ou BGE Reranker (self-hosted).</li>
+<li><strong>Eval</strong>: Ragas (open-source).</li>
+<li><strong>Observability</strong>: LangSmith, Arize Phoenix, ou Langfuse.</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>RAG não é trend — é a arquitetura que torna LLMs <em>úteis</em> em domínios reais. Sem ele, você está restrito ao conhecimento congelado do treino e às alucinações que vêm junto. Com ele, seus dados ficam no controle, atualizações são instantâneas (basta re-indexar), respostas são rastreáveis, e custo escala com query — não com retraining.</p>
+
+<p>O esqueleto que cobrimos aqui é o ponto de partida. Em produção, você empilha agentic loops, multi-modal retrieval (texto + imagem + tabela), graph RAG, e estratégias de chunking mais sofisticadas. Mas <strong>se você não acerta o básico — chunking, embedding consistente entre query e docs, hybrid retrieval, rerank, eval contínuo — nenhuma camada extra salva</strong>.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "RAG - A Deep Dive" por Neo Kim e Eric Roby, publicado em <a href="https://newsletter.systemdesign.one/p/how-rag-works" target="_blank" rel="noopener">The System Design Newsletter</a> em 23 de março de 2026. Este post é adaptação enriquecida em PT-BR com adições de frameworks, ferramentas e armadilhas comuns observadas em produção. Pra ir mais fundo, recomendo também o canal de Eric Roby (<a href="https://www.youtube.com/@codingwithroby" target="_blank" rel="noopener">@codingwithroby</a>) sobre backend e o curso "RAG From Scratch" do <a href="https://www.youtube.com/playlist?list=PLfaIDFEXuae2LXbO1_PKyVJiQ23ZztA0x" target="_blank" rel="noopener">LangChain no YouTube</a>.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-rag-works.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

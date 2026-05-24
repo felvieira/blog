@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Coding Workflow 101 — o loop de 6 estágios que separa dev que reclama de IA de dev que entrega 3x mais — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre workflow de AI coding — context, plan, code, review, test, iterate — com stack de ferramentas 2026, AGENTS.md, anti-patterns e o que aprendi construindo o Dev Team Kit.">
+<meta property="og:title" content="AI Coding Workflow 101 — o loop de 6 estágios que separa dev que reclama de IA de dev que entrega 3x mais">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre workflow de AI coding — context, plan, code, review, test, iterate — com stack de ferramentas 2026, AGENTS.md, anti-patterns e o que aprendi construindo o Dev Team Kit.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-ai-coding-workflow-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>AI Coding Workflow 101 — o loop de 6 estágios que separa dev que reclama de IA de dev que entrega 3x mais</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-ai-coding-workflow-cover.jpg" alt="AI Coding Workflow 101 — o loop de 6 estágios que separa dev que reclama de IA de dev que entrega 3x mais — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo mundo fala em usar AI pra escrever código como se fosse máquina automática:</p>
+
+<blockquote>"Cola o problema, recebe a solução pronta."</blockquote>
+
+<p>Na primeira vez que tentei, aprendi do jeito difícil que <strong>não é assim que funciona em projeto real</strong>. O modelo sugeria, com confiança, código que chamava funções que não existiam, assumia libs que não estávamos usando, ignorava constraints óbvios. O output parecia polido. No momento que eu rodava… caía aos pedaços.</p>
+
+<p>Depois de bastante tentativa e erro, parei de tentar "prompt melhor" e comecei a <em>trabalhar diferente</em>. O que finalmente fez AI ser útil não foi ferramenta mágica nem prompt esperto. Foi um <strong>loop simples</strong> que mantém o modelo com coleira curta e mantém você no controle.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/ai-coding-workflow" target="_blank" rel="noopener">"AI Coding Workflow" de Neo Kim e Louis-François Bouchard</a>, com adições do que aprendi construindo o <a href="https://github.com/felvieira/claude-skills-fv" target="_blank" rel="noopener">Dev Team Kit</a> e operando agents em produção.</p>
+
+<h2>O modelo mental — o que AI é e o que não é</h2>
+
+<p>AI coding assistants são fantásticos quando o problema é bem-escopado e está diante deles. <strong>São não-confiáveis no momento que você assume que eles "sabem" o que você não forneceu explicitamente</strong>. O workflow é basicamente como ficar na primeira zona e evitar a segunda.</p>
+
+<p>Quando você dá requisitos claros, AI é ótimo pra:</p>
+<ul>
+<li>Rascunhar funções.</li>
+<li>Refatorar código.</li>
+<li>Scaffold testes.</li>
+<li>Explicar mensagens de erro.</li>
+</ul>
+
+<p>Mas tem um limite duro: <strong>só sabe o que vê no context atual</strong>. Não lembra do último chat, não conhece sua arquitetura ou convenções, e <em>não vai te avisar quando está chutando</em>. Continua confiante.</p>
+
+<p>Eu já vi AI chamar funções de lib que não existem, usar sintaxe da versão errada, ignorar constraints que eu achava óbvios. O padrão é sempre o mesmo: <em>AI não sabia o que eu não tinha dito, então preenche as lacunas inventando algo plausível</em>.</p>
+
+<h3>3 princípios que mudaram tudo</h3>
+
+<ol>
+<li><strong>Dê mais context do que acha que precisa.</strong> Igual briefar colega que acabou de entrar no projeto, briefe a AI toda vez. Se não compartilha detalhes, ela inventa.</li>
+<li><strong>Guie com steps específicos.</strong> AI sofre com "construa um app web", mas vai bem com "adicione validação de input pra estes campos, retorne erro claro, escreva teste que prova que input inválido é rejeitado". Quanto mais específico o request, melhor o output.</li>
+<li><strong>Se importa, verifica.</strong> Logic sensitive de segurança, migration de banco, algoritmo que tem que estar correto — eu reviso pessoalmente e adiciono testes que provam o comportamento.</li>
+</ol>
+
+<p>Forma boa de manter isso na cabeça: <strong>AI é um colega esperto que entrou no seu projeto 5 minutos atrás</strong>. Escreve rápido, mas não conhece sua arquitetura, convenções, constraints — a não ser que você diga.</p>
+
+<h2>O loop — 6 estágios que se repetem</h2>
+
+<img src="../assets/images/2026-05-24-ai-coding-workflow-1-loop.jpg" alt="Diagrama hexagonal do loop com 6 estágios — Context, Plan, Code, Review, Test, Iterate — conectados em ciclo com ícones" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>O loop é o mesmo seja consertando bug, adicionando feature, ou limpando módulo bagunçado:</p>
+
+<ol>
+<li><strong>Context</strong>: compartilho background do projeto, constraints, código relevante. AI não fica chutando.</li>
+<li><strong>Plan</strong>: peço estratégia <em>antes</em> de qualquer código.</li>
+<li><strong>Code</strong>: gera ou edita código <em>um step de cada vez</em>. Mudanças ficam pequenas e revisáveis.</li>
+<li><strong>Review</strong>: checa output cuidadosamente, frequentemente uso AI-assisted PR review como segundo par de olhos.</li>
+<li><strong>Test</strong>: roda testes, e frequentemente peço pra AI gerar novos que travam o comportamento.</li>
+<li><strong>Iterate</strong>: debuga falhas, refina o pedido, repete até a mudança estar sólida.</li>
+</ol>
+
+<h2>Step 1: Context — o que mata 80% dos problemas</h2>
+
+<img src="../assets/images/2026-05-24-ai-coding-workflow-2-context.jpg" alt="Comparativo lado a lado — desenvolvedor com fix this minimalista e AI gerando solução errada, vs desenvolvedor com README, AGENTS.md e logs anexados e AI gerando solução correta" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Maioria dos erros de AI em código tem a mesma causa-raiz: <strong>o modelo está chutando no vácuo</strong>. Pessoa cola função, digita "fix this", e se surpreende quando a sugestão ignora metade do sistema.</p>
+
+<p>"Fix this" é a forma mais rápida de fazer o modelo halucinar. Sem background do projeto e constraints, ele tem que preencher lacunas com o que <em>soa certo</em>: funções que não existem, sintaxe da versão errada, soluções que quebram convenções de outras partes do repo.</p>
+
+<p>Pra qualquer tarefa não-trivial, eu carrego 3 tipos de context:</p>
+
+<h3>1. Project background</h3>
+
+<p>Mantenho README atualizado em cada projeto e começo a maioria das sessões com:</p>
+
+<pre><code>Read the README below to understand the project.
+Then I will give you a specific task.</code></pre>
+
+<p>Se a mudança toca algo sensível (pagamentos, auth), incluo os arquivos-chave na primeira mensagem também. Quando descrevo a mudança, o assistente já viu a vizinhança.</p>
+
+<h3>2. Rules e constraints (AGENTS.md / CLAUDE.md)</h3>
+
+<p>Mantenho arquivo de regras (<a href="https://github.com/agents-md/agents.md" target="_blank" rel="noopener">AGENTS.md</a> é padrão emergente, ou CLAUDE.md específico do Claude Code) que junta:</p>
+
+<ul>
+<li>Escopo do projeto.</li>
+<li>Coding style.</li>
+<li>Version constraints ("este service roda em Django 4.0").</li>
+<li>Hard rules ("nunca chame essa API externa em dev", "todas as datas devem ser UTC").</li>
+</ul>
+
+<p>Tools como Cursor, Claude Code, Cline, Continue suportam "rules" ou "custom instructions" que evitam repetição em cada sessão.</p>
+
+<h3>3. Relevant source e signals</h3>
+
+<p>Pra bugs ou features, colo a função/arquivo envolvidos junto com stack traces ou logs. Uma única linha de erro é como screenshot de um pixel. O assistente precisa de mais que isso pra raciocínio real em vez de chute otimista.</p>
+
+<h3>Pattern de prompt reutilizável</h3>
+
+<pre><code>Read @README to understand the project scope, architecture, constraints.
+Read @AGENTS.md for coding style, rules, constraints of this codebase.
+
+Then read @main.py, @business_logic_1.py, @business_logic_2.py carefully.
+
+Your task is to update @business_logic_2.py to implement:
+
+1. &lt;mudança 1&gt;
+2. &lt;mudança 2&gt;
+3. &lt;mudança 3&gt;
+
+Follow the conventions in README and AGENTS file.
+Do not modify other files unless strictly necessary, and explain any extra changes.</code></pre>
+
+<p>A estrutura fica igual: <em>context, rules, tarefa precisa</em>. Mudo só os filenames e a lista de mudanças.</p>
+
+<p><strong>Aprendido na marra:</strong> mais texto não é sempre melhor. Os melhores briefings são curtos e focados. Se notar que estou colando mais do que humano leria razoavelmente antes de começar, eu corto. <em>Context deve ser curado, não dumpado</em>.</p>
+
+<h2>Step 2: Plan Before You Code</h2>
+
+<p>Context responde "onde estou?". Não responde "o que devo construir?". Esse é o ponto que descarrila.</p>
+
+<p>Se você deixa AI escrever código direto, ela frequentemente escolhe abordagem estranha, otimiza a coisa errada, ignora silenciosamente constraints. <strong>Força o processo em duas etapas: plan first, then code.</strong></p>
+
+<h3>Primeiro: peça plano só</h3>
+
+<p>Pra qualquer mudança não-trivial, descrevo a feature ou bug em linguagem natural:</p>
+
+<pre><code>Here is the feature I want to build and some context.
+Help me design it.
+- What needs to change?
+- Which modules are involved?
+- What are the main steps?
+
+Do not write any code until I say "approved".</code></pre>
+
+<p>O "Do not write any code" explícito é crucial. Sem ele, modelos modernos pulam direto pra implementação.</p>
+
+<h3>Depois: aprove e implemente em small steps</h3>
+
+<p>Plano aprovado, peço pra implementar <em>uma etapa de cada vez</em>. Pra cada step, peço pra ele explicar o que vai mudar e propor o código <em>só daquele step</em>.</p>
+
+<p>Small steps são mais fáceis de revisar e desfazer se algo der errado.</p>
+
+<h3>Verifique APIs sugeridas</h3>
+
+<p>Se a AI recomendar lib ou função que você nunca viu, verifique se de fato existe usando search assistant (Perplexity, ChatGPT search) ou docs oficiais. Modelos frequentemente halucinam APIs que <em>soam plausíveis</em> mas não existem.</p>
+
+<h2>Step 3-6: Code, Review, Test, Iterate</h2>
+
+<h3>Code em incrementos</h3>
+
+<p>Cada step deveria ser pequeno o suficiente pra você revisar em 5-10 minutos. Função única, mudança contida. Se a AI propor diff de 200 linhas tocando 5 arquivos, peça pra quebrar.</p>
+
+<p>Use sempre o git: <code>git status</code> antes de cada step pra ver o que mudou. Se algo desviou, <code>git diff</code> mostra. Se quebrou tudo, <code>git checkout</code> reverte.</p>
+
+<h3>Review como se fosse PR humano</h3>
+
+<p>Trate código gerado por AI igual código de júnior:</p>
+
+<ul>
+<li>Leia linha por linha (sim, todas).</li>
+<li>Procure por: lógica errada, falta de error handling, edge cases ignorados, naming inconsistente.</li>
+<li>Verifique imports — frequentemente AI adiciona libs não usadas.</li>
+<li>Confira se segue padrões do projeto (chamadas API, error types, naming).</li>
+</ul>
+
+<p>Ferramentas como <a href="https://www.coderabbit.ai/" target="_blank" rel="noopener">CodeRabbit</a>, <a href="https://greptile.com/" target="_blank" rel="noopener">Greptile</a>, e <a href="https://www.diamond.ai/" target="_blank" rel="noopener">Diamond</a> automatizam parte do review — vale especialmente pra PRs grandes.</p>
+
+<h3>Test prova comportamento (não cobertura)</h3>
+
+<p>Peça pra AI escrever testes que comprovem o caso de uso específico. Não 50 testes triviais — 5-10 testes que cobrem o caminho feliz e os 2-3 edge cases principais.</p>
+
+<p>Padrão útil: <em>"Write tests first, then implementation"</em>. Não TDD puro, mas garante que você (e a AI) pensaram nos comportamentos antes do código.</p>
+
+<h3>Iterate quando bugs aparecem</h3>
+
+<p>Bugs durante iteração não são fracasso — são o loop fazendo o trabalho. <strong>Não tente "consertar pelo prompt" mais de 2 vezes.</strong> Se na terceira tentativa ainda não passou, é sinal que falta context ou plan está errado. Volte ao Step 1.</p>
+
+<h2>Stack de ferramentas — qual usar quando</h2>
+
+<img src="../assets/images/2026-05-24-ai-coding-workflow-3-stack.jpg" alt="Ecossistema de ferramentas — Cursor, Claude Code, GitHub Copilot, ChatGPT, Perplexity, CodeRabbit — cada uma com sua especialidade" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Diferentes tools são boas em coisas diferentes:</p>
+
+<h3>AI Editors (Cursor, VS Code + Copilot, Claude Code)</h3>
+
+<p>Bom pra <strong>trabalho dentro do repo</strong>. Vê arquivos, faz refactor multi-file, mantém context do projeto. <a href="https://www.cursor.com/" target="_blank" rel="noopener">Cursor</a> é o padrão de mercado em 2026; <a href="https://www.anthropic.com/news/claude-code" target="_blank" rel="noopener">Claude Code</a> é o líder em CLI/agent autônomo.</p>
+
+<h3>Chat models (Claude, ChatGPT, Gemini)</h3>
+
+<p>Bom pra <strong>pensar em linguagem natural</strong>. Brainstorm de approach, explicar erro, comparar trade-offs, sanity-check de design antes de escrever código. Use chat <em>antes</em> de abrir o editor.</p>
+
+<h3>Search assistants (Perplexity, ChatGPT search)</h3>
+
+<p>Bom pra <strong>verificar fatos</strong>. API existe na versão que você usa? Comportamento dessa lib mudou no release X? Esse pattern ainda é recomendado?</p>
+
+<h3>AI code review (CodeRabbit, Greptile, Diamond)</h3>
+
+<p>Bom como <strong>segundo par de olhos</strong>. Rode em PR antes do reviewer humano. Pega coisas óbvias (typos, error handling missing, security smell) e libera o reviewer humano pra arquitetura.</p>
+
+<h3>Specialized agents (Devin, Sweep, Tessl)</h3>
+
+<p>Bom pra <strong>tarefas autônomas long-running</strong> (refactor grande, bug triage, doc generation). Ainda não substituem dev em features complexas, mas crescem rapidamente.</p>
+
+<h2>Anti-patterns que vejo todo dia</h2>
+
+<ol>
+<li><strong>One-shot prompt mega-detailed</strong>: 2.000 palavras descrevendo a feature inteira. AI esmaece, gera 500 linhas mediocres. Quebra em planos + steps.</li>
+<li><strong>Aceitar a primeira sugestão</strong>: AI propôs solução? Pergunte 2 alternativas antes de aceitar. Frequentemente a 2ª ou 3ª é melhor.</li>
+<li><strong>Skip review porque "passou nos testes"</strong>: testes passam, mas código é horrível, viola conventions, ou tem race condition que só aparece em prod. Leia.</li>
+<li><strong>Não usar git stash / branches</strong>: AI quebrou tudo, você não sabe o que mudou. Trabalhe em branches separadas pra cada experiment.</li>
+<li><strong>Esquecer AGENTS.md/CLAUDE.md</strong>: cada sessão você re-explica as mesmas coisas. Capture em arquivo, deixa AI carregar.</li>
+<li><strong>Confiar em URLs/imports que a AI inventou</strong>: GitHub URL inexistente, pacote npm que não existe, função do framework removida há 2 versões. Verifique.</li>
+</ol>
+
+<h2>Stack que recomendo pra começar amanhã</h2>
+
+<ul>
+<li><strong>Editor primário</strong>: Cursor (visual) ou Claude Code (CLI/autônomo).</li>
+<li><strong>Chat secundário</strong>: Claude.ai ou ChatGPT pra planning.</li>
+<li><strong>Search</strong>: Perplexity pra verificar APIs.</li>
+<li><strong>PR review</strong>: CodeRabbit (free pra OSS, paid pra privado).</li>
+<li><strong>Rules</strong>: AGENTS.md no root do repo.</li>
+<li><strong>Observability</strong>: track tempo gasto por step. Se um step exige &gt; 30min de AI debug, é sinal pra parar e replanejar.</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>AI não substitui dev — <strong>multiplica</strong> dev que sabe operar. A diferença entre os 90% que reclamam de "AI gera código ruim" e os 10% que entregam 2-3× mais features é o workflow. Context → Plan → Code → Review → Test → Iterate.</p>
+
+<p>Não é mágica. É disciplina aplicada. Faça uma vez, sente o ganho, repita. Em 30 dias você não consegue mais voltar pro fluxo antigo.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "I struggled to code with AI until I learned this workflow" por Neo Kim e Louis-François Bouchard, publicado em <a href="https://newsletter.systemdesign.one/p/ai-coding-workflow" target="_blank" rel="noopener">The System Design Newsletter</a> em 2 de fevereiro de 2026. Esta adaptação em PT-BR enriquece com patterns que aprendi construindo o <a href="https://github.com/felvieira/claude-skills-fv" target="_blank" rel="noopener">Dev Team Kit</a>, comparativos atualizados de ferramentas 2026, anti-patterns observados, e stack recomendada pra começar amanhã.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-ai-coding-workflow-101.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

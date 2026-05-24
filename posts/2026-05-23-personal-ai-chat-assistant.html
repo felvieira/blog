@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Construindo seu próprio AI Chat Assistant — quando off-the-shelf vira teto baixo — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre como projetar um chat assistant customizado — tokenization, scaling laws, model routing, context engineering, evals, e a stack pra começar amanhã.">
+<meta property="og:title" content="Construindo seu próprio AI Chat Assistant — quando off-the-shelf vira teto baixo">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre como projetar um chat assistant customizado — tokenization, scaling laws, model routing, context engineering, evals, e a stack pra começar amanhã.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-personal-ai-chat-assistant-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Construindo seu próprio AI Chat Assistant — quando off-the-shelf vira teto baixo</h1>
+  <p class="meta">
+    <span>22 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">11 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-23-personal-ai-chat-assistant-cover.jpg" alt="Construindo seu próprio AI Chat Assistant — quando off-the-shelf vira teto baixo — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>ChatGPT, Claude e Gemini resolvem bem tarefas genéricas e conversas avulsas. Mas no momento que seu assistente vira <em>customer-facing</em>, a equação inteira muda.</p>
+
+<p>Seus usuários precisam de um assistente que conheça <strong>seu produto, suas políticas, e o histórico deles com você</strong>. Esse conhecimento mora nos seus sistemas — não nos dados de treino do modelo. Dá pra injetar em runtime, claro, mas dado proprietário vem com restrições reais: <em>geralmente é grande demais pra caber numa context window, sensível demais pra mandar pra API de terceiro, e dinâmico demais pra ficar parado num prompt estático.</em></p>
+
+<p>Além dos dados, você não consegue configurar comportamento por completo, não integra além de uma aba do browser, e o custo escala com cada conversa. Por isso times sérios constroem o próprio assistente — e este post (adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/ai-chat-assistant" target="_blank" rel="noopener">Design a personal AI chat assistant</a> de Neo Kim e Louis-François Bouchard) cobre como.</p>
+
+<h2>Por que construir o seu próprio?</h2>
+
+<p>Quando o custo, controle, ou compliance importam, off-the-shelf vira teto baixo. Cinco razões pra justificar o investimento:</p>
+
+<ul>
+<li><strong>Privacidade e controle de dados</strong>. Conversas ficam na sua infra. Você decide o que loga, por quanto tempo guarda, e quando deleta. Pra saúde, jurídico, finanças e enterprise — é requisito de compliance, não <em>nice-to-have</em>.</li>
+<li><strong>Controle total de comportamento</strong>. Você é dono do system prompt, da persona e dos guardrails. Pode forçar um tom específico, restringir respostas ao domínio do produto, trocar o modelo subjacente, ou rodar A/B test. Com produto pronto, você recebe o que vier.</li>
+<li><strong>Custo em escala</strong>. <em>Prompt caching, model routing</em> (modelo barato pra perguntas simples, caro pra perguntas difíceis) e estratégias de context management cortam custo drasticamente. Com milhares de conversas por dia, a economia é significativa.</li>
+<li><strong>Integração no produto</strong>. O assistente vive dentro do seu app, não numa aba separada. Compartilha auth, UI e contexto do usuário. Esse nível de integração é impossível quando você envelopa o chat de outra pessoa.</li>
+<li><strong>Segurança</strong>. Você controla o caminho inteiro da request: o que entra no modelo, o que sai, e quais filtros rodam no meio. Implementa suas próprias defesas contra <em>prompt injection</em>, <em>output guardrails</em> e <em>content policies</em>.</li>
+</ul>
+
+<p>Off-the-shelf é ótimo pra uso pessoal e protótipo interno. <strong>Construir o seu é pra quando o assistente é o produto</strong>, ou uma feature central.</p>
+
+<h2>O que você vai construir</h2>
+
+<img src="../assets/images/2026-05-23-personal-ai-chat-assistant-2-architecture.jpg" alt="Diagrama de arquitetura mostrando as quatro camadas do assistente: context engineering, generation engine, persistent memory, e SSE streaming" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Um assistente conversacional estilo ChatGPT que você controla por completo: seu próprio system prompt, sua personalidade, suas regras. Requisitos:</p>
+
+<ul>
+<li>Conversa multi-turn com contexto preservado entre turnos.</li>
+<li>Resposta em <em>streaming</em>, palavras aparecendo conforme são geradas.</li>
+<li>Comportamento configurável — criativo pra brainstorming, preciso pra extração de dados.</li>
+<li>Resistente a ataques de <em>prompt injection</em>.</li>
+<li>Cost-effective em escala, milhares de conversas por dia.</li>
+<li>(Extra coberto adiante) Memória persistente entre sessões — lembra preferências do usuário.</li>
+</ul>
+
+<p><strong>O que esse sistema NÃO faz:</strong> não recupera documentos externos (sem RAG), não tem expertise de domínio além do que o modelo já sabe, e não toma ações nem chama tools. É puramente conversacional. RAG e <em>tool calling</em> ficam pra posts futuros — aqui o foco é dominar o esqueleto.</p>
+
+<p>Pra esse build usamos uma API de modelo (OpenAI, Anthropic, ou similar). O provedor cuida de GPU, scaling e otimização de inferência — o ponto de partida certo pra quase todo time. Quando você cresce além da API, migra pra modelo open-source self-hosted servido com <a href="https://github.com/vllm-project/vllm" target="_blank" rel="noopener">vLLM</a>, <a href="https://github.com/ggerganov/llama.cpp" target="_blank" rel="noopener">llama.cpp</a>, ou <a href="https://github.com/sgl-project/sglang" target="_blank" rel="noopener">SGLang</a>.</p>
+
+<h2>Parte 1 — O que acontece quando você manda uma mensagem</h2>
+
+<p>Quando você chama uma API de modelo, muita coisa rola entre a request e o primeiro token aparecer na tela. Você nunca precisa tocar numa GPU, mas entender o que acontece ajuda a raciocinar sobre latência, custo e trade-offs.</p>
+
+<h3>De texto pra tokens</h3>
+
+<img src="../assets/images/2026-05-23-personal-ai-chat-assistant-1-tokens.jpg" alt="Frase sendo dividida em chunks de tokens coloridos, cada um mapeado pra um ID numérico, e a palavra strawberry quebrada em três pedaços mostrando por que LLMs não contam letras" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Antes do modelo processar sua mensagem, ele converte texto em números. <strong>Modelos não leem palavras — eles trabalham com tokens</strong>, chunks pequenos de texto mapeados pra IDs numéricos. Um token pode ser uma palavra inteira ("the"), parte de uma palavra ("un", "believ", "able"), ou um único caractere.</p>
+
+<p>O processo de quebrar texto em tokens chama <em>tokenization</em>. Existem várias formas:</p>
+
+<ul>
+<li><strong>Por caractere</strong>: simples mas o modelo precisa processar sequências longuíssimas pra ler uma frase curta.</li>
+<li><strong>Por palavra inteira</strong>: vocabulário fica enorme, e o modelo não consegue lidar com palavras que nunca viu.</li>
+<li><strong>Subword tokenization</strong>: o sweet spot, e virtualmente todo modelo moderno usa.</li>
+</ul>
+
+<p>O algoritmo mais comum é <strong>Byte Pair Encoding (BPE)</strong>. BPE começa com caracteres individuais e iterativamente funde os pares mais frequentes num único token. Palavras comuns como "the" ou "and" viram tokens únicos. Palavras raras ou longas são quebradas em pedaços significativos. "Unbelievable" pode virar três tokens: "un" + "believ" + "able". O vocabulário fica gerenciável (tipicamente 30.000 a 100.000 tokens), e palavras novas são processadas via decomposição em sub-pedaços conhecidos. Ferramentas pra inspecionar tokens: <a href="https://platform.openai.com/tokenizer" target="_blank" rel="noopener">OpenAI Tokenizer</a> e <a href="https://github.com/openai/tiktoken" target="_blank" rel="noopener">tiktoken</a> (lib Python).</p>
+
+<p>É por isso que LLMs erram tarefas que pra humano são triviais. Pergunte "quantos R's tem em strawberry?" — o modelo pode errar porque <strong>nunca vê letras individuais</strong>. "Strawberry" pode ser tokenizado como "str" + "aw" + "berry", então o modelo literalmente não consegue contar os R's porque eles estão espalhados em fronteiras de token. Reverter palavra, contar caracteres, etc — tudo difícil pelo mesmo motivo.</p>
+
+<p>Tokenization tem consequência prática direta pra construir chat assistant:</p>
+
+<ul>
+<li>Token count ≠ word count. Uma frase de 10 palavras em inglês tem tipicamente 13 a 15 tokens.</li>
+<li>Código costuma ser mais denso em tokens que prosa.</li>
+<li>Idiomas não-ingleses (incluindo PT-BR!) geralmente exigem mais tokens por palavra, porque vocabulários BPE são construídos principalmente a partir de texto em inglês. <strong>Custo em PT-BR pode ser 50–80% maior que em EN pra o mesmo conteúdo</strong>.</li>
+<li>Preço de API, limite de context window, e latência — tudo escala com token count.</li>
+</ul>
+
+<h3>Como o modelo chegou aqui: do pretraining ao chat</h3>
+
+<p>O modelo que você chama passou por um pipeline multi-estágio pra virar assistente de chat, e cada estágio tem consequência direta no produto que você está construindo.</p>
+
+<p><strong>Pretraining</strong> é onde o modelo aprende linguagem. Treinado num corpus massivo (livros, websites, código, papers), aprende a prever o próximo token dado todos os anteriores. Auto-supervisionado — ninguém rotula os dados. O modelo lê trilhões de tokens e aprende padrões. <strong>Pretraining é o que dá ao modelo conhecimento geral, gramática, capacidade de escrever código — e a tendência de produzir texto plausível, verdadeiro ou não</strong>. Quando seu assistente afirma um fato errado com confiança, esse comportamento vem do pretraining: o modelo aprendeu a produzir continuações prováveis, não verdades verificadas.</p>
+
+<p><strong>Post-training</strong> é o que transforma o preditor de texto em assistente de chat. O modelo pretreinado é bom em completar texto, mas não sabe seguir instruções, manter conversa, ou recusar pedidos prejudiciais. Conserta em duas etapas:</p>
+
+<ol>
+<li><strong>SFT (Supervised Fine-Tuning)</strong>: treina o modelo em exemplos curados de boas conversas — usuário faz pergunta, resposta humana mostra qual seria o ideal. Ensina o formato e estilo de assistente útil.</li>
+<li><strong>RLHF (Reinforcement Learning from Human Feedback)</strong>: avaliadores humanos comparam pares de respostas e escolhem a melhor. O modelo aprende dessas preferências, ficando mais útil, mais preciso, e menos propenso a output prejudicial.</li>
+</ol>
+
+<p>É por isso que <em>o mesmo base model pode parecer completamente diferente dependendo de como foi pós-treinado</em> — e também por que system prompts funcionam: o modelo foi especificamente treinado pra seguir instruções nível-developer durante o post-training. Para uma visão profunda, veja o paper <a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">InstructGPT</a> e o <a href="https://huggingface.co/blog/rlhf" target="_blank" rel="noopener">post da Hugging Face sobre RLHF</a>.</p>
+
+<h3>Scaling laws — por que existem modelos mini e nano</h3>
+
+<p><strong>Scaling laws</strong> governam a relação entre tamanho do modelo, dado de treino e performance. Pesquisa notável (Kaplan et al. na OpenAI e o <a href="https://arxiv.org/abs/2203.15556" target="_blank" rel="noopener">paper Chinchilla da DeepMind</a>) mostrou que performance melhora previsivelmente quando você aumenta parâmetros e tokens de treino, seguindo curvas <em>power-law</em>.</p>
+
+<p>É por isso que a indústria continua construindo modelos maiores: dobrar o tamanho produz ganhos previsíveis e mensuráveis. Pra você como builder, scaling laws explicam o trade-off custo-capacidade que enfrenta:</p>
+
+<ul>
+<li><strong>Frontier model</strong> (centenas de bilhões de parâmetros): custa mais por token, mas resolve tarefas mais difíceis. Ex: GPT-4o, Claude Sonnet 4.5, Gemini 2.5 Pro.</li>
+<li><strong>Lightweight model</strong> (menos parâmetros, menos treino): mais barato e rápido, menos capaz. Ex: GPT-4o-mini, Claude Haiku, Gemini Flash.</li>
+</ul>
+
+<p>O <em>tiered pricing</em> dos provedores (frontier / mini / nano) mapeia direto na curva de scaling. Entender isso permite tomar a decisão de <strong>model routing</strong> que cobrimos a seguir.</p>
+
+<h2>Parte 2 — Model routing: o truque que corta 60-80% do custo</h2>
+
+<img src="../assets/images/2026-05-23-personal-ai-chat-assistant-3-routing.jpg" alt="Router de circuito dividindo queries em dois caminhos — modelo pequeno barato e modelo grande caro — com medidores de custo mostrando diferença dramática" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>A maioria das queries de um chat assistant é trivial: "qual o horário de funcionamento?", "como cancelo minha assinatura?", "oi tudo bem?". Mandar tudo isso pro <em>frontier model</em> é desperdício caro.</p>
+
+<p><strong>Model routing</strong> classifica cada query antes da inferência e roteia pro modelo apropriado:</p>
+
+<ul>
+<li>Query simples / FAQ-style → modelo mini ou nano ($0.10-0.50 / 1M tokens).</li>
+<li>Query média / raciocínio leve → modelo medium ($1-5 / 1M tokens).</li>
+<li>Query complexa / raciocínio multi-step → frontier ($10-30 / 1M tokens).</li>
+</ul>
+
+<p>Implementações práticas: <a href="https://github.com/lm-sys/RouteLLM" target="_blank" rel="noopener">RouteLLM</a> da LMSys, <a href="https://openrouter.ai/docs/features/model-routing" target="_blank" rel="noopener">OpenRouter auto-routing</a>, ou um classifier simples (regex + embedding similarity) custom. Em volumes acima de 10K conversas/dia, economia típica é 60–80% sem perda perceptível de qualidade.</p>
+
+<h2>Parte 3 — Context engineering</h2>
+
+<p>O system prompt é onde sua personalidade, regras, formato de output e guardrails vivem. Mas context engineering é mais que isso: é como você empacota tudo que o modelo precisa pra responder bem.</p>
+
+<p>Componentes que entram em toda request:</p>
+
+<ol>
+<li><strong>System prompt</strong>: identidade, regras, formato (ex: "Você é o assistente do produto X. Sempre responda em PT-BR. Recuse perguntas fora do escopo do produto.").</li>
+<li><strong>Few-shot examples</strong>: 2-5 exemplos de bom comportamento. Reduz hallucination dramaticamente sem precisar fine-tuning.</li>
+<li><strong>Conversation history</strong>: turnos anteriores da sessão. Compactar agressivamente quando passar de N turnos (técnica: <em>multi-turn compaction</em> — resumir os 10 turnos mais antigos num resumo curto).</li>
+<li><strong>User context</strong>: nome, plano, perfil, idioma — injetado dinamicamente.</li>
+<li><strong>Persistent memory</strong>: preferências e fatos extraídos de sessões anteriores (técnica abordada em <a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">post anterior sobre memória de agents</a>).</li>
+<li><strong>Mensagem atual do usuário</strong>: a query crua, idealmente sanitizada contra prompt injection.</li>
+</ol>
+
+<p>Order matters. System prompt no topo, então few-shot, depois user context, depois history, e por último a mensagem atual. Modelos prestam mais atenção no início e no fim — o famoso efeito <em>lost in the middle</em> (<a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener">Liu et al., 2023</a>).</p>
+
+<h2>Parte 4 — Output controls: temperature, top-p, top-k</h2>
+
+<p>Esses três parâmetros controlam <strong>quão criativo ou determinístico</strong> o modelo é:</p>
+
+<ul>
+<li><strong>Temperature (0 a 2)</strong>: 0 = determinístico (sempre mesma resposta); 0.7 = balance natural; 1.5+ = criativo/caótico. Use 0–0.3 para extração de dados, classificação, código. Use 0.7–1.2 para brainstorming, copy criativo.</li>
+<li><strong>Top-p (nucleus sampling)</strong>: corta a distribuição de probabilidade no top P%. Top-p=0.9 = considera tokens que somam 90% da probabilidade. Limita tokens improváveis.</li>
+<li><strong>Top-k</strong>: considera só os K tokens mais prováveis. Top-k=40 = só os 40 mais prováveis entram no sorteio.</li>
+</ul>
+
+<p>Combine: temperature controla a "temperatura" do sorteio, top-p/top-k limitam o pool. Default razoável pra chat assistant geral: <em>temperature=0.7, top-p=0.9</em>. Para extração estruturada (JSON output): <em>temperature=0, JSON mode habilitado</em>.</p>
+
+<h2>Parte 5 — Como saber que funciona: evals e LLM-as-Judge</h2>
+
+<p>"Funcionou pra mim no terminal" não vale em produção. Você precisa de:</p>
+
+<ul>
+<li><strong>Golden test set</strong>: 50–200 conversas reais ou sintéticas com a resposta ideal anotada. Rode toda vez que mudar prompt, modelo ou config.</li>
+<li><strong>LLM-as-Judge</strong>: usa um modelo (de preferência mais forte que o que está sendo avaliado) pra pontuar respostas em critérios definidos (factualidade, tom, completude). <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">Paper original (Zheng et al., 2023)</a> tem o framework canônico.</li>
+<li><strong>A/B testing online</strong>: dois prompts/modelos rodando em paralelo, métricas de negócio (CSAT, deflection rate, conversion) decidem o ganhador.</li>
+<li><strong>Métricas de produção</strong>: latência (p50, p95, p99), custo médio por conversa, taxa de fallback, taxa de prompt injection detectada.</li>
+</ul>
+
+<p>Ferramentas que automatizam evals: <a href="https://www.langchain.com/langsmith" target="_blank" rel="noopener">LangSmith</a>, <a href="https://docs.smith.langchain.com/" target="_blank" rel="noopener">Phoenix da Arize</a>, <a href="https://github.com/openai/evals" target="_blank" rel="noopener">OpenAI Evals</a>, <a href="https://www.braintrust.dev/" target="_blank" rel="noopener">Braintrust</a> e <a href="https://www.promptfoo.dev/" target="_blank" rel="noopener">promptfoo</a> (CLI open-source).</p>
+
+<h2>Stack recomendada pra começar amanhã</h2>
+
+<ul>
+<li><strong>Modelo</strong>: comece com <a href="https://www.anthropic.com/claude/sonnet" target="_blank" rel="noopener">Claude Sonnet 4.5</a> ou <a href="https://platform.openai.com/docs/models#gpt-4o" target="_blank" rel="noopener">GPT-4o</a> pra prototipar. Adicione routing pra <a href="https://www.anthropic.com/claude/haiku" target="_blank" rel="noopener">Haiku</a> ou GPT-4o-mini quando começar a escalar.</li>
+<li><strong>Framework</strong>: <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a> ou <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a> pra orquestração; <a href="https://ai.pydantic.dev/" target="_blank" rel="noopener">PydanticAI</a> se quiser type-safety forte.</li>
+<li><strong>Memory store</strong>: <a href="https://github.com/mem0ai/mem0" target="_blank" rel="noopener">Mem0</a> ou <a href="https://www.zep.com/" target="_blank" rel="noopener">Zep</a> pra memória persistente; Redis pra session memory.</li>
+<li><strong>Auth e guardrails</strong>: <a href="https://auth0.com/" target="_blank" rel="noopener">Auth0</a> (mencionado no post original como partner), <a href="https://github.com/NVIDIA/NeMo-Guardrails" target="_blank" rel="noopener">NVIDIA NeMo Guardrails</a>, ou <a href="https://www.guardrailsai.com/" target="_blank" rel="noopener">Guardrails AI</a>.</li>
+<li><strong>Observabilidade</strong>: LangSmith ou <a href="https://www.helicone.ai/" target="_blank" rel="noopener">Helicone</a> pra tracing e custo.</li>
+<li><strong>Eval</strong>: promptfoo (CLI, free) → Braintrust quando quiser dashboard.</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>Construir o próprio assistente não é decisão de "AI hype" — é decisão de produto. Quando privacidade, controle de comportamento, integração no fluxo e custo em escala importam, off-the-shelf vira teto baixo. A maior parte da complexidade não está no modelo (a API resolve), está em <strong>context engineering, model routing, evals contínuos e guardrails</strong>.</p>
+
+<p>O esqueleto que cobrimos aqui é genérico — RAG, tool calling, multi-agent, voice, são camadas que você empilha em cima. Mas se você não acerta o esqueleto, nenhuma camada extra salva. Comece simples, instrumente desde o dia 1, e itere com base em eval — não em "achismo".</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "Design a personal AI chat assistant" por Neo Kim e Louis-François Bouchard, publicado em <a href="https://newsletter.systemdesign.one/p/ai-chat-assistant" target="_blank" rel="noopener">The System Design Newsletter</a> em 4 de maio de 2026. Este post é uma adaptação enriquecida em PT-BR, com adições próprias de contexto, links externos, frameworks e exemplos. O post original cobre também o build prático de 8 passos (streaming, JSON output, compaction, prompt injection defense, memory) — fortemente recomendado pra quem quer ir do esqueleto à implementação.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-23 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-personal-ai-chat-assistant.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

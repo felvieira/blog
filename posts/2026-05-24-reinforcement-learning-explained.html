@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Reinforcement Learning explicado simples — de cervos na floresta ao DeepSeek-R1 — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Dr. Ashish Bamania sobre RL — agent, environment, state, action, reward — expandido com RLHF, DPO, GRPO, RLVR, AlphaGo, DeepSeek-R1, reward hacking e o pipeline atual de reasoning models.">
+<meta property="og:title" content="Reinforcement Learning explicado simples — de cervos na floresta ao DeepSeek-R1">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Dr. Ashish Bamania sobre RL — agent, environment, state, action, reward — expandido com RLHF, DPO, GRPO, RLVR, AlphaGo, DeepSeek-R1, reward hacking e o pipeline atual de reasoning models.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-reinforcement-learning-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Reinforcement Learning explicado simples — de cervos na floresta ao DeepSeek-R1</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-reinforcement-learning-cover.jpg" alt="Reinforcement Learning explicado simples — de cervos na floresta ao DeepSeek-R1 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Reinforcement Learning (RL) está fazendo comeback e virando mainstream. De robôs humanoides e AIs que vencem campeões mundiais de Go, até os LLMs que você conversa todo dia — <strong>tudo é treinado com RL</strong>. É o que permite ao modelo aprender com experiência e melhorar via feedback.</p>
+
+<p>Apesar de muito tutorial fazer parecer difícil, RL é bem intuitivo, e <em>você realmente não precisa de PhD pra entender como funciona</em>. Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/what-is-reinforcement-learning" target="_blank" rel="noopener">"21 Reinforcement Learning Concepts" de Neo Kim e Dr. Ashish Bamania</a>, expandido com aplicações modernas em LLM (RLHF, DPO, GRPO, RLVR), papers fundadores, e o pipeline atual da DeepSeek-R1 e o3.</p>
+
+<h2>O que é Reinforcement Learning?</h2>
+
+<p>RL é um tipo de machine learning (junto com <em>supervised</em> e <em>unsupervised</em>) que trata de um <strong>agent</strong> tentando aprender a executar uma tarefa melhor no seu <strong>environment</strong> através de tentativa e erro.</p>
+
+<p>Exemplo intuitivo: um cervo (agent) forrageando numa floresta (environment) pra sobreviver, evitando ser comido por predadores. Cada ação tem consequência. Comportamentos que levam à comida = reward positivo. Comportamentos que levam ao predador = reward negativo (severo). Ao longo do tempo, o cervo aprende a navegar pela floresta de forma cada vez mais eficiente.</p>
+
+<p>É exatamente esse loop — agent age, environment responde, agent ajusta — que treina desde robôs até LLMs.</p>
+
+<img src="../assets/images/2026-05-24-reinforcement-learning-1-loop.jpg" alt="Loop clássico de RL — agent envia ação ao environment, environment responde com state observation e reward" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h2>Os 5 componentes fundamentais</h2>
+
+<h3>1. Agent</h3>
+
+<p>A entidade central. Quem estuda o ambiente, toma decisões, age, e aprende dos resultados. Pode ser:</p>
+
+<ul>
+<li>Um cervo numa floresta.</li>
+<li>Um robô numa fábrica.</li>
+<li>Um carro autônomo na estrada.</li>
+<li>Um jogador AI num jogo (AlphaGo, AlphaStar).</li>
+<li>Um LLM aprendendo a responder bem.</li>
+</ul>
+
+<h3>2. Environment</h3>
+
+<p>Tudo fora do agent com que ele interage. Funções do environment:</p>
+
+<ul>
+<li>Ser afetado pelas ações do agent.</li>
+<li>Mudar seu estado (ou mantê-lo) dependendo da ação.</li>
+<li>Dar reward (positivo) ou punishment (negativo) pra que o agent ajuste intenção na próxima ação.</li>
+</ul>
+
+<p>No caso do cervo, environment = floresta. Para LLM como agent, environment inclui: user inputs, system prompt, tools/APIs que pode chamar, respostas do sistema (tool results, API outputs, error messages), e contexto (documentos, histórico, files).</p>
+
+<h3>3. State</h3>
+
+<p>Snapshot do environment num momento. Tudo que o agent vê e pode usar pra decidir a próxima ação.</p>
+
+<ul>
+<li>Cervo: localização atual, predadores próximos, hora do dia.</li>
+<li>LLM agent: todo o contexto disponível no momento (mensagens anteriores, tool calls feitos, observações).</li>
+</ul>
+
+<h3>4. Action</h3>
+
+<p>Decisão que o agent toma. Espaço de ações pode ser:</p>
+
+<ul>
+<li><strong>Discreto</strong>: número limitado (cervo: norte/sul/leste/oeste; xadrez: ~30 movimentos possíveis por turno).</li>
+<li><strong>Contínuo</strong>: dimensões reais (robô controla torque dos motores entre -1 e 1).</li>
+<li><strong>Misto</strong>: LLM gera texto (cada token escolhido de um vocabulário de 30K-100K — espaço discreto enorme).</li>
+</ul>
+
+<h3>5. Reward</h3>
+
+<p>Sinal numérico de "isso foi bom ou ruim". Pode ser <strong>denso</strong> (reward cada passo: jogo dá +1 a cada inimigo morto) ou <strong>esparso</strong> (reward só no final: ganhou ou perdeu a partida). Sparse rewards são <em>muito</em> mais difíceis de treinar.</p>
+
+<p>O design do reward é onde RL falha catastroficamente quando feito mal — fenômeno chamado <em>reward hacking</em>. Exemplo clássico: agent treinado pra "fazer corrida do barco terminar rápido" descobriu que dava mais reward pegar moedas em loop infinito do que terminar a pista.</p>
+
+<h2>O loop de aprendizado — Q-learning, Policy Gradient, Actor-Critic</h2>
+
+<p>Como o agent <em>aprende</em>? Três famílias dominam:</p>
+
+<h3>Value-Based (Q-Learning, DQN)</h3>
+
+<p>Agent aprende a estimar o "valor" de estar em cada (state, action) — quanto reward esperar dali em diante. Algoritmo escolhe sempre a ação com maior valor estimado. Variantes famosas: <strong>Deep Q-Network (DQN)</strong> da DeepMind que aprendeu Atari só vendo pixels (<a href="https://www.nature.com/articles/nature14236" target="_blank" rel="noopener">paper Nature 2015</a>).</p>
+
+<h3>Policy-Based (REINFORCE, Policy Gradient)</h3>
+
+<p>Agent aprende uma <strong>policy</strong> direto — função que mapeia state → distribuição de ações. Ajusta a policy via gradient descent pra fazer ações boas mais prováveis. Base do <strong>PPO (Proximal Policy Optimization)</strong>, o algoritmo mais usado em RL moderno (<a href="https://arxiv.org/abs/1707.06347" target="_blank" rel="noopener">Schulman et al., 2017</a>).</p>
+
+<h3>Actor-Critic (A3C, SAC, PPO)</h3>
+
+<p>Combina os dois — um modelo "actor" propõe ações, outro "critic" estima valor. Estado da arte em controle contínuo (robótica) e em RL pra LLMs. <strong>PPO é actor-critic</strong>.</p>
+
+<h2>Aplicações que mudaram a história</h2>
+
+<img src="../assets/images/2026-05-24-reinforcement-learning-2-applications.jpg" alt="Painel duplo — AlphaGo jogando Go contra humano à esquerda, ChatGPT com humanos dando thumbs up/down em pares de respostas (RLHF) à direita" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>AlphaGo e AlphaZero (DeepMind, 2016-2017)</h3>
+
+<p>AlphaGo derrotou Lee Sedol em Go (2016). AlphaZero, sucessor, aprendeu Go, xadrez e shogi <em>sem nenhum conhecimento humano</em> além das regras — só auto-jogo via RL. <a href="https://arxiv.org/abs/1712.01815" target="_blank" rel="noopener">Paper Science 2018</a>. Foi a primeira prova pública de que RL puro podia superar décadas de engenharia humana específica.</p>
+
+<h3>OpenAI Five e AlphaStar (2018-2019)</h3>
+
+<p>RL aplicado a jogos multiplayer complexos: Dota 2 (OpenAI Five) e StarCraft II (AlphaStar). Ambos venceram pros humanos. Mostraram que RL escala pra ambientes parcialmente observáveis e ação em tempo real.</p>
+
+<h3>RLHF — o que tornou ChatGPT possível</h3>
+
+<p><strong>RLHF (Reinforcement Learning from Human Feedback)</strong> é a aplicação que mudou o mundo. Pipeline:</p>
+
+<ol>
+<li>Modelo pretreinado responde a prompts (várias respostas por prompt).</li>
+<li>Avaliadores humanos rankeiam as respostas (qual ficou melhor).</li>
+<li>Um <em>reward model</em> separado aprende a prever as preferências humanas.</li>
+<li>O modelo principal é fine-tuned via PPO usando esse reward model como sinal.</li>
+</ol>
+
+<p>Resultado: modelo passa a produzir respostas que humanos preferem — mais úteis, claras, e menos prejudiciais. Paper canônico: <a href="https://arxiv.org/abs/2203.02155" target="_blank" rel="noopener">InstructGPT (Ouyang et al., 2022)</a>. ChatGPT, Claude, Gemini — todos usam alguma variante de RLHF.</p>
+
+<h3>DPO — RLHF sem reward model</h3>
+
+<p>RLHF é caro e instável. <strong>DPO (Direct Preference Optimization)</strong>, de 2023, mostrou que dá pra otimizar direto das preferências humanas <em>sem treinar reward model separado</em>. Loss function que age direto nos pares de respostas. Mais simples, mais estável, resultado equivalente. <a href="https://arxiv.org/abs/2305.18290" target="_blank" rel="noopener">Paper original</a>.</p>
+
+<p>Hoje, Llama 3, Mistral, e muitos modelos open-source usam DPO ou variantes (KTO, IPO, ORPO) em vez de RLHF clássico.</p>
+
+<h3>RLVR e RLAIF — o salto de 2024-2025</h3>
+
+<img src="../assets/images/2026-05-24-reinforcement-learning-3-rlvr.jpg" alt="LLM agent resolvendo problema de matemática com chain-of-thought visível, verifier dando sinal correct/incorrect, reward fluindo de volta pra atualizar parâmetros" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p><strong>RLVR (Reinforcement Learning from Verifiable Rewards)</strong> usa rewards <em>objetivos e verificáveis</em> em vez de preferência humana subjetiva:</p>
+
+<ul>
+<li>Problema de matemática → resposta certa ou errada (verificável).</li>
+<li>Código → passa nos testes ou não.</li>
+<li>Prova de teorema → válida no Lean ou não.</li>
+</ul>
+
+<p>É o que treinou os <strong>reasoning models</strong> — o1, o3 da OpenAI, DeepSeek-R1, Claude com "thinking". O modelo aprende a "pensar mais" (chain-of-thought longo) porque thinking mais frequentemente leva ao reward correto. DeepSeek-R1 paper (janeiro 2025) é leitura obrigatória — mostrou que RLVR puro (sem SFT) já produz comportamento de reasoning emergent.</p>
+
+<p><strong>RLAIF (Reinforcement Learning from AI Feedback)</strong> substitui avaliadores humanos por um LLM forte que julga. Drasticamente mais barato e escalável. Anthropic usa pra Constitutional AI. <a href="https://arxiv.org/abs/2212.08073" target="_blank" rel="noopener">Paper Constitutional AI</a>.</p>
+
+<h3>GRPO — o algoritmo do DeepSeek-R1</h3>
+
+<p><strong>GRPO (Group Relative Policy Optimization)</strong>, introduzido pela DeepSeek, é simplificação do PPO que dispensa o <em>value model</em> separado. Mais barato, mais eficiente em memória — viabilizou o treino do R1 com recursos limitados. <a href="https://arxiv.org/abs/2402.03300" target="_blank" rel="noopener">DeepSeekMath paper</a> tem a derivação completa.</p>
+
+<h2>Exploration vs Exploitation — o trade-off fundamental</h2>
+
+<p>Em todo problema de RL existe tensão:</p>
+
+<ul>
+<li><strong>Exploitation</strong>: usa o que já sabe que funciona pra maximizar reward agora.</li>
+<li><strong>Exploration</strong>: tenta coisas novas pra descobrir estratégias melhores no futuro.</li>
+</ul>
+
+<p>Exploitar demais = fica preso em ótimo local. Explorar demais = nunca capitaliza no que aprendeu. Estratégias clássicas: <em>ε-greedy</em> (com probabilidade ε escolhe aleatório), <em>UCB (Upper Confidence Bound)</em>, <em>Thompson Sampling</em>.</p>
+
+<p>Em LLMs reasoning, controla via <em>temperature</em> durante rollouts no treino — temperature mais alta = mais exploration.</p>
+
+<h2>Reward Hacking — o calcanhar de Aquiles</h2>
+
+<p>Quando você especifica reward errado, agent encontra atalho que satisfaz o reward mas viola o intent. Exemplos reais documentados:</p>
+
+<ul>
+<li>Robô treinado pra "andar rápido" aprendeu a empilhar partes do corpo e cair pra frente — tecnicamente rápido, totalmente inútil.</li>
+<li>Agent treinado pra "limpar quarto" aprendeu a vendar a câmera — sem visão de sujeira = quarto "limpo".</li>
+<li>LLM RLHF aprende a ser <em>sycophantic</em> (concorda com tudo) porque humanos rankeiam respostas concordantes melhor, mesmo quando estão erradas.</li>
+</ul>
+
+<p><a href="https://openai.com/index/faulty-reward-functions/" target="_blank" rel="noopener">OpenAI: Faulty Reward Functions in the Wild</a> tem dezenas de casos. Lição: design de reward = design de incentivo, e Goodhart's Law se aplica brutalmente.</p>
+
+<h2>Como começar a brincar — recursos de aprendizado</h2>
+
+<ol>
+<li><strong>Book canônico</strong>: <a href="http://incompleteideas.net/book/the-book-2nd.html" target="_blank" rel="noopener">Sutton & Barto — Reinforcement Learning: An Introduction</a>. Free online. A bíblia.</li>
+<li><strong>Curso prático</strong>: <a href="https://huggingface.co/learn/deep-rl-course" target="_blank" rel="noopener">Hugging Face Deep RL Course</a>. Hands-on com PyTorch.</li>
+<li><strong>Simuladores</strong>: <a href="https://gymnasium.farama.org/" target="_blank" rel="noopener">Gymnasium</a> (sucessor do OpenAI Gym), <a href="https://github.com/Farama-Foundation/PettingZoo" target="_blank" rel="noopener">PettingZoo</a> (multi-agent).</li>
+<li><strong>Frameworks</strong>: <a href="https://stable-baselines3.readthedocs.io/" target="_blank" rel="noopener">Stable-Baselines3</a> (clássicos: PPO, SAC, DQN), <a href="https://docs.ray.io/en/latest/rllib/" target="_blank" rel="noopener">Ray RLlib</a> (escala distribuída).</li>
+<li><strong>LLM RL</strong>: <a href="https://huggingface.co/docs/trl/index" target="_blank" rel="noopener">Hugging Face TRL</a> (PPO, DPO, KTO, GRPO), <a href="https://github.com/OpenRLHF/OpenRLHF" target="_blank" rel="noopener">OpenRLHF</a> (escala).</li>
+<li><strong>Vídeos</strong>: <a href="https://www.youtube.com/watch?v=2pWv7GOvuf0" target="_blank" rel="noopener">DeepMind RL Lectures (David Silver)</a>. Curso completo grátis.</li>
+</ol>
+
+<h2>Conclusão — por que RL importa pra você que constrói com LLMs</h2>
+
+<p>Você pode achar que RL é coisa de pesquisador de DeepMind, mas <strong>o LLM que você usa todo dia é produto de RL</strong>. Quando você entende o ciclo agent-environment-state-action-reward, entende:</p>
+
+<ul>
+<li>Por que prompts levam o modelo a comportamentos específicos (você está manipulando o state que o agent vê).</li>
+<li>Por que models RLHF têm tendências sycophantic (reward hacking).</li>
+<li>Por que reasoning models são tão caros de treinar (RLVR exige rollouts longos).</li>
+<li>Por que fine-tuning + RLHF + tools = receita pra agents úteis em produção.</li>
+</ul>
+
+<p>RL não vai desaparecer — pelo contrário. Conforme agents ficam mais autônomos, RL vira a forma <em>natural</em> de treiná-los. Os 5 conceitos básicos (agent, environment, state, action, reward) são vocabulário fundamental — tão importante quanto saber o que é uma function ou um array.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "21 Reinforcement Learning (RL) Concepts Explained Simply" por Neo Kim e Dr. Ashish Bamania, publicado em <a href="https://newsletter.systemdesign.one/p/what-is-reinforcement-learning" target="_blank" rel="noopener">The System Design Newsletter</a> em 14 de março de 2026. Esta adaptação em PT-BR cobre os 5 conceitos básicos (a parte gratuita) e expande pesadamente com RLHF, DPO, GRPO, RLVR, AlphaZero, e o pipeline da DeepSeek-R1 — recomendo os livros do Dr. Bamania ("LLMs In 100 Images" e "Reinforcement Learning in 100 Images") pra ir mais fundo, e o curso Hugging Face Deep RL pra prática.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-reinforcement-learning-explained.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

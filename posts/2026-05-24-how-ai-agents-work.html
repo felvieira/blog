@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Sairam Sundaresan e Neo Kim sobre o que mecanicamente é um AI agent — framework PEAS, autonomy/proactiveness/action, ReAct vs Plan-and-Execute, context window como RAM, tools, e a stack pra construir agents em 2026.">
+<meta property="og:title" content="O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Sairam Sundaresan e Neo Kim sobre o que mecanicamente é um AI agent — framework PEAS, autonomy/proactiveness/action, ReAct vs Plan-and-Execute, context window como RAM, tools, e a stack pra construir agents em 2026.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-how-ai-agents-work-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-how-ai-agents-work-cover.jpg" alt="O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Imagina que você mantém um scraper que checa preços de voo todo dia antes da daily do time. Funcionou ontem: navega no site, clica em "Mais barato", coleta resultados, posta no Slack. Simples e previsível.</p>
+
+<p>Hoje, falha. <strong>Silenciosamente</strong>. Você investiga. A airline redesignou a UI ontem à noite. O botão que dizia "Mais barato" agora diz "Tarifa mais baixa". Seu CSS selector aponta pra nada. A lógica da sua task (achar voo barato) continua válida. Mas suas instruções <em>assumiram um mundo que não existe mais</em>.</p>
+
+<p>Você conserta. Uma semana depois, outra coisa muda. Conserta de novo. <strong>Isso é automação brittle</strong> — funciona perfeitamente em condições estreitas, quebra se qualquer coisa muda.</p>
+
+<p>Considere uma abordagem diferente: em vez de escrever código que clica num elemento específico, você dá ao AI agent uma <em>meta</em>: "Encontre o voo mais barato pra Tóquio neste mês". Esse post — adaptação enriquecida em PT-BR de <a href="https://newsletter.systemdesign.one/p/ai-agents-explained" target="_blank" rel="noopener">"AI Agents Explained" de Sairam Sundaresan e Neo Kim</a> — abre a tampa do que é, mecanicamente, um agent.</p>
+
+<h2>Agent vs Chatbot — a diferença que tudo muda</h2>
+
+<img src="../assets/images/2026-05-24-how-ai-agents-work-1-intern.jpg" alt="Estagiário digital recebendo meta de alto nível com ferramentas (browser, cartão, email, calendário) e guardrails visíveis (rate limit, allow-list, verification gates)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>A distinção mais simples: <strong>chatbot fala, agent faz</strong>.</p>
+
+<p>Pede pra um chatbot reservar um voo: ele explica como — o que procurar, o que comparar, talvez um link. Útil, mas <em>nada muda no mundo</em>.</p>
+
+<p>Pede pra um agent reservar um voo: ele abre browser, chama APIs, compara preços, filtra por suas constraints. Checa se há assentos. Se der erro de pagamento, tenta de novo. Quando sucede, confirma o booking e te manda o recibo. <strong>No fim, você tem uma passagem.</strong></p>
+
+<p>Esse <em>side effect</em> (mudar o mundo) é o que separa agents.</p>
+
+<h3>A analogia do estagiário digital</h3>
+
+<p>Um agent é como estagiário inteligente mas inexperiente. Você não micromanage o teclado dele. Você diz:</p>
+
+<blockquote>"Reserve voo pra Tóquio, abaixo de R$2.500, no próximo mês. Use o cartão corporativo. Me manda a confirmação."</blockquote>
+
+<p>Você seta a meta e dá o necessário pra trabalhar: acesso ao site de viagem, dados de pagamento, email. Também seta limites: budget, preferências de airline, regra contra voo madrugada. Ele resolve o resto.</p>
+
+<p><strong>Mas tem caveat que a analogia não captura</strong>: estagiário erra em velocidade humana. Uma tarefa, pausas naturais — fácil pegar. <em>Agent erra em escala instantânea</em>. Dê acesso ao email com "follow up com leads", ele pode mandar 200 mensagens bizarras antes de qualquer um notar.</p>
+
+<p>Agents precisam de boundaries reais aplicadas em código: <strong>rate limits, allow lists, verification gates</strong>. Dizer no prompt não basta.</p>
+
+<h2>As 3 características que definem um agent</h2>
+
+<h3>1. Autonomy</h3>
+
+<p>Agent descobre os passos intermediários sozinho. Você disse "reserve voo abaixo de $500". Ele determina o que precisa acontecer.</p>
+
+<p>Coisas falham — site da airline dá timeout, tarifa some. Agent <strong>pode</strong> se adaptar se você deu estratégias de recovery. Senão, ele trava ou fica tentando a mesma coisa em loop.</p>
+
+<h3>2. Proactiveness</h3>
+
+<p>Toma iniciativa quando informação está faltando. Agent acha 2 voos no mesmo preço com layovers diferentes — consegue checar seu calendário ou te perguntar? <strong>Só se você permitiu e disse pra ele perguntar</strong>. Senão, escolhe aleatório.</p>
+
+<p>Reconhecimento de input faltando é <em>design feature</em> (thresholds de uncertainty, triggers "ask for help"), não propriedade inata.</p>
+
+<h3>3. Action</h3>
+
+<p>Tomar ação via tools é o que distingue agents de chatbots. Agent chama APIs, automatiza browsers, executa código, manda emails — sujeito a scoping rigoroso e validação. Capacidades são mediadas por interfaces definidas: tools com inputs e outputs claros.</p>
+
+<p>Agent decide o que fazer; tools fazem acontecer no mundo real.</p>
+
+<h2>Specifying your agent — o framework PEAS</h2>
+
+<p>Antes de construir, responda 4 perguntas (vem da IA clássica):</p>
+
+<h3>Performance — como você sabe que funcionou?</h3>
+<p>"Round-trip pra Tóquio, abaixo de $500, partindo em 30 dias, email de confirmação recebido."</p>
+
+<h3>Environment — onde opera?</h3>
+<p>Sites de airline públicos, API de agregador, sistema de email corporativo. O que está em bound, o que não está? Pode acessar calendário? Cartão? <strong>Defina o playing field.</strong></p>
+
+<h3>Actuators — o que pode fazer?</h3>
+<p>Buscar voos, clicar botões, preencher forms, fazer compras, mandar emails. Cada capacidade é uma tool que você está entregando. <em>Mais tools = mais poder = mais risco.</em></p>
+
+<h3>Sensors — como percebe os resultados?</h3>
+<p>Lendo conteúdo de página, parseando respostas de API, detectando números de confirmação em emails. <strong>Se não consegue observar o outcome, não consegue raciocinar sobre o próximo passo.</strong></p>
+
+<p>Errou esses, agent vaga sem rumo. Acertou, você tem sistema que dá pra construir e debugar.</p>
+
+<h2>O Brain — LLM como processor, não como hard drive</h2>
+
+<p>Erro comum: tratar o LLM como base de conhecimento. <strong>Pense no LLM como processor, não hard drive</strong>. Ele toma input, raciocina, produz output. Diferente de CPU, é probabilístico — bom com linguagem bagunçada, imperfeito com fatos precisos.</p>
+
+<p>Para nosso agent de voos: não espere que o LLM "saiba" quais airlines voam pra Tóquio ou os preços atuais. Não sabe. Ele propõe próximos passos: buscar voos, comparar preços, checar disponibilidade. Tenta interpretar o que vê.</p>
+
+<p>Implicação prática: <strong>LLM é o engine de reasoning, não a fonte da verdade</strong>. Quando agent precisa de fatos (preços atuais, disponibilidade, política da empresa), pega de tools e memory. O job do LLM é descobrir o que olhar, como interpretar, e o que fazer depois.</p>
+
+<h3>Convivendo com non-determinismo</h3>
+
+<p>Pergunte ao LLM a mesma coisa duas vezes, recebe respostas diferentes. Não erradas — apenas diferentes. <em>Não é bug, é como sistemas probabilísticos funcionam</em>.</p>
+
+<p>Você modula via <strong>temperature</strong> (baixa = mais previsível) mas nunca tem repetibilidade perfeita de código tradicional. E tudo bem. Você projeta diferente:</p>
+
+<ul>
+<li><strong>Decisões low-stakes</strong> (qual search result mostrar primeiro): variância OK.</li>
+<li><strong>Ações high-stakes</strong> (efetivamente comprar voo): adicione verification.</li>
+</ul>
+
+<p>Antes do agent debitar no cartão, ele deve confirmar detalhes-chave (voo, preço, total). Reasoning fuzzy pode propor ações. <strong>Execução final precisa de checkpoints.</strong></p>
+
+<h2>Context Window — working memory do agent</h2>
+
+<p>Se LLM é processor, context window é a RAM dele. Tudo que o agent consegue "ver" de uma vez: request original, conversa até agora, outputs de tools recentes, instruções.</p>
+
+<p>Modelos atuais têm 128K a 1M+ tokens. Rodar fora de espaço não é mais o problema principal. <strong>O limite real é atenção</strong> — conforme o context cresce, agent tem dificuldade de achar e usar detalhes enterrados no meio.</p>
+
+<p>Exemplo real: agent busca em 3 airlines. Cada uma retorna página de resultados. Adicione instruções, reasoning. De repente, gerenciar memória vira problema. Quando context window enche, <strong>agent efetivamente esquece</strong>. Info antiga cai. Se buscou Airline A 10 steps atrás e agora precisa comparar com Airline C, os resultados de A podem ter sumido.</p>
+
+<p>Mitigações:</p>
+<ul>
+<li>Summarizar info conforme avança.</li>
+<li>Salvar detalhes em armazenamento externo (key-value store, vector DB).</li>
+<li>Repetir regras-chave a cada step crítico.</li>
+</ul>
+
+<p>Cobertura profunda no <a href="../posts/2026-05-24-context-engineering-101.html">post sobre context engineering</a>.</p>
+
+<h2>The Loop — ReAct (Reason + Act)</h2>
+
+<img src="../assets/images/2026-05-24-how-ai-agents-work-2-react.jpg" alt="Loop ReAct com 4 estágios — Reason (cérebro), Act (ferramenta), Observe (olho), de volta a Reason — cercado por breadcrumbs de booking de voo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>O engine que faz agents funcionarem chama <strong>ReAct</strong>. Mais simples do que parece. Trace do flight booking:</p>
+
+<p>Você disse: "Reserve voo round-trip pra Tóquio, abaixo de $500, no próximo mês."</p>
+
+<ol>
+<li><strong>Reason</strong>: "Tóquio, abaixo de $500, datas flexíveis. Vou buscar voos primeiro."</li>
+<li><strong>Act</strong>: chama API de busca de voos com parameters (destino: Tóquio, datas flexíveis, max: $500).</li>
+<li><strong>Observe</strong>: "12 voos encontrados. Preços $420-$890. Seis dentro do budget."</li>
+<li><strong>Reason</strong> de novo: "Tenho opções dentro do budget. Mas devo checar layover times. Filtrar por menos de 20h total."</li>
+<li><strong>Act</strong>: filtra ou chama outra tool pra detalhes.</li>
+<li><strong>Observe</strong>: vê lista filtrada.</li>
+</ol>
+
+<p>Ciclo continua (Reason → Act → Observe → Reason) até o agent atingir a meta. <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Paper original do ReAct (Yao et al., 2022)</a>.</p>
+
+<p>Insight: <strong>agent não está seguindo script pré-escrito — cada step depende das observations anteriores</strong>.</p>
+
+<p>ReAct é flexível mas <em>não é confiável</em>. Erros cedo (mal-lê preços, ignora constraints) acumulam e quebram steps depois. Mitigue com checkpoints, planos estruturados pra fases conhecidas, e verification antes de ações irreversíveis.</p>
+
+<h2>Quando o caminho é conhecido — Plan-and-Execute</h2>
+
+<img src="../assets/images/2026-05-24-how-ai-agents-work-3-patterns.jpg" alt="Comparativo ReAct (caminho zig-zag adaptativo, mais lento mas flexível) vs Plan-and-Execute (caminho linear waterfall, mais rápido mas rígido)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>ReAct brilha quando há incerteza. Mas às vezes você sabe exatamente o que precisa acontecer. Padrão alternativo: <strong>Plan-and-Execute</strong>.</p>
+
+<p>Agent escreve plano completo upfront:</p>
+<ol>
+<li>Buscar voos pra Tóquio próximo mês.</li>
+<li>Filtrar abaixo de $500.</li>
+<li>Ranquear por total travel time.</li>
+<li>Checar disponibilidade nos top 3.</li>
+<li>Reservar o melhor.</li>
+<li>Mandar confirmação por email.</li>
+</ol>
+
+<p>Executa cada step em sequência. <strong>Vantagens</strong>: mais rápido (menos round-trips ao LLM), plano é reviewable (você vê antes de começar).</p>
+
+<p><strong>Downside</strong>: rigidez. Se step 3 revelar algo inesperado (todos os voos &lt; $500 têm layover terrível), o plano não se adapta automaticamente. Resposta: <em>hybrid</em> — Plan-and-Execute pro happy path, ReAct quando deviates.</p>
+
+<p>Frameworks suportando ambos: <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a> (state machine), <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a>, <a href="https://www.crewai.com/" target="_blank" rel="noopener">CrewAI</a>.</p>
+
+<h2>Tools — onde poder e risco moram</h2>
+
+<p>Tools são interfaces que o agent usa pra interagir com o mundo. Cada tool deve ter:</p>
+
+<ul>
+<li><strong>Name</strong> claro e descritivo (<code>search_flights</code>, não <code>tool_1</code>).</li>
+<li><strong>Description</strong> contando quando usar.</li>
+<li><strong>Input schema</strong> validado (JSON Schema, Pydantic).</li>
+<li><strong>Output</strong> conciso e estruturado.</li>
+<li><strong>Error handling</strong> que o agent consegue interpretar.</li>
+</ul>
+
+<p>Anthropic publicou <a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">guia canônico sobre writing tools for agents</a>. <strong>MCP (Model Context Protocol)</strong> está virando o padrão da indústria pra agents conversarem com tools — coberto em profundidade no <a href="../posts/2026-05-24-design-ai-agent.html">post de design de agent</a>.</p>
+
+<h2>Memory — short-term vs long-term</h2>
+
+<p>Agents precisam de dois tipos:</p>
+
+<ul>
+<li><strong>Short-term (working memory)</strong>: built-in via context window. Persiste durante a sessão atual.</li>
+<li><strong>Long-term (persistent memory)</strong>: precisa de armazenamento externo. Persiste entre sessões — usuário, preferências, fatos aprendidos.</li>
+</ul>
+
+<p>Soluções: <a href="https://github.com/mem0ai/mem0" target="_blank" rel="noopener">Mem0</a>, <a href="https://www.zep.com/" target="_blank" rel="noopener">Zep</a>, <a href="https://github.com/agents-md/agents.md" target="_blank" rel="noopener">AGENTS.md</a> (padrão de arquivo plano). Cobertura completa no <a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">post sobre memória de agents</a>.</p>
+
+<h2>O que sempre quebra em produção</h2>
+
+<ol>
+<li><strong>Tool definitions vagos</strong>: agent escolhe tool errada ou passa argumento errado. Solução: descriptions específicas, exemplos few-shot.</li>
+<li><strong>Loop infinito sem max-step</strong>: agent tenta o mesmo erro 50 vezes. Solução: cap de steps + circuit breaker.</li>
+<li><strong>Sem verificação antes de ação irreversível</strong>: agent comprou voo errado. Solução: human-in-the-loop ou self-verify step antes de POST destructive.</li>
+<li><strong>Context overflow silencioso</strong>: agent "esquece" constraints. Solução: compaction + re-injeção de regras críticas a cada N steps.</li>
+<li><strong>Tool retornando dado verboso demais</strong>: 50KB de JSON na resposta. Solução: filtrar e formatar antes de retornar ao LLM.</li>
+<li><strong>Sem observability</strong>: agent fez algo errado e você não consegue debuggar. Solução: LangSmith, Langfuse, ou Helicone instrumentando cada call.</li>
+</ol>
+
+<h2>Stack pra construir agents em 2026</h2>
+
+<ul>
+<li><strong>Framework</strong>: LangGraph (estado complexo), CrewAI (multi-agent simples), OpenAI Swarm (lean), Pydantic AI (type-safe).</li>
+<li><strong>Tools</strong>: MCP servers oficiais, Composio (300+ integrações), tools custom via decorators.</li>
+<li><strong>Memory</strong>: Mem0 ou Zep + Redis pra session.</li>
+<li><strong>Vector DB</strong> (pra RAG-augmented): pgvector → Qdrant.</li>
+<li><strong>Models</strong>: Claude Sonnet 4.5 ou GPT-4o pra reasoning, Haiku/4o-mini pra steps simples (model routing).</li>
+<li><strong>Observability</strong>: LangSmith, Langfuse, Arize Phoenix.</li>
+<li><strong>Eval</strong>: Ragas (RAG), promptfoo (geral), trajectory eval custom (agent-specific).</li>
+<li><strong>Hosting</strong>: Vercel/Modal (serverless), Temporal/Restate (workflows long-running).</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>Agents não são chatbots melhorados. <strong>São sistemas que mudam o mundo</strong> — e por isso precisam de design rigoroso, boundaries explícitos, observability obsessiva. A mágica some quando você abre a tampa: é só um loop simples (reason, act, observe, repeat) sobre um LLM probabilístico, mediado por tools cuidadosamente escopadas.</p>
+
+<p>A diferença entre demo bonitinho e agent que roda autônomo em produção <em>sem te queimar o cartão de crédito</em> está nos detalhes mundanos: rate limits em código, verification gates, max-step caps, compaction de context, eval contínuo. <strong>Trate agent como software, não como mágica.</strong></p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "What Makes an AI Agent Different From ChatGPT?" por Sairam Sundaresan (autor de <em>"AI for the Rest of Us"</em>) e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/ai-agents-explained" target="_blank" rel="noopener">The System Design Newsletter</a> em 5 de janeiro de 2026. Esta adaptação em PT-BR cobre o framework PEAS, ReAct vs Plan-and-Execute, tools, memory, e adiciona stack atualizada de 2026, padrões de produção e referências ao MCP e outros posts da série. Recomendo o livro do Sairam (<a href="https://www.amazon.com/AI-Rest-Us-Sairam-Sundaresan/dp/1399415654" target="_blank" rel="noopener">AI for the Rest of Us</a>) e o newsletter <a href="https://gradientascent.substack.com/" target="_blank" rel="noopener">Gradient Ascent</a> dele.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-ai-agents-work.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

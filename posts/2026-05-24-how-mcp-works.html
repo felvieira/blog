@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Eric Roby e Neo Kim sobre Model Context Protocol — problema N×M, analogia USB-C, arquitetura 3-layer (Hosts/Clients/Servers), 3 primitives (Resources/Prompts/Tools), ecossistema 2026 com 1000+ servers, código de exemplo e patterns de produção.">
+<meta property="og:title" content="Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Eric Roby e Neo Kim sobre Model Context Protocol — problema N×M, analogia USB-C, arquitetura 3-layer (Hosts/Clients/Servers), 3 primitives (Resources/Prompts/Tools), ecossistema 2026 com 1000+ servers, código de exemplo e patterns de produção.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-how-mcp-works-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-how-mcp-works-cover.jpg" alt="Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo AI tool que você usa está <strong>passando fome de "context"</strong>. Seu AI precisa do seu codebase. Seus custom agents precisam acessar database. Mas <em>levar esse contexto até eles</em>? Aí é onde a coisa fica bagunçada.</p>
+
+<p>Quando LLMs surgiram, cada link entre AI e fonte de dados exigia uma integração custom construída do zero. Em novembro de 2024, a Anthropic lançou o <strong>Model Context Protocol (MCP)</strong> pra consertar esse problema. Não foi só mais uma ferramenta dev — atacou uma questão fundamental de infraestrutura em AI engineering.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-mcp-works" target="_blank" rel="noopener">"MCP - A Deep Dive" de Eric Roby e Neo Kim</a>, com adições de catálogos atuais de servers (1.000+ públicos), implementações práticas, e o estado do ecossistema em 2026.</p>
+
+<h2>O problema N×M — por que MCP tinha que existir</h2>
+
+<img src="../assets/images/2026-05-24-how-mcp-works-1-nm-problem.jpg" alt="N×M problem — esquerda mostra spaghetti web tangled de clients e data sources, direita mostra MCP com hub-and-spoke limpo através de protocolo único" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Todo AI assistant precisa de context pra ser útil. Claude precisa do seu codebase. ChatGPT pode precisar dos seus arquivos no Google Drive. Custom agents precisam de conexões com database.</p>
+
+<p>Tradicionalmente, cada conexão exige <strong>integração custom</strong>. Pra construir AI coding assistant você precisa:</p>
+<ol>
+<li>Escrever código que conecta na API do GitHub.</li>
+<li>Adicionar autenticação e segurança.</li>
+<li>Converter o formato de dados do GitHub pra algo que sua AI entende.</li>
+<li>Tratar rate limiting, erros, edge cases.</li>
+<li>Repetir tudo isso pra GitLab, Bitbucket, e cada source control.</li>
+</ol>
+
+<p>Esse é o <strong>problema N×M</strong>: N AI assistants × M data sources = N×M integrações únicas pra construir e manter.</p>
+
+<p>Quando Cursor quer adicionar suporte ao Notion, constrói do zero. Quando GitHub Copilot quer o mesmo, constrói de novo. <em>Esforço de engenharia duplicado em cada plataforma AI.</em></p>
+
+<h3>Limitações fundamentais da abordagem antiga</h3>
+
+<ul>
+<li><strong>Integração estática, build-time</strong>: integrações hardcoded. Não dá pra adicionar fonte nova sem updatear a aplicação. Experimentação rápida impossível.</li>
+<li><strong>Segurança app-específica</strong>: cada integração reinventa auth, authorization, data protection. Modelos de segurança inconsistentes, attack surface maior.</li>
+<li><strong>Sem descoberta padrão</strong>: AI systems não conseguem descobrir o que uma data source pode fazer. Tudo precisa ser hardcoded. Difícil criar agents que se adaptam.</li>
+</ul>
+
+<p>Resultado: ecossistema fragmentado, inovação travada por integration work, usuários esperando conexões oficiais.</p>
+
+<h2>A analogia do USB-C</h2>
+
+<p>A melhor forma de pensar em MCP é como porta USB-C:</p>
+
+<p><strong>Antes do USB</strong>: mouse com PS/2. Impressora com paralelo. Câmera com cabo proprietário. Computador precisava de porta específica pra cada device. Maker de cada device tinha que descobrir como conectar em cada computador.</p>
+
+<p><strong>Com USB-C</strong>: tudo usa porta padrão. Computador precisa de uma porta USB-C — não importa se você está conectando HD ou microfone, ele só "fala USB". Device precisa de porta USB-C — não importa se é Mac, PC ou iPad. <strong>Resultado: você conecta qualquer coisa em qualquer coisa, instantaneamente.</strong></p>
+
+<p>MCP é o USB-C dos LLMs. Um único protocolo entre AI models e data sources.</p>
+
+<h2>Como MCP resolve N×M</h2>
+
+<p>Solução: <strong>defina um protocolo único que funcione em todos os sistemas</strong>. Em vez de construir N×M integrações, você constrói N <em>clients</em> (um por AI app) e M <em>servers</em> (um por data source). Trabalho total cai de <strong>N×M pra N+M</strong>.</p>
+
+<p>Quando um AI assistant novo quer suportar todas as fontes existentes, só precisa implementar o MCP client protocol uma vez. Quando uma data source nova quer ficar disponível pra todos os AI assistants, só precisa implementar o MCP server protocol uma vez.</p>
+
+<h3>Duas features arquiteturais críticas</h3>
+
+<h4>1. Dynamic Capability Discovery</h4>
+
+<p>Em integrações tradicionais, a AI app precisa saber detalhes da data source <em>antecipadamente</em>. Se a API muda, a app quebra.</p>
+
+<p>MCP inverte. Usa modelo de "handshake": quando AI conecta num MCP server, pergunta <em>"o que você consegue fazer?"</em>. Server retorna lista de resources e tools disponíveis em tempo real.</p>
+
+<p><strong>Resultado</strong>: você adiciona uma nova tool ao seu database server (ex: "Refund User"). AI agent encontra na próxima conexão. Não precisa mudar código na AI app.</p>
+
+<h4>2. Decoupling Intelligence from Data</h4>
+
+<p>MCP separa o sistema que pensa (AI model) do sistema que sabe (data source):</p>
+
+<ul>
+<li><strong>Pra Data Teams</strong>: constroem MCP servers robustos e seguros pras suas APIs internas, sem se preocupar qual AI model vai usar.</li>
+<li><strong>Pra AI Teams</strong>: trocam modelos sem precisar reconstruir integrações.</li>
+</ul>
+
+<p>Isso significa que sua infra não fica obsoleta quando lançam modelo novo. <strong>Constrói camada de dados uma vez, funciona com qualquer camada de inteligência.</strong></p>
+
+<h2>A arquitetura em 3 camadas</h2>
+
+<img src="../assets/images/2026-05-24-how-mcp-works-2-architecture.jpg" alt="Arquitetura 3 layers — Hosts no topo (Claude Desktop, VSCode, Cursor), Clients no meio (translation layer), Servers embaixo (database, GitHub, Slack)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>Hosts — user-facing apps</h3>
+
+<p>Onde usuários interagem com AI. Exemplos: Claude Desktop, VSCode, Cursor, Claude Code CLI, custom agents. <strong>Hosts orquestram a experiência inteira</strong>:</p>
+
+<ul>
+<li>Interpretam o prompt do usuário.</li>
+<li>Decidem se dados externos ou tools são necessários.</li>
+<li>Criam e gerenciam clients internos (um por server conectado).</li>
+</ul>
+
+<h3>Clients — protocol-speaking connection managers</h3>
+
+<p>Rodam dentro dos hosts. <strong>Cada client mantém conexão 1:1 dedicada com um único MCP server</strong>. São a camada de tradução — convertem requests abstratos do AI em mensagens MCP claras (<code>tools/call</code>, <code>resources/read</code>).</p>
+
+<p>Clients gerenciam o lifecycle inteiro da sessão: connection drops, reconnections, state. Quando conexão começa, fazem <strong>capability negotiation</strong> — perguntam ao server quais tools, resources e prompts ele oferece.</p>
+
+<h3>Servers — onde dados moram</h3>
+
+<p>Conectam a sistemas reais: PostgreSQL, GitHub, Slack workspace, file system, qualquer API. Traduzem requests MCP em operações nativas (ex: MCP read → SQL SELECT).</p>
+
+<p>Servers podem rodar <em>localmente</em> (no laptop do usuário, pra acesso privado) ou <em>remotamente</em> (cloud service compartilhado). Suportam stdio (local) e HTTP+SSE (remoto).</p>
+
+<h2>Os 3 primitives do MCP</h2>
+
+<img src="../assets/images/2026-05-24-how-mcp-works-3-primitives.jpg" alt="3 primitives — Resources (file com cadeado read-only), Prompts (template com variáveis), Tools (gear com action button)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>1. Resources — dados read-only</h3>
+
+<p>Contexto controlado pela aplicação. Dados que o AI <strong>lê mas não muda</strong>:</p>
+
+<ul>
+<li>Query results de database.</li>
+<li>Arquivos do file system.</li>
+<li>API responses de web service.</li>
+<li>Documentação ou knowledge base articles.</li>
+</ul>
+
+<p>Cada resource tem URI única (ex: <code>file:///home/user/project/README.md</code>, <code>github://repo/owner/issue/123</code>).</p>
+
+<h3>2. Prompts — templates reutilizáveis</h3>
+
+<p>Templates de instrução com variáveis. Parametrized prompts compartilháveis entre apps. Usuários e aplicações invocam prompts com valores diferentes pra code, focus areas.</p>
+
+<p>Padronizam workflows comuns. Facilitam compartilhar técnicas eficazes de prompting. Ex: <code>code-review</code> prompt que aceita <code>language</code> e <code>focus_area</code>.</p>
+
+<h3>3. Tools — capacidades executáveis</h3>
+
+<p>Funções que o AI <strong>chama pra executar ações</strong> no mundo real:</p>
+
+<ul>
+<li><code>create_github_issue(repo, title, body)</code></li>
+<li><code>execute_sql(query)</code></li>
+<li><code>send_slack_message(channel, text)</code></li>
+<li><code>read_file(path)</code></li>
+</ul>
+
+<p>Cada tool tem schema JSON definindo inputs/outputs. AI escolhe qual chamar baseado na meta. <strong>Tools são o que tornam MCP poderoso (e perigoso)</strong> — precisam de scoping rigoroso, autenticação, e validation.</p>
+
+<h2>O ecossistema MCP em 2026</h2>
+
+<p>Em 18 meses, MCP passou de "anúncio Anthropic" pra <strong>padrão de facto da indústria</strong>. OpenAI, Google, Microsoft, e dezenas de outros adotaram. Hoje há mais de 1.000 MCP servers públicos.</p>
+
+<h3>Servers oficiais e populares</h3>
+
+<ul>
+<li><a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">Repo oficial</a>: GitHub, GitLab, PostgreSQL, SQLite, Filesystem, Brave Search, Puppeteer, Slack, Google Drive, Memory.</li>
+<li><a href="https://github.com/punkpeye/awesome-mcp-servers" target="_blank" rel="noopener">Awesome MCP Servers</a>: catálogo curado com 500+ servers.</li>
+<li><a href="https://mcp.so/" target="_blank" rel="noopener">mcp.so</a>: diretório searchable.</li>
+<li><a href="https://composio.dev/" target="_blank" rel="noopener">Composio</a>: 300+ tools enterprise (Jira, Linear, Notion, Salesforce, HubSpot) com auth gerenciada.</li>
+</ul>
+
+<h3>Hosts que falam MCP nativo</h3>
+
+<ul>
+<li><a href="https://www.anthropic.com/news/claude-code" target="_blank" rel="noopener">Claude Code</a> (Anthropic) — suporte MCP first-class.</li>
+<li><a href="https://www.cursor.com/" target="_blank" rel="noopener">Cursor</a> — config via <code>.cursor/mcp.json</code>.</li>
+<li><a href="https://github.com/cline/cline" target="_blank" rel="noopener">Cline</a> (VSCode extension).</li>
+<li><a href="https://block.github.io/goose/" target="_blank" rel="noopener">Goose</a> (Block).</li>
+<li><a href="https://continue.dev/" target="_blank" rel="noopener">Continue</a>.</li>
+<li><a href="https://zed.dev/" target="_blank" rel="noopener">Zed</a> (editor com agents).</li>
+</ul>
+
+<h3>SDKs oficiais</h3>
+
+<ul>
+<li><a href="https://github.com/modelcontextprotocol/typescript-sdk" target="_blank" rel="noopener">TypeScript SDK</a> — o mais maduro.</li>
+<li><a href="https://github.com/modelcontextprotocol/python-sdk" target="_blank" rel="noopener">Python SDK</a>.</li>
+<li>SDKs comunitários: Go, Rust, Java, C#, Ruby.</li>
+</ul>
+
+<h2>Construindo seu primeiro MCP server (em 50 linhas)</h2>
+
+<p>Em TypeScript, um server mínimo com 1 tool:</p>
+
+<pre><code>import { Server } from "@modelcontextprotocol/sdk/server/index.js";
+import { StdioServerTransport } from "@modelcontextprotocol/sdk/server/stdio.js";
+
+const server = new Server({ name: "my-server", version: "1.0.0" }, {
+  capabilities: { tools: {} }
+});
+
+server.setRequestHandler("tools/list", async () =&gt; ({
+  tools: [{
+    name: "greet",
+    description: "Greet a person by name",
+    inputSchema: {
+      type: "object",
+      properties: { name: { type: "string" } },
+      required: ["name"]
+    }
+  }]
+}));
+
+server.setRequestHandler("tools/call", async (request) =&gt; {
+  if (request.params.name === "greet") {
+    return { content: [{ type: "text", text: `Hello, ${request.params.arguments.name}!` }] };
+  }
+});
+
+await server.connect(new StdioServerTransport());</code></pre>
+
+<p>Conecta em Claude Desktop adicionando ao <code>~/.config/claude/claude_desktop_config.json</code>:</p>
+
+<pre><code>{
+  "mcpServers": {
+    "my-server": {
+      "command": "node",
+      "args": ["/path/to/my-server.js"]
+    }
+  }
+}</code></pre>
+
+<p>Reinicie Claude Desktop, e seu tool aparece automaticamente.</p>
+
+<h2>O que veio depois — extensões além do core</h2>
+
+<h3>MCP Resources com subscriptions</h3>
+
+<p>Resources podem agora notificar clients quando mudam (ex: arquivo editado, row de DB updateado). Reduz polling.</p>
+
+<h3>MCP Roots — escoping de filesystem</h3>
+
+<p>Host informa ao server quais diretórios são "acessíveis". Server limita operações a esses roots. Importante pra security em hosts multi-tenant.</p>
+
+<h3>Sampling — server pede ao client pra inferir</h3>
+
+<p>Server pode solicitar que o client (host) rode inferência LLM pra ele. Inverte o fluxo normal — útil pra servers que precisam de "thinking" sem ter chave de API própria.</p>
+
+<h3>HTTP+SSE transport pra remote servers</h3>
+
+<p>Inicialmente MCP era só stdio (local). Agora HTTP+SSE permite remote MCP servers — cloud services compartilhados, multi-tenant, com OAuth.</p>
+
+<h2>Armadilhas e patterns de produção</h2>
+
+<ol>
+<li><strong>Não dê tool de DELETE/DROP sem human-in-the-loop</strong>. AI pode invocar com argumentos errados. Pattern: tool "prepara" ação, posta pra approval, executa após sim humano.</li>
+<li><strong>Auth via env vars ou secret manager</strong>. Nunca hardcode tokens no MCP server config.</li>
+<li><strong>Rate limit por server</strong>. Especialmente pra tools que chamam APIs externas pagas.</li>
+<li><strong>Logging estruturado</strong>. Toda <code>tools/call</code> deve ser auditável (quem, quando, com qual argumento, resultado).</li>
+<li><strong>Versionamento de tool schema</strong>. Mudar input schema quebra agents existentes — versione (<code>create_issue_v2</code>) em vez de modificar.</li>
+<li><strong>Server scopes via Roots</strong>. Servidor de filesystem deve respeitar roots fornecidos. Acesso fora = security incident.</li>
+<li><strong>Test em isolamento</strong>: rode MCP server standalone com inspector (<code>npx @modelcontextprotocol/inspector</code>) antes de conectar em host real.</li>
+</ol>
+
+<h2>Quando MCP faz sentido (e quando não)</h2>
+
+<p><strong>Use MCP quando</strong>:</p>
+<ul>
+<li>Você quer mesma integração funcionando em Claude, Cursor, custom agent.</li>
+<li>Acesso a dados que mudam frequentemente (DB, APIs).</li>
+<li>Multi-tool setup onde dynamic discovery economiza setup.</li>
+<li>Quer separar logic de tools de logic de agent (data team vs AI team).</li>
+</ul>
+
+<p><strong>Pode dispensar quando</strong>:</p>
+<ul>
+<li>Single-app, single-tool, sem reuso planejado.</li>
+<li>Latência ultra-crítica (overhead MCP &gt; 10ms).</li>
+<li>Tool já existe como SDK nativo no modelo (ex: built-in file editor do Claude Code).</li>
+</ul>
+
+<h2>O que vem aí em MCP</h2>
+
+<ul>
+<li><strong>Registries oficiais</strong> com signed servers (verificação de identidade do publisher).</li>
+<li><strong>Marketplaces</strong> com servers comerciais (estilo VSCode extensions).</li>
+<li><strong>MCP Gateways</strong> — proxy reverso pra múltiplos servers com auth centralizada (Composio é isso, basicamente).</li>
+<li><strong>Tool composition</strong> nativo — servers chamando outros servers.</li>
+<li><strong>Streaming responses</strong> pra tools que retornam dado contínuo (logs, métricas).</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>MCP não é "mais um protocolo". É a <strong>fundação compartilhada que finalmente desbloqueia agents reais em produção</strong>. Sem ele, todo agent novo é cliente HTTP de propósito específico recriando integrações da estaca zero. Com ele, qualquer agent novo pluga em qualquer data source sem código adicional do lado da AI app.</p>
+
+<p>É um daqueles padrões que parecem óbvios em retrospecto — e que vão definir como AI agents são construídos pela próxima década. Se você está construindo qualquer coisa com LLM em 2026, <strong>aprender MCP é não-negociável</strong>. A boa notícia: o SDK é simples, há 1.000+ servers pra estudar, e o tooling melhora toda semana.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "MCP - A Deep Dive: Understanding Model Context Protocol" por Eric Roby e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/how-mcp-works" target="_blank" rel="noopener">The System Design Newsletter</a> em 26 de dezembro de 2025. Esta adaptação em PT-BR cobre a parte gratuita (problema N×M, USB-C analogy, arquitetura 3-layer, 3 primitives) e expande pesadamente com ecossistema 2026, código de exemplo, patterns de produção, e roadmap futuro. Recomendo o <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">site oficial do MCP</a>, o canal <a href="https://www.youtube.com/@codingwithroby" target="_blank" rel="noopener">@codingwithroby</a> do Eric, e o <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">repo oficial de servers</a> pra começar.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-mcp-works.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

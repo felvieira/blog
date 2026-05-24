@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Fran Soto sobre construir AI agents — a metáfora da montagem de móvel, framework de 10 steps, MCP tools, skills, SOPs, AGENTS.md, multi-agent patterns e human-in-the-loop.">
+<meta property="og:title" content="Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Fran Soto sobre construir AI agents — a metáfora da montagem de móvel, framework de 10 steps, MCP tools, skills, SOPs, AGENTS.md, multi-agent patterns e human-in-the-loop.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-design-ai-agent-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-design-ai-agent-cover.jpg" alt="Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo mundo está falando de AI agents — só que pouquíssimas pessoas estão de fato <strong>construindo</strong> um. Plugar um chatbot no site é só atualização de UI. A oportunidade real está em <em>agentic AI</em>, e a maior parte do mercado está deixando passar.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-do-ai-agents-work" target="_blank" rel="noopener">"How Do AI Agents Work" de Neo Kim e Fran Soto (engenheiro Amazon/Ring)</a>, com adições de frameworks atuais, comparativos e o caso de uso prático que mais tem retorno: <strong>incident response autônomo</strong>.</p>
+
+<h2>A metáfora que finalmente fez click — montagem de móvel</h2>
+
+<img src="../assets/images/2026-05-24-design-ai-agent-1-comparison.jpg" alt="Comparação visual entre LLM (cérebro num telefone, só conselho), workflow (manual de instruções rígido) e agent (robô com cérebro e mãos)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Imagine que você acabou de comprar um móvel e precisa montar.</p>
+
+<ul>
+<li><strong>O manual de instruções da caixa é um workflow</strong>. Caminho linear que funciona perfeitamente enquanto tudo dá certo. É o equivalente a scripts e código tradicional. Mas se você quebrar uma peça, o manual não te ajuda. Não há recuperação.</li>
+<li><strong>Um LLM é como ter um SAC pra ligar</strong>. Você descreve a peça quebrada, e atende uma pessoa brilhante e empática que explica por que a madeira rachou. Mas no fim da ligação, você ainda está sentado no chão com a peça quebrada. Por mais simpático que seja o atendente, ele <em>não tem mãos</em> pra ajudar.</li>
+<li><strong>Você é o agent nesse cenário</strong>. É você quem tem as ferramentas — martelo, prego, cola, furadeira. É você quem tem o cérebro pra decidir como usar e como recuperar de erros que não estavam no manual.</li>
+</ul>
+
+<p>Construir um AI agent é <strong>dar ao modelo tanto o cérebro quanto as mãos</strong> pra trabalhar por você. Fran Soto usa o exemplo de <em>incident response agent</em> no post — mas os princípios valem pra praticamente qualquer processo repetível.</p>
+
+<h2>Por que o lado não-determinístico de AI é bom (e não bug)</h2>
+
+<p>Tem muito ceticismo sobre AI porque ela <em>não é tão confiável</em> quanto código tradicional. Estamos acostumados com código que faz exatamente a mesma coisa toda vez. Mas a falta de determinismo é uma <em>feature</em> pra certas tarefas.</p>
+
+<p>Humanos não são tão confiáveis quanto máquinas, e ainda assim somos nós que consertamos máquinas quando elas quebram. <strong>Preferimos humanos usando máquinas porque traz o melhor dos dois mundos</strong>: máquinas dão velocidade e precisão do determinismo; humanos lidam com o que sai do script.</p>
+
+<p>Um agent imita essa habilidade humana de adaptar a situações novas. Quando um sistema falha de forma não-antecipada, o agent revisa logs e ajusta a abordagem. <strong>É self-healing.</strong></p>
+
+<h2>O framework de 10 passos — de manual a fleet autônoma</h2>
+
+<img src="../assets/images/2026-05-24-design-ai-agent-3-ladder.jpg" alt="Escada de maturidade de 10 passos saindo de humano fazendo trabalho manual no chão até fleet de agents autônomos cooperando no topo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Construir um agent não é flip de switch. É processo iterativo onde você gradualmente <em>offloada</em> carga cognitiva pra máquina enquanto mantém olho na performance. Fran propõe 10 passos:</p>
+
+<h3>Passo 1 — Faça o trabalho manualmente</h3>
+
+<p>Documente como você faz hoje, como se fosse um <em>runbook</em> pra outra pessoa seguir:</p>
+
+<ul>
+<li>Abrir dashboard de monitoramento e checar métrica fora do padrão.</li>
+<li>Conferir runbooks pra troubleshooting da métrica específica.</li>
+<li>Consultar logs de erro dos últimos 15 minutos, procurando requests com HTTP 500.</li>
+</ul>
+
+<p><strong>Estado atual:</strong> você é o gargalo. Toda step exige sua intervenção e atenção. Esse é o baseline a melhorar.</p>
+
+<h3>Passo 2 — Comece a usar um LLM</h3>
+
+<p>Com processo manual sólido, use como guia pra um LLM. Sai do trabalho braçal pra ter um assistente que analisa dados. Cola logs do terminal, pede:</p>
+
+<blockquote>"Revise estes logs e ache qual erro está acontecendo: &lt;cola dos logs&gt;"</blockquote>
+
+<p>Preste atenção <strong>onde o AI não faz o que você quer</strong> e como você corrige. Essas anotações viram seus prompts e skills no futuro.</p>
+
+<p><strong>Estado atual:</strong> AI começa a analisar padrões, mas você ainda orquestra tudo e move dado manualmente.</p>
+
+<h3>Passo 3 — Adicione MCP Tools</h3>
+
+<p>Você ainda está no meio, atuando como ponte. Próximo passo: parar de copy-paste. Use o <strong><a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">Model Context Protocol (MCP)</a></strong> pra permitir que o AI execute ações.</p>
+
+<p>MCP é como HTTP pra AI agents — uma API padronizada que deixa o modelo executar operações em outros sistemas. Com MCP servers conectados (Datadog, GitHub, Jira, Slack, PagerDuty, AWS), seus prompts viram:</p>
+
+<blockquote>"Obtenha os alarmes que dispararam nos últimos 15 minutos. Me dê apenas o nome do alarme."<br>
+"Cheque os logs por requests com HTTP 500. Me dê a mensagem do log, mensagem de erro, e stack trace..."</blockquote>
+
+<p>Catálogo de MCP servers oficiais: <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">github.com/modelcontextprotocol/servers</a>. Para integrações enterprise, <a href="https://composio.dev/" target="_blank" rel="noopener">Composio</a> tem 300+ tools prontas.</p>
+
+<h3>Passo 4 — Adicione Agent Skills</h3>
+
+<img src="../assets/images/2026-05-24-design-ai-agent-2-anatomy.jpg" alt="Anatomia de um agent — agent no centro, conectado a MCP tools, memory store, skills e SOP via spokes brilhantes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Onboarde o AI em incident response como você onboarderia um júnior recém-contratado: ensine como usar cada tool, ensine como você quer o trabalho feito. Combine guides + Standard Operating Procedures.</p>
+
+<p>Exemplo: se as MCP tools de log exigem query como input, crie a Skill de "build de query" — markdown com guia dos campos dos logs + scripts pequenos pra montar queries de um template. Muito melhor que fazer o AI escrever queries complexas toda vez (e reduz hallucinations de campos que não existem).</p>
+
+<p><strong>Skills são carregadas só quando necessárias</strong> (saving tokens). Sintaxe tipo Cursor:</p>
+
+<pre><code>/metrics-and-alarm-management Find the alarms fired
+&lt;LLM responde com info de métricas&gt;
+/my-service-logs-management Find logs with errors in these endpoints
+&lt;LLM responde com info de logs&gt;
+/code-expert Where in code is this log emitted?
+&lt;LLM responde com info de código&gt;</code></pre>
+
+<p>Convergência de mercado: <a href="https://github.com/anthropics/skills" target="_blank" rel="noopener">Anthropic Skills</a>, Claude Code skills, Cursor rules — todos seguem o mesmo padrão de markdown + scripts opcionais carregados sob demanda.</p>
+
+<h3>Passo 5 — Adicione memory</h3>
+
+<p>Toda nova sessão, o agent tem amnésia. Sabe resolver incidentes mas não lembra do que resolveu ontem. Solução: short-term + long-term memory.</p>
+
+<ul>
+<li><strong>Short-term memory</strong>: built-in. É a habilidade do AI de lembrar mensagens anteriores na conversa atual. Quando você chama a API pra resposta, manda as mensagens anteriores junto com a nova.</li>
+<li><strong>Long-term memory</strong>: arquivos que o AI lê, persistentes entre sessões.</li>
+</ul>
+
+<p>Cada empresa tinha o próprio formato; agora há padrão emergente: <strong><a href="https://github.com/agents-md/agents.md" target="_blank" rel="noopener">AGENTS.md</a></strong>. Arquivo lido por qualquer AI, independente de qual seja (Claude Code, Cursor, Gemini CLI, etc.).</p>
+
+<p>Pra memória semântica avançada: <a href="https://github.com/mem0ai/mem0" target="_blank" rel="noopener">Mem0</a> ou <a href="https://www.zep.com/" target="_blank" rel="noopener">Zep</a> (cobertos no <a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">post sobre memória de agents</a>).</p>
+
+<h3>Passo 6 — Orquestre com Agent SOPs</h3>
+
+<p>Você ainda está dirigindo cada movimento. Crie um <strong>Standard Operating Procedure (SOP)</strong> — arquivo step-by-step que o AI segue. Convenção emergente: usar palavras-chave do <a href="https://datatracker.ietf.org/doc/html/rfc2119" target="_blank" rel="noopener">RFC 2119</a> (MUST, SHOULD, MAY) pra especificar níveis de requirement.</p>
+
+<p>Em vez de prompts step-by-step, você invoca:</p>
+
+<pre><code>/incident-response-agent-sop Investigate the incident reported at JIRA-1234</code></pre>
+
+<p>O agent vira muito mais autônomo. Humano só invoca o SOP certo, agent cuida do resto — tipo um manager achando o engineer certo pra entrar na call.</p>
+
+<h3>Passo 7 — Defina um agent (com dependências)</h3>
+
+<p>Com dezenas de MCP tools, skills e SOPs, vira impossível configurar tudo manualmente. Solução copiada de software tradicional: <strong>declare as dependências do agent</strong> num manifesto. Cada agent tem seu próprio package de tools + skills + SOPs.</p>
+
+<p>Hoje não tem package manager universal pra isso (ainda), mas plataformas como <a href="https://www.anthropic.com/news/claude-code" target="_blank" rel="noopener">Claude Code com plugins</a>, <a href="https://docs.cursor.com/" target="_blank" rel="noopener">Cursor</a>, <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a>, e <a href="https://kiro.dev/" target="_blank" rel="noopener">Amazon Kiro</a> já vão nessa direção.</p>
+
+<h3>Passo 8 — Execute o agent periodicamente</h3>
+
+<p>Por que você ainda está sendo paged às 3 da manhã só pra invocar o agent e esperar? Setup o agent pra rodar autônomo. Script simples: checa por trabalho → roda agent se houver → dorme N minutos. CLI tools tornam isso trivial (Claude Code, gemini-cli, codex CLI).</p>
+
+<h3>Passo 9 — Melhore state management</h3>
+
+<p>Agent rodando no laptop é POC. Pra produção, integre no workflow:</p>
+
+<ul>
+<li>Webhook do PagerDuty → trigger automático pro AI agent rodando em Lambda.</li>
+<li>Pra relatórios periódicos: cron job que dispara em intervalos regulares.</li>
+<li>Agent faz investigação, posta sumário no Slack channel.</li>
+</ul>
+
+<p>Agora seu agent trabalha enquanto você dorme — mesmo que faça apenas uma coisa específica bem.</p>
+
+<h3>Passo 10 — Escale pra múltiplos agents</h3>
+
+<p>Como um time de engineers, você não pede pra uma pessoa só lidar com todo microsserviço. Mesma lógica vale pra agents. Final state: <strong>múltiplos agents colaborando no mesmo incidente</strong>, cada um com expertise específica (database, network, application, security), orquestrados por um agent supervisor.</p>
+
+<p>Patterns comuns:</p>
+
+<ul>
+<li><strong>Hierarchical</strong>: supervisor agent delega pra sub-agents especializados.</li>
+<li><strong>Peer-to-peer</strong>: agents se comunicam via message bus (Kafka, NATS).</li>
+<li><strong>Blackboard</strong>: agents leem/escrevem em estado compartilhado (Redis, S3).</li>
+</ul>
+
+<p>Frameworks: <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a>, <a href="https://www.crewai.com/" target="_blank" rel="noopener">CrewAI</a>, <a href="https://microsoft.github.io/autogen/" target="_blank" rel="noopener">Microsoft AutoGen</a>, <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a>.</p>
+
+<h2>Quando manter humano no loop</h2>
+
+<p>Nem toda ação pode ser autônoma. Defina <em>guardrails</em> que exigem human approval pra:</p>
+
+<ul>
+<li>Ações <strong>destrutivas</strong> (DELETE, DROP, rm -rf, payment, refund).</li>
+<li>Ações <strong>irreversíveis</strong> (deploy em prod, terminate EC2, force-push).</li>
+<li>Ações com <strong>blast radius alto</strong> (escala recursos cloud, dispara campanha de email).</li>
+<li>Decisões que requerem <strong>contexto político/social</strong> (responder cliente bravo no Twitter).</li>
+</ul>
+
+<p>Pattern recomendado: agent prepara a ação + justificativa + diff, posta no Slack ou Jira, humano clica "approve". Frameworks como <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph interrupt()</a> facilitam isso.</p>
+
+<h2>Stack pra começar amanhã</h2>
+
+<ul>
+<li><strong>IDE / runner</strong>: <a href="https://www.anthropic.com/news/claude-code" target="_blank" rel="noopener">Claude Code</a> (CLI + plugins) ou <a href="https://cursor.com/" target="_blank" rel="noopener">Cursor</a> (IDE).</li>
+<li><strong>Tools</strong>: MCP servers oficiais + Composio (300+ integrações).</li>
+<li><strong>Memory</strong>: AGENTS.md + Mem0 ou Zep.</li>
+<li><strong>Orchestration</strong>: LangGraph (fluxos complexos) ou CrewAI (multi-agent simples).</li>
+<li><strong>Observability</strong>: <a href="https://www.langchain.com/langsmith" target="_blank" rel="noopener">LangSmith</a> ou <a href="https://langfuse.com/" target="_blank" rel="noopener">Langfuse</a>.</li>
+<li><strong>Scheduling</strong>: cron simples → AWS EventBridge → Temporal pra workflows complexos.</li>
+</ul>
+
+<h2>Conclusão — pra onde isso está indo</h2>
+
+<p>Em 2024, AI agents eram experimento. Em 2025, viraram produto (Claude Code, Cursor Composer, Devin). Em 2026, viram <em>commodity</em> — todo time decente terá pelo menos 1 agent rodando autônomo. Os times que vão se destacar são os que <strong>tratam agents como engenheiros juniores</strong>: onboard direito, dão tools, escrevem SOPs claros, monitoram performance, e iteram.</p>
+
+<p>O framework de 10 passos do Fran não é mágica — é a aplicação rigorosa de práticas que já usamos em software tradicional (runbooks, dependências, schedulers) num novo tipo de "funcionário". <strong>Comece pequeno. Um agent. Uma tarefa. Mede. Itera.</strong> Em 90 dias você não vai querer voltar.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "I struggled with AI agents until I built an incident response agent" por Neo Kim e Fran Soto, publicado em <a href="https://newsletter.systemdesign.one/p/how-do-ai-agents-work" target="_blank" rel="noopener">The System Design Newsletter</a> em 18 de março de 2026. Esta adaptação em PT-BR enriquece com frameworks atuais, patterns multi-agent e padrões emergentes (AGENTS.md, Claude Skills). Para o passo-a-passo do incident response agent, vale o post completo + o newsletter <a href="https://strategizeyourcareer.com/" target="_blank" rel="noopener">StrategizeYourCareer</a> do Fran.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-design-ai-agent.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

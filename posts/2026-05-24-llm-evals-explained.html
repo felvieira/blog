@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LLM Evals Explicado — os 15 conceitos que separam ship-and-pray de engenharia séria com LLMs — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Anshuman Mishra e Neo Kim sobre LLM evaluation — non-determinismo, golden set, rubrics, LLM-as-judge, métricas RAG e agent, e o framework de 5 passos pra ter eval rodando em CI até semana que vem.">
+<meta property="og:title" content="LLM Evals Explicado — os 15 conceitos que separam ship-and-pray de engenharia séria com LLMs">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Anshuman Mishra e Neo Kim sobre LLM evaluation — non-determinismo, golden set, rubrics, LLM-as-judge, métricas RAG e agent, e o framework de 5 passos pra ter eval rodando em CI até semana que vem.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-llm-evals-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>LLM Evals Explicado — os 15 conceitos que separam ship-and-pray de engenharia séria com LLMs</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-llm-evals-cover.jpg" alt="LLM Evals Explicado — os 15 conceitos que separam ship-and-pray de engenharia séria com LLMs — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você lança uma feature de LLM. Passa nos testes manuais. Um dia depois, um usuário posta screenshot do produto halucinando feio. Você ajusta o prompt, roda de novo, parece OK. <strong>Você consertou, ou só teve sorte?</strong></p>
+
+<p>Bem-vindo à frustração central de LLM engineering: <em>você não pode mais rodar um teste e dar por encerrado</em>.</p>
+
+<p>Isso não é problema de debug. É <strong>problema de medição</strong>. E medição tem nome: <em>evaluation</em>.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/llm-evals" target="_blank" rel="noopener">"29 LLM Evaluation Concepts" de Anshuman Mishra e Neo Kim</a>, com adições de stack de ferramentas atuais (Ragas, promptfoo, Braintrust, LangSmith), patterns de produção, e o framework de eval que uso pra todas as skills do <a href="https://github.com/felvieira/claude-skills-fv" target="_blank" rel="noopener">Dev Team Kit</a>.</p>
+
+<h2>Por que seus instintos de testing não funcionam aqui</h2>
+
+<img src="../assets/images/2026-05-24-llm-evals-1-non-deterministic.jpg" alt="Unit test tradicional com checkmark binário vs LLM eval com distribuição probabilística, score 4.2/5 com variance bars" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>1. O problema da não-determinismo</h3>
+
+<p>Escreve uma function. Chama com mesmo input duas vezes, recebe mesmo output. LLMs não funcionam assim. <strong>Mesmo prompt pode produzir resposta diferente toda vez</strong>. Às vezes pouco diferente. Às vezes completamente diferente.</p>
+
+<p>Isso quebra algo mais profundo: <em>seu modelo mental inteiro de testing assume determinismo</em>. Você roda teste, passa ou falha. Com LLMs, teste que passa é <strong>data point, não veredito</strong>. Você não está testando uma function — está fazendo sample de uma distribuição de probabilidade. Uma amostra te diz quase nada.</p>
+
+<h3>2. O problema da correctness "fuzzy"</h3>
+
+<p>Quando regex casa, casa. Binário. Objetivo. Done. Mas qual é a resposta "certa" pra <em>"summarize this support ticket empathetically"</em>?</p>
+
+<ul>
+<li>A mais concisa?</li>
+<li>A com linguagem mais quente?</li>
+<li>A que captura todos os fatos-chave?</li>
+<li>A que reviewer humano daria nota mais alta?</li>
+</ul>
+
+<p>Quality de LLM é <strong>multi-dimensional e subjetiva</strong>. Geralmente não há uma resposta correta. Há um <em>range</em> de respostas aceitáveis e um <em>range</em> de ruins. A linha entre eles é julgamento.</p>
+
+<p><em>Você não pode medir o que não definiu.</em> O que "bom" significa pro seu use case? Você precisa de resposta clara antes de avaliar qualquer coisa. Maioria pula essa etapa. Vem caçá-los depois.</p>
+
+<h3>3. O problema da regressão silenciosa</h3>
+
+<p>Você atualizou o prompt. Rodou algumas vezes. Outputs parecem melhores. Shippou. Mas <strong>qualidade de fato melhorou, ou você teve sorte com as amostras que checou?</strong></p>
+
+<p>Sem processo sistemático de eval, toda mudança de prompt é <em>aposta cega</em>. Você pode estar melhorando. Pode estar consertando um failure mode enquanto introduz outro. E não tem como saber.</p>
+
+<p>Em software tradicional, CI pega regressões antes do usuário. Em LLM engineering, <strong>não existe equivalente direto</strong>. Pessoas confiam no feeling e em spot-checks manuais. Descobre regressão quando usuário reclama!</p>
+
+<h2>Vocabulário primário — 9 conceitos</h2>
+
+<h3>4. Criteria</h3>
+
+<p>Dimensões de qualidade que importam pro seu use case específico. Bot de suporte se importa com:</p>
+<ul>
+<li>Endereça o problema real do usuário?</li>
+<li>Tom é empático?</li>
+<li>Evita escalation desnecessária?</li>
+</ul>
+
+<p>Tool de geração de código se importa com algo completamente diferente:</p>
+<ul>
+<li>Output é sintaticamente válido?</li>
+<li>Segue convenções do projeto?</li>
+<li>De fato resolve o problema?</li>
+</ul>
+
+<p>Mesma tecnologia, criteria inteiramente diferentes. <strong>Isso é decisão de produto, não técnica.</strong> Você não pode terceirizar pro modelo ou framework. Alguém do time precisa sentar e responder: o que um output bom de fato parece aqui?</p>
+
+<h3>5. Quality Dimensions (vocabulário padrão)</h3>
+
+<ul>
+<li><strong>Relevance</strong>: addressou o que foi perguntado? Resposta pode ser acurada, bem escrita, e completamente off-topic.</li>
+<li><strong>Coherence</strong>: faz sentido logicamente? Sem contradições, sem pivotes mid-sentence.</li>
+<li><strong>Factual Accuracy</strong>: o que diz é de fato verdade? Distinto de relevance — resposta pode ser relevante e errada.</li>
+<li><strong>Helpfulness</strong>: dá o que o usuário precisa pra avançar? Diferença entre tecnicamente correto e útil.</li>
+<li><strong>Safety</strong>: evita conteúdo prejudicial, biased, inapropriado?</li>
+</ul>
+
+<h3>6. Rubric</h3>
+
+<p>Operacionaliza os criteria. Em vez de criterion vago "helpfulness", rubric quebra em perguntas específicas e pontuáveis:</p>
+<ul>
+<li>Resposta direta à pergunta? (0-5)</li>
+<li>Evita hedging desnecessário? (0-5)</li>
+<li>Menos de 200 palavras? (sim/não)</li>
+<li>Usuário não-técnico entende? (0-5)</li>
+</ul>
+
+<p>É checklist de code review pra LLM outputs. <strong>Rubric é o que torna avaliação reproduzível</strong>. Dois reviewers diferentes (humano ou AI) devem chegar em scores similares.</p>
+
+<h3>7. Test Cases</h3>
+
+<p>Pair input/output que forma uma unidade da sua eval. Input é prompt (idealmente representativo de tráfego real). Output é resposta de referência OU o output ao vivo que você vai pontuar.</p>
+
+<p>Pense em test cases como unit tests — exceto que <strong>failing test não significa que output estava errado</strong>. Significa que pontuou abaixo do threshold definido na rubric.</p>
+
+<h3>8. Golden Set</h3>
+
+<img src="../assets/images/2026-05-24-llm-evals-2-golden-set.jpg" alt="Golden set como baú de tesouro contendo test cases curados, alimentado por pipelines de produção, curadoria manual e edge case mining" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Coleção curada de test cases de alta qualidade. <strong>Sua ground truth</strong>. Construir bom golden set é mais difícil que parece.</p>
+
+<p>Instinto: escrever exemplos você mesmo, cobrindo casos de uso antecipados. É um começo. Mas usuários fraseiam coisas diferente do que você espera, batem em edge cases que não imaginou, e usam features de formas criativas.</p>
+
+<p><strong>Solução: seed com queries reais de produção</strong>. Anonimizadas, limpas, representativas. Trate o golden set como artefato crítico do sistema — versione, atualize quando descobrir novos failure modes.</p>
+
+<h3>9. Pass/Fail Threshold</h3>
+
+<p>Scores de eval raramente são binários. Rubric produz score 1-5 ou 0-10. <strong>Threshold converte score em decisão</strong>. Score abaixo de 3 (numa escala 1-5) = falha.</p>
+
+<p>Setar o threshold certo é <strong>product call</strong>: quanto de imperfeição usuários toleram? Quão severas são falhas no domínio? Custo de falsos positivos?</p>
+
+<p>Threshold baixo demais = ship de lixo. Alto demais = não ship nada.</p>
+
+<h3>10. Eval Coverage</h3>
+
+<p>O quanto seu golden set reflete inputs reais de usuários. <strong>Maioria dos times tem cobertura baixa e não sabe</strong>. Constroem golden set de exemplos próprios — happy path + alguns edge cases óbvios. Enquanto isso, tráfego de produção é totalmente diferente.</p>
+
+<p>Cobertura baixa = sua suite de eval é otimista. Você passa em testes mas falha com usuários. <strong>O fix não é escrever mais exemplos sozinho</strong>. É samplear de produção regularmente, revisar falhas, adicionar inputs que expuseram fraquezas.</p>
+
+<h3>11. Temperature, Top-p, Reproducibility</h3>
+
+<p>Settings de sampling afetam eval results diretamente. Rode evals em <code>temperature=1.0</code> e o mesmo prompt pode passar hoje, falhar amanhã. <strong>Standard: temperature=0 durante eval runs</strong>. Trava determinismo.</p>
+
+<p>Se precisa de variância criativa em produção, teste em sua temperatura de produção — só saiba que aceita resultados mais ruidosos.</p>
+
+<h3>12. Rigor Estatístico</h3>
+
+<p>Mesmo em temperature=0, uma única eval run não basta. Seu golden set é amostra do espaço de input. Essa amostra tem variance própria. <strong>Set de exemplos infeliz pode fazer prompt bom parecer ruim. E vice-versa.</strong></p>
+
+<p>Rode muitas avaliações em samples diferentes. Reporte <em>mean E variance</em>, não só score. Mudou prompt e score foi de 4.1 pra 4.3? <strong>Pode ser melhoria real. Pode ser ruído.</strong> Sem dados de variance, você não sabe.</p>
+
+<h2>Os 3 modos de scoring</h2>
+
+<img src="../assets/images/2026-05-24-llm-evals-3-pyramid.jpg" alt="Pirâmide de 3 camadas — heurístico embaixo (barato, rápido, muitos cases), LLM-as-Judge no meio (médio custo, escalável), human no topo (caro, gold standard)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>13. Human Evaluation — gold standard</h3>
+
+<p>Humano revisa output usando rubric e dá score. Lento, caro, pode ser inconsistente. Mas é o mais próximo de ground truth. <strong>Você não pode usar humanos pra toda eval run</strong> — não escala.</p>
+
+<p>Use estrategicamente: construir/validar golden set, checar acurácia das evals automatizadas periodicamente, debugar quando algo quebra e você não sabe por quê.</p>
+
+<h3>14. Heuristic / Code-Based Evaluation — barato e rápido</h3>
+
+<p>Regras escritas em código. Funciona pra coisas binárias e objetivas:</p>
+<ul>
+<li>Output é JSON válido? <code>JSON.parse()</code> sucesso?</li>
+<li>Contém keywords obrigatórios?</li>
+<li>Está abaixo de N tokens?</li>
+<li>Cita fonte específica?</li>
+<li>Matches regex de PII pra rejeitar?</li>
+</ul>
+
+<p>Bibliotecas tipo <a href="https://github.com/openai/evals" target="_blank" rel="noopener">OpenAI Evals</a> e <a href="https://www.promptfoo.dev/" target="_blank" rel="noopener">promptfoo</a> facilitam. Custo: ~zero. Velocidade: milhões de eval/dia. Limitação: só pega o objetivo.</p>
+
+<h3>15. LLM-as-Judge — a escala que viabiliza CI</h3>
+
+<p>Usa um LLM (idealmente mais forte que o avaliado) pra pontuar outputs usando a rubric. <a href="https://arxiv.org/abs/2306.05685" target="_blank" rel="noopener">Paper canônico (Zheng et al., 2023)</a>: GPT-4 como judge tem ~85% de agreement com humanos em tarefas comuns.</p>
+
+<p>Patterns:</p>
+<ul>
+<li><strong>Pairwise comparison</strong>: judge compara duas respostas, escolhe melhor. Mais robusto que scoring absoluto.</li>
+<li><strong>Reference-based</strong>: judge compara com resposta-padrão.</li>
+<li><strong>Rubric-based</strong>: judge dá score em cada dimensão da rubric.</li>
+</ul>
+
+<p>Armadilhas: biases (position bias, verbosity bias, self-preference), inconsistência. Mitigações: rodar judge múltiplas vezes, alternar ordem, validar contra humanos periodicamente.</p>
+
+<h2>Métricas específicas pra RAG</h2>
+
+<p>Sistemas RAG têm vocabulary próprio. <a href="https://docs.ragas.io/" target="_blank" rel="noopener">Ragas</a> popularizou:</p>
+
+<ul>
+<li><strong>Faithfulness</strong>: a resposta gerada é grounded nos chunks recuperados? (anti-hallucination)</li>
+<li><strong>Answer Relevancy</strong>: a resposta endereça a pergunta?</li>
+<li><strong>Context Precision</strong>: dos chunks recuperados, quantos são realmente relevantes?</li>
+<li><strong>Context Recall</strong>: dos chunks <em>necessários</em>, quantos foram recuperados?</li>
+<li><strong>Context Entity Recall</strong>: das entidades-chave, quantas o retrieval pegou?</li>
+</ul>
+
+<p>Combinação típica: faithfulness + answer relevancy + context precision = "RAG triad" (popularizado pela <a href="https://www.trulens.org/" target="_blank" rel="noopener">TruLens</a>).</p>
+
+<h2>Métricas específicas pra Agents</h2>
+
+<p>Agents adicionam complexidade:</p>
+<ul>
+<li><strong>Task completion rate</strong>: agent terminou a tarefa?</li>
+<li><strong>Tool call accuracy</strong>: chamou a tool certa?</li>
+<li><strong>Tool argument correctness</strong>: passou argumentos corretos?</li>
+<li><strong>Trajectory similarity</strong>: o caminho até o resultado foi razoável?</li>
+<li><strong>Cost per task</strong>: tokens, latência, número de steps.</li>
+<li><strong>Recovery from failure</strong>: agent se recuperou quando tool falhou?</li>
+</ul>
+
+<p>Frameworks que cobrem isso: <a href="https://www.langchain.com/langsmith" target="_blank" rel="noopener">LangSmith</a>, <a href="https://langfuse.com/" target="_blank" rel="noopener">Langfuse</a>, <a href="https://www.braintrust.dev/" target="_blank" rel="noopener">Braintrust</a>.</p>
+
+<h2>Patterns de produção que importam</h2>
+
+<h3>1. Eval-driven development</h3>
+
+<p>Antes de mudar prompt, escreva o eval que prova que a mudança melhorou. Sem isso, você está chutando.</p>
+
+<h3>2. Continuous evals (CI/CD pra LLM)</h3>
+
+<p>Toda PR que toca prompt, modelo ou config deve rodar suite de eval automaticamente. Falhou abaixo do threshold → block merge. Frameworks: promptfoo no CI, LangSmith, Braintrust.</p>
+
+<h3>3. Production sampling + offline eval</h3>
+
+<p>Capture queries reais de produção (anonimizadas), aleatoriamente. Rode eval offline contra elas regularmente. Falhas viram novos test cases no golden set.</p>
+
+<h3>4. Multi-judge consensus</h3>
+
+<p>Quando custo permite, use múltiplos judges diferentes (GPT-4 + Claude + Gemini) e tome o majority vote. Reduz bias específico de modelo.</p>
+
+<h3>5. Eval feedback loop com usuário</h3>
+
+<p>Thumbs up/down de usuário → vira sinal pra eval. Sample respostas com thumbs down pra revisão humana. Sample com thumbs up pra confirmar golden set.</p>
+
+<h2>Stack pra começar (do trivial ao maduro)</h2>
+
+<h3>Nível 1: trivial</h3>
+<ul>
+<li><strong>promptfoo</strong> (CLI, free): rode no terminal, output YAML, integra com CI.</li>
+<li>Golden set: arquivo CSV com 30 exemplos.</li>
+<li>Eval: heurístico + LLM-as-judge com GPT-4o-mini.</li>
+</ul>
+
+<h3>Nível 2: ferramenta dedicada</h3>
+<ul>
+<li><strong>LangSmith</strong> (Anthropic-ish, paga): trace, dataset, eval, comparação.</li>
+<li><strong>Langfuse</strong> (open-source, self-host): mesmo que LangSmith, mais barato em escala.</li>
+<li><strong>Braintrust</strong>: bom DX, foco em comparação de prompts.</li>
+</ul>
+
+<h3>Nível 3: RAG-specific</h3>
+<ul>
+<li><strong>Ragas</strong> (open-source): métricas RAG canônicas (faithfulness, etc).</li>
+<li><strong>TruLens</strong>: dashboards + RAG triad nativo.</li>
+<li><strong>DeepEval</strong>: PyTest-style.</li>
+</ul>
+
+<h3>Nível 4: enterprise</h3>
+<ul>
+<li><strong>Arize Phoenix</strong>: observability + eval integrados, free tier generoso.</li>
+<li><strong>Patronus AI</strong>: foco em compliance e safety evals.</li>
+<li><strong>Galileo</strong>: eval + observability ML/LLM unificado.</li>
+</ul>
+
+<h2>O framework eval em 5 passos pra começar amanhã</h2>
+
+<ol>
+<li><strong>Defina criteria de qualidade.</strong> Sente com PM/product owner. Escreva 5-8 critérios específicos. Sem isso, nada faz sentido.</li>
+<li><strong>Construa rubric simples.</strong> Cada critério vira 1-3 perguntas pontuáveis. Comece com escala 1-5.</li>
+<li><strong>Monte golden set inicial (30-100 exemplos).</strong> 50% sintético, 50% real (queries de prod anonimizadas).</li>
+<li><strong>Implemente eval automático.</strong> promptfoo + LLM-as-judge é o "good enough" inicial. Rode no CI.</li>
+<li><strong>Sample produção semanalmente, atualize golden set.</strong> Falhas viram novos cases. Aumente o set continuamente.</li>
+</ol>
+
+<p>Em 4-6 semanas você tem um sistema de eval que de fato detecta regressão antes do usuário. Em 3 meses, está rodando A/B testing de prompt com confidence statistical.</p>
+
+<h2>Conclusão</h2>
+
+<p>Eval não é "nice to have" pra projetos LLM sérios. É a única coisa que separa <em>"ship and pray"</em> de engenharia. Sem eval contínuo, você está navegando no nevoeiro — todas as decisões de prompt, modelo, e arquitetura são baseadas em vibes.</p>
+
+<p>A boa notícia: a maioria das ferramentas é open-source ou tem free tier generoso. promptfoo no CI + golden set num CSV te leva 80% do caminho. Investimento operacional: 2-3 dias pra setup inicial, 1-2 horas/semana pra manutenção. Retorno: dezenas de horas economizadas em debug de produção e usuários reclamando.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "29 LLM Evaluation Concepts Every Engineer Needs to Know" por Anshuman Mishra (lead de evals na Zomato) e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/llm-evals" target="_blank" rel="noopener">The System Design Newsletter</a> em 27 de abril de 2026. Esta adaptação em PT-BR cobre os 15 conceitos primários e expande pesadamente com métricas RAG (Ragas), agent evals, patterns de produção e stack de ferramentas atualizada. Recomendo seguir o <a href="https://aiproof.substack.com/" target="_blank" rel="noopener">newsletter AI Proof do Anshuman</a> e o <a href="https://hamel.dev/blog/posts/evals/" target="_blank" rel="noopener">"Your AI Product Needs Evals" do Hamel Husain</a> — referência canônica em eval pragmático.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-llm-evals-explained.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

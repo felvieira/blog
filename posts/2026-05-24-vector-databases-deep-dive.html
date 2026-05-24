@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do deep dive de Maxine Meurer e Neo Kim sobre vector databases — por que bancos tradicionais quebram, HNSW, quantization, pre vs post filtering, comparativo 2026 de pgvector/Qdrant/Pinecone/Weaviate/Milvus e o framework de decisão.">
+<meta property="og:title" content="Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do deep dive de Maxine Meurer e Neo Kim sobre vector databases — por que bancos tradicionais quebram, HNSW, quantization, pre vs post filtering, comparativo 2026 de pgvector/Qdrant/Pinecone/Weaviate/Milvus e o framework de decisão.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-vector-databases-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-vector-databases-cover.jpg" alt="Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você construiu uma feature de busca. Usuário digita query, app bate no database, resultados voltam ranqueados por relevância. Funciona perfeitamente.</p>
+
+<p>Aí você pensa: a busca precisa <strong>entender o que o usuário quis dizer</strong>, não só casar palavras. Quem procura "como eu faço login" deveria achar resultados sobre "acesso à conta" e "entrar" mesmo que essas palavras exatas nunca apareçam.</p>
+
+<p>Isso se chama <em>semantic search</em>. E exige uma abordagem completamente diferente pra armazenar e buscar dados.</p>
+
+<p>O problema: tudo que tornava seu banco relacional rápido — índices B-tree, cláusulas WHERE, keyword matching — foi feito pra valores exatos. Semantic search <strong>não trabalha com valores exatos</strong>. Trabalha com significado, e significado é muito mais difícil de buscar eficientemente. Uma busca que demorava milissegundos passa a demorar segundos. Quanto maior o dataset, pior.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/what-is-a-vector-database" target="_blank" rel="noopener">"Vector Database - A Deep Dive" de Maxine Meurer e Neo Kim</a>, com comparativos atualizados de 2026 (pgvector vs Qdrant vs Pinecone vs Weaviate vs Milvus), trade-offs reais de produção, e o framework de decisão.</p>
+
+<h2>Por que bancos tradicionais quebram com embeddings</h2>
+
+<img src="../assets/images/2026-05-24-vector-databases-1-brute-force.jpg" alt="Vista aérea de Times Square com pessoa no centro puxando linhas de distância pra cada um dos 10000 prédios — ilustração de busca O(n) força bruta" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Bancos relacionais são ótimos em <em>exact matches</em> e <em>range queries</em>. <code>WHERE user_id = 12345</code> usa índice pra pular direto na linha. Dicionário não lê página por página — vai direto à seção.</p>
+
+<p>Embeddings quebram esse modelo porque <strong>não há valor exato pra procurar</strong>. Um embedding é uma lista de números que representa significado. Frases similares produzem números similares. Você não procura linha específica — procura linhas <em>próximas</em> em significado. "Próximo" exige medir distância em espaço de alta dimensão (tipicamente 768, 1.536 ou 3.072 dimensões) em vez de comparar valores.</p>
+
+<p>Pense num mapa normal com latitude/longitude (2 dimensões). Embeddings são o mesmo conceito, com 1.536 dimensões em vez de 2.</p>
+
+<h3>O problema O(n) — analogia Times Square</h3>
+
+<p>Imagine que você está na Times Square e precisa achar as 10 cafeterias mais próximas. Sem mapa ou sistema organizado, sua única opção:</p>
+
+<ol>
+<li>Andar até cada prédio.</li>
+<li>Checar se é cafeteria.</li>
+<li>Medir distância de Times Square.</li>
+<li>Manter lista das 10 mais próximas.</li>
+</ol>
+
+<p>Com 10 mil prédios, checa 10 mil. Com 10 milhões, checa 10 milhões.</p>
+
+<p>Em termos práticos: 10.000 chunks de documento × 0,0001s por cálculo = 1s por query. Tolerável. Mas com <strong>10 milhões de chunks, vira 1.000 segundos por query</strong> (16 minutos). Servindo 100 QPS de usuários diferentes? Sistema morre imediatamente.</p>
+
+<p>É por isso que bancos tradicionais sofrem com embeddings. Índices foram feitos pra exact matches. Não há atalho pra "similar" — só "igual".</p>
+
+<h2>pgvector — o "good enough" pra começar</h2>
+
+<p><a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a> é extensão do PostgreSQL que adiciona busca vetorial. Vantagens enormes:</p>
+
+<ul>
+<li>Você já tem Postgres em prod. Sem nova database pra operar.</li>
+<li>Compõe perfeitamente com SQL normal — combine vector search com WHERE, JOIN, transactions.</li>
+<li>Operacionalmente mínimo: backups, replicação, security — tudo que você já sabe fazer.</li>
+<li>Suporta HNSW e IVFFlat desde a v0.5.</li>
+</ul>
+
+<p>Sweet spot: <strong>até ~100K-1M vetores, query volume moderado, latência ~50-200ms aceitável</strong>. Para muita coisa de produção, pgvector é tudo que você precisa.</p>
+
+<p>Quando você passa de alguns milhões e exige latência sub-50ms consistente, a infra Postgres genérica vira gargalo. <strong>Aí entram os vector DBs dedicados.</strong></p>
+
+<h2>Arquitetura — as 3 camadas de um vector DB</h2>
+
+<p>Todo vector DB tem três camadas com trade-offs operacionais:</p>
+
+<h3>1. Storage Layer — onde os vetores moram</h3>
+
+<p>Vetores são <strong>gigantes</strong>. Um vetor de 1.536 dimensões em float32 ocupa 6 KB. Milhões de vetores = gigabytes que custam dinheiro real.</p>
+
+<p>Solução: <strong>quantization</strong>. Reduz a precisão de cada dimensão:</p>
+
+<ul>
+<li><strong>Scalar quantization</strong>: float32 → int8 (4× menor).</li>
+<li><strong>Product quantization (PQ)</strong>: divide vetor em sub-vetores quantizados separadamente.</li>
+<li><strong>Binary quantization</strong>: 1 bit por dimensão (32× menor!) — surpreendentemente útil em escala.</li>
+</ul>
+
+<p>Trade-off: <em>approximation error</em>. Você ocasionalmente perde o "verdadeiro" match mais próximo, mas na prática a diferença é tão pequena que aplicações não notam.</p>
+
+<p>Outra decisão: <strong>memória vs disco</strong>. Para latência mínima, índice na RAM. Caro em escala. Vector DBs modernos suportam <em>tiered storage</em> — vetores quentes em RAM, frios em disco, ou estrutura de índice em RAM com vetores brutos em disco.</p>
+
+<h3>2. Indexing Layer — onde a "mágica" acontece</h3>
+
+<img src="../assets/images/2026-05-24-vector-databases-2-hnsw.jpg" alt="Visualização do grafo HNSW com 3 camadas empilhadas — top com poucos nodes grandes e edges longos, middle com mais nodes, bottom denso, query path cascateando por todas" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p><strong>HNSW (Hierarchical Navigable Small World)</strong> é o algoritmo dominante. Conceito: small world networks — você está a poucas conexões de qualquer outra pessoa do planeta.</p>
+
+<p>HNSW constrói grafo multi-camada onde vetores similares estão conectados. Quando você faz query, algoritmo começa na top layer e navega em direção ao alvo seguindo edges pra vizinhos similares, descendo camadas até chegar nos mais similares no bottom.</p>
+
+<p>Analogia Google Maps de NY pra cafeteria em SF:</p>
+
+<ul>
+<li><strong>Top layer (zoom out)</strong>: direção geral — costa oeste, segue conexões pra Califórnia.</li>
+<li><strong>Middle layers</strong>: narrow down — Bay Area, San Francisco.</li>
+<li><strong>Bottom layer (street level)</strong>: bairro específico, endereço exato.</li>
+</ul>
+
+<p>Em cada nível de zoom, você segue só as conexões que te aproximam do alvo. Pula vastas porções do mapa na direção errada.</p>
+
+<p>Parâmetros chave: <strong>M (max connections por vetor)</strong> e <strong>ef (exploration factor)</strong>. Maior = melhor acurácia, queries mais lentas. Menor = queries rápidas, mas pode perder resultados relevantes. Tunagem em produção depende da sua tolerância latência/acurácia.</p>
+
+<p>Outros algoritmos relevantes: <strong>IVF (Inverted File Index)</strong>, <strong>DiskANN</strong> (Microsoft, otimizado pra disco), <strong>ScaNN</strong> (Google), <strong>Vamana</strong> (base do DiskANN). HNSW é default em quase todo lugar.</p>
+
+<h3>3. Query Layer — ANN search + filtering</h3>
+
+<p>Quando query chega: query vector → ANN (Approximate Nearest Neighbor) search via HNSW → top-K candidatos → opcional metadata filtering → rerank → resultado.</p>
+
+<p><strong>Metadata filtering tem armadilha sutil</strong>: <em>pre-filter vs post-filter</em>.</p>
+
+<ul>
+<li><strong>Post-filter</strong>: vector search primeiro, depois filtra por metadata. Simples mas pode retornar lista vazia se o top-K não bate com o filtro.</li>
+<li><strong>Pre-filter</strong>: filtra metadata primeiro, depois vector search só nos candidatos. Mais correto mas mais complexo (índice precisa suportar isso bem).</li>
+</ul>
+
+<p>Pinecone, Qdrant e Weaviate suportam pre-filter eficiente. pgvector é tradicionalmente post-filter (com gambiarras pra pre-filter).</p>
+
+<h2>O cenário de vector DBs em 2026</h2>
+
+<img src="../assets/images/2026-05-24-vector-databases-3-options.jpg" alt="Comparativo de três opções de vector DB — pgvector, Qdrant, Pinecone — com medidores mostrando sweet spots de escala diferentes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3><a href="https://github.com/pgvector/pgvector" target="_blank" rel="noopener">pgvector</a> — Postgres extension</h3>
+
+<p><strong>Quando usar</strong>: você já tem Postgres, dataset até ~5M vetores, simplicidade > performance bleeding-edge.<br>
+<strong>Prós</strong>: zero infra extra, SQL composability, transactions, custo praticamente zero.<br>
+<strong>Contras</strong>: latência menos previsível em escala, tooling menos especializado.</p>
+
+<h3><a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a> — open-source Rust</h3>
+
+<p><strong>Quando usar</strong>: você quer melhor performance que pgvector, valoriza self-hosted, prefere open-source com cloud opcional.<br>
+<strong>Prós</strong>: filtering avançado, payload rich, Rust = rápido e eficiente, free self-hosted.<br>
+<strong>Contras</strong>: operacional extra vs pgvector, comunidade menor que Pinecone.</p>
+
+<h3><a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a> — SaaS managed</h3>
+
+<p><strong>Quando usar</strong>: você quer zero ops, está em escala, e cliente paga.<br>
+<strong>Prós</strong>: latência sub-50ms confiável, serverless, índices pré-otimizados, suporte enterprise.<br>
+<strong>Contras</strong>: caro em volume, lock-in, sem self-hosted, querying via SDK proprietário.</p>
+
+<h3><a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a> — schema-rich + híbrido</h3>
+
+<p><strong>Quando usar</strong>: você precisa de hybrid search nativo (vector + BM25), GraphQL API, ou ML modules built-in.<br>
+<strong>Prós</strong>: hybrid search excelente, generative search módulos, multi-tenant maduro.<br>
+<strong>Contras</strong>: mais opinionated, curva de aprendizado mais alta.</p>
+
+<h3><a href="https://milvus.io/" target="_blank" rel="noopener">Milvus</a> — cloud-native scale</h3>
+
+<p><strong>Quando usar</strong>: bilhões de vetores, infra Kubernetes existente, equipe de infra sólida.<br>
+<strong>Prós</strong>: separação storage/compute, escala horizontal real, suporta múltiplos índices (HNSW, IVF, DiskANN).<br>
+<strong>Contras</strong>: complexo operacionalmente, exige K8s.</p>
+
+<h3><a href="https://github.com/spotify/voyager" target="_blank" rel="noopener">Voyager (Spotify)</a> / <a href="https://github.com/facebookresearch/faiss" target="_blank" rel="noopener">FAISS</a> — embedded libs</h3>
+
+<p><strong>Quando usar</strong>: dataset cabe em RAM, sem necessidade de persistência distribuída, batch jobs.<br>
+<strong>Prós</strong>: trivial de adicionar, latência mínima, sem infra.<br>
+<strong>Contras</strong>: sem persistência transparente, single-node only.</p>
+
+<h2>Realidades de produção que pegam todo mundo</h2>
+
+<h3>1. Index build é caro</h3>
+
+<p>Inserir vetores em HNSW exige calcular distâncias e atualizar conexões do grafo. Bulk index build geralmente roda offline ou em períodos de baixo tráfego. <strong>Index build time importa</strong>: afeta velocidade de recovery de falhas, deploys, e onboarding de dados novos.</p>
+
+<h3>2. Custo escala com dimensões × N × replicas</h3>
+
+<p>Pinecone serverless cobra por <em>storage GB-month</em> + <em>queries</em>. Self-hosted (Qdrant/Milvus) cobra em CPU+RAM. Faça as contas <em>antes</em>:</p>
+
+<pre><code>10M chunks × 1536 dim × 4 bytes = ~61 GB raw
++ HNSW index overhead (1.5-2x) = ~100 GB total
++ replicas (3x) = ~300 GB
++ memória pra latência = SSDs NVMe + RAM proporcional</code></pre>
+
+<h3>3. Embedding consistency</h3>
+
+<p>Query embedding e document embeddings <strong>devem usar o mesmo modelo</strong>. Trocou de OpenAI v2 pra v3? Re-embedding obrigatório de toda a base. Esse re-embedding pode custar dezenas de milhares de dólares em datasets grandes.</p>
+
+<h3>4. Monitoring que importa</h3>
+
+<ul>
+<li>Latência p50/p95/p99 por query.</li>
+<li>Recall@K vs ground truth (mede degradação).</li>
+<li>Index size / memória usada.</li>
+<li>Index build time.</li>
+<li>Failed inserts (vector com NaN, dimensão errada).</li>
+</ul>
+
+<h2>Framework de decisão — qual vector DB usar?</h2>
+
+<ol>
+<li><strong>Dataset &lt; 1M vetores E você tem Postgres?</strong> → pgvector. Pare aqui.</li>
+<li><strong>1M–50M, self-hosted ok, time DevOps razoável?</strong> → Qdrant ou Weaviate.</li>
+<li><strong>1M–50M, quer zero ops, budget aberto?</strong> → Pinecone serverless.</li>
+<li><strong>50M+ e Kubernetes maduro?</strong> → Milvus distribuído.</li>
+<li><strong>Hybrid search (vector + BM25) é requisito?</strong> → Weaviate ou Qdrant nativo, ou pgvector + ts_vector.</li>
+<li><strong>Latência sub-10ms p99 obrigatório?</strong> → Pinecone, Vespa, ou FAISS embedded.</li>
+</ol>
+
+<h2>Conclusão</h2>
+
+<p>Vector databases não são "novo banco de dados que substitui Postgres". São <strong>infraestrutura especializada pra um workload específico</strong>: nearest-neighbor search em espaço de alta dimensão. Quando você entende que o problema fundamental é "como evitar comparar contra cada vetor sem perder muito recall", todas as decisões de arquitetura (HNSW, quantization, filtering, replication) fazem sentido.</p>
+
+<p>A maior armadilha é over-engineering. <strong>Comece com pgvector</strong>. Se atingir limite, então invista. A maioria dos sistemas RAG em produção hoje roda em pgvector sem problema — só pivota quando há evidência clara (latência p99 ruim, custo de Postgres explodindo, dataset acima de 10M).</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "Vector Database - A Deep Dive" por Maxine Meurer e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/what-is-a-vector-database" target="_blank" rel="noopener">The System Design Newsletter</a> em 25 de abril de 2026. Esta adaptação em PT-BR adiciona comparativos atualizados de 2026, framework de decisão, e armadilhas operacionais que peguei pessoalmente em produção. Recomendo <a href="https://iamlovedevops.substack.com/" target="_blank" rel="noopener">o newsletter "I Love DevOps" da Maxine</a> e o livro "LLMs for Humans: From Prompts to Production".</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-vector-databases-deep-dive.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

@@ -1,0 +1,230 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre context engineering — anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents, e o framework da Anthropic.">
+<meta property="og:title" content="Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre context engineering — anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents, e o framework da Anthropic.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-context-engineering-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-context-engineering-cover.jpg" alt="Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você já usou um AI assistant e recebeu resposta que ficou <em>off</em>? Reescreveu a pergunta, adicionou "think step by step", deu mais detalhe. Às vezes ajudou. Às vezes não.</p>
+
+<p>Esse tipo de tentativa e erro é <strong>prompt engineering</strong>. Pra tarefas simples, basta. Mas no momento que você pede algo mais complexo, <em>fraseado raramente é o problema principal</em>.</p>
+
+<p>Mais frequente: o modelo está trabalhando com a <strong>informação errada</strong>. Algo importante está faltando, enterrado na conversa, ou misturado com texto irrelevante. O resultado parece confusão — o modelo perde o fio, faz suposições frágeis, responde com confiança sem fundamento sólido.</p>
+
+<p>É aqui que <strong>context engineering</strong> entra. Em vez de perguntar "como reformulo isso?", você pergunta: <strong>"que informação o modelo deveria ver agora?"</strong></p>
+
+<p>Como Andrej Karpathy, um dos founders da OpenAI, define:</p>
+
+<blockquote><em>"A arte e ciência delicada de preencher a context window com exatamente a informação certa pro próximo passo."</em></blockquote>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/what-is-context-engineering" target="_blank" rel="noopener">"Context Engineering 101" de Neo Kim e Louis-François Bouchard</a>, com adições de patterns atuais (Anthropic context engineering, compaction, sub-agents), ferramentas e exemplos práticos de implementação.</p>
+
+<h2>O que é "context"?</h2>
+
+<img src="../assets/images/2026-05-24-context-engineering-1-anatomy.jpg" alt="Camadas empilhadas da anatomia do contexto — system prompt no topo, few-shot examples, message history, tools, retrieved data — fluindo num funil pra LLM" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Quando você manda uma mensagem pra um AI assistant, ele não vê só a sua pergunta. Vê todo o pacote estruturado:</p>
+
+<ul>
+<li><strong>System prompt</strong>: instruções que guiam o comportamento do modelo.</li>
+<li><strong>Conversation history</strong>: partes relevantes da conversa até agora.</li>
+<li><strong>Few-shot examples</strong>: exemplos que você (ou o produto) fornece.</li>
+<li><strong>Tool outputs</strong>: resultados de tools chamadas.</li>
+<li><strong>Retrieved documents</strong>: chunks de RAG.</li>
+<li><strong>User message atual</strong>: a sua query agora.</li>
+</ul>
+
+<p>Tudo isso junto é o <strong>context</strong>.</p>
+
+<p>Por que importa? Porque o modelo <strong>não tem memória de longo prazo</strong> como humano. Não consegue lembrar de conversas passadas a menos que aquela informação seja incluída de novo. Cada resposta é gerada exclusivamente a partir do context atual.</p>
+
+<p>E o modelo só presta atenção numa quantidade limitada de texto por vez — a famosa <strong>context window</strong>. Jogar mais informação dentro desse espaço frequentemente piora respostas, não melhora.</p>
+
+<h2>Context rot — o problema que escala com tempo de tarefa</h2>
+
+<img src="../assets/images/2026-05-24-context-engineering-3-rot.jpg" alt="Timeline mostrando context rot — informação útil ficando enterrada sob ruído ao longo da conversa, performance gauge caindo, compaction resgatando" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Em agents que rodam tarefas multi-step, cada step gera nova informação que é adicionada ao que o modelo vê depois — search results, summaries, intermediate notes. Ao longo do tempo, o context cresce, e muito dele deixa de ser relevante pro step atual.</p>
+
+<p>Isso chama <strong>context rot</strong>: informação útil fica enterrada sob detalhes outdated. <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener">Pesquisa da Chroma (2024)</a> mostra que mesmo modelos com context window de 1M tokens degradam performance significativamente quando o context fica acima de 30-50K tokens.</p>
+
+<p>A regra prática: <strong>encontre o mínimo de informação alto-valor necessária — mais context nem sempre é melhor</strong>.</p>
+
+<h2>A anatomia do context — o que vai onde</h2>
+
+<h3>System Prompt</h3>
+
+<p>Determina o comportamento geral do modelo. Define como o assistente deve agir, regras a seguir, formatos de resposta esperados. Geralmente você não vê — é definido pelo produto.</p>
+
+<p>É por isso que dois assistants no mesmo modelo subjacente se comportam tão diferente. ChatGPT tende a responder educadamente, recusar certos pedidos, formatar de maneira previsível — tudo isso vem do system prompt, mesmo quando você nunca pediu explicitamente.</p>
+
+<p><strong>Princípio prático pra construir features AI</strong>: comece minimalista, teste com use cases reais, adicione regras só quando ver falhas específicas. Sistema prompt rígido demais → modelo brittle. Vago demais → respostas inconsistentes.</p>
+
+<h3>Few-shot examples</h3>
+
+<p>Às vezes a forma mais clara de guiar o AI é <em>mostrar</em> o que você quer. Em vez de escrever lista longa de regras, inclua 1-2 inputs de exemplo com os outputs exatos esperados.</p>
+
+<p>Você provavelmente já fez isso no ChatGPT sem perceber: "Formate assim:" + colar exemplo. O modelo geralmente segue o padrão.</p>
+
+<p>Exemplos removem ambiguidade. Mostram tom, estrutura, nível de detalhe de forma que instruções não conseguem. Trade-off: <strong>ocupam espaço na context window</strong>. Poucos exemplos bem escolhidos &gt; lista longa.</p>
+
+<h3>Message history</h3>
+
+<p>Em chat, o modelo responde a perguntas de follow-up porque mensagens anteriores ficam no context. Pergunta "Capital da França?" → "População?". O modelo infere que ainda é sobre Paris.</p>
+
+<p>Funciona porque a conversa até agora age como <em>scratch paper compartilhado</em>. O modelo não lembra de verdade — está lendo de novo como input.</p>
+
+<p>Problema: history cresce. Mensagens velhas ocupam espaço mesmo quando irrelevantes. Modelo fica menos focado, repete, segue assunções outdated. <strong>Gerenciar history = manter o que é relevante, summarizar o que está resolvido, deixar o resto cair</strong>.</p>
+
+<h3>Tools</h3>
+
+<p>Sozinho, LLM só gera texto. Tools permitem mais: buscar na web, ler documentos, rodar código, query database, interagir com sistemas externos. Quando uma tool é chamada, o resultado é alimentado de volta no context.</p>
+
+<p>Tools são poderosas, mas <strong>toda tool call adiciona texto que compete por atenção</strong>. Se uma tool retorna informação demais ou em formato confuso, sobrecarrega o modelo.</p>
+
+<p>Bom design: nomes claros, responsabilidades estreitas, outputs concisos. Anthropic publicou <a href="https://www.anthropic.com/engineering/writing-tools-for-agents" target="_blank" rel="noopener">guia canônico sobre "writing tools for agents"</a> que cobre exatamente isso.</p>
+
+<h3>Data (documentos, files)</h3>
+
+<p>Agents frequentemente trabalham com dados externos. Documento que você fez upload, artigo colado, files acessíveis. Quando incluso, vira parte do context.</p>
+
+<p>Documentos grandes não se comportam como você espera. Modelo pode focar na seção errada ou perder detalhes. <strong>É problema de context management, não descuido</strong>. Solução: quebrar em pedaços, puxar só o relevante pro step atual, deixar o resto fora.</p>
+
+<h2>Estratégias de retrieval — loading upfront vs just-in-time</h2>
+
+<img src="../assets/images/2026-05-24-context-engineering-2-retrieval.jpg" alt="Comparativo lado a lado — loading upfront com agent puxando todos os chunks de uma vez, vs just-in-time fazendo múltiplas round-trips menores" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>Loading upfront (RAG clássico)</h3>
+
+<p>Recupera informação relevante <em>antes</em> de o modelo começar a responder, e inclui tudo de uma vez. É o que acontece quando ChatGPT busca na web e depois escreve resposta usando os resultados.</p>
+
+<p>Funciona bem quando a pergunta é clara e o agent consegue prever que informação vai ser útil. Downside: <strong>agent toma decisão de retrieval cedo e fica preso</strong>. Se algo importante está faltando ou a tarefa muda de direção, é mais difícil corrigir.</p>
+
+<h3>Just-in-time retrieval</h3>
+
+<p>Recupera informação <em>conforme a tarefa se desenrola</em>. Em vez de carregar tudo no início, agent dá um passo, olha o que aprendeu, e recupera mais só quando precisa.</p>
+
+<p>Você vê isso no ChatGPT em tarefas longas — ele busca, lê, refina a query, busca de novo. Context fica mais limpo (só puxa o necessário). Trade-off: mais steps, exige que o agent decida quando recuperar e quando parar.</p>
+
+<h3>Progressive Disclosure</h3>
+
+<p>Pattern dentro de just-in-time: começa amplo e <em>drilla down</em>. Em vez de carregar documentos inteiros imediatamente, agent começa com snippets curtos ou summaries, identifica o que parece relevante, e só então puxa o detalhe.</p>
+
+<p>É como humano faz pesquisa: você não lê todos os artigos do banco. Você escaneia títulos, lê abstract dos promissores, mergulha só nas fontes que importam.</p>
+
+<h3>Estratégia híbrida (a que ganha)</h3>
+
+<p>Maioria dos agents em produção combina os dois. Carrega quantidade pequena de baseline upfront (regras, persona, contexto de usuário), recupera mais conforme precisa.</p>
+
+<p>É o que ChatGPT, Claude, Cursor e similares fazem. Algumas instruções e history já estão presentes, informação adicional é puxada baseado no que você pede.</p>
+
+<h2>Técnicas pra tarefas long-horizon</h2>
+
+<p>Tarefas que rodam o suficiente pra agent produzir mais texto que cabe no context window exigem técnicas extras:</p>
+
+<h3>1. Compaction (summarization)</h3>
+
+<p>Comprime conversation history mais antiga num resumo curto. Cursor, Claude Code, e ChatGPT (modo "Memory") fazem isso automaticamente. Você perde detalhes específicos mas ganha mais espaço pra trabalho atual.</p>
+
+<p>Implementação típica: a cada N turnos ou ao atingir M tokens, dispara LLM separado que sumariza os turnos mais antigos. Substituído no context pela versão summary.</p>
+
+<h3>2. Sub-agents (delegation)</h3>
+
+<p>Em vez de um agent monolítico carregando tudo, agent principal delega sub-tarefas pra sub-agents com contexts próprios isolados. Sub-agent termina, retorna resumo, agent principal incorpora.</p>
+
+<p>É o pattern do Claude Code com Task tool, Cursor com agents, e <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a> com graph orchestration. Cada sub-agent só vê o context que precisa.</p>
+
+<h3>3. External memory (scratch pads, notes)</h3>
+
+<p>Agent escreve notas em armazenamento externo (arquivo, vector DB, Redis) durante a tarefa, e re-lê seletivamente quando relevante. Em vez de carregar tudo no context, mantém referência leve.</p>
+
+<p>Coberto em profundidade no <a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">post sobre memória de agents</a>: Mem0, Zep, AGENTS.md.</p>
+
+<h3>4. Context reordering</h3>
+
+<p>Coloca informação crítica no início e no fim do prompt, evitando o meio. Lembre-se do efeito <strong>"lost in the middle"</strong> (<a href="https://arxiv.org/abs/2307.03172" target="_blank" rel="noopener">Liu et al., 2023</a>): modelos prestam menos atenção em conteúdo no meio do context.</p>
+
+<p>Pattern prático: system prompt → few-shot → message history (mais antigo → mais novo) → tool results → query atual no final.</p>
+
+<h2>Patterns avançados que estão emergindo</h2>
+
+<h3>Anthropic's "Context Engineering" framework</h3>
+
+<p>Anthropic publicou <a href="https://www.anthropic.com/engineering/context-engineering" target="_blank" rel="noopener">framework próprio</a> em 2024 que sistematiza 4 técnicas: <strong>compaction</strong>, <strong>structured note-taking</strong>, <strong>sub-agent architectures</strong>, e <strong>just-in-time context</strong>. Influência forte no design do Claude e do Claude Code.</p>
+
+<h3>Context engines (Augment, Cursor, Codeium)</h3>
+
+<p>Em vez de você gerenciar context manualmente, ferramentas modernas têm <em>context engines</em> que indexam o seu codebase inteiro e injetam só o relevante pra cada query. Augment Code, Cursor, Codeium, Sourcegraph Cody — todos fazem isso. <strong>É a diferença entre autocomplete e raciocínio sobre arquitetura</strong>.</p>
+
+<h3>Skill-based loading (Anthropic Skills, Claude Code)</h3>
+
+<p>Skills (arquivos markdown + scripts opcionais) carregados sob demanda baseado em palavras-chave. Em vez de gigantesco system prompt com tudo, só a skill relevante entra no context.</p>
+
+<p>Pattern do Dev Team Kit que mantenho — skill carregada só quando uma palavra de gatilho aparece. Reduz context overhead em 70-90%.</p>
+
+<h2>Erros comuns que vejo</h2>
+
+<ol>
+<li><strong>Dump-everything pattern</strong>: jogar repo inteiro no prompt. Context window enorme não substitui curadoria.</li>
+<li><strong>System prompt inflado</strong>: 5K tokens de regras que ninguém lê. Comece com 200, adicione só após falha real.</li>
+<li><strong>Tool output verboso</strong>: tool retorna 50KB de JSON. Filtre e formate antes de enviar de volta ao modelo.</li>
+<li><strong>History sem compaction</strong>: agent loop infinito consumindo tokens. Adicione compaction a cada 20 turnos ou 30K tokens.</li>
+<li><strong>RAG sem rerank</strong>: 20 chunks vector search puro vira ruído. Use cross-encoder pra ranquear.</li>
+<li><strong>Documento inteiro no prompt</strong>: PDF de 100 páginas → modelo perde. Quebre em chunks + retrieval.</li>
+</ol>
+
+<h2>Stack pra fazer context engineering bem</h2>
+
+<ul>
+<li><strong>RAG framework</strong>: LangChain, LlamaIndex, ou Haystack.</li>
+<li><strong>Vector DB</strong>: pgvector → Qdrant/Weaviate → Pinecone (ver <a href="../posts/2026-05-24-vector-databases-deep-dive.html">post sobre vector databases</a>).</li>
+<li><strong>Reranker</strong>: Cohere Rerank ou BGE Reranker.</li>
+<li><strong>Memory</strong>: Mem0, Zep, ou AGENTS.md pra agents persistentes.</li>
+<li><strong>Orchestration</strong>: LangGraph (delegation + state) ou CrewAI.</li>
+<li><strong>Observability</strong>: LangSmith ou Langfuse pra ver exatamente o que entra no context window.</li>
+<li><strong>Eval</strong>: <a href="https://docs.ragas.io/" target="_blank" rel="noopener">Ragas</a> pra medir context precision/recall.</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>Prompt engineering te leva a uma performance OK. <strong>Context engineering te leva ao top 1% do que LLMs conseguem fazer.</strong> A diferença entre um chatbot que parece esperto e um agent que de fato resolve tarefas complexas é quase sempre o que está (e não está) na context window naquele momento.</p>
+
+<p>A pergunta certa nunca foi "como reformulo essa pergunta?". É <strong>"que informação o modelo precisa ver agora — e o que não precisa estar lá?"</strong>. Quando você começa a pensar assim, sua relação com LLMs muda completamente.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "Context Engineering 101: How ChatGPT Stays on Track" por Neo Kim e Louis-François Bouchard, publicado em <a href="https://newsletter.systemdesign.one/p/what-is-context-engineering" target="_blank" rel="noopener">The System Design Newsletter</a> em 19 de dezembro de 2025. Esta adaptação em PT-BR enriquece com Anthropic context engineering framework, context engines modernos (Augment, Cursor), skill-based loading, e armadilhas de produção. Recomendo fortemente o <a href="https://www.anthropic.com/engineering/context-engineering" target="_blank" rel="noopener">artigo da Anthropic sobre context engineering</a> e o <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener">paper sobre context rot da Chroma</a>.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-context-engineering-101.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

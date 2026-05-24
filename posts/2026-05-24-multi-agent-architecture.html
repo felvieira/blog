@@ -1,0 +1,303 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia do Neo Kim sobre multi-agent — quando NÃO usar, as 6 arquiteturas (orchestrator-worker, pipeline, hierarchical, swarm, mesh, handoffs), failure modes em produção, stack por topologia, e case study do Dev Team Kit. Post 15/15 da série.">
+<meta property="og:title" content="Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia do Neo Kim sobre multi-agent — quando NÃO usar, as 6 arquiteturas (orchestrator-worker, pipeline, hierarchical, swarm, mesh, handoffs), failure modes em produção, stack por topologia, e case study do Dev Team Kit. Post 15/15 da série.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-multi-agent-architecture-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">11 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-multi-agent-architecture-cover.jpg" alt="Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Um único agent tem <strong>uma context window, um conjunto de tools, um loop rodando</strong>. Quando a tarefa cresce além de qualquer uma dessas três, você precisa de mais que um agent. Isso é um <em>multi-agent system</em>: em vez de um agent fazendo tudo, divide o trabalho entre muitos, cada um com seu papel, tools e contexto.</p>
+
+<p>A maioria dos multi-agent systems falha <strong>não porque o modelo é fraco</strong>, mas porque você escolheu muitos agents antes de precisar, ou escolheu a arquitetura errada uma vez que tem muitos.</p>
+
+<p>Este post — adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/multi-agent-system" target="_blank" rel="noopener">"Multi-Agent Architectures, Clearly Explained" do Neo Kim</a> — cobre as 6 arquiteturas, quando usar cada uma, e o que sempre quebra em produção.</p>
+
+<h2>Quando NÃO usar multi-agent</h2>
+
+<p>Um único agent com bons prompts e as ferramentas certas resolve mais do que se espera. Devin da Cognition processou <strong>5 milhões de linhas de COBOL em 500 GB de repositórios com agent único</strong>, subindo merge rate de PR de 34% pra 67%.</p>
+
+<p>Você só precisa de multi-agent quando bate em <strong>3 limites duros</strong>:</p>
+
+<h3>1. Context overflow</h3>
+
+<p>Context window só comporta um tanto. Passou desse limite, info mais antiga cai, agent perde o próprio plano. <strong>Quando compaction sozinha não dá conta, um segundo agent com seu próprio context window resolve</strong>.</p>
+
+<h3>2. Parallelism</h3>
+
+<p>Tarefas independentes não deveriam esperar em fila. 4 research queries que não dependem entre si — rodar uma de cada vez é desperdício. Rodar em 4 agents separados leva tempo de aproximadamente o mais lento.</p>
+
+<p>O sistema de research da Anthropic usa exatamente isso e <strong>reduziu tempo total de query em até 90%</strong>.</p>
+
+<h3>3. Specialization</h3>
+
+<p>Partes diferentes de uma tarefa frequentemente precisam de modelos, tools ou níveis de acesso diferentes:</p>
+
+<ul>
+<li>Agent de código precisa de sandbox.</li>
+<li>Agent de research precisa de web search.</li>
+<li>Agent customer-facing precisa de user data mas não deve ter acesso a databases de produção.</li>
+</ul>
+
+<p>Quando um agent não consegue carregar todas as tools e permissões que a tarefa exige, cada role ganha seu próprio agent.</p>
+
+<p><strong>Se nenhuma dessas 3 condições aplica, fique com agent único.</strong> Melhores prompts + melhores tools resolvem maioria sem o overhead de coordenar agents.</p>
+
+<h2>As 6 arquiteturas — de centralizada a totalmente distribuída</h2>
+
+<h3>Arquiteturas centralizadas (com chain of command claro)</h3>
+
+<img src="../assets/images/2026-05-24-multi-agent-architecture-1-centralized.jpg" alt="Três topologias centralizadas — Orchestrator-Worker (torre de controle aéreo), Pipeline (linha de montagem), Hierarchical (árvore militar de comando)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h4>1. Orchestrator-Worker</h4>
+
+<p>Um agent central quebra tarefa em pedaços, atribui cada pedaço a worker agents, junta resultados. <strong>Workers não falam entre si</strong> — toda comunicação passa pelo central. Como torre de controle aéreo: fala com cada avião, nenhum avião fala diretamente com outro.</p>
+
+<p><strong>Caso real</strong>: Claude Research da Anthropic. Agent central rodando Opus 4 quebra a query em partes e cria 2-10 workers Sonnet 4 (às vezes mais), todos ao mesmo tempo. Workers buscam na web, leem documentos, coletam evidências em paralelo. Quando terminam, central lê resultados e escreve um relatório único. <strong>Bateu single-agent Opus 4 em 90,2%</strong> na eval interna de research.</p>
+
+<p><strong>Trade-offs</strong>: central é coordenador E gargalo. Fala com workers um por vez. Se cada call leva 3s e 20 workers esperam, teto é ~7 tasks/segundo. Workers podem duplicar trabalho sem instruções específicas — vague task splitting transforma paralelismo em trabalho duplicado.</p>
+
+<h4>2. Pipeline</h4>
+
+<p>Agents rodam em ordem fixa, um após outro. Output de cada agent vira input do próximo, sequência inteira é definida com antecedência. Diferente de Orchestrator-Worker (central decide conforme avança), pipeline <strong>elimina essa escolha</strong>.</p>
+
+<p>Como linha de montagem: cada estação faz um trabalho, passa adiante, nunca vê o produto finalizado.</p>
+
+<p><strong>Caso real</strong>: Stripe usa pra checar se novos negócios na plataforma são legítimos. Antes de agents, reviewer humano pulava entre customer databases, fontes jurídicas e support tickets. Time de engenharia quebrou em fluxo fixo de stages de agent via DAG (directed acyclic graph). Cada stage tem "rails" — contrato de output format que próxima stage espera. <strong>Cortou tempo médio de handling em 26%, reviewers avaliam outputs como 96% úteis</strong>, com registro completo de cada decisão.</p>
+
+<p><strong>Trade-offs</strong>: latência soma. Pipeline de 5 stages, 2s cada = 10s antes de qualquer output. Upside: previsibilidade. Cada stage com contrato estreito = qualquer falha rastreável a exatamente um step. Por isso workflows regulados (Stripe) usam pipelines.</p>
+
+<h4>3. Hierarchical</h4>
+
+<p>Manager top-level dá trabalho a uma ou mais camadas de manager agents abaixo, que então dão trabalho a workers individuais. Dois níveis mínimo, sistemas grandes empilham mais. Resultado é uma árvore. <strong>Nenhum agent precisa do contexto completo</strong> — top mantém goal de alto nível + summary de cada branch; níveis inferiores veem só o que sua role estreita precisa.</p>
+
+<p>Como chain of command militar: ordens descem, reports sobem, ninguém pula nível.</p>
+
+<p><strong>Caso real</strong>: IBM watsonx Orchestrate. Supervisor top-level age como router/planner em 80+ domain agents pré-construídos (HR, sales, procurement). "Pedir laptops novos pro time de design" → Procure Equipment supervisor → 3 child agents especializados (cotações de vendor aprovado, checa respostas, submete purchase request).</p>
+
+<p><strong>Trade-offs</strong>: detalhes podem se perder em cada nível. Worker produz resultado detalhado. Mid-level manager encurta pra uma frase. Quando chega no top, o detalhe que importa pode ter sumido. <strong>Hierárquico troca detalhe por cobertura</strong>: mais alto, escopo mais amplo, menos conhecimento específico.</p>
+
+<h3>Arquiteturas descentralizadas (sem chain of command)</h3>
+
+<img src="../assets/images/2026-05-24-multi-agent-architecture-2-decentralized.jpg" alt="Três topologias descentralizadas — Swarm (nuvem de agents iguais ao redor de blackboard), Mesh (web peer-to-peer), Handoffs (relay race com bastão)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>As próximas 3 arquiteturas <strong>abandonam o chain</strong>. São mais difíceis de debugar, mas sobrevivem melhor a falhas parciais.</p>
+
+<h4>4. Swarm</h4>
+
+<p>Muitos agents trabalham como iguais. Coordenam através de um <strong>shared blackboard</strong> — data store (Redis cache, database table, vector store) que todo agent lê e escreve. <em>Sem mensagens diretas entre agents</em>.</p>
+
+<p>Cada agent fica observando o blackboard, vê algo que pode trabalhar, age, escreve resultado de volta. Outros agents reagem ao novo estado.</p>
+
+<p><strong>Caso real</strong>: <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm framework</a> (apesar do nome, mais voltado pra handoffs); <a href="https://github.com/MotiaDev/motia" target="_blank" rel="noopener">Motia</a> com event-bus pattern; sistemas de research multi-agent que usam Redis como scratch pad compartilhado.</p>
+
+<p>Trabalha bem pra <strong>problemas exploratórios sem caminho conhecido</strong>: brainstorming, pesquisa aberta, hypothesis generation.</p>
+
+<p><strong>Trade-offs</strong>: emergent behavior é poderoso mas imprevisível. Hard pra debugar. Race conditions no shared state. Sem garantia de convergência — agents podem ficar girando sem produzir resultado final.</p>
+
+<h4>5. Mesh (peer-to-peer)</h4>
+
+<p>Agents se comunicam diretamente entre si via mensagens. Sem blackboard central, sem orchestrator. Cada agent conhece os outros (ou descobre via discovery) e troca mensagens 1-on-1 ou broadcast.</p>
+
+<p>Permite <strong>especialização extrema</strong>: cada agent vira "expert" num domínio, e a mesh natural emerge das interações.</p>
+
+<p><strong>Caso real</strong>: <a href="https://microsoft.github.io/autogen/" target="_blank" rel="noopener">Microsoft AutoGen</a> com GroupChat pattern; sistemas de negotiation onde agents representam stakeholders diferentes; simulações multi-agent (mercado financeiro, social networks).</p>
+
+<p><strong>Trade-offs</strong>: complexidade quadrática (N×N comunicações possíveis). Sem coordenador, easy pra dois agents loop infinitamente trocando mensagens. <strong>Hard de auditar</strong> — não há single source of truth do que aconteceu.</p>
+
+<h4>6. Handoffs</h4>
+
+<p>Pattern intermediário entre pipeline (ordem fixa) e mesh (livre). Agents <strong>passam o controle</strong> (handoff) explicitamente quando reconhecem que outro agent é mais apto. Como corrida de revezamento — bastão passa entre runners.</p>
+
+<p>Diferente de pipeline: handoffs são <em>dinâmicos</em> — agent decide quando e pra quem passar. Diferente de mesh: só um agent ativo por vez (não há concorrência).</p>
+
+<p><strong>Caso real</strong>: <a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a> é literalmente baseado nisso — agent "triage" recebe query, passa pra agent "billing" se for sobre pagamento, pro "tech support" se for técnico. Pattern <strong>perfeito pra customer support multi-departamento</strong>.</p>
+
+<p><strong>Trade-offs</strong>: agent precisa saber pra quem passar (knowledge problem). Loop de handoffs ("billing diz que é tech, tech diz que é billing") trava sistema. Mitigation: cap de handoffs por sessão, fallback pra humano.</p>
+
+<h2>Como agents coordenam</h2>
+
+<h3>Run loops</h3>
+
+<p>Multi-agent não muda fundamentalmente o run loop de cada agent (ReAct, Plan-and-Execute — coberto no <a href="../posts/2026-05-24-how-ai-agents-work.html">post sobre agents</a>). Mas adiciona <strong>coordination loop</strong>: orchestrator espera workers, mesh agents trocam mensagens, swarm agents observam blackboard.</p>
+
+<h3>MCP vs A2A</h3>
+
+<p>Dois protocolos relevantes:</p>
+
+<ul>
+<li><strong>MCP (Model Context Protocol)</strong>: agent ↔ tools/data (coberto no <a href="../posts/2026-05-24-how-mcp-works.html">post sobre MCP</a>).</li>
+<li><strong>A2A (Agent-to-Agent)</strong>: agent ↔ agent. Padrão emergente — Google's <a href="https://google.github.io/A2A/" target="_blank" rel="noopener">A2A protocol</a>, AutoGen messaging, LangGraph handoffs.</li>
+</ul>
+
+<h3>Shared state vs Isolated state</h3>
+
+<ul>
+<li><strong>Shared</strong> (swarm, mesh): tudo num blackboard/state machine. Simples mas race conditions.</li>
+<li><strong>Isolated</strong> (orchestrator-worker, pipeline): cada agent tem state próprio, troca via messages. Mais robusto, mais overhead.</li>
+</ul>
+
+<h3>Stopping conditions</h3>
+
+<p>Quando o multi-agent system "termina"? Critérios:</p>
+
+<ul>
+<li>Goal alcançado (orchestrator verifica).</li>
+<li>Max iterations (cap absoluto).</li>
+<li>Cost budget excedido.</li>
+<li>Quórum de agents votou "done".</li>
+<li>Human override.</li>
+</ul>
+
+<p>Sem stopping conditions explícitas, agents loop pra sempre — burnando tokens e dinheiro.</p>
+
+<h2>O custo real de multi-agent</h2>
+
+<p>Mais agents = mais tokens = mais latência = mais coordenação = mais falhas. <strong>Custo total é tipicamente 3-10× single agent</strong> pra ganho marginal em qualidade.</p>
+
+<p>Exemplo numérico: orchestrator com 10 workers, cada worker faz 3 tool calls com 500 tokens output, orchestrator agrega em 2.000 tokens. Total: 10 × 3 × 500 + 2.000 = <strong>17.000 tokens por task</strong>. Single agent equivalente: ~5.000 tokens. <em>3,4× custo.</em></p>
+
+<p>Justifica quando: ganho de qualidade &gt; 30%, paralelismo corta latência críticamente, ou specialization é não-negociável (security boundary).</p>
+
+<h2>Failure modes que sempre aparecem</h2>
+
+<ol>
+<li><strong>Bad instructions cascade</strong>: orchestrator dá instrução vaga, workers entregam lixo, orchestrator agrega lixo. Mitigation: rubrics rigorosas pra cada agent, eval na borda.</li>
+<li><strong>Misalignment entre agents</strong>: agent A produz formato X, agent B espera Y. Soluciona com contratos explícitos (Pydantic schemas, Zod).</li>
+<li><strong>Weak verification</strong>: nenhum agent valida output de outro. Fix: evaluator-optimizer loop em pontos críticos.</li>
+<li><strong>Prompt injection através de agent</strong>: input malicioso recebido por agent A, propagado pra agent B com acesso elevado. Solução: sanitização inter-agent.</li>
+<li><strong>Context contamination</strong>: agent envenenado com info errada espalha pra outros. Isolation + verification breaks the cascade.</li>
+<li><strong>Privilege creep</strong>: agent que era pra read-only ganha write capability via tool. Princípio de least privilege rigoroso, audit trail.</li>
+<li><strong>Loop de handoffs</strong> (mesh/handoffs): 2 agents jogam tarefa um pro outro infinito. Cap de handoffs.</li>
+<li><strong>Coordination deadlock</strong>: orchestrator espera worker que espera orchestrator. Timeouts em tudo.</li>
+</ol>
+
+<h2>Stack recomendada por arquitetura</h2>
+
+<table style="width:100%; border-collapse:collapse; margin:24px 0; font-size:14px;">
+<thead>
+<tr style="border-bottom: 2px solid var(--border);">
+<th style="text-align:left; padding:8px;">Arquitetura</th>
+<th style="text-align:left; padding:8px;">Framework recomendado</th>
+<th style="text-align:left; padding:8px;">Quando usar</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Orchestrator-Worker</strong></td>
+<td style="padding:8px;">LangGraph, CrewAI hierarchical mode</td>
+<td style="padding:8px;">Research, code analysis multi-file</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Pipeline</strong></td>
+<td style="padding:8px;">LangGraph (DAG), Temporal, Airflow</td>
+<td style="padding:8px;">Workflows regulados, compliance</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Hierarchical</strong></td>
+<td style="padding:8px;">CrewAI, AutoGen group chat</td>
+<td style="padding:8px;">Enterprise multi-domain (HR, finance, sales)</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Swarm</strong></td>
+<td style="padding:8px;">Motia, custom Redis + agents</td>
+<td style="padding:8px;">Exploration, brainstorming</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Mesh</strong></td>
+<td style="padding:8px;">AutoGen, A2A protocol</td>
+<td style="padding:8px;">Simulação, negotiation</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Handoffs</strong></td>
+<td style="padding:8px;">OpenAI Swarm, LangGraph routing</td>
+<td style="padding:8px;">Customer support multi-departamento</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Case study — o Dev Team Kit (claude-skills-fv)</h2>
+
+<img src="../assets/images/2026-05-24-multi-agent-architecture-3-decision.jpg" alt="Flowchart de decisão — precisa multi-agent? branches sim/não, central vs distribuído, cards finais com cada arquitetura" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>O <a href="https://github.com/felvieira/claude-skills-fv" target="_blank" rel="noopener">Dev Team Kit</a> que mantenho usa <strong>hybrid hierarchical + handoffs</strong>:</p>
+
+<ul>
+<li><strong>Top-level</strong>: orchestrator skill recebe a tarefa, classifica (CRUD / bug / refactor / docs).</li>
+<li><strong>Mid-level</strong>: pipeline de roles (PO → Architect → Dev → QA → Security) ativado conforme classificação.</li>
+<li><strong>Worker-level</strong>: cada role é agent especializado (subagent Claude Code) com tools + memory próprios.</li>
+<li><strong>Handoffs</strong>: roles passam controle explicitamente (`/auto` flow), com gates entre fases.</li>
+<li><strong>Shared state</strong>: <code>D:\claude-memory\</code> como blackboard cross-session.</li>
+</ul>
+
+<p>Resultado: feature CRUD completa do zero ao PR em ~25 minutos autônomos, com qualidade de equipe sênior. Sem single-agent equivalente sustentável.</p>
+
+<h2>Conclusão — multi-agent não é silver bullet</h2>
+
+<p><strong>A regra de ouro</strong>: stay single-agent até dor de produção forçar a mudança. Quando forçar, escolha a arquitetura mais simples que resolve a dor — não a mais "modern" ou "cool". Centralizadas (orchestrator-worker, pipeline, hierarchical) ganham 80% dos cases reais porque são auditáveis. Descentralizadas (swarm, mesh) brilham em problemas exploratórios mas custam caro em debugability.</p>
+
+<p>O ecossistema ainda é jovem — protocolos como A2A apenas emergindo, frameworks evoluindo semanalmente, best practices se solidificando. Mas o princípio fundamental já está claro: <em>multi-agent é sistema distribuído, não mágica</em>. Vale tudo que vale pra distributed systems (idempotency, retry, observability, circuit breakers, contracts) — só que com componentes probabilísticos.</p>
+
+<p>Se você está construindo agents, leia <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">"How we built our multi-agent research system" da Anthropic</a>. É o melhor case study público existente.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "Multi-Agent Architectures, Clearly Explained" por Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/multi-agent-system" target="_blank" rel="noopener">The System Design Newsletter</a> em 30 de abril de 2026. Esta adaptação em PT-BR cobre as 6 arquiteturas (3 da parte gratuita + 3 expandidas com pesquisa própria), failure modes observados em produção, tabela de stack por arquitetura, e case study do Dev Team Kit. Recomendo o <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">post da Anthropic sobre Claude Research</a> e a documentação dos frameworks LangGraph, CrewAI, AutoGen e OpenAI Swarm pra ir mais fundo.</em></p>
+
+<hr>
+
+<h2>🎉 Fim da série — 15 posts em 24 horas</h2>
+
+<p>Este post fecha a série de <strong>15 adaptações enriquecidas em PT-BR</strong> dos artigos do The System Design Newsletter sobre AI, agents, RAG, LLM concepts, e tudo que importa em 2026. Sequência completa:</p>
+
+<ol>
+<li><a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">AI Agents Memory & State Consistency</a></li>
+<li><a href="../posts/2026-05-23-ml-system-design-101.html">ML System Design 101</a></li>
+<li><a href="../posts/2026-05-23-personal-ai-chat-assistant.html">Personal AI Chat Assistant</a></li>
+<li><a href="../posts/2026-05-24-how-rag-works.html">How RAG Works</a></li>
+<li><a href="../posts/2026-05-24-llm-concepts-deep-dive.html">LLM Concepts Deep Dive</a></li>
+<li><a href="../posts/2026-05-24-design-ai-agent.html">Design AI Agent (framework 10 passos)</a></li>
+<li><a href="../posts/2026-05-24-reinforcement-learning-explained.html">Reinforcement Learning Explained</a></li>
+<li><a href="../posts/2026-05-24-vector-databases-deep-dive.html">Vector Databases Deep Dive</a></li>
+<li><a href="../posts/2026-05-24-context-engineering-101.html">Context Engineering 101</a></li>
+<li><a href="../posts/2026-05-24-ai-coding-workflow-101.html">AI Coding Workflow 101</a></li>
+<li><a href="../posts/2026-05-24-llm-evals-explained.html">LLM Evals Explained</a></li>
+<li><a href="../posts/2026-05-24-how-ai-agents-work.html">How AI Agents Work (conceitual)</a></li>
+<li><a href="../posts/2026-05-24-how-mcp-works.html">How MCP Works</a></li>
+<li><a href="../posts/2026-05-24-agentic-design-patterns.html">9 Agentic Design Patterns</a></li>
+<li>Multi-Agent Architecture (este post)</li>
+</ol>
+
+<p>Crédito principal: <strong>Neo Kim e os guest authors do The System Design Newsletter</strong> — Paolo Perrone, Louis-François Bouchard, Eric Roby, Fran Soto, Dr. Ashish Bamania, Maxine Meurer, Anshuman Mishra, Sairam Sundaresan. <a href="https://newsletter.systemdesign.one/" target="_blank" rel="noopener">Assine o newsletter deles</a> — é onde tudo isso começou.</p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-multi-agent-architecture.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

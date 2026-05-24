@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista — felvieira's blog</title>
+<meta name="description" content="Tradução enriquecida em PT-BR do guia de Paolo Perrone e Neo Kim sobre os conceitos fundamentais de ML system design — features, embeddings, loss functions, leakage — com contexto extra, ferramentas e framework de entrevista.">
+<meta property="og:title" content="ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista">
+<meta property="og:description" content="Tradução enriquecida em PT-BR do guia de Paolo Perrone e Neo Kim sobre os conceitos fundamentais de ML system design — features, embeddings, loss functions, leakage — com contexto extra, ferramentas e framework de entrevista.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-ml-system-design-101-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista</h1>
+  <p class="meta">
+    <span>22 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">13 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-23-ml-system-design-101-cover.jpg" alt="ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você entra numa entrevista de <em>ML system design</em>, alguém diz "projete um sistema de recomendação" e em segundos a sala vira uma sopa de jargão: <strong>embeddings, feature store, model drift, class imbalance</strong>. Você acena com a cabeça enquanto afunda silenciosamente.</p>
+
+<p>O problema é que quase todo material de preparação te empurra direto pra <em>deep-dive</em> em algoritmo ou drill de LeetCode. Mas antes disso falta o básico: um modelo mental de como um sistema de ML funciona de ponta a ponta — vocabulário, blocos de construção, e como eles se encaixam.</p>
+
+<p>Este post é uma tradução enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">guia de Paolo Perrone e Neo Kim no The System Design Newsletter</a>, com adições de contexto, links externos, e exemplos práticos. Eles cobrem os 38 conceitos que sustentam sistemas reais (Netflix, Uber, Spotify) — aqui revisamos os 10 fundamentais que você <em>precisa</em> dominar antes de qualquer entrevista de ML.</p>
+
+<h2>O que é, no fundo, um sistema de ML?</h2>
+
+<p>Software tradicional roda em regras escritas à mão. Se a temperatura passar de 30°C, ligue o ar. Se o usuário clicar em "comprar", cobre o cartão. Cada decisão está <em>hardcoded</em>.</p>
+
+<p>Sistemas de ML invertem a lógica. Em vez de escrever as regras, você dá milhões de exemplos ao sistema e <strong>ele descobre as regras sozinho</strong>. Mostre um milhão de corridas passadas e o modelo aprende a prever quanto tempo seu Uber vai levar. Mostre bilhões de sessões de visualização e o modelo aprende qual filme recomendar a seguir.</p>
+
+<p>Parece mágico, mas é só engenharia de dados sofisticada: dados entram, padrões são extraídos, predições saem, e o sistema continua aprendendo a partir dos próprios resultados.</p>
+
+<p>Cada conceito a seguir mapeia para um estágio dessa pipeline. <strong>Dominar a pipeline = dominar a entrevista.</strong></p>
+
+<h2>Parte 1 — Matéria-prima: como dados viram inteligência</h2>
+
+<p>Você pode ter o modelo mais sofisticado do mundo. Se seus dados são lixo, suas predições são lixo. Não há atalho.</p>
+
+<h3>1. Features</h3>
+
+<p>Uma <strong>feature</strong> é uma única informação mensurável que o modelo usa pra fazer predições. Pense em features como as colunas de uma planilha que descrevem cada exemplo.</p>
+
+<img src="../assets/images/2026-05-23-ml-system-design-101-1-features.jpg" alt="Features como colunas de uma planilha alimentando uma rede neural, ao lado de um chef preparando ingredientes (metáfora pra feature engineering)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Se você está prevendo se alguém vai clicar num anúncio, suas features podem incluir: idade do usuário, hora do dia, dispositivo, e quantos anúncios já viu na sessão. Cada feature dá ao modelo um ângulo diferente sobre a mesma pergunta.</p>
+
+<p>No Discover Weekly do Spotify, features incluem seus gêneros mais ouvidos, a hora que você costuma escutar, e com que frequência você pula músicas. O modelo não "ouve" a música — ele lê as features.</p>
+
+<p><strong>A qualidade das features quase sempre importa mais que a sofisticação do modelo.</strong> O que levanta a pergunta: de onde vêm boas features?</p>
+
+<h3>2. Feature Engineering</h3>
+
+<p><strong>Feature engineering</strong> é o processo de transformar dados brutos em features que ajudam o modelo a aprender melhor. Dados brutos são bagunçados e desestruturados — feature engineering é sobre limpar, remodelar, e extrair o sinal.</p>
+
+<p>É como preparar ingredientes antes de cozinhar. Você não joga um frango inteiro na panela; você corta, tempera, e organiza primeiro.</p>
+
+<p>Exemplo: dado bruto do Uber pode dizer "corrida solicitada em 2024-12-25 08:47:32 UTC". Feature engineering transforma isso em: <em>dia da semana (quarta), período (rush matinal), feriado (sim), clima (chuvoso)</em>. Cada transformação dá ao modelo um sinal mais útil que o timestamp cru.</p>
+
+<p>Às vezes as features mais poderosas <em>não estão</em> nos dados brutos. Uma feature como "número médio de corridas que este usuário faz por semana" exige agregação em vários registros. Esse tipo de criatividade separa feature engineering boa de excelente. Bibliotecas como <a href="https://featuretools.alteryx.com/" target="_blank" rel="noopener">Featuretools</a> e <a href="https://tsfresh.com/" target="_blank" rel="noopener">tsfresh</a> automatizam parte disso, mas o que realmente movimenta o ponteiro é entender o domínio.</p>
+
+<h3>3. Labels e Ground Truth</h3>
+
+<p>Um <strong>label</strong> é a resposta que você está treinando o modelo a prever. <strong>Ground truth</strong> é o que realmente aconteceu no mundo real.</p>
+
+<p>Se você está construindo um filtro de spam, o label de cada email é "spam" ou "não-spam". Se você está prevendo preços de imóveis, o label é o preço real de venda. O modelo aprende comparando seus chutes com essas respostas conhecidas.</p>
+
+<p>Ground truth parece simples, mas é frequentemente surpreendentemente difícil de obter. Quando a Netflix pergunta "o usuário gostou deste filme?", o ground truth é ambíguo: ele assistiu até o fim? avaliou? assistiu algo similar em seguida? <em>Definições diferentes de ground truth levam a comportamentos diferentes de modelo.</em></p>
+
+<blockquote>
+<p>💡 <strong>Como você define seu label molda o que o modelo de fato aprende.</strong> Escolha errado, e o modelo otimiza pra coisa errada — com consequências caras em produção.</p>
+</blockquote>
+
+<h3>4. Treino, Validação e Teste</h3>
+
+<p>Você não testa um aluno com as mesmas perguntas que ele praticou. O mesmo princípio vale pra ML.</p>
+
+<img src="../assets/images/2026-05-23-ml-system-design-101-2-splits.jpg" alt="Dataset dividido em três fatias representando treino, validação e teste, ao lado de um estudante com envelope lacrado de prova final" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Os dados são divididos em três grupos, cada um com um trabalho específico:</p>
+
+<ul>
+<li><strong>Treino</strong>: o que o modelo de fato aprende. Ele vê esses exemplos durante o treinamento.</li>
+<li><strong>Validação</strong>: checkpoint de meio-de-treino. Diz qual versão do modelo está indo melhor.</li>
+<li><strong>Teste</strong>: a prova final. Se o modelo se sair bem aqui, está pronto pro mundo real.</li>
+</ul>
+
+<p>A maioria das equipes divide 70/15/15 ou 80/10/10. A proporção exata depende de quanto dado você tem, mas uma regra é inegociável: <strong>o test set nunca pode influenciar o desenvolvimento do modelo</strong>. Caso contrário, você deixou o aluno espiar a prova final — e o resultado em produção vai despencar.</p>
+
+<p>Na Netflix, isso pode significar treinar com dados de visualização de janeiro a outubro, validar em novembro, e testar em dezembro. Esse <em>time-based split</em> é especialmente importante pra ML porque dados do mundo real mudam ao longo do tempo (o que o original chama de <em>concept drift</em>, tema da seção 5 deles).</p>
+
+<h3>5. Class Imbalance e Data Leakage</h3>
+
+<p><strong>Class imbalance</strong> acontece quando um resultado é muito mais comum que os outros. Em detecção de fraude, talvez 1 em 10.000 transações seja fraudulenta. Em diagnóstico médico, a maioria dos pacientes não tem a doença rara. O modelo pode atingir 99,99% de acurácia simplesmente prevendo "não-fraude" sempre — e ainda assim ser <em>completamente inútil</em>.</p>
+
+<p>Corrigir imbalance geralmente envolve técnicas como oversampling da classe rara (<a href="https://imbalanced-learn.org/stable/references/generated/imblearn.over_sampling.SMOTE.html" target="_blank" rel="noopener">SMOTE</a>), undersampling da classe comum, ou ajustar a <em>loss function</em> pra penalizar erros em exemplos raros mais pesadamente.</p>
+
+<p><strong>Data leakage</strong> ocorre quando a resposta está escondida nos dados de treino. Você está construindo um modelo pra prever entregas atrasadas, mas seu dataset inclui "reclamação de cliente registrada". Essa reclamação só existe <em>porque</em> a entrega já foi atrasada. Claro que o modelo parece preciso — em produção ele é inútil.</p>
+
+<blockquote>
+<p>💡 <strong>Regra de ouro:</strong> se seu modelo bater 95% de acurácia na primeira tentativa, procure leakage. Se passar de 99%, procure também imbalance.</p>
+</blockquote>
+
+<h3>6. Data Pipelines e ETL</h3>
+
+<p><strong>Data pipelines</strong> são workflows automatizados que movem dados de fontes brutas (bancos, event logs, APIs de terceiros) por uma série de transformações, até um formato que o modelo possa usar.</p>
+
+<p><strong>ETL</strong> significa <em>Extract, Transform, Load</em>:</p>
+
+<ul>
+<li><strong>Extract</strong>: pega dado bruto da fonte.</li>
+<li><strong>Transform</strong>: limpa, faz join, agrega, e engenheira features.</li>
+<li><strong>Load</strong>: deposita o resultado num <em>feature store</em> ou dataset de treino.</li>
+</ul>
+
+<p>É a parte de encanamento do ML. E como encanamento real, ninguém pensa nela até algo quebrar. Uma linha perdida, um valor null, um pipeline que rodou atrasado. Nenhum erro lançado — só predições silenciosamente piores.</p>
+
+<p>A Uber roda milhares de pipelines de dados diariamente. Todos têm monitoramento, alerta, e quality checks. Ferramentas como <a href="https://airflow.apache.org/" target="_blank" rel="noopener">Apache Airflow</a>, <a href="https://www.prefect.io/" target="_blank" rel="noopener">Prefect</a>, e <a href="https://dagster.io/" target="_blank" rel="noopener">Dagster</a> dominam esse espaço. Mencione isso numa entrevista e você imediatamente se destaca como alguém que pensa em como ML funciona <em>de verdade</em>.</p>
+
+<h3>7. Data Versioning</h3>
+
+<p><strong>Data versioning</strong> significa rastrear exatamente qual versão de um dataset foi usada pra treinar cada modelo. Assim como engenheiros de software usam Git pra rastrear mudanças de código, equipes de ML precisam rastrear mudanças de dado.</p>
+
+<p>Por que isso importa? Imagine que a performance do seu modelo cai de repente. Sem data versioning, você não tem como responder: "o que mudou? foi o modelo ou os dados?". Com versioning, você compara o dataset atual com versões anteriores e identifica a mudança.</p>
+
+<p>Data versioning também habilita <strong>reprodutibilidade</strong> — um requisito em setores regulados como finanças e saúde. Se um auditor pergunta "por que o modelo tomou esta decisão seis meses atrás?", você precisa conseguir recriar o modelo exato e os dados de treinamento daquele ponto no tempo.</p>
+
+<p>Ferramentas como <a href="https://dvc.org/" target="_blank" rel="noopener">DVC (Data Version Control)</a> e <a href="https://mlflow.org/" target="_blank" rel="noopener">MLflow</a> ajudam equipes a gerenciar isso. <a href="https://lakefs.io/" target="_blank" rel="noopener">LakeFS</a> e <a href="https://pachyderm.com/" target="_blank" rel="noopener">Pachyderm</a> são alternativas pra cenários de data lake.</p>
+
+<h2>Parte 2 — Máquinas de padrão: como modelos realmente aprendem</h2>
+
+<p>Um modelo não "sabe" nada. Ele encontra padrões em dados e usa esses padrões pra fazer predições. Os próximos 3 conceitos descrevem exatamente como essa mágica acontece.</p>
+
+<h3>8. Model Training e Loss Functions</h3>
+
+<p><strong>Model training</strong> é o processo de mostrar exemplos ao modelo e deixar que ele ajuste suas configurações internas até que as predições fiquem cada vez mais próximas do ground truth. É como um aluno fazendo provas práticas várias vezes, melhorando um pouco a cada uma.</p>
+
+<p>O mecanismo que dirige a melhora é a <strong>loss function</strong>. Uma loss function mede o quão errado o modelo está. Após cada batch de exemplos, o modelo calcula a loss e ajusta suas configurações internas pra reduzir esse número. Ao longo de milhões de exemplos, esses pequenos ajustes somam.</p>
+
+<p>Problemas diferentes pedem loss functions diferentes:</p>
+
+<ul>
+<li><strong>Prever um número</strong> (como o ETA da Uber): <em>mean squared error</em> (MSE), que penaliza erros grandes desproporcionalmente.</li>
+<li><strong>Classificar algo</strong> (spam vs. não-spam): <em>cross-entropy loss</em>, que mede o quão confiante o modelo estava na resposta errada.</li>
+<li><strong>Ranking</strong> (busca, recomendação): <em>pairwise loss</em> ou <em>listwise loss</em> como <a href="https://www.microsoft.com/en-us/research/publication/from-ranknet-to-lambdarank-to-lambdamart-an-overview/" target="_blank" rel="noopener">LambdaRank</a>.</li>
+</ul>
+
+<p>A escolha da loss function molda o que o modelo otimiza. MSE → ser correto em média. <em>Mean absolute error</em> (MAE) → mais robusto a outliers. Decisões pequenas aqui têm grandes efeitos a jusante.</p>
+
+<h3>9. Parameters e Hyperparameters</h3>
+
+<p><strong>Parameters</strong> são o que o modelo de fato aprende — pense neles como a memória do modelo: cada padrão fica codificado como um número. GPT-4 tem centenas de bilhões; um modelo simples de recomendação, alguns milhões. Você não os escreve — o modelo descobre por conta própria.</p>
+
+<p><strong>Hyperparameters</strong> são as configurações que controlam <em>como</em> o modelo treina. Você os define antes do treino começar:</p>
+
+<ul>
+<li><strong>Learning rate</strong>: quão rápido o modelo ajusta os pesos.</li>
+<li><strong>Batch size</strong>: quantos exemplos ele processa de uma vez.</li>
+<li><strong>Epochs</strong>: quantas vezes ele percorre os dados.</li>
+<li><strong>Arquitetura</strong>: número de camadas, neurônios, etc.</li>
+</ul>
+
+<p>Se o modelo é o aluno, parameters são o conhecimento na cabeça dele, e hyperparameters são o plano de estudo: quantas horas por dia, quais matérias primeiro, quantos simulados.</p>
+
+<p>Hyperparameters ruins fazem um bom modelo falhar. Learning rate alta demais e o modelo nunca converge. Baixa demais e treina pra sempre. Poucas epochs → underfitting. Muitas → overfitting. Na prática, equipes rodam muitos experimentos com hyperparameters diferentes e comparam resultados no validation set. Ferramentas como <a href="https://optuna.org/" target="_blank" rel="noopener">Optuna</a>, <a href="https://www.ray.io/ray-tune" target="_blank" rel="noopener">Ray Tune</a> e <a href="https://wandb.ai/site/sweeps" target="_blank" rel="noopener">Weights & Biases Sweeps</a> automatizam essa busca.</p>
+
+<h3>10. Embeddings — o conceito que move tudo</h3>
+
+<p>Um <strong>embedding</strong> é uma forma de representar algo (uma palavra, um usuário, um produto) como uma lista de números que captura seu significado.</p>
+
+<img src="../assets/images/2026-05-23-ml-system-design-101-3-embeddings.jpg" alt="Espaço vetorial 3D mostrando embeddings de conceitos como pontos brilhantes agrupados por similaridade semântica" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Em vez de tratar "gato" e "gatinho" como labels completamente diferentes, embeddings os posicionam <em>próximos</em> num espaço vetorial porque são conceitos relacionados.</p>
+
+<p>Pense nisso como um mapa. Num mapa geográfico, cidades próximas estão plotadas perto uma da outra. Num espaço de embeddings, conceitos similares em significado estão plotados perto. "Comédia" e "rom-com" seriam vizinhos. "Terror" estaria distante, mas ainda na mesma galáxia de gêneros. "Contabilidade" estaria em outro universo.</p>
+
+<p>Embeddings estão em todo lugar em sistemas reais:</p>
+
+<ul>
+<li><strong>Spotify</strong> usa embeddings de músicas pra achar faixas musicalmente similares ao que você está ouvindo.</li>
+<li><strong>Netflix</strong> usa embeddings de filme e embeddings de usuário pra cruzar viewers com filmes que provavelmente vão gostar.</li>
+<li><strong>OpenAI, Cohere, Voyage</strong> oferecem APIs de <em>text embeddings</em> (<a href="https://platform.openai.com/docs/guides/embeddings" target="_blank" rel="noopener">text-embedding-3-large</a>, <a href="https://docs.voyageai.com/" target="_blank" rel="noopener">voyage-3</a>) que viram a fundação de quase todo sistema RAG moderno.</li>
+<li><strong>Bancos de dados vetoriais</strong> como <a href="https://www.pinecone.io/" target="_blank" rel="noopener">Pinecone</a>, <a href="https://qdrant.tech/" target="_blank" rel="noopener">Qdrant</a>, e <a href="https://weaviate.io/" target="_blank" rel="noopener">Weaviate</a> existem precisamente pra armazenar e consultar bilhões de embeddings em milissegundos.</li>
+</ul>
+
+<p><strong>Embeddings são como sistemas de ML dão sentido ao mundo real.</strong> Um usuário, um produto, uma sentença. Transforme em vetor, e de repente você pode calcular quais são similares, quais são relacionados, e quais recomendar.</p>
+
+<h2>O que vem depois — sinais de alerta e o resto do mapa</h2>
+
+<p>O artigo original cobre mais 28 conceitos: <em>overfitting & regularization, model evaluation metrics, A/B testing, online vs offline learning, feature stores, model registries, drift detection, shadow deployments, canary releases, multi-armed bandits, recsys two-tower architectures</em>, e por aí vai. Cada um deles preenche uma lacuna real que aparece em sistemas de produção.</p>
+
+<p>Se você quer cobrir os 38 inteiros, o <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">post completo de Paolo Perrone e Neo Kim</a> está disponível na assinatura paga do <em>The System Design Newsletter</em> — vale o investimento se você está se preparando seriamente pra entrevistas em <em>big tech</em>.</p>
+
+<p>Pra estudar gratuitamente em mais profundidade, três recursos canônicos:</p>
+
+<ul>
+<li><a href="https://www.amazon.com/dp/B0BPLJWN8L" target="_blank" rel="noopener"><strong>Machine Learning System Design Interview</strong></a> — livro de Alex Xu e Sahn-Lam (vol. 1 e 2), o material mais referenciado em entrevistas de big tech.</li>
+<li><a href="https://huyenchip.com/ml-interviews-book/" target="_blank" rel="noopener"><strong>Introduction to ML Interviews Book</strong></a> — de Chip Huyen, gratuito e abrangente.</li>
+<li><a href="https://github.com/chiphuyen/machine-learning-systems-design" target="_blank" rel="noopener"><strong>Designing Machine Learning Systems</strong></a> (livro + repo) — também de Chip Huyen, foco em produção.</li>
+</ul>
+
+<h2>Como praticar — o framework dos 5 passos</h2>
+
+<p>Em toda entrevista de ML system design, use esta espinha dorsal pra estruturar sua resposta. Mesmo que esqueça detalhes, esse mapa te impede de pular pedaços:</p>
+
+<ol>
+<li><strong>Esclareça o problema</strong> — qual é a métrica de negócio? (engagement, GMV, churn). Qual é a proxy de ML? (CTR, watch time, churn probability).</li>
+<li><strong>Defina dados e features</strong> — quais sinais existem? quais features novas você engenheraria? como lida com class imbalance? como evita leakage?</li>
+<li><strong>Escolha modelo e loss</strong> — começa simples (regressão logística, gradient boosting) e justifica complexidade só quando necessário. Qual loss function? por quê?</li>
+<li><strong>Sirva e avalie</strong> — batch ou online? feature store? latência alvo? como vai A/B testar? quais guardrail metrics te avisam de regressão?</li>
+<li><strong>Itere e monitore</strong> — como detecta data drift? quando retreina? como faz rollback? como vai estar em 6 meses?</li>
+</ol>
+
+<p>Esse framework é o mesmo que pessoas como <a href="https://eugeneyan.com/writing/system-design-for-discovery/" target="_blank" rel="noopener">Eugene Yan</a> e <a href="https://applyingml.com/" target="_blank" rel="noopener">ApplyingML</a> usam pra raciocinar sobre sistemas reais — não é truque de entrevista, é como ML production de verdade é projetado.</p>
+
+<h2>Conclusão</h2>
+
+<p>ML system design não é decorar fórmula. É <strong>vocabulário + intuição sobre trade-offs</strong>. Quando o entrevistador joga "embeddings" na conversa, você precisa instantaneamente pensar em vector DB, dimensão, distância coseno, e quando faz sentido aprender embeddings vs. usar pre-treinados.</p>
+
+<p>Os 10 conceitos acima são a fundação. Se eles ainda parecem turvos, releia esse post e os links externos antes de ir pra arquiteturas mais sofisticadas. Embeddings sem features bem definidas é castelo de areia. Modelo perfeito com leakage no dataset é fraude estatística.</p>
+
+<p>Próximos conceitos pra estudar (e que aparecem em quase toda entrevista sênior): <em>two-tower architectures</em> pra recsys, <em>multi-stage ranking</em> (candidate generation → ranking → re-ranking), <em>feature stores</em> (Tecton, Feast), <em>model drift detection</em>, e <em>shadow deployment</em>. Cada um deles merece um post próprio — e provavelmente vamos cobrir em entradas futuras desse blog.</p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "Machine Learning System Design Interview — How ML Systems Actually Work" por Paolo Perrone e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">The System Design Newsletter</a> em 12 de maio de 2026. Este post é uma adaptação enriquecida em PT-BR, com adições próprias de contexto, links externos, e ferramentas. Recomendo fortemente assinar o newsletter original — os 28 conceitos restantes (incluindo os deep-dives em Netflix, Uber e Spotify) estão na versão paga.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-23 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-ml-system-design-101.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>

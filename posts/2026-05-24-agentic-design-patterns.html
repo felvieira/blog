@@ -1,0 +1,333 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão — felvieira's blog</title>
+<meta name="description" content="Adaptação enriquecida em PT-BR do guia de 9 agentic patterns do Neo Kim — workflow patterns (chaining, routing, parallelization, orchestrator-workers) vs agent patterns (reflection, tool use, ReAct, planning) — combinada com o framework canônico da Anthropic, case study real e tabela de decisão.">
+<meta property="og:title" content="9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão">
+<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de 9 agentic patterns do Neo Kim — workflow patterns (chaining, routing, parallelization, orchestrator-workers) vs agent patterns (reflection, tool use, ReAct, planning) — combinada com o framework canônico da Anthropic, case study real e tabela de decisão.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-agentic-patterns-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão</h1>
+  <p class="meta">
+    <span>23 de maio de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">11 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-05-24-agentic-patterns-cover.jpg" alt="9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Quando você constrói software com LLMs, precisa decidir <strong>quanto controle dar pro modelo</strong>. Seu código roda cada step, ou o modelo descobre os steps sozinho?</p>
+
+<p>Agentic patterns são <em>design patterns pra essa decisão</em>. São as mesmas escolhas arquiteturais que você já faz em qualquer sistema: quem controla o que vem a seguir, o que acontece em falha, como dado flui entre componentes. A diferença é que alguns desses componentes agora são modelos de linguagem.</p>
+
+<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/agentic-design-patterns" target="_blank" rel="noopener">"9 Agentic Patterns, Simply Explained" do Neo Kim</a>, com adições baseadas no <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">framework canônico da Anthropic</a> e patterns que vejo em produção.</p>
+
+<h2>A decisão fundamental — quanto controle dar</h2>
+
+<img src="../assets/images/2026-05-24-agentic-patterns-1-ladder.jpg" alt="Escala de 3 tiers — Direct LLM call embaixo, Workflow no meio com pipeline fixa, Agent no topo com árvore de decisões" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Em uma ponta: <strong>workflow patterns</strong> onde seu código controla cada step. Na outra: <strong>agent patterns</strong> onde o LLM decide o que fazer. Em algum ponto, você para de dizer ao modelo o que fazer e começa a deixar ele descobrir.</p>
+
+<p>A primeira pergunta não é qual pattern usar — é <strong>se você precisa de algum</strong>.</p>
+
+<h3>Comece pelo mais simples — direct LLM call</h3>
+
+<p>Maioria das tarefas não precisa de agent. Maioria não precisa nem de workflow. <strong>Default: a configuração mais simples que funciona</strong>. Escala só quando essa configuração quebra.</p>
+
+<p>Direct API call ao LLM resolve muito mais do que parece:</p>
+<ul>
+<li>Summarization</li>
+<li>Classification</li>
+<li>Extraction</li>
+<li>Rewriting</li>
+<li>Translation</li>
+<li>Geração de código com specs claros</li>
+</ul>
+
+<p><em>Maioria pula esse nível cedo demais.</em></p>
+
+<h3>Quando subir pra workflow</h3>
+
+<p>Escale quando a tarefa tem muitos steps, e quando atenção focada em cada step melhora o output. Entre steps, você define <strong>validation gates</strong> que verificam o output antes de passar adiante.</p>
+
+<p>Característica definidora: <strong>você consegue escrever todos os steps antes do sistema rodar</strong>. Seu código tem o control flow. O LLM cuida dos detalhes.</p>
+
+<h3>Quando subir pra agent</h3>
+
+<p>Agent patterns são pra quando <strong>o número e tipo de steps são desconhecidos até o sistema rodar</strong>. O modelo olha resultados, decide o que fazer, e escolhe seu próprio caminho.</p>
+
+<p>Exemplo: support agent que lida com cancelamentos. Cliente pede cancelamento — agent não sabe upfront se precisa checar política de reembolso, ver status do envio, ou escalar pra humano. Steps dependem do que ele descobre.</p>
+
+<p><strong>Sinal pra trocar workflow por agent</strong>: você escreve mais código tratando erros e exceptions do que fazendo o trabalho real. Ou continua adicionando special cases pra situações que o LLM encontra e você não planejou.</p>
+
+<p>Erro comum: chegar a 70-80% num protótipo e assumir que a arquitetura precisa upgrade. <em>Geralmente não precisa</em>. O problema real costuma ser qualidade do prompt ou gates de validação faltando. <strong>Migre pra pattern mais complexo só quando o simples de fato falhou — não quando parece limitante.</strong></p>
+
+<h2>Workflow patterns — seu código no controle</h2>
+
+<img src="../assets/images/2026-05-24-agentic-patterns-2-workflow.jpg" alt="4 quadrantes dos workflow patterns — Prompt Chaining (linear), Routing (front desk), Parallelization (lanes paralelas), Orchestrator-Workers (hub-and-spoke)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<h3>1. Prompt Chaining</h3>
+
+<p>Quebra uma tarefa em série de calls LLM. Cada call pega o output do passo anterior, e um check entre eles garante que está correto antes de avançar.</p>
+
+<p>Igual CI/CD pipeline: compile, lint, test, package. Cada step tem que passar antes do próximo rodar. Se testes falham, pipeline para.</p>
+
+<p><strong>Exemplo</strong>: review de contrato jurídico — extrai cláusulas → classifica risco de cada uma → gera summary das de alto risco pra review humano. Produtos como Thomson Reuters CoCounsel e Robin AI rodam variações disso.</p>
+
+<p><strong>Trade-offs</strong>: latência cresce linearmente — 5 steps = 5 round-trips. Erros se propagam: se step 2 mal-classifica, steps 3-5 processam input ruim. Validation gates pegam falhas cedo, mas só pegam o que suas condições conseguem pegar.</p>
+
+<h3>2. Routing</h3>
+
+<p>Classifica o input e manda pro handler certo: prompt diferente, modelo diferente, ou sub-workflow diferente. Cada handler é construído pra um tipo de input.</p>
+
+<p>Igual recepção de hospital. Paciente entra, recepção checa sintomas, encaminha pro médico certo. Recepção não trata ninguém. Médico não faz check-in.</p>
+
+<p><strong>Exemplo</strong>: Sierra AI roteia entre 15+ modelos — classificação vai pra um, tool calling pra outro, geração de resposta pra terceiro. Customer support tipo Intercom Fin roteia cada request pra AI handler ou humano baseado em intent + sentiment.</p>
+
+<p><strong>O argumento de custo está embutido</strong>: queries simples vão pra modelos baratos e rápidos. Complexos vão pra modelos caros e capazes. Você não paga preço premium por trabalho que modelo menor resolve.</p>
+
+<p><strong>Trade-offs (1 palavra: misclassification)</strong>: query complexa roteada pro modelo barato = resposta ruim. Query simples no modelo caro = desperdício. O router é single point of failure — a acurácia dele é o teto do sistema inteiro.</p>
+
+<h3>3. Parallelization</h3>
+
+<p>Duas variantes que resolvem problemas diferentes:</p>
+
+<h4>Sectioning — partes independentes em paralelo</h4>
+
+<p>Divide tarefa em partes independentes, roda em paralelo, merge no fim. Como crew de construção: eletricistas, encanadores, carpinteiros trabalham no mesmo prédio ao mesmo tempo. Trabalho combinado no final.</p>
+
+<p><strong>Exemplo</strong>: GitHub Advanced Security — CodeQL + Snyk + Semgrep escaneiam o mesmo PR em paralelo, cada um produz alerts independentes.</p>
+
+<h4>Voting — mesma tarefa, múltiplas vezes</h4>
+
+<p>Roda a mesma tarefa muitas vezes com prompts diferentes, combina respostas. Como júri: cada jurado vê a mesma evidência, decide individual, grupo decide junto.</p>
+
+<p><strong>Exemplo</strong>: review de segurança — 3 prompts separados analisam mesma mudança de código pra vulnerabilities, sinaliza issue só se 2+ concordam. Mais caro, mas pega menos falsos alarmes.</p>
+
+<p>Em resumo: <em>sectioning dá trabalho diferente pra cada worker; voting dá mesmo trabalho pra todos</em>.</p>
+
+<p><strong>Trade-offs</strong>: custo multiplica com cada branch paralela. Partial failures são decisão de design — uma branch falha, retry, prossegue com as outras, ou aborta tudo? Não há resposta universal, e escolha errada é cara.</p>
+
+<h3>4. Orchestrator-Workers</h3>
+
+<p>Um LLM central quebra a tarefa em subtarefas, atribui cada uma a um LLM worker, combina os resultados. <strong>Diferença vs anteriores: subtarefas não são conhecidas upfront — orchestrator descobre conforme avança</strong>.</p>
+
+<p>Como general contractor construindo casa:</p>
+<ul>
+<li>Contrata as pessoas certas, mas não sabe todos os subcontractors upfront.</li>
+<li>Encanador acha problema estrutural — contractor traz engenheiro estrutural.</li>
+<li>Plano muda conforme o projeto revela novos problemas.</li>
+</ul>
+
+<p><strong>Exemplo</strong>: Cursor agent mode — agents diferentes pra partes diferentes do codebase. Um adicionando testes, outro atualizando docs, terceiro refatorando shared utilities.</p>
+
+<p>Você confia no LLM pra descobrir <em>o que precisa ser feito</em>, não só fazer o que foi atribuído.</p>
+
+<p><strong>Trade-offs</strong>: orchestrator pode perder o goal original. Quebra tarefas simples em subtarefas demais. Workers terminam mais rápido do que ele consegue combinar — orchestrator vira o gargalo.</p>
+
+<h2>Agent patterns — LLM no controle</h2>
+
+<img src="../assets/images/2026-05-24-agentic-patterns-3-agent.jpg" alt="4 painéis dos agent patterns — Reflection (LLM olhando no espelho), Tool Use (mão pegando da toolbox), ReAct (ciclo think-act-observe), Planning (LLM desenhando roadmap)" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
+
+<p>Com agent patterns, você <strong>para de definir o que acontece e em qual ordem</strong>. Em vez de steps, você define <em>constraints</em>: quais tools estão disponíveis, quanto o modelo pode gastar, quando parar. O modelo observa, raciocina, escolhe o próximo passo.</p>
+
+<h3>5. Reflection</h3>
+
+<p>LLM gera output, revisa o próprio trabalho, conserta problemas que ele mesmo encontrou. <strong>Auto-crítica em loop</strong>.</p>
+
+<p>Pattern simples mas poderoso: 2 calls em vez de 1, mas qualidade quase sempre melhora dramaticamente em tarefas onde "primeira tentativa raramente é boa" — code generation, writing, math reasoning.</p>
+
+<p><strong>Implementação típica</strong>:</p>
+<pre><code>1. LLM gera draft.
+2. LLM (mesmo modelo) revisa o draft com prompt:
+   "Aja como reviewer cético. Liste problemas, erros, melhorias."
+3. LLM gera v2 incorporando o feedback.
+4. (Opcional) Repete até critério de parada.</code></pre>
+
+<p>Variantes: <strong>Self-Refine</strong> (<a href="https://arxiv.org/abs/2303.17651" target="_blank" rel="noopener">paper Madaan et al., 2023</a>), <strong>Reflexion</strong> (<a href="https://arxiv.org/abs/2303.11366" target="_blank" rel="noopener">Shinn et al., 2023</a> — com memory persistente entre tentativas).</p>
+
+<p><strong>Trade-offs</strong>: 2-3× custo. Risco de "over-correction" — modelo introduz problemas novos enquanto corrige antigos. Cap o número de iterações.</p>
+
+<h3>6. Tool Use</h3>
+
+<p>LLM tem acesso a tools e decide quais chamar pra completar a tarefa. <strong>É o pattern mais usado em produção</strong> — Claude, GPT-4, Gemini todos têm "function calling" nativo.</p>
+
+<p>Tools podem ser:</p>
+<ul>
+<li>Acesso a dados: <code>search_database</code>, <code>read_file</code>, <code>fetch_url</code>.</li>
+<li>Ações: <code>send_email</code>, <code>create_ticket</code>, <code>execute_sql</code>.</li>
+<li>Computação: <code>run_python</code>, <code>calculate</code>, <code>plot_chart</code>.</li>
+<li>Outras AIs: <code>image_generate</code>, <code>transcribe_audio</code>.</li>
+</ul>
+
+<p>MCP (Model Context Protocol) virou o padrão pra expor tools — coberto no <a href="../posts/2026-05-24-how-mcp-works.html">post sobre MCP</a>.</p>
+
+<p><strong>Trade-offs</strong>: LLM pode escolher tool errada, passar argumentos errados, ou loop chamando a mesma tool. Mitigações: tool descriptions claras, schema validation rigorosa, max-call limits, human-in-loop pra ações destrutivas.</p>
+
+<h3>7. ReAct (Reason + Act)</h3>
+
+<p>O loop fundamental que mistura raciocínio com ação. Coberto em profundidade no <a href="../posts/2026-05-24-how-ai-agents-work.html">post sobre AI agents</a>.</p>
+
+<p>Em essência: <strong>Thought → Action → Observation → Thought → ...</strong> até atingir a meta. Diferente de Tool Use puro, o ReAct intercala thinking explícito entre cada ação. <a href="https://arxiv.org/abs/2210.03629" target="_blank" rel="noopener">Paper original (Yao et al., 2022)</a>.</p>
+
+<p><strong>Vantagem</strong>: traçabilidade. Você vê o raciocínio do agent em cada step. Facilita debug e auditoria.<br>
+<strong>Trade-off</strong>: verboso. Cada step gera tokens de "thinking" que custam mas não viram output útil.</p>
+
+<h3>8. Planning</h3>
+
+<p>Agent gera plano completo upfront, depois executa. Diferente de ReAct (decide step-a-step), Planning antecipa a sequência inteira.</p>
+
+<p><strong>Plan-and-Execute</strong>: agent planeja → executa em ordem → revisa se necessário.<br>
+<strong>Tree of Thoughts</strong>: planeja múltiplos caminhos possíveis, explora, escolhe melhor (<a href="https://arxiv.org/abs/2305.10601" target="_blank" rel="noopener">Yao et al., 2023</a>).<br>
+<strong>LLM Compiler</strong> (Berkeley): planeja DAG de tool calls, executa em paralelo (<a href="https://arxiv.org/abs/2312.04511" target="_blank" rel="noopener">paper</a>).</p>
+
+<p><strong>Vantagens</strong>: planos são revisáveis humano-readable. Pode paralelizar steps independentes.<br>
+<strong>Trade-off</strong>: rigidez. Plano feito upfront não se adapta bem se realidade desvia.</p>
+
+<h3>9. Evaluator-Optimizer Loop (o "reliability layer")</h3>
+
+<p>Não é pattern de agent puro — é uma camada de confiabilidade aplicada em cima de qualquer agent. Adiciona:</p>
+
+<ul>
+<li><strong>Evaluator</strong>: LLM separado (ou heurística) que pontua o output da iteração atual.</li>
+<li><strong>Iteration limits</strong>: cap de número máximo de iterações.</li>
+<li><strong>Cost control</strong>: cap de tokens/dollars por tarefa.</li>
+<li><strong>Stopping criteria</strong>: para quando score &gt; threshold OU iterações esgotadas OU custo excedido.</li>
+</ul>
+
+<p>Pattern essencial em produção. Sem ele, agents podem loop infinito ou burnar budget. Frameworks como <a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a> têm primitives específicos pra implementar esse loop.</p>
+
+<h2>Multi-Agent — quando 1 agent não basta</h2>
+
+<p>Agent patterns vivem dentro de <strong>multi-agent architectures</strong> — muitos agents cooperando no mesmo problema, cada um com seu papel. Próximo passo de complexidade.</p>
+
+<p>Patterns multi-agent comuns:</p>
+
+<ul>
+<li><strong>Supervisor-Worker</strong>: como Orchestrator-Workers, mas workers são agents completos (não só LLM calls). Supervisor delega, workers podem usar tools próprios.</li>
+<li><strong>Peer-to-peer</strong>: agents conversam direto sem coordenador central. Mais flexível, mais difícil de debugar.</li>
+<li><strong>Blackboard</strong>: agents leem/escrevem em state compartilhado (Redis, S3). Coordenam indiretamente via estado.</li>
+<li><strong>Specialist team</strong>: cada agent é "especialista" (frontend, backend, QA, security). Coordenação via shared task queue.</li>
+</ul>
+
+<p>Cobertura completa no <a href="../posts/2026-05-24-multi-agent-architecture.html">próximo post sobre multi-agent architecture</a>.</p>
+
+<h2>Case study real — code review pipeline</h2>
+
+<p>Pipeline de code review com IA que combina múltiplos patterns:</p>
+
+<ol>
+<li><strong>Routing</strong>: classifica o PR (bugfix / feature / refactor) e roteia pra workflow específico.</li>
+<li><strong>Parallelization (sectioning)</strong>: roda análises em paralelo — security scan, test coverage, lint, complexity, documentation.</li>
+<li><strong>Reflection</strong>: cada análise revisa o próprio output antes de reportar.</li>
+<li><strong>Voting</strong>: 3 prompts pra security check, flag só se 2+ concordam.</li>
+<li><strong>Orchestrator</strong>: agrega tudo num review unificado priorizado.</li>
+<li><strong>Evaluator-Optimizer</strong>: judge LLM avalia se o review é útil; se score &lt; 7/10, regenera.</li>
+</ol>
+
+<p>Esse pattern stack é <em>basicamente o que CodeRabbit, Greptile e Diamond AI fazem por baixo dos panos</em>.</p>
+
+<h2>Tabela de decisão rápida</h2>
+
+<table style="width:100%; border-collapse:collapse; margin:24px 0; font-size:14px;">
+<thead>
+<tr style="border-bottom: 2px solid var(--border);">
+<th style="text-align:left; padding:8px;">Padrão</th>
+<th style="text-align:left; padding:8px;">Quando usar</th>
+<th style="text-align:left; padding:8px;">Quando evitar</th>
+</tr>
+</thead>
+<tbody>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Direct call</strong></td>
+<td style="padding:8px;">Tarefa única bem definida</td>
+<td style="padding:8px;">Múltiplos steps interdependentes</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Prompt Chaining</strong></td>
+<td style="padding:8px;">Steps lineares, ordem fixa, validation gates</td>
+<td style="padding:8px;">Steps que dependem de decisão dinâmica</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Routing</strong></td>
+<td style="padding:8px;">Input diverso, handlers especializados</td>
+<td style="padding:8px;">Classificação ambígua, tipos overlap</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Parallelization</strong></td>
+<td style="padding:8px;">Tarefas independentes ou voting de confiança</td>
+<td style="padding:8px;">Steps que dependem uns dos outros</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Orchestrator-Workers</strong></td>
+<td style="padding:8px;">Subtarefas descobertas dinamicamente</td>
+<td style="padding:8px;">Tarefas previsíveis (use Chaining)</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Reflection</strong></td>
+<td style="padding:8px;">Code gen, writing, math — qualidade importa</td>
+<td style="padding:8px;">Tarefas triviais, custo crítico</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Tool Use</strong></td>
+<td style="padding:8px;">Agent precisa acessar mundo real</td>
+<td style="padding:8px;">Pure text-in-text-out</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>ReAct</strong></td>
+<td style="padding:8px;">Tarefas exploratórias, debug</td>
+<td style="padding:8px;">Quando caminho é conhecido</td>
+</tr>
+<tr style="border-bottom: 1px solid var(--border);">
+<td style="padding:8px;"><strong>Planning</strong></td>
+<td style="padding:8px;">Tarefas longas, sequências previsíveis</td>
+<td style="padding:8px;">Ambiente muda durante execução</td>
+</tr>
+</tbody>
+</table>
+
+<h2>Frameworks que implementam esses patterns</h2>
+
+<ul>
+<li><a href="https://www.langchain.com/langgraph" target="_blank" rel="noopener">LangGraph</a>: state machine, suporta todos os patterns acima.</li>
+<li><a href="https://www.crewai.com/" target="_blank" rel="noopener">CrewAI</a>: foco em multi-agent, Orchestrator-Workers nativo.</li>
+<li><a href="https://github.com/openai/swarm" target="_blank" rel="noopener">OpenAI Swarm</a>: lean, foco em handoffs (routing dinâmico).</li>
+<li><a href="https://microsoft.github.io/autogen/" target="_blank" rel="noopener">Microsoft AutoGen</a>: framework full pra multi-agent conversation.</li>
+<li><a href="https://ai.pydantic.dev/" target="_blank" rel="noopener">Pydantic AI</a>: type-safe, suporta Reflection + Tool Use elegante.</li>
+<li><a href="https://docs.haystack.deepset.ai/" target="_blank" rel="noopener">Haystack</a>: RAG + agents, modular.</li>
+</ul>
+
+<h2>Conclusão</h2>
+
+<p>Agentic patterns não são "novos design patterns". São <em>aplicação de design patterns clássicos (pipeline, broker, observer, strategy) ao contexto onde alguns componentes são LLMs probabilísticos</em>. A maior decisão é quanto controle dar ao modelo — quanto mais controle, mais flexível, mais imprevisível, mais caro de debugar.</p>
+
+<p><strong>Regra de ouro</strong>: sempre comece com o pattern mais simples. Direct call → Chaining → Routing → Parallelization → Orchestrator → Agent (Reflection / Tool Use / ReAct / Planning). Suba o nível só quando há evidência clara de que o anterior falhou — não quando "parece limitante".</p>
+
+<p>Em produção, sistemas maduros combinam múltiplos patterns. Mas isso é resultado de iteração — não de arquitetura prematura. <em>Pattern-driven é tão errado quanto premature optimization.</em></p>
+
+<hr>
+
+<p><em><strong>Fonte original:</strong> "9 Agentic Patterns, Simply Explained" por Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/agentic-design-patterns" target="_blank" rel="noopener">The System Design Newsletter</a> em 22 de abril de 2026. Esta adaptação em PT-BR cobre os 4 workflow patterns (parte gratuita) e expande pesadamente com os 4 agent patterns + evaluator-optimizer, baseando-se no <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">framework canônico da Anthropic "Building Effective Agents"</a> — leitura obrigatória pra quem leva agents a sério. Adiciona também tabela de decisão, case study real, e os frameworks que implementam cada pattern.</em></p>
+
+  </article>
+
+  <footer class="post">
+    <span>Published 2026-05-24 · CC-BY-4.0</span>
+    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-agentic-design-patterns.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+  </footer>
+</main>
+</body>
+</html>
