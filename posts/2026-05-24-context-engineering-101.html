@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre context engineering — anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents, e o framework da Anthropic.">
+<meta name="description" content="O que separa um prompt engineer comum do top 1% dos usuários de LLM: context engineering. Anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents e armadilhas de produção.">
 <meta property="og:title" content="Context Engineering 101 — a arte que separa prompt engineer de top 1% dos usuários de LLM">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Louis-François Bouchard sobre context engineering — anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents, e o framework da Anthropic.">
+<meta property="og:description" content="O que separa um prompt engineer comum do top 1% dos usuários de LLM: context engineering. Anatomia do contexto, context rot, loading upfront vs just-in-time, compaction, sub-agents e armadilhas de produção.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-context-engineering-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -41,7 +41,7 @@
 
 <blockquote><em>"A arte e ciência delicada de preencher a context window com exatamente a informação certa pro próximo passo."</em></blockquote>
 
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/what-is-context-engineering" target="_blank" rel="noopener">"Context Engineering 101" de Neo Kim e Louis-François Bouchard</a>, com adições de patterns atuais (Anthropic context engineering, compaction, sub-agents), ferramentas e exemplos práticos de implementação.</p>
+<p>Vou destrinchar os patterns que importam na prática: anatomia do contexto, context rot, retrieval upfront vs just-in-time, compaction, sub-agents e as armadilhas que aparecem quando isso vai pra produção.</p>
 
 <h2>O que é "context"?</h2>
 
@@ -217,14 +217,33 @@
 
 <hr>
 
-<p><em><strong>Fonte original:</strong> "Context Engineering 101: How ChatGPT Stays on Track" por Neo Kim e Louis-François Bouchard, publicado em <a href="https://newsletter.systemdesign.one/p/what-is-context-engineering" target="_blank" rel="noopener">The System Design Newsletter</a> em 19 de dezembro de 2025. Esta adaptação em PT-BR enriquece com Anthropic context engineering framework, context engines modernos (Augment, Cursor), skill-based loading, e armadilhas de produção. Recomendo fortemente o <a href="https://www.anthropic.com/engineering/context-engineering" target="_blank" rel="noopener">artigo da Anthropic sobre context engineering</a> e o <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener">paper sobre context rot da Chroma</a>.</em></p>
+<p>Pra ir mais fundo, vale o <a href="https://www.anthropic.com/engineering/context-engineering" target="_blank" rel="noopener">artigo da Anthropic sobre context engineering</a> e o <a href="https://research.trychroma.com/context-rot" target="_blank" rel="noopener">paper sobre context rot da Chroma</a>.</p>
 
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todo mundo aprende a reformular o prompt. Quase ninguém aprende a curar o que o modelo vê antes de responder — e é aí que mora o top 1%.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A diferença entre um chatbot que parece esperto e um agent que resolve tarefas complexas quase nunca é o prompt.
+
+É o que está (e o que NÃO está) na context window naquele momento.
+
+Prompt engineering te leva a um resultado OK. Context engineering — anatomia do contexto, context rot, retrieval just-in-time, compaction e sub-agents — te leva ao top 1% do que LLMs conseguem fazer.
+
+Escrevi um guia prático sobre isso, com as armadilhas que aparecem em produção: https://felvieira.github.io/blog/posts/2026-05-24-context-engineering-101.html
+
+#ContextEngineering #LLM #IA #AIAgents #RAG</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-context-engineering-101.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

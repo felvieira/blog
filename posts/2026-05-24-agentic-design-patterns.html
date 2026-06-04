@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de 9 agentic patterns do Neo Kim — workflow patterns (chaining, routing, parallelization, orchestrator-workers) vs agent patterns (reflection, tool use, ReAct, planning) — combinada com o framework canônico da Anthropic, case study real e tabela de decisão.">
+<meta name="description" content="Os 9 agentic design patterns que importam, dos workflow patterns (chaining, routing, parallelization, orchestrator-workers) aos agent patterns (reflection, tool use, ReAct, planning). Com tabela de decisão, case study real de code review e os frameworks que implementam cada um.">
 <meta property="og:title" content="9 Agentic Design Patterns — do prompt chaining ao multi-agent, com tabela de decisão">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de 9 agentic patterns do Neo Kim — workflow patterns (chaining, routing, parallelization, orchestrator-workers) vs agent patterns (reflection, tool use, ReAct, planning) — combinada com o framework canônico da Anthropic, case study real e tabela de decisão.">
+<meta property="og:description" content="Os 9 agentic design patterns que importam, dos workflow patterns (chaining, routing, parallelization, orchestrator-workers) aos agent patterns (reflection, tool use, ReAct, planning). Com tabela de decisão, case study real de code review e os frameworks que implementam cada um.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-agentic-patterns-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -33,7 +33,7 @@
 
 <p>Agentic patterns são <em>design patterns pra essa decisão</em>. São as mesmas escolhas arquiteturais que você já faz em qualquer sistema: quem controla o que vem a seguir, o que acontece em falha, como dado flui entre componentes. A diferença é que alguns desses componentes agora são modelos de linguagem.</p>
 
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/agentic-design-patterns" target="_blank" rel="noopener">"9 Agentic Patterns, Simply Explained" do Neo Kim</a>, com adições baseadas no <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">framework canônico da Anthropic</a> e patterns que vejo em produção.</p>
+<p>Este guia organiza os 9 patterns em dois grupos — workflow e agent — alinhados ao <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">framework canônico da Anthropic "Building Effective Agents"</a> e aos patterns que vejo rodando em produção.</p>
 
 <h2>A decisão fundamental — quanto controle dar</h2>
 
@@ -318,16 +318,31 @@
 
 <p>Em produção, sistemas maduros combinam múltiplos patterns. Mas isso é resultado de iteração — não de arquitetura prematura. <em>Pattern-driven é tão errado quanto premature optimization.</em></p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "9 Agentic Patterns, Simply Explained" por Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/agentic-design-patterns" target="_blank" rel="noopener">The System Design Newsletter</a> em 22 de abril de 2026. Esta adaptação em PT-BR cobre os 4 workflow patterns (parte gratuita) e expande pesadamente com os 4 agent patterns + evaluator-optimizer, baseando-se no <a href="https://www.anthropic.com/engineering/building-effective-agents" target="_blank" rel="noopener">framework canônico da Anthropic "Building Effective Agents"</a> — leitura obrigatória pra quem leva agents a sério. Adiciona também tabela de decisão, case study real, e os frameworks que implementam cada pattern.</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A maioria pula direto pra "multi-agent" quando uma única chamada de LLM resolveria. Os 9 patterns abaixo mostram exatamente quando subir o nível — e quando você está só pagando caro por complexidade que não precisava.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A maioria dos sistemas com LLM começa complexo demais. Direct call resolve mais do que parece; agent multi-step quase nunca é o primeiro passo certo.
+
+Os 9 agentic design patterns que importam, dos workflow patterns (chaining, routing, parallelization, orchestrator-workers) aos agent patterns (reflection, tool use, ReAct, planning) — com a regra de ouro: suba o nível só quando há evidência clara de que o anterior falhou.
+
+No post: tabela de decisão de qual pattern usar, case study real de pipeline de code review e os frameworks que implementam cada um.
+
+https://felvieira.github.io/blog/posts/2026-05-24-agentic-design-patterns.html
+
+#AgenticAI #AIAgents #LLM #SystemDesign #AIEngineering</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-agentic-design-patterns.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>24 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

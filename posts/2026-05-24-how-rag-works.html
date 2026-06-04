@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do deep dive de Neo Kim e Eric Roby sobre Retrieval-Augmented Generation — por que long context e fine-tuning falham, como embeddings habilitam busca semântica, pipelines de ingestão e retrieval, hybrid search, agentic RAG e a stack pra começar.">
+<meta name="description" content="Todo LLM tem conhecimento congelado no tempo e alucina com confiança quando não sabe. RAG resolve isso puxando contexto relevante na hora da pergunta — destrincho embeddings, chunking, hybrid search, rerank, agentic RAG e a stack pra começar em produção.">
 <meta property="og:title" content="Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do deep dive de Neo Kim e Eric Roby sobre Retrieval-Augmented Generation — por que long context e fine-tuning falham, como embeddings habilitam busca semântica, pipelines de ingestão e retrieval, hybrid search, agentic RAG e a stack pra começar.">
+<meta property="og:description" content="Todo LLM tem conhecimento congelado no tempo e alucina com confiança quando não sabe. RAG resolve isso puxando contexto relevante na hora da pergunta — destrincho embeddings, chunking, hybrid search, rerank, agentic RAG e a stack pra começar em produção.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-how-rag-works-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -34,8 +34,6 @@
 <p>Isso não é bug. É limitação arquitetural fundamental. LLMs guardam conhecimento em <em>parameters</em> — bilhões de pesos numéricos aprendidos durante o treino. Quando o treino acaba, o conhecimento fica trancado. <strong>O modelo não sabe o que não sabe</strong>, então preenche as lacunas com fabricação confiante. Estudos mostram que taxas de hallucination podem ser tão baixas quanto 1% pra summarização simples — mas passam de 58% em tarefas complexas (<a href="https://arxiv.org/abs/2202.03629" target="_blank" rel="noopener">survey de hallucination da ACM</a>).</p>
 
 <p>É exatamente isso que <strong>Retrieval-Augmented Generation (RAG)</strong> resolve. RAG não embute conhecimento no modelo — em vez disso, puxa contexto relevante quando você faz a pergunta. O modelo continua inteligente, seus dados ficam atualizados, e cada resposta é rastreável até a fonte.</p>
-
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-rag-works" target="_blank" rel="noopener">deep dive de Neo Kim e Eric Roby no The System Design Newsletter</a>, com adições próprias sobre frameworks, vector DBs e armadilhas que vejo em produção.</p>
 
 <h2>O problema do conhecimento — por que LLMs sozinhos não bastam</h2>
 
@@ -76,7 +74,7 @@
 
 <p>Estudante em prova sem consulta depende do que decorou — esse é o LLM padrão. É inteligente, sabe raciocinar, mas está limitado ao que está nos parameters. Estudante em prova com consulta tem a mesma capacidade de raciocínio, mas pode checar páginas relevantes antes de responder. <strong>Esse é RAG</strong>.</p>
 
-<p>A definição formal vem do <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">paper de 2020 de Patrick Lewis e equipe no Facebook AI Research e University College London</a>. Modelos RAG combinam <em>parametric memory</em> (o modelo pretreinado) com <em>non-parametric memory</em> (um índice externo de conhecimento) acessado por um <em>neural retriever</em>.</p>
+<p>A definição formal vem do <a href="https://arxiv.org/abs/2005.11401" target="_blank" rel="noopener">paper de 2020 de Lewis et al. (Facebook AI Research e University College London)</a> que introduziu RAG. Modelos RAG combinam <em>parametric memory</em> (o modelo pretreinado) com <em>non-parametric memory</em> (um índice externo de conhecimento) acessado por um <em>neural retriever</em>.</p>
 
 <p>Você atualiza o conhecimento do modelo apenas trocando o índice de retrieval. Sem retraining. Loop de 3 passos:</p>
 
@@ -224,16 +222,36 @@
 
 <p>O esqueleto que cobrimos aqui é o ponto de partida. Em produção, você empilha agentic loops, multi-modal retrieval (texto + imagem + tabela), graph RAG, e estratégias de chunking mais sofisticadas. Mas <strong>se você não acerta o básico — chunking, embedding consistente entre query e docs, hybrid retrieval, rerank, eval contínuo — nenhuma camada extra salva</strong>.</p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "RAG - A Deep Dive" por Neo Kim e Eric Roby, publicado em <a href="https://newsletter.systemdesign.one/p/how-rag-works" target="_blank" rel="noopener">The System Design Newsletter</a> em 23 de março de 2026. Este post é adaptação enriquecida em PT-BR com adições de frameworks, ferramentas e armadilhas comuns observadas em produção. Pra ir mais fundo, recomendo também o canal de Eric Roby (<a href="https://www.youtube.com/@codingwithroby" target="_blank" rel="noopener">@codingwithroby</a>) sobre backend e o curso "RAG From Scratch" do <a href="https://www.youtube.com/playlist?list=PLfaIDFEXuae2LXbO1_PKyVJiQ23ZztA0x" target="_blank" rel="noopener">LangChain no YouTube</a>.</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todo LLM que você já usou mentiu pra você — com confiança e sotaque de especialista. Existe um padrão arquitetural que resolve isso de vez, e quase ninguém implementa o básico direito.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Todo LLM que você usou já te respondeu com confiança total uma coisa que ele simplesmente inventou.
+
+Não é bug. É limitação arquitetural — o conhecimento dele está congelado no tempo de treino. E a forma de resolver isso não é context window gigante nem fine-tuning.
+
+Escrevi um deep dive sobre RAG, o padrão que faz LLMs pararem de alucinar:
+→ por que long context e fine-tuning falham (e a curva em U que quase ninguém menciona)
+→ embeddings, chunking, hybrid search e rerank explicados sem enrolação
+→ o salto pra Agentic RAG e a stack exata pra começar em produção
+
+A maioria erra no básico — e nenhuma camada extra salva quem não acerta o fundamento.
+
+https://felvieira.github.io/blog/posts/2026-05-24-how-rag-works.html
+
+#RAG #LLM #IA #MachineLearning #AIEngineering</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-rag-works.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do deep dive de Maxine Meurer e Neo Kim sobre vector databases — por que bancos tradicionais quebram, HNSW, quantization, pre vs post filtering, comparativo 2026 de pgvector/Qdrant/Pinecone/Weaviate/Milvus e o framework de decisão.">
+<meta name="description" content="Por que bancos tradicionais quebram com embeddings, como HNSW e quantization resolvem o problema O(n), e o framework pra decidir entre pgvector, Qdrant, Pinecone, Weaviate e Milvus em 2026.">
 <meta property="og:title" content="Vector Databases — quando pgvector basta, quando você precisa de Pinecone, e o framework de decisão">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do deep dive de Maxine Meurer e Neo Kim sobre vector databases — por que bancos tradicionais quebram, HNSW, quantization, pre vs post filtering, comparativo 2026 de pgvector/Qdrant/Pinecone/Weaviate/Milvus e o framework de decisão.">
+<meta property="og:description" content="Por que bancos tradicionais quebram com embeddings, como HNSW e quantization resolvem o problema O(n), e o framework pra decidir entre pgvector, Qdrant, Pinecone, Weaviate e Milvus em 2026.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-vector-databases-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -37,7 +37,7 @@
 
 <p>O problema: tudo que tornava seu banco relacional rápido — índices B-tree, cláusulas WHERE, keyword matching — foi feito pra valores exatos. Semantic search <strong>não trabalha com valores exatos</strong>. Trabalha com significado, e significado é muito mais difícil de buscar eficientemente. Uma busca que demorava milissegundos passa a demorar segundos. Quanto maior o dataset, pior.</p>
 
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/what-is-a-vector-database" target="_blank" rel="noopener">"Vector Database - A Deep Dive" de Maxine Meurer e Neo Kim</a>, com comparativos atualizados de 2026 (pgvector vs Qdrant vs Pinecone vs Weaviate vs Milvus), trade-offs reais de produção, e o framework de decisão.</p>
+<p>Vamos do problema fundamental até o framework de decisão: por que bancos tradicionais quebram, como HNSW e quantization resolvem isso, o comparativo atualizado de 2026 (pgvector vs Qdrant vs Pinecone vs Weaviate vs Milvus), e as armadilhas operacionais que pegam todo mundo em produção.</p>
 
 <h2>Por que bancos tradicionais quebram com embeddings</h2>
 
@@ -222,16 +222,31 @@
 
 <p>A maior armadilha é over-engineering. <strong>Comece com pgvector</strong>. Se atingir limite, então invista. A maioria dos sistemas RAG em produção hoje roda em pgvector sem problema — só pivota quando há evidência clara (latência p99 ruim, custo de Postgres explodindo, dataset acima de 10M).</p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "Vector Database - A Deep Dive" por Maxine Meurer e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/what-is-a-vector-database" target="_blank" rel="noopener">The System Design Newsletter</a> em 25 de abril de 2026. Esta adaptação em PT-BR adiciona comparativos atualizados de 2026, framework de decisão, e armadilhas operacionais que peguei pessoalmente em produção. Recomendo <a href="https://iamlovedevops.substack.com/" target="_blank" rel="noopener">o newsletter "I Love DevOps" da Maxine</a> e o livro "LLMs for Humans: From Prompts to Production".</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todo mundo manda começar com Pinecone. Quase ninguém te conta que a maioria dos RAGs em produção roda em algo que você já tem instalado — e que o erro caro é trocar antes da hora.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A maior armadilha em vector databases é over-engineering: escolher Pinecone quando pgvector resolvia.
+
+Escrevi um deep dive sobre por que bancos tradicionais quebram com embeddings (o problema O(n)), como HNSW e quantization resolvem isso, e um framework objetivo pra decidir entre pgvector, Qdrant, Pinecone, Weaviate e Milvus.
+
+Spoiler: comece com pgvector. Só pivota quando há evidência clara — latência p99 ruim, custo de Postgres explodindo, dataset acima de 10M.
+
+Leia aqui 👉 https://felvieira.github.io/blog/posts/2026-05-24-vector-databases-deep-dive.html
+
+#VectorDatabase #RAG #IA #pgvector #SystemDesign</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-vector-databases-deep-dive.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

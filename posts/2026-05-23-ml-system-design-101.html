@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista — felvieira's blog</title>
-<meta name="description" content="Tradução enriquecida em PT-BR do guia de Paolo Perrone e Neo Kim sobre os conceitos fundamentais de ML system design — features, embeddings, loss functions, leakage — com contexto extra, ferramentas e framework de entrevista.">
+<meta name="description" content="Os 10 conceitos fundamentais de ML system design que você precisa dominar antes de qualquer entrevista — features, embeddings, loss functions, data leakage. Com exemplos reais, ferramentas que importam e um framework de 5 passos.">
 <meta property="og:title" content="ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista">
-<meta property="og:description" content="Tradução enriquecida em PT-BR do guia de Paolo Perrone e Neo Kim sobre os conceitos fundamentais de ML system design — features, embeddings, loss functions, leakage — com contexto extra, ferramentas e framework de entrevista.">
+<meta property="og:description" content="Os 10 conceitos fundamentais de ML system design que você precisa dominar antes de qualquer entrevista — features, embeddings, loss functions, data leakage. Com exemplos reais, ferramentas que importam e um framework de 5 passos.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-ml-system-design-101-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -33,7 +33,7 @@
 
 <p>O problema é que quase todo material de preparação te empurra direto pra <em>deep-dive</em> em algoritmo ou drill de LeetCode. Mas antes disso falta o básico: um modelo mental de como um sistema de ML funciona de ponta a ponta — vocabulário, blocos de construção, e como eles se encaixam.</p>
 
-<p>Este post é uma tradução enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">guia de Paolo Perrone e Neo Kim no The System Design Newsletter</a>, com adições de contexto, links externos, e exemplos práticos. Eles cobrem os 38 conceitos que sustentam sistemas reais (Netflix, Uber, Spotify) — aqui revisamos os 10 fundamentais que você <em>precisa</em> dominar antes de qualquer entrevista de ML.</p>
+<p>Existem 38 conceitos que sustentam sistemas reais (Netflix, Uber, Spotify). Aqui revisamos os 10 fundamentais que você <em>precisa</em> dominar antes de qualquer entrevista de ML — com contexto, links externos, e exemplos práticos.</p>
 
 <h2>O que é, no fundo, um sistema de ML?</h2>
 
@@ -99,7 +99,7 @@
 
 <p>A maioria das equipes divide 70/15/15 ou 80/10/10. A proporção exata depende de quanto dado você tem, mas uma regra é inegociável: <strong>o test set nunca pode influenciar o desenvolvimento do modelo</strong>. Caso contrário, você deixou o aluno espiar a prova final — e o resultado em produção vai despencar.</p>
 
-<p>Na Netflix, isso pode significar treinar com dados de visualização de janeiro a outubro, validar em novembro, e testar em dezembro. Esse <em>time-based split</em> é especialmente importante pra ML porque dados do mundo real mudam ao longo do tempo (o que o original chama de <em>concept drift</em>, tema da seção 5 deles).</p>
+<p>Na Netflix, isso pode significar treinar com dados de visualização de janeiro a outubro, validar em novembro, e testar em dezembro. Esse <em>time-based split</em> é especialmente importante pra ML porque dados do mundo real mudam ao longo do tempo — fenômeno conhecido como <em>concept drift</em>.</p>
 
 <h3>5. Class Imbalance e Data Leakage</h3>
 
@@ -199,9 +199,7 @@
 
 <h2>O que vem depois — sinais de alerta e o resto do mapa</h2>
 
-<p>O artigo original cobre mais 28 conceitos: <em>overfitting & regularization, model evaluation metrics, A/B testing, online vs offline learning, feature stores, model registries, drift detection, shadow deployments, canary releases, multi-armed bandits, recsys two-tower architectures</em>, e por aí vai. Cada um deles preenche uma lacuna real que aparece em sistemas de produção.</p>
-
-<p>Se você quer cobrir os 38 inteiros, o <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">post completo de Paolo Perrone e Neo Kim</a> está disponível na assinatura paga do <em>The System Design Newsletter</em> — vale o investimento se você está se preparando seriamente pra entrevistas em <em>big tech</em>.</p>
+<p>Os outros 28 conceitos cobrem: <em>overfitting & regularization, model evaluation metrics, A/B testing, online vs offline learning, feature stores, model registries, drift detection, shadow deployments, canary releases, multi-armed bandits, recsys two-tower architectures</em>, e por aí vai. Cada um deles preenche uma lacuna real que aparece em sistemas de produção.</p>
 
 <p>Pra estudar gratuitamente em mais profundidade, três recursos canônicos:</p>
 
@@ -233,16 +231,31 @@
 
 <p>Próximos conceitos pra estudar (e que aparecem em quase toda entrevista sênior): <em>two-tower architectures</em> pra recsys, <em>multi-stage ranking</em> (candidate generation → ranking → re-ranking), <em>feature stores</em> (Tecton, Feast), <em>model drift detection</em>, e <em>shadow deployment</em>. Cada um deles merece um post próprio — e provavelmente vamos cobrir em entradas futuras desse blog.</p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "Machine Learning System Design Interview — How ML Systems Actually Work" por Paolo Perrone e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/machine-learning-system-design-interview" target="_blank" rel="noopener">The System Design Newsletter</a> em 12 de maio de 2026. Este post é uma adaptação enriquecida em PT-BR, com adições próprias de contexto, links externos, e ferramentas. Recomendo fortemente assinar o newsletter original — os 28 conceitos restantes (incluindo os deep-dives em Netflix, Uber e Spotify) estão na versão paga.</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Tem um motivo pelo qual 99,99% de acurácia pode significar que seu modelo é completamente inútil. E quase todo candidato em entrevista de ML cai nessa armadilha.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">"Projete um sistema de recomendação." A pergunta cai na entrevista e a sala vira uma sopa de jargão: embeddings, feature store, model drift, class imbalance.
+
+A maioria dos materiais te empurra direto pra deep-dive em algoritmo. Mas falta o básico: o modelo mental de como um sistema de ML funciona de ponta a ponta.
+
+Escrevi um guia dos 10 conceitos fundamentais — features, embeddings, loss functions, data leakage — com exemplos reais (Netflix, Uber, Spotify), ferramentas que importam, e um framework de 5 passos pra estruturar qualquer resposta de ML system design.
+
+Leia aqui 👉 https://felvieira.github.io/blog/posts/2026-05-23-ml-system-design-101.html
+
+#MLSystemDesign #MachineLearning #IA #DataScience #MLOps</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-23 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-ml-system-design-101.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>22 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

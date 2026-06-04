@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Eric Roby e Neo Kim sobre Model Context Protocol — problema N×M, analogia USB-C, arquitetura 3-layer (Hosts/Clients/Servers), 3 primitives (Resources/Prompts/Tools), ecossistema 2026 com 1000+ servers, código de exemplo e patterns de produção.">
+<meta name="description" content="MCP é o protocolo único que resolve o problema N×M de integrar AI com fontes de dados — arquitetura 3-layer, os 3 primitives, código de exemplo e patterns de produção. O guia completo de por que aprender MCP virou não-negociável em 2026.">
 <meta property="og:title" content="Como MCP funciona — o USB-C dos LLMs que finalmente desbloqueia agents em produção">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Eric Roby e Neo Kim sobre Model Context Protocol — problema N×M, analogia USB-C, arquitetura 3-layer (Hosts/Clients/Servers), 3 primitives (Resources/Prompts/Tools), ecossistema 2026 com 1000+ servers, código de exemplo e patterns de produção.">
+<meta property="og:description" content="MCP é o protocolo único que resolve o problema N×M de integrar AI com fontes de dados — arquitetura 3-layer, os 3 primitives, código de exemplo e patterns de produção. O guia completo de por que aprender MCP virou não-negociável em 2026.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-how-mcp-works-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -32,8 +32,6 @@
 <p>Todo AI tool que você usa está <strong>passando fome de "context"</strong>. Seu AI precisa do seu codebase. Seus custom agents precisam acessar database. Mas <em>levar esse contexto até eles</em>? Aí é onde a coisa fica bagunçada.</p>
 
 <p>Quando LLMs surgiram, cada link entre AI e fonte de dados exigia uma integração custom construída do zero. Em novembro de 2024, a Anthropic lançou o <strong>Model Context Protocol (MCP)</strong> pra consertar esse problema. Não foi só mais uma ferramenta dev — atacou uma questão fundamental de infraestrutura em AI engineering.</p>
-
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-mcp-works" target="_blank" rel="noopener">"MCP - A Deep Dive" de Eric Roby e Neo Kim</a>, com adições de catálogos atuais de servers (1.000+ públicos), implementações práticas, e o estado do ecossistema em 2026.</p>
 
 <h2>O problema N×M — por que MCP tinha que existir</h2>
 
@@ -304,14 +302,35 @@ await server.connect(new StdioServerTransport());</code></pre>
 
 <hr>
 
-<p><em><strong>Fonte original:</strong> "MCP - A Deep Dive: Understanding Model Context Protocol" por Eric Roby e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/how-mcp-works" target="_blank" rel="noopener">The System Design Newsletter</a> em 26 de dezembro de 2025. Esta adaptação em PT-BR cobre a parte gratuita (problema N×M, USB-C analogy, arquitetura 3-layer, 3 primitives) e expande pesadamente com ecossistema 2026, código de exemplo, patterns de produção, e roadmap futuro. Recomendo o <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">site oficial do MCP</a>, o canal <a href="https://www.youtube.com/@codingwithroby" target="_blank" rel="noopener">@codingwithroby</a> do Eric, e o <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">repo oficial de servers</a> pra começar.</em></p>
+<p>Pra ir mais fundo, vale começar pelo <a href="https://modelcontextprotocol.io/" target="_blank" rel="noopener">site oficial do MCP</a> e pelo <a href="https://github.com/modelcontextprotocol/servers" target="_blank" rel="noopener">repo oficial de servers</a>.</p>
 
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A Anthropic resolveu, em um protocolo só, o problema que fazia toda integração de AI custar N×M. E quase ninguém percebeu o tamanho disso.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Todo agent de AI que você constrói hoje recria as mesmas integrações da estaca zero. Isso é o problema N×M — e é exatamente o que o Model Context Protocol mata.
+
+MCP é o USB-C dos LLMs: um protocolo único entre AI models e fontes de dados. Em vez de N×M integrações custom, você constrói N clients + M servers. O trabalho cai de N×M pra N+M.
+
+Escrevi um guia completo: arquitetura 3-layer (Hosts/Clients/Servers), os 3 primitives (Resources/Prompts/Tools), um server funcional em 50 linhas, e os patterns de produção que separam um POC de algo seguro.
+
+Se você está construindo qualquer coisa com LLM em 2026, aprender MCP virou não-negociável.
+
+https://felvieira.github.io/blog/posts/2026-05-24-how-mcp-works.html
+
+#MCP #AIAgents #LLM #AIEngineering #ModelContextProtocol</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-mcp-works.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

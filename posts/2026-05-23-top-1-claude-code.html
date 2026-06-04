@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo) — felvieira's blog</title>
-<meta name="description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Comentário sobre o playbook do allglenn no Towards AI, com o que ele não cobriu + bench público de 53 cenários (pass rate 92.6%).">
+<meta name="description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Os 6 padrões que separam os dois grupos, o que quase ninguém cobre, e um bench público de 53 cenários (pass rate 92.6%).">
 <meta property="og:title" content="Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo)">
-<meta property="og:description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Comentário sobre o playbook do allglenn no Towards AI, com o que ele não cobriu + bench público de 53 cenários (pass rate 92.6%).">
+<meta property="og:description" content="A diferença entre amador e top 1% no Claude Code não é prompting — é design de sistemas. Os 6 padrões que separam os dois grupos, o que quase ninguém cobre, e um bench público de 53 cenários (pass rate 92.6%).">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-top-1-claude-code-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -29,10 +29,6 @@
   <img src="../assets/images/2026-05-23-top-1-claude-code-cover.jpg" alt="Ilustração de cover: developer setup dual-monitor com dashboard estruturado mostrando checkmarks verdes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
 
   <article>
-<blockquote>
-  <p><strong>Inspirado em:</strong> <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">"Becoming a top 1% Claude Code user"</a> de <a href="https://medium.com/@allglenn">allglenn</a> (Towards AI, abril/2026). Este post não traduz nem resume o original — converso com ele, adiciono o que ele não cobriu, e mostro o que aprendi aplicando essas ideias na prática até virar um kit open-source de 41 skills.</p>
-</blockquote>
-
 <p><strong>TL;DR:</strong> A diferença entre quem está no top 1% do Claude Code e quem está usando como um Stack Overflow turbinado não é prompting melhor. É <em>mentalidade de infraestrutura</em> aplicada a uma ferramenta de IA. Este post mostra os 6 padrões que separam os dois grupos — e prova com números medidos: pass rate de 92.6% num bench público de 53 cenários, +1.84 de delta médio de qualidade, 98% de redução de tokens em loops autônomos.</p>
 
 <hr>
@@ -43,7 +39,7 @@
 
 <p>Mas o que está acontecendo de verdade é: você está usando o Claude Code como um <strong>Stack Overflow mais rápido</strong>. Continua sendo você quem segura todos os fios, gerencia toda mudança de contexto, baby-sitta cada decisão. A ferramenta é impressionante. Seu workflow com ela, não.</p>
 
-<p>O <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">artigo do allglenn no Towards AI</a> abre exatamente nesse ponto, e ele tem razão. Mas o problema não é só de awareness. É de <strong>onde botar o esforço</strong>.</p>
+<p>Esse é o ponto em que quase ninguém para pra pensar. Mas o problema não é só de awareness. É de <strong>onde botar o esforço</strong>.</p>
 
 <p>O top 1% não é melhor em prompting. Ele construiu <em>sistema</em>:</p>
 
@@ -54,7 +50,7 @@
   <li><strong>MCP servers</strong> dando ao Claude acesso real ao banco, GitHub, ferramentas internas</li>
 </ul>
 
-<p>Eu segui esse caminho durante meses. Fiz cada um desses passos. E aí descobri uma coisa que o artigo do allglenn deixa de fora: <strong>existe um próximo nível depois de ter o sistema montado</strong>. É quando você para de só <em>usar</em> o sistema e começa a <em>medir</em> se ele realmente funciona.</p>
+<p>Eu segui esse caminho durante meses. Fiz cada um desses passos. E aí descobri uma coisa que quase nenhum guia menciona: <strong>existe um próximo nível depois de ter o sistema montado</strong>. É quando você para de só <em>usar</em> o sistema e começa a <em>medir</em> se ele realmente funciona.</p>
 
 <hr>
 
@@ -64,15 +60,15 @@
 
 <h3>1. CLAUDE.md: orçamento de instruções, não dump de docs</h3>
 
-<p>O allglenn cita um número que dói: <strong>CLAUDE.md tem orçamento de ~150–200 instruções. O system prompt já come 50.</strong> Cada linha que você adiciona sem o Claude precisar dilui as que importam.</p>
+<p>Tem um número que dói: <strong>CLAUDE.md tem orçamento de ~150–200 instruções. O system prompt já come 50.</strong> Cada linha que você adiciona sem o Claude precisar dilui as que importam.</p>
 
-<p>O teste que ele propõe é cirúrgico:</p>
+<p>O teste pra cada linha é cirúrgico:</p>
 
 <blockquote>
   <p>"Antes de commitar qualquer linha, pergunte: o Claude erraria no meu codebase sem isso? Se a resposta for não, apague a linha."</p>
 </blockquote>
 
-<p>Funciona. Mas tem 2 coisas que ele não explora:</p>
+<p>Funciona. Mas tem 2 coisas que quase ninguém explora:</p>
 
 <p><strong>Hierarquia de arquivos.</strong> O Claude Code carrega CLAUDE.md em cascata. Subdiretórios têm seus próprios CLAUDE.md carregados <em>sob demanda</em>:</p>
 
@@ -90,7 +86,7 @@
 
 <h3>2. Hooks: a infra invisível que separa amador de pro</h3>
 
-<p>Aqui o artigo do allglenn é bom mas conservador. Ele mostra 3 hooks (PostToolUse pra lint, PreToolUse pra bloquear comandos perigosos, Stop pra session summary). Funciona. Mas o ecossistema de hooks vai muito além.</p>
+<p>A maioria dos guias para em 3 hooks (PostToolUse pra lint, PreToolUse pra bloquear comandos perigosos, Stop pra session summary). Funciona. Mas o ecossistema de hooks vai muito além.</p>
 
 <p><strong>12 eventos de lifecycle</strong> que o Claude Code expõe:</p>
 
@@ -118,9 +114,9 @@
 
 <h3>3. Subagents: o pattern "duas Claudes" é só o começo</h3>
 
-<p>O artigo descreve o <strong>two-Claude review</strong>: sessão A implementa, sessão B revisa o diff cold. Concordo 100% — é uma das técnicas mais úteis e subutilizadas.</p>
+<p>O pattern mais citado é o <strong>two-Claude review</strong>: sessão A implementa, sessão B revisa o diff cold. Concordo 100% — é uma das técnicas mais úteis e subutilizadas.</p>
 
-<p>Mas existe um pattern mais poderoso que ele não toca: <strong>multi-agent paralelo em worktrees isolados</strong>.</p>
+<p>Mas existe um pattern mais poderoso que quase ninguém toca: <strong>multi-agent paralelo em worktrees isolados</strong>.</p>
 
 <p>Em vez de uma sessão de review, você dispara 4 reviewers em paralelo, cada um focado num eixo diferente:</p>
 
@@ -139,9 +135,9 @@
 
 <h3>4. MCP: o princípio do least-privilege é não-negociável</h3>
 
-<p>Aqui o allglenn acerta o ponto crítico: <strong>read-only por padrão</strong>. Você configura dois servidores: um read-only pra exploração e debugging, outro read-write atrás de permissão explícita.</p>
+<p>O ponto crítico aqui é: <strong>read-only por padrão</strong>. Você configura dois servidores: um read-only pra exploração e debugging, outro read-write atrás de permissão explícita.</p>
 
-<p>O que falta no artigo é tratar MCP como <strong>superfície de ataque</strong>. Cada MCP server é código de terceiros que tem acesso aos seus dados. Recomendações práticas:</p>
+<p>O que quase ninguém faz é tratar MCP como <strong>superfície de ataque</strong>. Cada MCP server é código de terceiros que tem acesso aos seus dados. Recomendações práticas:</p>
 
 <ul>
   <li><strong>Audit antes de instalar.</strong> O servidor é open-source? Tem revisão pública? Há quanto tempo o último commit?</li>
@@ -152,9 +148,9 @@
 
 <p>O <a href="https://modelcontextprotocol.io">spec do MCP</a> é razoavelmente novo e o ecossistema está em consolidação. Não baixe servidor de qualquer um.</p>
 
-<h3>5. Skills vs MCP: a heurística que o artigo dá funciona até um ponto</h3>
+<h3>5. Skills vs MCP: a heurística comum funciona até um ponto</h3>
 
-<p>O allglenn dá uma regra clara:</p>
+<p>A regra que todo mundo repete é clara:</p>
 
 <ul>
   <li><strong>Skill</strong> = workflow, padrão, conhecimento de domínio</li>
@@ -168,7 +164,7 @@
 
 <h3>6. Os patterns avançados que ninguém ensina</h3>
 
-<p>O artigo lista alguns: <code>/compact</code> manual em 50% de contexto, <code>/loop</code> pra monitoramento background, model selection per task (Haiku/Sonnet/Opus), remote-control, <code>/voice</code>.</p>
+<p>Os de sempre: <code>/compact</code> manual em 50% de contexto, <code>/loop</code> pra monitoramento background, model selection per task (Haiku/Sonnet/Opus), remote-control, <code>/voice</code>.</p>
 
 <p>Vou adicionar 3 que mudaram meu workflow:</p>
 
@@ -176,15 +172,15 @@
 
 <p><strong>Loops autônomos com circuit breaker.</strong> Não basta ter <code>/loop</code>. Você precisa de detecção de "mesmo erro 3x" (loop infinito), stall detection (3 iterações sem <code>git diff</code>), token cap, e exit codes classificados pra integração com CI. Sem isso, você dorme e acorda com a fatura da Anthropic em 4 dígitos.</p>
 
-<p><strong>Eval bench público dos seus próprios agents.</strong> Esse é o nível que o artigo não toca. Cada skill que você criou: ela realmente melhora o output, ou é placebo? <a href="https://github.com/felvieira/claude-skills-fv/blob/main/analyze-doc/index.pt-BR.html">Rodamos um bench em 53 cenários</a> (Pass A = modelo frio sem skill, Pass B = skill carregada, rubrica de 5 critérios × 1-5). Pass rate medido: 92.6%, delta médio de +1.84. Quando uma skill falha o bench, vira fix concreto na próxima versão — não justificamos achados.</p>
+<p><strong>Eval bench público dos seus próprios agents.</strong> Esse é o nível que quase ninguém toca. Cada skill que você criou: ela realmente melhora o output, ou é placebo? <a href="https://github.com/felvieira/claude-skills-fv/blob/main/analyze-doc/index.pt-BR.html">Rodamos um bench em 53 cenários</a> (Pass A = modelo frio sem skill, Pass B = skill carregada, rubrica de 5 critérios × 1-5). Pass rate medido: 92.6%, delta médio de +1.84. Quando uma skill falha o bench, vira fix concreto na próxima versão — não justificamos achados.</p>
 
 <hr>
 
 <h2>O que separa quem só lê esse tipo de artigo de quem aplica</h2>
 
-<p>Vou ser direto: <strong>ler artigos como o do allglenn não muda nada</strong>. O que muda é tratar isso como engenharia de infra — sistemática, iterativa, mensurável.</p>
+<p>Vou ser direto: <strong>ler sobre isso não muda nada</strong>. O que muda é tratar como engenharia de infra — sistemática, iterativa, mensurável.</p>
 
-<p>O artigo dele propõe um plano de 5 dias (CLAUDE.md → hook → two-Claude review → subagent → MCP). É um bom plano. Mas a parte que ele não enfatiza é a <strong>compounding</strong>: cada setup que você faz hoje compounda em cada sessão futura.</p>
+<p>Um bom plano de arranque cabe em 5 dias (CLAUDE.md → hook → two-Claude review → subagent → MCP). Mas a parte que quase ninguém enfatiza é a <strong>compounding</strong>: cada setup que você faz hoje compounda em cada sessão futura.</p>
 
 <p>Se você investe 30 minutos hoje configurando um hook que roda <code>npm run lint --fix</code> em PostToolUse, vai economizar 30 minutos <em>por dia</em> pelo resto do tempo que esse projeto existir. Em 6 meses, são 90 horas que não estão indo pra lint manual.</p>
 
@@ -194,7 +190,7 @@
 
 <h2>O atalho que existe</h2>
 
-<p>O artigo do allglenn lista vários repos da comunidade no final: <a href="https://github.com/shanraisshan/claude-code-best-practice">claude-code-best-practice</a> (20k+ stars), <a href="https://github.com/hesreallyhim/awesome-claude-code">awesome-claude-code</a>, e outros. Vale visitar todos.</p>
+<p>A comunidade tem repos excelentes pra puxar referência: <a href="https://github.com/shanraisshan/claude-code-best-practice">claude-code-best-practice</a> (20k+ stars), <a href="https://github.com/hesreallyhim/awesome-claude-code">awesome-claude-code</a>, e outros. Vale visitar todos.</p>
 
 <p>Mas existe outro caminho que eu construí pessoalmente: o <a href="https://github.com/felvieira/claude-skills-fv"><strong>Dev Team Kit</strong></a>, plugin Apache-2.0 que materializa todos esses padrões num único install:</p>
 
@@ -218,7 +214,7 @@
 
 <h2>O que fica</h2>
 
-<p>O <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">artigo do allglenn</a> é o melhor playbook gratuito que vi pra quem está saindo do nível "Claude Code = Stack Overflow rápido". Recomendo ler na íntegra.</p>
+<p>Tem muito playbook bom por aí pra quem está saindo do nível "Claude Code = Stack Overflow rápido". Vale ler todos.</p>
 
 <p>Mas se você levar uma frase desse post pra casa, que seja esta: <strong>o top 1% não é melhor em prompting. É melhor em design de sistemas. E sistemas só ficam bons quando você mede se funcionam.</strong></p>
 
@@ -231,7 +227,6 @@
 <h3>Recursos pra continuar</h3>
 
 <ul>
-  <li><strong>Artigo original:</strong> <a href="https://pub.towardsai.net/becoming-a-top-1-claude-code-user-the-complete-playbook-no-one-else-is-sharing-96057be1468e">"Becoming a top 1% Claude Code user"</a> — allglenn no Towards AI</li>
   <li><strong>Docs oficiais:</strong> <a href="https://docs.claude.com/en/docs/claude-code/overview">code.claude.com/docs</a></li>
   <li><strong>Best practices da Anthropic:</strong> <a href="https://docs.claude.com/en/docs/claude-code/overview">code.claude.com/docs/en/best-practices</a></li>
   <li><strong>MCP Protocol spec:</strong> <a href="https://modelcontextprotocol.io">modelcontextprotocol.io</a></li>
@@ -242,10 +237,31 @@
 
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A diferença entre quem usa Claude Code como um Stack Overflow turbinado e quem está no top 1% não é prompting melhor. É uma coisa que quase ninguém mede — e dá pra provar com número.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O que separa amador de top 1% no Claude Code não é prompting melhor — é mentalidade de infraestrutura.
+
+Escrevi sobre os 6 padrões que importam de verdade (CLAUDE.md como orçamento de instruções, hooks pra codificar julgamento, subagents paralelos em worktrees isolados, MCP least-privilege) e o nível que quase ninguém alcança: medir se o seu sistema realmente funciona.
+
+Bench público de 53 cenários, pass rate de 92.6%, 98% de redução de tokens em loops autônomos. Números reais, reprodutíveis.
+
+O 1% não é clube fechado. É só quem trata isso como engenharia.
+
+https://felvieira.github.io/blog/posts/2026-05-23-top-1-claude-code.html
+
+#ClaudeCode #AICoding #DevProductivity #AIAgents #SoftwareEngineering</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-23 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-top-1-claude-code.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>22 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

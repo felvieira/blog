@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia do Neo Kim sobre multi-agent — quando NÃO usar, as 6 arquiteturas (orchestrator-worker, pipeline, hierarchical, swarm, mesh, handoffs), failure modes em produção, stack por topologia, e case study do Dev Team Kit. Post 15/15 da série.">
+<meta name="description" content="As 6 topologias de multi-agent systems — orchestrator-worker, pipeline, hierarchical, swarm, mesh e handoffs — explicadas com casos reais. Quando NÃO usar multi-agent, os failure modes que sempre aparecem em produção, e a stack certa por arquitetura.">
 <meta property="og:title" content="Multi-Agent Architectures — as 6 topologias, quando usar cada uma, e por que não usar nenhuma">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia do Neo Kim sobre multi-agent — quando NÃO usar, as 6 arquiteturas (orchestrator-worker, pipeline, hierarchical, swarm, mesh, handoffs), failure modes em produção, stack por topologia, e case study do Dev Team Kit. Post 15/15 da série.">
+<meta property="og:description" content="As 6 topologias de multi-agent systems — orchestrator-worker, pipeline, hierarchical, swarm, mesh e handoffs — explicadas com casos reais. Quando NÃO usar multi-agent, os failure modes que sempre aparecem em produção, e a stack certa por arquitetura.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-multi-agent-architecture-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -33,7 +33,7 @@
 
 <p>A maioria dos multi-agent systems falha <strong>não porque o modelo é fraco</strong>, mas porque você escolheu muitos agents antes de precisar, ou escolheu a arquitetura errada uma vez que tem muitos.</p>
 
-<p>Este post — adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/multi-agent-system" target="_blank" rel="noopener">"Multi-Agent Architectures, Clearly Explained" do Neo Kim</a> — cobre as 6 arquiteturas, quando usar cada uma, e o que sempre quebra em produção.</p>
+<p>Este post cobre as 6 arquiteturas de multi-agent systems, quando usar cada uma, e o que sempre quebra em produção.</p>
 
 <h2>Quando NÃO usar multi-agent</h2>
 
@@ -262,42 +262,33 @@
 
 <p>Se você está construindo agents, leia <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">"How we built our multi-agent research system" da Anthropic</a>. É o melhor case study público existente.</p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "Multi-Agent Architectures, Clearly Explained" por Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/multi-agent-system" target="_blank" rel="noopener">The System Design Newsletter</a> em 30 de abril de 2026. Esta adaptação em PT-BR cobre as 6 arquiteturas (3 da parte gratuita + 3 expandidas com pesquisa própria), failure modes observados em produção, tabela de stack por arquitetura, e case study do Dev Team Kit. Recomendo o <a href="https://www.anthropic.com/engineering/built-multi-agent-research-system" target="_blank" rel="noopener">post da Anthropic sobre Claude Research</a> e a documentação dos frameworks LangGraph, CrewAI, AutoGen e OpenAI Swarm pra ir mais fundo.</em></p>
-
-<hr>
-
-<h2>🎉 Fim da série — 15 posts em 24 horas</h2>
-
-<p>Este post fecha a série de <strong>15 adaptações enriquecidas em PT-BR</strong> dos artigos do The System Design Newsletter sobre AI, agents, RAG, LLM concepts, e tudo que importa em 2026. Sequência completa:</p>
-
-<ol>
-<li><a href="../posts/2026-05-23-ai-agents-memory-state-consistency.html">AI Agents Memory & State Consistency</a></li>
-<li><a href="../posts/2026-05-23-ml-system-design-101.html">ML System Design 101</a></li>
-<li><a href="../posts/2026-05-23-personal-ai-chat-assistant.html">Personal AI Chat Assistant</a></li>
-<li><a href="../posts/2026-05-24-how-rag-works.html">How RAG Works</a></li>
-<li><a href="../posts/2026-05-24-llm-concepts-deep-dive.html">LLM Concepts Deep Dive</a></li>
-<li><a href="../posts/2026-05-24-design-ai-agent.html">Design AI Agent (framework 10 passos)</a></li>
-<li><a href="../posts/2026-05-24-reinforcement-learning-explained.html">Reinforcement Learning Explained</a></li>
-<li><a href="../posts/2026-05-24-vector-databases-deep-dive.html">Vector Databases Deep Dive</a></li>
-<li><a href="../posts/2026-05-24-context-engineering-101.html">Context Engineering 101</a></li>
-<li><a href="../posts/2026-05-24-ai-coding-workflow-101.html">AI Coding Workflow 101</a></li>
-<li><a href="../posts/2026-05-24-llm-evals-explained.html">LLM Evals Explained</a></li>
-<li><a href="../posts/2026-05-24-how-ai-agents-work.html">How AI Agents Work (conceitual)</a></li>
-<li><a href="../posts/2026-05-24-how-mcp-works.html">How MCP Works</a></li>
-<li><a href="../posts/2026-05-24-agentic-design-patterns.html">9 Agentic Design Patterns</a></li>
-<li>Multi-Agent Architecture (este post)</li>
-</ol>
-
-<p>Crédito principal: <strong>Neo Kim e os guest authors do The System Design Newsletter</strong> — Paolo Perrone, Louis-François Bouchard, Eric Roby, Fran Soto, Dr. Ashish Bamania, Maxine Meurer, Anshuman Mishra, Sairam Sundaresan. <a href="https://newsletter.systemdesign.one/" target="_blank" rel="noopener">Assine o newsletter deles</a> — é onde tudo isso começou.</p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quase todo mundo erra a mesma coisa em multi-agent: escolhe muitos agents antes de precisar. Tem 3 limites que justificam — e 6 topologias, mas só 3 sobrevivem em produção.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Multi-agent não é silver bullet — é sistema distribuído com componentes probabilísticos.
+
+A maioria dos multi-agent systems falha não porque o modelo é fraco, mas porque alguém escolheu muitos agents antes de precisar, ou escolheu a topologia errada.
+
+Mapeei as 6 arquiteturas (orchestrator-worker, pipeline, hierarchical, swarm, mesh, handoffs), quando usar cada uma, os 3 limites que justificam sair do agent único, e os 8 failure modes que sempre aparecem em produção.
+
+Regra de ouro: fique single-agent até a dor de produção forçar a mudança.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-05-24-multi-agent-architecture.html
+
+#MultiAgent #AIAgents #LLM #SystemDesign #AIEngineering</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-multi-agent-architecture.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

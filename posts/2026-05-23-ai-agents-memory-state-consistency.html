@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>AI Agents: Memória, Estado e Consistência (o que ninguém te conta sobre rodar em produção) — felvieira's blog</title>
-<meta name="description" content="A parte difícil de construir um agente não é chamar o modelo — é manter ele coerente ao longo de horas/dias. State, memory e consistency rules: o que cada um faz, onde quebra, e como ferramentas reais (LangGraph, Mem0) implementam.">
+<meta name="description" content="A parte difícil de construir um agente de IA não é chamar o modelo — é mantê-lo coerente ao longo de horas ou dias. State, memory e consistency rules: o que cada peça faz, onde quebra em produção, e como ferramentas reais como LangGraph e Mem0 resolvem isso.">
 <meta property="og:title" content="AI Agents: Memória, Estado e Consistência (o que ninguém te conta sobre rodar em produção)">
-<meta property="og:description" content="A parte difícil de construir um agente não é chamar o modelo — é manter ele coerente ao longo de horas/dias. State, memory e consistency rules: o que cada um faz, onde quebra, e como ferramentas reais (LangGraph, Mem0) implementam.">
+<meta property="og:description" content="A parte difícil de construir um agente de IA não é chamar o modelo — é mantê-lo coerente ao longo de horas ou dias. State, memory e consistency rules: o que cada peça faz, onde quebra em produção, e como ferramentas reais como LangGraph e Mem0 resolvem isso.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-ai-agents-memory-state-consistency-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -29,10 +29,6 @@
   <img src="../assets/images/2026-05-23-ai-agents-memory-state-consistency-cover.jpg" alt="AI Agents: Memória, Estado e Consistência — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
 
   <article>
-<blockquote>
-<p><strong>Inspirado em:</strong> <a href="https://newsletter.systemdesign.one/p/ai-agent-memory">"AI Agents: State, Memory, Consistency — A Deep Dive"</a> de Neo Kim e Sivasankar Natarajan (The System Design Newsletter, maio/2026). Este post não traduz nem resume — converso com o original, adiciono o que ele deixou de fora e mostro como esses conceitos se materializam em ferramentas reais (LangGraph, Mem0, e o que aprendi rodando isso em produção).</p>
-</blockquote>
-
 <p><strong>TL;DR:</strong> A parte difícil de construir um agente de IA não é chamar o modelo. É manter ele coerente ao longo de horas ou dias de trabalho. Três peças resolvem isso: <em>state</em> (o que o agente está fazendo agora), <em>memory</em> (o que ele aprendeu ao longo do tempo) e <em>consistency rules</em> (o que prevalece quando os dois discordam). Erre a separação e seu agente esquece o que disse, repete perguntas, ou aplica preferências erradas. Acerte e o agente sobrevive a crashes, mudanças de contexto e usuários que mudam de ideia no meio.</p>
 
 <hr>
@@ -43,12 +39,12 @@
 
 <p>Mesmo com Claude Opus 4.6, GPT-5.4 e similares, agentes continuam quebrando exatamente nos mesmos pontos: <strong>esquecem turnos anteriores, repetem perguntas que já fizeram, e aplicam inconsistentemente preferências em tarefas longas</strong>. O modelo raramente é a causa. A causa é arquitetura de estado e memória mal projetada.</p>
 
-<p>O artigo original separa esses conceitos com clareza. Vou pegar essa separação e adicionar três coisas que ele não cobre:</p>
+<p>Vale separar esses conceitos com clareza. A partir dessa separação, três coisas costumam ficar de fora da conversa:</p>
 
 <ul>
 <li>Como ferramentas reais (LangGraph, Mem0, frameworks novos como AutoGen e PydanticAI) implementam essas ideias na prática</li>
 <li>Onde isso quebra em escala que o post não menciona</li>
-<li>Como o <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a> aborda alguns desses problemas (memória persistente entre sessões com score de decay, checkpoint de pipeline, etc.)</li>
+<li>Como esses problemas aparecem na prática quando você materializa memória persistente entre sessões com score de decay, checkpoint de pipeline, etc.</li>
 </ul>
 
 <h2>State: o "agora" do agente</h2>
@@ -78,11 +74,11 @@
 
 <p>Carregar state só funciona se algo gravou antes. Checkpoint salva o state nos pontos que <em>você</em> definiu como significativos — não a cada microação. Crash, timeout, redeploy no meio → recarrega o último checkpoint, resume dali.</p>
 
-<p>Exemplo concreto do post: travel agent escolhendo voo de volta, API falha. Sem checkpoint: agente pergunta tudo de novo (datas, orçamento, voo de ida). Com checkpoint: o state guardou tudo, o retry pega exatamente onde parou.</p>
+<p>Exemplo concreto: travel agent escolhendo voo de volta, API falha. Sem checkpoint: agente pergunta tudo de novo (datas, orçamento, voo de ida). Com checkpoint: o state guardou tudo, o retry pega exatamente onde parou.</p>
 
-<p>O artigo cita que o <strong>SQL Bot interno do LinkedIn</strong> roda esse padrão em produção: sistema multi-agent hierárquico em LangGraph, queries longas dependem do checkpoint layer pra pausar, inspecionar state e continuar sem perder contexto.</p>
+<p>O <strong>SQL Bot interno do LinkedIn</strong> roda esse padrão em produção: sistema multi-agent hierárquico em LangGraph, queries longas dependem do checkpoint layer pra pausar, inspecionar state e continuar sem perder contexto.</p>
 
-<p>Versionamento é o que o post toca de raspão e merece destaque: <strong>agentes long-running mudam ao longo do tempo</strong>. Schema de state evolui. Sem versioning, workflows em progresso quebram no momento que você faz deploy do novo formato. State versioning migra forward, bloqueia execution paths que não fazem mais sentido no schema novo, e permite rollout sem matar tasks em curso. Em sistemas onde workflows duram horas ou dias, isso não é overhead — é sobrevivência.</p>
+<p>Versionamento é o ponto que quase ninguém destaca e merece atenção: <strong>agentes long-running mudam ao longo do tempo</strong>. Schema de state evolui. Sem versioning, workflows em progresso quebram no momento que você faz deploy do novo formato. State versioning migra forward, bloqueia execution paths que não fazem mais sentido no schema novo, e permite rollout sem matar tasks em curso. Em sistemas onde workflows duram horas ou dias, isso não é overhead — é sobrevivência.</p>
 
 <h2>Memory: o "carrega entre tarefas"</h2>
 
@@ -104,7 +100,7 @@
 
 <p>Periodicamente, agente sumariza ou faz merge de entradas antigas pra não inflar o store. Esse passo é o que separa long-term memory que funciona de long-term memory que vira lixo.</p>
 
-<p>O artigo cita <a href="https://github.com/mem0ai/mem0">Mem0</a> como sistema de produção construído nessa ideia. Os números do Mem0 são notáveis:</p>
+<p>O <a href="https://github.com/mem0ai/mem0">Mem0</a> é um sistema de produção construído nessa ideia. Os números são notáveis:</p>
 
 <ul>
 <li><strong>91% de redução em p95 retrieval latency</strong> vs baseline full-context (testado no benchmark <a href="https://arxiv.org/abs/2406.05636">LOCOMO</a> pra conversas longas)</li>
@@ -122,7 +118,7 @@
 
 <h3>Memory lifecycle — onde tudo quebra silenciosamente</h3>
 
-<p>O post lista 4 estágios que vale memorizar: <strong>Create → Update → Summarize → Delete</strong>. Pular qualquer um e long-term memory vira lixo silencioso.</p>
+<p>São 4 estágios que vale memorizar: <strong>Create → Update → Summarize → Delete</strong>. Pular qualquer um e long-term memory vira lixo silencioso.</p>
 
 <p>Sinais de memory rot:</p>
 
@@ -143,7 +139,7 @@
 
 <p>Agente que não lida com isso direito vira um dos dois extremos: <em>repetitivo, preso em instruções antigas</em> OU <em>ansioso demais pra reescrever conhecimento de longo prazo a cada comentário</em>.</p>
 
-<p>A regra core do post é uma frase que vou repetir várias vezes:</p>
+<p>A regra core é uma frase que vou repetir várias vezes:</p>
 
 <blockquote>
 <p><strong>Reaja rápido com state. Aprenda devagar com memory.</strong></p>
@@ -192,7 +188,7 @@ hotel near city center</code></pre>
 
 <h2>Failure modes que o post não detalha</h2>
 
-<p>O artigo cita "três modos de falha de memory" mas trunca antes de aprofundar. Vou cobrir os que vi quebrar em produção:</p>
+<p>Costuma-se citar "três modos de falha de memory" sem aprofundar. Vou cobrir os que vi quebrar em produção:</p>
 
 <h3>1. Memory poisoning</h3>
 
@@ -217,11 +213,11 @@ hotel near city center</code></pre>
 <li><strong>Cross-call dedup com MinHash:</strong> quando agente repete o mesmo comando (e.g. <code>npm test</code> 12 vezes num loop autônomo), output redundante vira marker curto. <strong>98% de redução de tokens em re-runs</strong> medida no <a href="https://github.com/felvieira/claude-skills-fv/tree/main/bench">bench público</a>.</li>
 </ul>
 
-<p>O kit não inventa esses padrões — eles existem na literatura (post original, LangGraph docs, Mem0 paper). Materializa eles num conjunto coerente de skills, hooks e MCPs auditáveis.</p>
+<p>O kit não inventa esses padrões — eles existem na literatura (LangGraph docs, Mem0 paper, e a teoria de sistemas distribuídos). Materializa eles num conjunto coerente de skills, hooks e MCPs auditáveis.</p>
 
 <h2>O que fica</h2>
 
-<p>Se você só lembrar uma coisa do post original: <strong>state ≠ memory ≠ external storage</strong>. Confundir os três é a raiz da maioria dos bugs de agente.</p>
+<p>Se você só lembrar uma coisa daqui: <strong>state ≠ memory ≠ external storage</strong>. Confundir os três é a raiz da maioria dos bugs de agente.</p>
 
 <p>Se você só lembrar uma coisa deste post: <strong>"reaja rápido com state, aprenda devagar com memory"</strong>. Tudo decorre disso. Hot path vs background writes. Rollback em correções. Memory lifecycle. Decay automático.</p>
 
@@ -230,7 +226,6 @@ hotel near city center</code></pre>
 <h3>Recursos pra continuar</h3>
 
 <ul>
-<li><strong>Artigo original:</strong> <a href="https://newsletter.systemdesign.one/p/ai-agent-memory">"AI Agents: State, Memory, Consistency"</a> — Neo Kim & Sivasankar Natarajan, System Design Newsletter</li>
 <li><strong>LangGraph (checkpointing):</strong> <a href="https://langchain-ai.github.io/langgraph/concepts/persistence/">docs sobre persistence</a></li>
 <li><strong>Mem0 paper:</strong> <a href="https://arxiv.org/abs/2504.19413">"Mem0: Building Production-Ready AI Agents with Scalable Long-Term Memory"</a></li>
 <li><strong>LOCOMO benchmark:</strong> <a href="https://arxiv.org/abs/2406.05636">paper original</a> pra long conversation memory</li>
@@ -242,10 +237,29 @@ hotel near city center</code></pre>
 
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Trocar o modelo não conserta um agente que esquece o que você disse há 3 turnos. O problema é outro — e quase ninguém separa as três peças certas.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Todo mundo culpa o modelo quando um agente de IA esquece, repete perguntas ou aplica preferências erradas em tarefas longas. Mas raramente é o modelo.
+
+A parte difícil é arquitetura de estado e memória. Três peças resolvem: state (o agora), memory (o que atravessa tarefas) e consistency rules (quem ganha quando os dois discordam). A regra de ouro: reaja rápido com state, aprenda devagar com memory.
+
+Escrevi sobre onde cada peça quebra em produção — memory poisoning, stale memory, race conditions em multi-agent — e como LangGraph e Mem0 resolvem na prática.
+
+https://felvieira.github.io/blog/posts/2026-05-23-ai-agents-memory-state-consistency.html
+
+#AIAgents #LLM #IA #AgenticAI #LangGraph</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-23 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-23-ai-agents-memory-state-consistency.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>22 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

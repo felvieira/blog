@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Sairam Sundaresan e Neo Kim sobre o que mecanicamente é um AI agent — framework PEAS, autonomy/proactiveness/action, ReAct vs Plan-and-Execute, context window como RAM, tools, e a stack pra construir agents em 2026.">
+<meta name="description" content="O que mecanicamente separa um AI agent de um chatbot: o framework PEAS, autonomy/proactiveness/action, o loop ReAct, Plan-and-Execute, context window como RAM e tools. Com a stack pra construir agents em produção e os erros que sempre quebram.">
 <meta property="og:title" content="O que torna um AI Agent diferente do ChatGPT — abrindo a tampa do loop ReAct">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Sairam Sundaresan e Neo Kim sobre o que mecanicamente é um AI agent — framework PEAS, autonomy/proactiveness/action, ReAct vs Plan-and-Execute, context window como RAM, tools, e a stack pra construir agents em 2026.">
+<meta property="og:description" content="O que mecanicamente separa um AI agent de um chatbot: o framework PEAS, autonomy/proactiveness/action, o loop ReAct, Plan-and-Execute, context window como RAM e tools. Com a stack pra construir agents em produção e os erros que sempre quebram.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-how-ai-agents-work-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -35,7 +35,7 @@
 
 <p>Você conserta. Uma semana depois, outra coisa muda. Conserta de novo. <strong>Isso é automação brittle</strong> — funciona perfeitamente em condições estreitas, quebra se qualquer coisa muda.</p>
 
-<p>Considere uma abordagem diferente: em vez de escrever código que clica num elemento específico, você dá ao AI agent uma <em>meta</em>: "Encontre o voo mais barato pra Tóquio neste mês". Esse post — adaptação enriquecida em PT-BR de <a href="https://newsletter.systemdesign.one/p/ai-agents-explained" target="_blank" rel="noopener">"AI Agents Explained" de Sairam Sundaresan e Neo Kim</a> — abre a tampa do que é, mecanicamente, um agent.</p>
+<p>Considere uma abordagem diferente: em vez de escrever código que clica num elemento específico, você dá ao AI agent uma <em>meta</em>: "Encontre o voo mais barato pra Tóquio neste mês". Este post abre a tampa do que é, mecanicamente, um agent.</p>
 
 <h2>Agent vs Chatbot — a diferença que tudo muda</h2>
 
@@ -237,16 +237,31 @@
 
 <p>A diferença entre demo bonitinho e agent que roda autônomo em produção <em>sem te queimar o cartão de crédito</em> está nos detalhes mundanos: rate limits em código, verification gates, max-step caps, compaction de context, eval contínuo. <strong>Trate agent como software, não como mágica.</strong></p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "What Makes an AI Agent Different From ChatGPT?" por Sairam Sundaresan (autor de <em>"AI for the Rest of Us"</em>) e Neo Kim, publicado em <a href="https://newsletter.systemdesign.one/p/ai-agents-explained" target="_blank" rel="noopener">The System Design Newsletter</a> em 5 de janeiro de 2026. Esta adaptação em PT-BR cobre o framework PEAS, ReAct vs Plan-and-Execute, tools, memory, e adiciona stack atualizada de 2026, padrões de produção e referências ao MCP e outros posts da série. Recomendo o livro do Sairam (<a href="https://www.amazon.com/AI-Rest-Us-Sairam-Sundaresan/dp/1399415654" target="_blank" rel="noopener">AI for the Rest of Us</a>) e o newsletter <a href="https://gradientascent.substack.com/" target="_blank" rel="noopener">Gradient Ascent</a> dele.</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todo mundo chama de "agent". Quase ninguém sabe que por baixo é só um loop de três passos rodando em cima de um LLM probabilístico — e é justamente nos detalhes mundanos desse loop que mora a diferença entre demo bonito e algo que não queima seu cartão de crédito.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Chatbot fala. Agent faz. Essa é a diferença que muda tudo — e o que está embaixo da tampa é mais simples (e mais perigoso) do que parece.
+
+Um agent é só um loop: Reason → Act → Observe → repeat, sobre um LLM probabilístico, mediado por tools cuidadosamente escopadas. O framework PEAS pra especificar, ReAct vs Plan-and-Execute pra orquestrar, context window como RAM, memory short/long-term.
+
+A mágica some quando você abre a tampa. O que sobra é engenharia: rate limits em código, verification gates antes de ação irreversível, max-step caps, compaction de context. Trate agent como software, não como mágica.
+
+Escrevi um guia mecânico, do scraper brittle ao agent autônomo em produção: https://felvieira.github.io/blog/posts/2026-05-24-how-ai-agents-work.html
+
+#AIAgents #LLM #IA #ReAct #MCP</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-how-ai-agents-work.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>24 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

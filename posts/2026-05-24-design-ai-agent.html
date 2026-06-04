@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Fran Soto sobre construir AI agents — a metáfora da montagem de móvel, framework de 10 steps, MCP tools, skills, SOPs, AGENTS.md, multi-agent patterns e human-in-the-loop.">
+<meta name="description" content="Construir um AI agent é dar ao modelo tanto o cérebro quanto as mãos. Um framework de 10 passos que sai do trabalho manual até uma fleet de agents autônomos, com MCP tools, skills, SOPs, AGENTS.md, patterns multi-agent e human-in-the-loop.">
 <meta property="og:title" content="Como projetar seu primeiro AI Agent — o framework de 10 passos de manual a fleet autônoma">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de Neo Kim e Fran Soto sobre construir AI agents — a metáfora da montagem de móvel, framework de 10 steps, MCP tools, skills, SOPs, AGENTS.md, multi-agent patterns e human-in-the-loop.">
+<meta property="og:description" content="Construir um AI agent é dar ao modelo tanto o cérebro quanto as mãos. Um framework de 10 passos que sai do trabalho manual até uma fleet de agents autônomos, com MCP tools, skills, SOPs, AGENTS.md, patterns multi-agent e human-in-the-loop.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-design-ai-agent-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -31,7 +31,7 @@
   <article>
 <p>Todo mundo está falando de AI agents — só que pouquíssimas pessoas estão de fato <strong>construindo</strong> um. Plugar um chatbot no site é só atualização de UI. A oportunidade real está em <em>agentic AI</em>, e a maior parte do mercado está deixando passar.</p>
 
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/how-do-ai-agents-work" target="_blank" rel="noopener">"How Do AI Agents Work" de Neo Kim e Fran Soto (engenheiro Amazon/Ring)</a>, com adições de frameworks atuais, comparativos e o caso de uso prático que mais tem retorno: <strong>incident response autônomo</strong>.</p>
+<p>A oportunidade real está em <em>agentic AI</em>, e aqui eu uso o caso de uso prático que mais tem retorno pra ancorar tudo: <strong>incident response autônomo</strong>. Vou enriquecer o caminho com frameworks atuais e comparativos.</p>
 
 <h2>A metáfora que finalmente fez click — montagem de móvel</h2>
 
@@ -45,7 +45,7 @@
 <li><strong>Você é o agent nesse cenário</strong>. É você quem tem as ferramentas — martelo, prego, cola, furadeira. É você quem tem o cérebro pra decidir como usar e como recuperar de erros que não estavam no manual.</li>
 </ul>
 
-<p>Construir um AI agent é <strong>dar ao modelo tanto o cérebro quanto as mãos</strong> pra trabalhar por você. Fran Soto usa o exemplo de <em>incident response agent</em> no post — mas os princípios valem pra praticamente qualquer processo repetível.</p>
+<p>Construir um AI agent é <strong>dar ao modelo tanto o cérebro quanto as mãos</strong> pra trabalhar por você. Vou usar o exemplo de <em>incident response agent</em> como fio condutor — mas os princípios valem pra praticamente qualquer processo repetível.</p>
 
 <h2>Por que o lado não-determinístico de AI é bom (e não bug)</h2>
 
@@ -59,7 +59,7 @@
 
 <img src="../assets/images/2026-05-24-design-ai-agent-3-ladder.jpg" alt="Escada de maturidade de 10 passos saindo de humano fazendo trabalho manual no chão até fleet de agents autônomos cooperando no topo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)">
 
-<p>Construir um agent não é flip de switch. É processo iterativo onde você gradualmente <em>offloada</em> carga cognitiva pra máquina enquanto mantém olho na performance. Fran propõe 10 passos:</p>
+<p>Construir um agent não é flip de switch. É processo iterativo onde você gradualmente <em>offloada</em> carga cognitiva pra máquina enquanto mantém olho na performance. Proponho 10 passos:</p>
 
 <h3>Passo 1 — Faça o trabalho manualmente</h3>
 
@@ -200,18 +200,38 @@
 
 <p>Em 2024, AI agents eram experimento. Em 2025, viraram produto (Claude Code, Cursor Composer, Devin). Em 2026, viram <em>commodity</em> — todo time decente terá pelo menos 1 agent rodando autônomo. Os times que vão se destacar são os que <strong>tratam agents como engenheiros juniores</strong>: onboard direito, dão tools, escrevem SOPs claros, monitoram performance, e iteram.</p>
 
-<p>O framework de 10 passos do Fran não é mágica — é a aplicação rigorosa de práticas que já usamos em software tradicional (runbooks, dependências, schedulers) num novo tipo de "funcionário". <strong>Comece pequeno. Um agent. Uma tarefa. Mede. Itera.</strong> Em 90 dias você não vai querer voltar.</p>
-
-<hr>
-
-<p><em><strong>Fonte original:</strong> "I struggled with AI agents until I built an incident response agent" por Neo Kim e Fran Soto, publicado em <a href="https://newsletter.systemdesign.one/p/how-do-ai-agents-work" target="_blank" rel="noopener">The System Design Newsletter</a> em 18 de março de 2026. Esta adaptação em PT-BR enriquece com frameworks atuais, patterns multi-agent e padrões emergentes (AGENTS.md, Claude Skills). Para o passo-a-passo do incident response agent, vale o post completo + o newsletter <a href="https://strategizeyourcareer.com/" target="_blank" rel="noopener">StrategizeYourCareer</a> do Fran.</em></p>
+<p>O framework de 10 passos não é mágica — é a aplicação rigorosa de práticas que já usamos em software tradicional (runbooks, dependências, schedulers) num novo tipo de "funcionário". <strong>Comece pequeno. Um agent. Uma tarefa. Mede. Itera.</strong> Em 90 dias você não vai querer voltar.</p>
 
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quase ninguém que fala de AI agent está de fato construindo um — e o que separa um chatbot de um agent que se cura sozinho cabe num framework de 10 passos.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Todo mundo fala de AI agent. Quase ninguém constrói um de verdade.
+
+Plugar um chatbot é só UI. O pulo do gato é dar ao modelo o cérebro E as mãos — e isso segue um framework de 10 passos que vai do trabalho manual até uma fleet de agents autônomos.
+
+O que você tira deste post:
+→ A diferença real entre LLM, workflow e agent (a metáfora da montagem de móvel finalmente fez sentido)
+→ Os 10 passos: MCP tools, skills, memory, SOPs, scheduling e multi-agent
+→ Onde manter humano no loop pra não deixar o agent fazer rm -rf em produção
+
+Comece pequeno: um agent, uma tarefa, mede, itera.
+
+Leia: https://felvieira.github.io/blog/posts/2026-05-24-design-ai-agent.html
+
+#AIAgents #IA #LLM #MCP #Engenharia</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-design-ai-agent.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>

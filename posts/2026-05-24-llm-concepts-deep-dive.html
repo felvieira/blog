@@ -4,9 +4,9 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>LLM Concepts Deep Dive — os 15 conceitos que separam quem usa IA de brinquedo de quem usa em produção — felvieira's blog</title>
-<meta name="description" content="Adaptação enriquecida em PT-BR do guia de 33 conceitos de LLM de Neo Kim e Louis-François Bouchard — tokens, embeddings, latent space, pretraining, RLHF, temperature, hallucinations, prompt injection — com papers, ferramentas e armadilhas em produção.">
+<meta name="description" content="Os 15 conceitos de LLM que importam de verdade em produção: tokens, embeddings, latent space, pretraining, RLHF, temperature, hallucinations e prompt injection. Com papers de referência, ferramentas e as armadilhas que ninguém te avisa.">
 <meta property="og:title" content="LLM Concepts Deep Dive — os 15 conceitos que separam quem usa IA de brinquedo de quem usa em produção">
-<meta property="og:description" content="Adaptação enriquecida em PT-BR do guia de 33 conceitos de LLM de Neo Kim e Louis-François Bouchard — tokens, embeddings, latent space, pretraining, RLHF, temperature, hallucinations, prompt injection — com papers, ferramentas e armadilhas em produção.">
+<meta property="og:description" content="Os 15 conceitos de LLM que importam de verdade em produção: tokens, embeddings, latent space, pretraining, RLHF, temperature, hallucinations e prompt injection. Com papers de referência, ferramentas e as armadilhas que ninguém te avisa.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-24-llm-concepts-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -32,8 +32,6 @@
 <p>Você já abriu o ChatGPT, fez uma pergunta simples, e recebeu resposta lenta, vaga, ou simplesmente errada? A maioria das soluções por aí oferece "promptilhos mágicos" ou listas de técnicas. <strong>Mas o que você realmente precisa é entender como esses sistemas funcionam por dentro</strong>.</p>
 
 <p>As pessoas usam termos como <em>tokens, embeddings, hallucinations</em> pra explicar tudo. Se você não entende essas palavras, é impossível saber o que consertar.</p>
-
-<p>Este post é adaptação enriquecida em PT-BR do <a href="https://newsletter.systemdesign.one/p/llm-concepts" target="_blank" rel="noopener">"Thirty-Three LLM Concepts Explained (Without Maths)" de Neo Kim e Louis-François Bouchard</a>. Cobrimos os <strong>15 conceitos mais alto-leverage</strong> (do total de 33 do post original) com adições de ferramentas, papers de referência e armadilhas comuns.</p>
 
 <h2>O mapa mental — onde LLM se encaixa</h2>
 
@@ -210,9 +208,9 @@
 
 <p><a href="https://owasp.org/www-project-top-10-for-large-language-model-applications/" target="_blank" rel="noopener">OWASP Top 10 for LLMs</a> tem o playbook completo.</p>
 
-<h2>Os outros 18 conceitos do artigo original</h2>
+<h2>Os outros conceitos que completam o vocabulário</h2>
 
-<p>O post de Neo e Louis-François cobre ainda: <em>attention mechanism, transformer architecture, encoder-decoder, autoregressive, multimodal models, MoE (Mixture of Experts), distillation, quantization, LoRA, PEFT, prompt engineering, few-shot, chain-of-thought, function calling, tool use, agents, RAG, fine-tuning, knowledge cutoff, system prompt</em>. Vale a leitura completa pra fechar o vocabulário.</p>
+<p>Ficaram de fora deste recorte, mas valem o estudo pra fechar o vocabulário: <em>attention mechanism, transformer architecture, encoder-decoder, autoregressive, multimodal models, MoE (Mixture of Experts), distillation, quantization, LoRA, PEFT, prompt engineering, few-shot, chain-of-thought, function calling, tool use, agents, RAG, fine-tuning, knowledge cutoff, system prompt</em>.</p>
 
 <h2>Como praticar — o caminho dos 30 dias</h2>
 
@@ -236,16 +234,36 @@
 
 <p>LLM não é mágica. É autocomplete sofisticado treinado em montanha de texto, ajustado em duas etapas (pretraining + post-training), e controlado por meia dúzia de parâmetros (temperature, top-p, context window). Quando você entende esses 15 conceitos, parar de "torcer pro modelo acertar" e começa a <strong>raciocinar sobre por que ele falha e como consertar</strong>. Isso é o que separa quem usa LLM como brinquedo de quem usa em produção.</p>
 
-<hr>
-
-<p><em><strong>Fonte original:</strong> "Everything You Need to Know to Understand How LLMs Like ChatGPT Actually Work — Thirty-Three LLM Concepts Explained (Without Maths)" por Neo Kim e Louis-François Bouchard, publicado em <a href="https://newsletter.systemdesign.one/p/llm-concepts" target="_blank" rel="noopener">The System Design Newsletter</a> em 3 de novembro de 2025. Esta adaptação enriquecida em PT-BR cobre os 15 conceitos mais alto-leverage com adições de papers, ferramentas, e armadilhas em produção. Recomendo o <a href="https://academy.towardsai.net/" target="_blank" rel="noopener">curso Master AI for Work</a> do Louis-François e o canal <a href="https://www.youtube.com/@WhatsAI" target="_blank" rel="noopener">What's AI</a> pra continuar.</em></p>
-
   </article>
 
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A maioria dos termos de IA que você ouve todo dia — tokens, embeddings, hallucinations — é decorada sem ninguém entender. Tem 15 conceitos que decidem se seu LLM vira brinquedo ou vai pra produção. Você sabe quais são?</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Todo mundo fala em "tokens", "embeddings" e "hallucinations" — mas quase ninguém sabe o que cada um realmente significa por dentro.
+
+Escrevi um guia direto com os 15 conceitos de LLM que de fato importam quando você sai do brinquedo e vai pra produção:
+
+→ Por que português pode custar 50-80% mais tokens que inglês
+→ O que é "lost in the middle" e por que context window de 1M não te salva
+→ Como temperature, top-p e RLHF controlam o que o modelo diz de verdade
+→ Prompt injection e as defesas que você precisa ter antes de soltar um chatbot
+
+Quando você entende isso, para de torcer pro modelo acertar e começa a raciocinar sobre por que ele falha.
+
+https://felvieira.github.io/blog/posts/2026-05-24-llm-concepts-deep-dive.html
+
+#LLM #IA #MachineLearning #IAGenerativa #EngenhariaDeSoftware</div>
+  </section>
+
   <footer class="post">
-    <span>Published 2026-05-24 · CC-BY-4.0</span>
-    <span><a href="https://github.com/felvieira/blog/blob/main/posts/2026-05-24-llm-concepts-deep-dive.html">View source</a> · <a href="https://github.com/felvieira/blog">All posts</a></span>
+    <span>23 de maio de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
+<script src="../assets/js/share.js"></script>
 </body>
 </html>
