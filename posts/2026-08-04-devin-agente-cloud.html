@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto — felvieira's blog</title>
+<meta name="description" content="Agentes de codificação não são mais uma coisa só. Existe local (terminal, você acompanha em tempo real) e cloud (roda numa VM isolada, faz deploy, devolve PR sozinho). O framework pra decidir quando usar cada um — e quando nenhum agente deveria tocar o código sem supervisão.">
+<meta property="og:title" content="Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto">
+<meta property="og:description" content="Agentes de codificação não são mais uma coisa só. Existe local (terminal, você acompanha em tempo real) e cloud (roda numa VM isolada, faz deploy, devolve PR sozinho). O framework pra decidir quando usar cada um — e quando nenhum agente deveria tocar o código sem supervisão.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-08-04-devin-agente-cloud-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto</h1>
+  <p class="meta">
+    <span>3 de agosto de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-08-04-devin-agente-cloud-cover.jpg" alt="Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto. Não é ficção — é o pitch de uma categoria de ferramenta que ainda confunde muita gente: <strong>agentes de codificação que rodam fora da sua máquina</strong>, num ambiente cloud completo, com acesso a browser, deploy e GitHub.</p>
+
+<p>A pergunta que importa não é "isso existe?" — já existe. É: <strong>onde termina o agente local (tipo Claude Code, Cursor) e começa o agente cloud, e quando faz sentido usar cada um?</strong></p>
+
+<p><img src="../assets/images/2026-08-04-devin-agente-cloud-1-local-vs-cloud.jpg" alt="Dois caminhos a partir de um terminal: um permanece local, outro sobe para um servidor na nuvem, ambos levando a um pull request"></p>
+
+<h2>Duas categorias, não uma</h2>
+
+<p>Existe uma confusão comum: tratar "agente de codificação" como uma coisa só. Na prática, hoje são duas arquiteturas bem diferentes:</p>
+
+<ul>
+<li><strong>Local / terminal</strong> — roda na sua máquina, lê seus arquivos locais, você escolhe o modelo, e você acompanha em tempo real. Claude Code, Cursor CLI e o Devin Terminal (da Cognition) entram nessa categoria.</li>
+<li><strong>Cloud / autônomo</strong> — roda numa VM isolada, sem depender do seu laptop ligado. Recebe uma tarefa, navega na web se precisar, roda comandos, faz deploy, e devolve um PR pronto. Devin Cloud é o exemplo mais maduro dessa categoria hoje.</li>
+</ul>
+
+<p>E tem uma terceira peça que quase ninguém fala: <strong>revisão automatizada de PR</strong> — uma IA que entra direto no seu fluxo do GitHub e comenta/aprova mudanças antes de um humano olhar. É o que fecha o ciclo: agente escreve, agente revisa, humano decide.</p>
+
+<p><img src="../assets/images/2026-08-04-devin-agente-cloud-2-modes.jpg" alt="Três escudos concêntricos representando níveis crescentes de autonomia do agente, de bloqueado a totalmente aberto"></p>
+
+<h2>O modo de operação muda tudo</h2>
+
+<p>A parte mais subestimada de qualquer agente de terminal é o <strong>nível de autonomia que você concede</strong>. A maioria dessas ferramentas tem 3 modos equivalentes:</p>
+
+<table>
+<thead><tr><th>Modo</th><th>Comportamento</th><th>Quando usar</th></tr></thead>
+<tbody>
+<tr><td>Normal</td><td>Pede permissão pra qualquer ação além de leitura</td><td>Você não confia ainda no agente nesse repo</td></tr>
+<tr><td>Accept edits</td><td>Edita arquivos sozinho, mas pede permissão pra rodar comando ou deletar algo</td><td>Refactor/feature normal, você quer supervisionar side effects</td></tr>
+<tr><td>Bypass ("YOLO")</td><td>Faz tudo sem perguntar</td><td>Sandbox isolado, ou tarefa de baixo risco que você já validou várias vezes</td></tr>
+</tbody>
+</table>
+
+<p>O ponto prático: comece sempre em <em>accept edits</em>. Bypass parece produtivo até o agente decidir "otimizar" algo que você não pediu.</p>
+
+<h2>Sessões são amnésicas — trate assim</h2>
+
+<p>Toda ferramenta desse tipo compartilha uma limitação estrutural: <strong>fechar a sessão apaga o contexto</strong>. Você sai, volta uma hora depois, reabre o terminal, e o agente não lembra de nada — nem os arquivos que você referenciou, nem a decisão que vocês tomaram juntos.
+
+Duas implicações práticas:
+
+<ul>
+<li>Sessões novas performam melhor. Contexto que enche demais faz o modelo alucinar mais perto do fim — é literalmente o padrão de degradação que qualquer usuário pesado de LLM já sentiu.</li>
+<li>Se você precisa de continuidade real entre sessões, a solução não é "lembrar manualmente" — é externalizar o estado num arquivo (tipo um <code>AGENTS.md</code> ou notas de sessão) que você recarrega no começo da próxima.</li>
+</ul>
+
+<h2>Troca de modelo não é cosmética</h2>
+
+<p>Um detalhe que separa uso amador de uso sério: <strong>o modelo default raramente é o certo pra tudo</strong>. Ferramentas como Devin já vêm com modelo próprio de código (algo como um "SWE" fine-tunado especificamente pra tarefas de engenharia) como padrão, mas permitem trocar pra modelos de fronteira (Opus, por exemplo) quando a tarefa exige raciocínio mais profundo. Regra prática: modelo mais barato/rápido pra CRUD e refactor mecânico; modelo mais caro/capaz pra arquitetura, debugging difícil, ou qualquer coisa que você só vai revisar uma vez.</p>
+
+<h2>Referenciar arquivo importa mais do que parece</h2>
+
+<p>A diferença entre um agente que "acerta na primeira" e um que fica em loop de correção geralmente não é o prompt — é a <strong>precisão da referência</strong>. Usar <code>@arquivo</code> pra apontar exatamente o que deve mudar, em vez de descrever em texto livre, reduz drasticamente ambiguidade. É o mesmo princípio por trás de context engineering: menos "adivinha o que eu quero", mais "aqui está exatamente o escopo".</p>
+
+<p><img src="../assets/images/2026-08-04-devin-agente-cloud-3-scheduled.jpg" alt="Relógio e calendário se fundindo com uma seta de fluxo de trabalho em loop, representando tarefas de codificação agendadas rodando sem supervisão"></p>
+
+<h2>O que muda quando você sobe pra cloud</h2>
+
+<p>A vantagem real do agente cloud não é "mais inteligente" — é <strong>desacoplamento de máquina</strong>. Isso destrava um padrão de trabalho que agente local não consegue:</p>
+
+<ul>
+<li><strong>Playbooks</strong> — tarefas recorrentes viram templates reutilizáveis (tipo "sempre que eu pedir X, siga esses passos").</li>
+<li><strong>Sessões agendadas</strong> — dispara uma tarefa às 3h da manhã, acorda com o PR pronto.</li>
+<li><strong>Integrações com Slack e ferramentas de tracking</strong> — o time abre uma tarefa numa ferramenta de gestão, o agente pega sozinho, entrega PR, e devolve status pro canal.</li>
+<li><strong>Revisão automatizada de PR</strong> — antes de um humano gastar tempo, uma primeira passada de IA já filtra o óbvio.</li>
+</ul>
+
+<p>Isso é o que separa "IA que me ajuda a codar" de "IA que participa do pipeline de entrega" — a segunda categoria é onde o ROI real aparece pra times, não só pra indivíduos.</p>
+
+<h2>Quando NÃO vale a pena</h2>
+
+<p>Vale nomear o óbvio que costuma ficar de fora: agente cloud autônomo tem custo de setup (conectar GitHub, configurar permissões, aprender os modos) e não substitui supervisão em tarefas de alto risco — migração de banco, mudança de auth, qualquer coisa que um bug silencioso custa caro. A automação total (bypass mode, sessão agendada sem review) é pra tarefa que você já testou manualmente dezenas de vezes. Não é o primeiro lugar pra confiar cegamente.</p>
+
+<h2>O framework de decisão</h2>
+
+<table>
+<thead><tr><th>Cenário</th><th>Ferramenta</th></tr></thead>
+<tbody>
+<tr><td>Você está codando ativamente, quer ver cada mudança</td><td>Agente local (terminal/IDE)</td></tr>
+<tr><td>Tarefa bem definida, pode rodar sem supervisão</td><td>Agente cloud, modo accept edits</td></tr>
+<tr><td>Tarefa recorrente e repetitiva</td><td>Playbook + sessão agendada</td></tr>
+<tr><td>Antes de merge, quer uma primeira triagem</td><td>Revisão automatizada de PR</td></tr>
+<tr><td>Migração crítica, mudança de auth, dado sensível</td><td>Nenhum agente sem review humano linha a linha</td></tr>
+</tbody>
+</table>
+
+<p>A categoria de agente cloud ainda é nova o bastante pra maioria dos devs nem ter testado. Mas o padrão de arquitetura — local pra iteração rápida, cloud pra escala e automação, revisão automatizada como rede de segurança — é o que vai virar padrão de indústria nos próximos anos. Vale entender agora, antes que vire tabela stakes.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Existe uma categoria de agente de IA que a maioria dos devs nunca testou — e ela muda completamente o que 'produtividade' significa quando você não está nem olhando pro código.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto.
+
+Não é ficção. É a categoria de agente de codificação que roda inteira na nuvem — sem depender do seu laptop ligado.
+
+Mas a pergunta real não é 'isso existe?'. É: onde termina o agente local e começa o cloud, e quando cada um faz sentido? Escrevi sobre:
+
+→ as 2 arquiteturas (local vs. cloud) e a peça que falta na maioria das discussões: revisão automatizada de PR
+→ por que o modo de permissão (normal / accept edits / bypass) importa mais que o modelo escolhido
+→ o framework de decisão: quando confiar automação total, e quando nenhum agente deveria tocar o código sozinho
+
+#AICoding #AIAgents #DevProductivity #SoftwareEngineering #CloudAI
+
+https://felvieira.github.io/blog/posts/2026-08-04-devin-agente-cloud.html</div>
+  </section>
+
+  <footer class="post">
+    <span>3 de agosto de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
