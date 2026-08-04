@@ -158,7 +158,7 @@ if (webhookUrl) {
     const res = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ text: fullText }),
+      body: JSON.stringify({ chatInput: fullText }),
     });
     console.log(res.ok
       ? `\nLinkedIn webhook: sent (HTTP ${res.status})`
