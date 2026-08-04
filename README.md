@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-08-04** — [Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt](posts/2026-08-04-agents-e-ontologias.html) (🇧🇷 PT)
 - **2026-05-24** — [Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar](posts/2026-05-24-how-rag-works.html) (🇧🇷 PT)
 - **2026-05-24** — [LLM Concepts Deep Dive — os 15 conceitos que separam quem usa IA de brinquedo de quem usa em produção](posts/2026-05-24-llm-concepts-deep-dive.html) (🇧🇷 PT)
 - **2026-05-24** — [Reinforcement Learning explicado simples — de cervos na floresta ao DeepSeek-R1](posts/2026-05-24-reinforcement-learning-explained.html) (🇧🇷 PT)

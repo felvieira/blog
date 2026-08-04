@@ -1,0 +1,187 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt — felvieira's blog</title>
+<meta name="description" content="LLMs são probabilísticos e por isso deixam passar erros que nenhuma regra explícita permitiria. A solução esquecida nos anos 80 está voltando: casar redes neurais com ontologias formais pra dar guardrails de verdade aos agentes.">
+<meta property="og:title" content="Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt">
+<meta property="og:description" content="LLMs são probabilísticos e por isso deixam passar erros que nenhuma regra explícita permitiria. A solução esquecida nos anos 80 está voltando: casar redes neurais com ontologias formais pra dar guardrails de verdade aos agentes.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-08-04-agents-e-ontologias-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt</h1>
+  <p class="meta">
+    <span>3 de agosto de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-08-04-agents-e-ontologias-cover.jpg" alt="Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Seu agente de IA acabou de aprovar o segundo reembolso do mesmo pedido. Ninguém escreveu um bug — o LLM só achou <em>plausível</em>. E é aí que mora o problema que quase ninguém está resolvendo direito: modelos de linguagem são probabilísticos por natureza, e probabilidade não conhece a palavra "não".</p>
+
+<p>A resposta pra isso não é um prompt mais esperto. É trazer de volta uma tecnologia que o mundo da IA deu por morta nos anos 80 — e casá-la com os LLMs de hoje. O nome disso é <strong>neurosymbolic AI</strong>, e é o que separa um agente que faz demo bonito de um que você deixa rodar sem torrar seu cartão de crédito.</p>
+
+<h2>Duas linhagens que estão colidindo agora</h2>
+
+<p>Pra entender por que isso importa, vale olhar duas histórias que passaram décadas separadas e só agora estão se encontrando.</p>
+
+<p><strong>Agentes.</strong> A ideia não é nova. Ela vem dos primeiros dias da IA — <a href="https://en.wikipedia.org/wiki/John_McCarthy_(computer_scientist)" target="_blank" rel="noopener">John McCarthy</a>, Oliver Selfridge, o <em>Society of Mind</em> de <a href="https://en.wikipedia.org/wiki/Marvin_Minsky" target="_blank" rel="noopener">Marvin Minsky</a>. O termo "inteligência artificial" foi cunhado em 1956, quando essa turma se reuniu pra tentar adivinhar pra onde a computação ia. O conceito de agente amadureceu ali: algo que <strong>percebe, decide e age</strong>. É exatamente o que estamos vendo agora, só que com um motor novo por baixo.</p>
+
+<p><strong>Ontologias.</strong> Essa é ainda mais antiga. Foi Aristóteles quem primeiro propôs que precisávamos de uma "filosofia do ser" — categorias do que existe. Séculos depois, o filósofo Willard Van Orman Quine formalizou parte disso, e em 1993 veio a definição que até hoje captura o que grafos de conhecimento realmente são: <em>uma especificação formal de uma conceitualização compartilhada</em>. Traduzindo pro nosso contexto: é o modelo do mundo que você entrega ao seu agente. O universo dele é o seu domínio — pedidos, clientes, representantes, e como tudo isso se relaciona.</p>
+
+<blockquote>A convergência é essa: algo probabilístico (o LLM) amarrado a algo formal (a ontologia). Neural network conectada a IA simbólica. Daí o nome que você está ouvindo em todo lugar — neurosymbolic AI.</blockquote>
+
+<h2>Alucinação não é bug, é a feature</h2>
+
+<p>Todo mundo se preocupa com hallucination como se fosse um defeito a ser exterminado. Mas é o contrário: é a natureza da coisa. LLMs imaginam o que pode não existir — assim como a gente. O ser humano inventa coisas que ainda não são reais e depois as constrói. O modelo faz uma versão disso a cada token.</p>
+
+<p>O ponto não é matar a imaginação do modelo. É colocar <strong>guardrails</strong> em volta dela. E é aqui que a IA simbólica, dada por morta, volta com tudo.</p>
+
+<p><img src="../assets/images/2026-08-04-agents-e-ontologias-1-graph.jpg" alt="Grafo de conhecimento: entidades como nós conectados por relações, com propriedades ramificando"></p>
+
+<h2>O que é uma ontologia, sem o mistério</h2>
+
+<p>Apesar da palavra intimidante, a estrutura é simples: <strong>entidades, suas propriedades, e as relações entre elas</strong>. É um grafo. Nada mais.</p>
+
+<p>Grafos surgiram justamente quando ficou claro que enfiar tudo em tabelas relacionais era restritivo demais. Quer adicionar um campo novo num banco relacional? Adiciona uma coluna, refaz a estrutura, reza. Num grafo, você só <em>pendura</em> mais um nó, mais uma propriedade, mais uma relação. Cresce orgânico.</p>
+
+<h3>Top-down ou bottom-up</h3>
+
+<p>Existem dois caminhos pra construir a sua:</p>
+
+<ul>
+<li><strong>Top-down:</strong> junta os especialistas, eles analisam o domínio e desenham as entidades — "temos pedidos, clientes, representantes, essas são as propriedades, essas as relações". É como se fazia expert systems nos anos 80.</li>
+<li><strong>Bottom-up:</strong> você observa o que acontece na prática (reações de clientes, eventos reais) e vai adicionando ao grafo conforme aparece.</li>
+</ul>
+
+<p>E você não precisa começar do zero. Existem taxonomias maduras há 15-20 anos: <a href="https://schema.org/" target="_blank" rel="noopener">schema.org</a> traz um vocabulário inteiro de termos e relações, FOAF (<em>friend of a friend</em>) modela redes sociais, o <a href="https://www.dublincore.org/" target="_blank" rel="noopener">Dublin Core</a> descreve documentos e artigos. Aliás, a Wikipedia roda sobre uma ontologia chamada <a href="https://www.dbpedia.org/" target="_blank" rel="noopener">DBpedia</a> — quando você busca lá, está consultando um grafo gigante. Esse maquinário já está embaixo de muita coisa que você usa todo dia.</p>
+
+<h2>A lição esquecida do inverno da IA</h2>
+
+<p>Vale um aviso histórico. Nos anos 80, todo mundo apostou que expert systems — IA simbólica pura, baseada em regras — eram o caminho. Empresas nasceram, milhões foram gastos, o Japão lançou o projeto <em>Fifth Generation</em>, tinha gente colocando os filhos pra aprender japonês por causa disso.</p>
+
+<p>Não escalou. E veio o inverno da IA.</p>
+
+<p>Redes neurais, por sua vez, já existiam desde os anos 60 — e <em>também</em> não escalavam, até a NVIDIA aparecer fazendo GPUs pra videogame e alguém perceber que dava pra usar aquele poder de cálculo pra treinar as redes. É por isso que estamos aqui. A moral: nenhuma das duas abordagens sozinha bastou. O futuro é a soma.</p>
+
+<p><img src="../assets/images/2026-08-04-agents-e-ontologias-2-loop.jpg" alt="Loop de agente: fluxo circular passando por LLM, ferramenta e um validador em forma de escudo"></p>
+
+<h2>Agentes são loops — e loops são tudo</h2>
+
+<p>"Agente" virou sinônimo de "loop", e com razão — mas loops não têm nada de novo. Em 1966, Corrado Böhm e Giuseppe Jacopini provaram algo elegante: qualquer linguagem de programação é equivalente a qualquer outra se tiver três coisas — <strong>sequência</strong> (statement A, B, C), <strong>condicional</strong> (if/then) e <strong>iteração</strong> (o loop). Com esses três, a linguagem é <em>Turing-completa</em>: consegue computar qualquer coisa computável.</p>
+
+<p>É exatamente a peça que os agentes ganharam. O loop é o que fecha a equação e dá a eles a capacidade de fazer qualquer coisa que um computador faz. Mas essa mesma peça é o perigo:</p>
+
+<ul>
+<li><strong>Loops quebram</strong> — todo programador já caiu num loop infinito.</li>
+<li><strong>Loops derivam</strong> — quando agentes começam a conversar entre si, as coisas saem dos trilhos.</li>
+<li><strong>Loops custam</strong> — a contagem de tokens sobe a cada iteração.</li>
+</ul>
+
+<h2>O padrão prático: ontologia como validador do loop</h2>
+
+<p>Aqui está o encaixe. Um LLM, sozinho, <strong>não faz nada</strong> — ele só prevê a próxima palavra com alta probabilidade. O que o torna útil é a <em>tool</em>: você dá uma ferramenta e pergunta "como isso ajuda a resolver o problema?". O modelo não executa nada — ele monta os parâmetros e devolve: <em>"não posso rodar isso, mas sei quais são os inputs, aqui está a chamada que você precisa fazer"</em>.</p>
+
+<p>Um loop de agente com Claude segue mais ou menos isso:</p>
+
+<pre><code>while True:
+    resp = client.messages.create(model=..., messages=..., tools=[...])
+
+    if resp.stop_reason == "tool_use":
+        result = run_tool(resp)          # executa a ferramenta
+
+        # AQUI entra a ontologia:
+        if validator.check(result):      # o resultado faz sentido no domínio?
+            messages.append(result)      # segue o baile
+        else:
+            messages.append(feedback)    # devolve pro LLM: "isso não bate"
+            # ou: chama um humano
+</code></pre>
+
+<p>A ideia é <strong>cercar o input com checagens</strong>. Duas camadas fazem isso muito bem:</p>
+
+<ul>
+<li><strong><a href="https://docs.pydantic.dev/" target="_blank" rel="noopener">Pydantic</a> na porta</strong> — Python não tem tipagem forte (<code>x = 20</code> e depois <code>x = "olá"</code> passa liso). Pydantic adiciona validação de tipo aos parâmetros. Garante a <em>forma</em> do dado.</li>
+<li><strong>Ontologia no balcão</strong> — depois de validar o tipo, você valida o <em>significado</em>: o resultado é coerente com as regras do seu domínio?</li>
+</ul>
+
+<p>E uma regra de ouro: agentes puros devem ter <strong>zero side effects</strong>. Não deixe o agente sair alterando o banco antes de passar pela ontologia. Valide primeiro, aja depois.</p>
+
+<p><img src="../assets/images/2026-08-04-agents-e-ontologias-3-guardrails.jpg" alt="Guardrails: saída probabilística de uma rede neural sendo filtrada por um portão geométrico rígido"></p>
+
+<h2>O que a ontologia pega que o texto não pega</h2>
+
+<p>Grafos têm tecnologias auxiliares — RDFS e OWL — que ficam ao lado do grafo e permitem <em>inferência</em> e <em>restrição</em>. Alguns exemplos de por que isso é poderoso:</p>
+
+<ul>
+<li><strong>Inferência via domain/range (RDFS):</strong> se "ensinar" tem domínio "professor" e alcance "aluno", então a frase "Bob ensina Scooter" te diz automaticamente que Bob é professor e Scooter é aluno. E se "todo professor é pessoa", você deriva que Bob é pessoa. Conhecimento que não estava explícito no grafo.</li>
+<li><strong>Propriedade transitiva (OWL):</strong> se "ancestral" é transitiva e Sue é ancestral de Mary, e Mary de Anne, então Sue é ancestral de Anne — sem você ter dito isso.</li>
+<li><strong>Propriedade funcional (OWL):</strong> "tem pai" só admite <em>um</em> valor. Então se o sistema diz "Bob é pai do Jim" e "BB é pai do Jim", a ontologia infere que Bob e BB são a mesma pessoa — vira uma restrição de integridade.</li>
+</ul>
+
+<p>Agora pense nesses erros de agente, que são <strong>trivíssimos de deixar passar em texto puro</strong> e que uma ontologia barra na hora:</p>
+
+<table>
+<thead><tr><th>Erro do agente</th><th>Como a ontologia pega</th></tr></thead>
+<tbody>
+<tr><td>Segundo reembolso no mesmo pedido</td><td>Restrição de cardinalidade / funcional</td></tr>
+<tr><td>Pagamento enviado ao suporte em vez do comprador</td><td>OWL <em>disjoint</em>: cliente e representante são entidades separadas</td></tr>
+<tr><td>Status inventado tipo "provavelmente enviado"</td><td>Enumeração fechada: só "pago", "enviado" ou "reembolsado"</td></tr>
+</tbody>
+</table>
+
+<p>No mundo de texto livre, o LLM devolve coisa esquisita porque é probabilístico. No mundo do grafo, o <em>reasoner</em> baseado na ontologia mantém o modelo nos trilhos — guardrails que o obrigam a ser honesto.</p>
+
+<h2>Fechando o loop</h2>
+
+<p>Não estamos abandonando os LLMs nem voltando pro passado. Estamos costurando as duas metades que sempre foram fortes sozinhas em coisas diferentes: a intuição probabilística das redes neurais e o rigor formal da IA simbólica. Pydantic garante a forma, a ontologia garante o sentido, e o loop do agente ganha um adulto na sala.</p>
+
+<p>Se você está construindo agentes que tocam dinheiro, pedidos ou qualquer coisa que não pode dar errado silenciosamente, o caminho não é rezar pro prompt. É dar ao seu agente um modelo do mundo — e um validador que diz "não" quando a probabilidade escorrega.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todo mundo culpa o prompt quando o agente faz besteira. O erro real é estrutural — e a correção veio de uma tecnologia que a IA deu por morta há 40 anos.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Seu agente de IA acabou de aprovar o segundo reembolso do mesmo pedido.
+
+Ninguém escreveu um bug. O LLM só achou plausível — porque modelos de linguagem são probabilísticos, e probabilidade não conhece a palavra 'não'.
+
+A correção não é um prompt mais esperto. É costurar os LLMs com ontologias formais (grafos de conhecimento) — o que chamam de neurosymbolic AI. Escrevi sobre:
+
+→ por que alucinação é feature, não bug
+→ o padrão prático: ontologia como validador dentro do loop do agente
+→ os erros que uma ontologia pega e o texto puro deixa passar
+→ Pydantic na porta, ontologia no balcão
+
+Guardrails de verdade pra agentes que tocam dinheiro.
+
+#AIAgents #LLM #KnowledgeGraph #NeurosymbolicAI #AIEngineering
+
+https://felvieira.github.io/blog/posts/2026-08-04-agents-e-ontologias.html</div>
+  </section>
+
+  <footer class="post">
+    <span>3 de agosto de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
