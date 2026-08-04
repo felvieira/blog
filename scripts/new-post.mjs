@@ -25,6 +25,10 @@ import { execSync } from "node:child_process";
 const ROOT     = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const TEMPLATE = join(ROOT, "TEMPLATE.html");
 
+// Load .env (gitignored, personal secrets like LINKEDIN_WEBHOOK_URL) if present.
+// Node 20.6+ native loader; silently skips if the file doesn't exist.
+try { process.loadEnvFile(join(ROOT, ".env")); } catch { /* no .env — fine */ }
+
 // ─── Load blog config (multi-user friendly) ──────────────────────────────────
 function loadBlogConfig() {
   const configPath = process.env.DEVKIT_BLOG_CONFIG
@@ -140,4 +144,31 @@ if (pagesBase) {
   console.log(`\nURL after push: ${pagesBase}/posts/${filename}`);
 } else {
   console.log(`\nConfigure ~/.dev-team-kit/blog-config.json to get the public URL printed here.`);
+}
+
+// ─── Personal LinkedIn webhook (local-only, not part of the kit) ─────────────
+// Set LINKEDIN_WEBHOOK_URL in your own shell/env to enable. Not read from
+// blog-config.json on purpose: this is a personal automation, not something
+// the kit ships or that other users inherit when they scaffold their blog.
+const webhookUrl = process.env.LINKEDIN_WEBHOOK_URL;
+if (webhookUrl) {
+  const linkedinRaw = args.linkedin || args["share-hook"] || args.excerpt;
+  try {
+    const res = await fetch(webhookUrl, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        title: args.title,
+        text: linkedinRaw,
+        url: postUrl,
+      }),
+    });
+    console.log(res.ok
+      ? `\nLinkedIn webhook: sent (HTTP ${res.status})`
+      : `\nLinkedIn webhook: FAILED (HTTP ${res.status}) — post was still created, push manually and retry the webhook if needed.`);
+  } catch (err) {
+    console.log(`\nLinkedIn webhook: FAILED (${err.message}) — post was still created.`);
+  }
+} else {
+  console.log(`\nLinkedIn webhook: skipped (set LINKEDIN_WEBHOOK_URL to enable).`);
 }
