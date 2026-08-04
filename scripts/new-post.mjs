@@ -153,15 +153,12 @@ if (pagesBase) {
 const webhookUrl = process.env.LINKEDIN_WEBHOOK_URL;
 if (webhookUrl) {
   const linkedinRaw = args.linkedin || args["share-hook"] || args.excerpt;
+  const fullText = `${linkedinRaw}${postUrl ? `\n\n${postUrl}` : ""}`;
   try {
     const res = await fetch(webhookUrl, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({
-        title: args.title,
-        text: linkedinRaw,
-        url: postUrl,
-      }),
+      body: JSON.stringify({ text: fullText }),
     });
     console.log(res.ok
       ? `\nLinkedIn webhook: sent (HTTP ${res.status})`
