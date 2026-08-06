@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-08-06** — [O teste de 10 segundos que mostra por que seu produto não vende](posts/2026-08-06-por-que-produto-nao-vende.html) (🇧🇷 PT)
 - **2026-08-04** — [Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt](posts/2026-08-04-agents-e-ontologias.html) (🇧🇷 PT)
 - **2026-08-04** — [Você fecha o notebook, sai pra almoçar, e volta com um pull request pronto](posts/2026-08-04-devin-agente-cloud.html) (🇧🇷 PT)
 - **2026-05-24** — [Como RAG funciona — o padrão arquitetural que faz LLMs deixarem de alucinar](posts/2026-05-24-how-rag-works.html) (🇧🇷 PT)
