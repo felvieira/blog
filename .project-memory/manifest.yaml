@@ -1,0 +1,82 @@
+schemaVersion: 1
+project:
+  id: blog
+  name: Blog — felvieira
+  path: D:\Repos\blog
+status: active
+stack:
+  frontend:
+    - HTML estático (sem framework, sem build step)
+    - CSS custom (assets/css/post.css, dark mode)
+    - JavaScript vanilla (assets/js/share.js)
+  backend:
+    - Node.js scripts (ESM .mjs, sem dependências npm, sem package.json)
+  database: []
+  auth: []
+capabilities:
+  post-scaffolding: true
+  auto-index-regeneration: true
+  linkedin-share-block: true
+  linkedin-webhook-notification: true
+  bilingual-content-pt-en: true
+  ai-generated-content-pipeline: true
+  static-site-deploy-github-pages: true
+  backend-api: false
+  database: false
+  authentication: false
+  automated-tests: false
+  ci-cd: false
+integrations:
+  - name: GitHub Pages
+    category: hosting
+    mode: branch main, root path, .nojekyll
+  - name: fal.ai
+    category: ia
+    mode: geração de imagens (cover + inline), externo à execução deste repo — usado pela skill 41 do kit
+  - name: LinkedIn (webhook pessoal via n8n/automate.felvieira.com.br)
+    category: automação/notificação
+    mode: opcional, disparado por new-post.mjs quando LINKEDIN_WEBHOOK_URL está setado
+product:
+  summary: >-
+    Blog técnico pessoal do felvieira com posts autorais sobre IA, engenharia de
+    software e ferramentas de dev, gerados com apoio de um agente Claude Code.
+  problemSolved: >-
+    Remove a fricção de manter um blog técnico: sem esse workflow, publicar exigiria
+    escrever HTML/CSS à mão, gerar/editar imagens, atualizar índice da home e do
+    README manualmente, e lembrar de divulgar no LinkedIn a cada post — trabalho
+    repetitivo que desestimula publicar com frequência. O autor manda só um assunto
+    ou texto e o resto do pipeline (escrita, imagem, HTML, índice, divulgação) roda
+    sozinho, o que viabiliza publicar seguido sem esse custo de manutenção.
+  valueProposition: >-
+    Publicação assistida por IA: o autor manda um assunto ou texto, o sistema escreve
+    o post, gera imagens e publica automaticamente, sem esforço manual de HTML/CSS.
+  features:
+    - Geração de post autoral em pt-BR (ou en) a partir de assunto/texto/URL, via skill externa dev-team-kit-fv:41-blog-publisher
+    - Scaffold de post a partir de TEMPLATE.html (scripts/new-post.mjs) preenchendo title, excerpt, data (ISO + humana), tempo de leitura estimado (palavras / 220 wpm) e lang label
+    - Geração automática de imagem de capa + imagens inline (via fal.ai gemini-25-flash ou Playwright screenshot, executado fora deste repo)
+    - Cover image embutida no corpo do post (tag <img>) além do og:image, com fallback para OpenGraph do GitHub quando não há blog-config configurado
+    - Bloco de compartilhamento pronto para LinkedIn (hook curto + texto completo pré-formatado + botão "copiar texto" via assets/js/share.js + link direto para abrir o LinkedIn)
+    - Notificação automática opcional por webhook pessoal (n8n) ao publicar, enviando o texto pronto do LinkedIn — só dispara se LINKEDIN_WEBHOOK_URL estiver setada
+    - Índice da home (hero + 2 secundários + lista com thumbnail, scripts/update-index.mjs) e do README regenerados automaticamente a cada novo post, por marcadores de comentário
+    - Suporte bilíngue pt-BR/en por post, com bandeira/label de idioma exibida no post e na listagem
+    - Data exibida em formato DD/MM/AAAA nos cards da home
+    - Configuração multi-usuário via ~/.dev-team-kit/blog-config.json (github_user, blog_repo, pages_url), com fallback local-only quando ausente
+    - Deploy automático via GitHub Pages (push para main = site atualizado), sem CI custom
+    - "Licenciamento explícito: texto sob CC-BY-4.0, código dos snippets sob Apache-2.0"
+sessions: []
+operations:
+  envVars:
+    - name: LINKEDIN_WEBHOOK_URL
+      source: .env (real, lido diretamente do repo)
+  addresses:
+    - label: Blog público (GitHub Pages)
+      url: https://felvieira.github.io/blog/
+    - label: Repositório GitHub
+      url: https://github.com/felvieira/blog
+  metrics: []
+sources:
+  repoAudit: docs/repo-audit/current.md
+  detectiveSpec: _detective_sdd/
+  productContent: README.md
+  lastSyncedCommit: eec4998939afc82c03fcfb7faa4e1ab178bdb741
+  lastSyncedAt: "2026-08-06T00:00:00Z"
