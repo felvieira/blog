@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-08-12** — [Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite](posts/2026-08-12-mcp-stateless.html) (🇧🇷 PT)
 - **2026-08-10** — [Você mandou às 14h03. São 14h08. Isso não é o problema que você acha que é](posts/2026-08-10-disponibilidade-nao-e-produtividade.html) (🇧🇷 PT)
 - **2026-08-06** — [O teste de 10 segundos que mostra por que seu produto não vende](posts/2026-08-06-por-que-produto-nao-vende.html) (🇧🇷 PT)
 - **2026-08-04** — [Seu agente aprovou o reembolso duas vezes — e a culpa não é do prompt](posts/2026-08-04-agents-e-ontologias.html) (🇧🇷 PT)

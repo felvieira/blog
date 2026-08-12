@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite — felvieira's blog</title>
+<meta name="description" content="MCP acabou de deixar de ser stateful. A mudança parece um detalhe de changelog, mas remove o maior atrito de quem hospeda um servidor em produção: deploy serverless e escala horizontal deixam de exigir uma camada de sessão dedicada. Como o novo modelo de descoberta e os cabeçalhos explícitos resolvem isso na prática.">
+<meta property="og:title" content="Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite">
+<meta property="og:description" content="MCP acabou de deixar de ser stateful. A mudança parece um detalhe de changelog, mas remove o maior atrito de quem hospeda um servidor em produção: deploy serverless e escala horizontal deixam de exigir uma camada de sessão dedicada. Como o novo modelo de descoberta e os cabeçalhos explícitos resolvem isso na prática.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-08-12-mcp-stateless-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite</h1>
+  <p class="meta">
+    <span>11 de agosto de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">4 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-08-12-mcp-stateless-cover.jpg" alt="Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Lembra da promessa de que MCP ia acabar com a necessidade de implementar REST? Ela ainda não se cumpriu de verdade — mas não porque a tecnologia falhou. Foi o mesmo atraso que todo protocolo novo sofre: leva tempo até a infraestrutura amadurecer o suficiente pra adoção em massa acontecer. E com uma mudança recente na especificação, essa maturação acabou de dar um salto real.</p>
+
+<p>A raiz do problema técnico era simples de descrever e difícil de resolver: servidores MCP eram <strong>stateful</strong>. A aplicação precisava guardar contexto entre requisições — múltiplos usuários batendo no mesmo servidor, cada um com seu próprio estado de sessão vivo em algum lugar. Pra sustentar isso, era necessária uma camada de sessão real: um cache dedicado, algo como Redis segurando estado entre chamadas. E essa camada de sessão é exatamente o que impede rodar limpo em edge ou serverless.</p>
+
+<h2>De stateful pra stateless: o que mudou</h2>
+
+<p>A mudança central na especificação move o núcleo do protocolo de uma troca bidirecional com estado persistente pra um modelo de request-response mais simples. Na prática, um servidor remoto de MCP passa a se comportar essencialmente como um endpoint HTTP comum — sem sessão obrigatória amarrada, sem estrutura específica do protocolo segurando estado entre chamadas.</p>
+
+<p><img src="../assets/images/2026-08-12-mcp-stateless-1-stateful-vs-stateless.jpg" alt="Diagrama comparando um servidor stateful com sessão persistente ao lado de um servidor stateless recebendo requisições HTTP independentes"></p>
+
+<p>O impacto pra quem hospeda é bem concreto: dá pra fazer deploy serverless, rodar em edge, e escalar horizontalmente sem se preocupar em sincronizar sessão entre instâncias. É a diferença entre precisar de infraestrutura com estado dedicada e simplesmente colocar mais réplicas atrás de um load balancer.</p>
+
+<h2>Descoberta de capacidades antes de qualquer chamada</h2>
+
+<p>Junto com a mudança de modelo, entra um método de descoberta que todo servidor é obrigado a implementar. Ele anuncia versão, capacidades suportadas e identidade antes de qualquer chamada de ferramenta acontecer. Se o cliente tentar chamar uma ferramenta com versão incompatível, o servidor responde com erro de versão explícito — em vez de falhar de forma silenciosa ou ambígua.</p>
+
+<p>Isso resolve um problema real de quem já tentou colocar um proxy ou gateway na frente de um servidor desse tipo: antes, uma chamada simples pra listar as ferramentas disponíveis chegava misturada, no nível do proxy, com uma chamada que de fato executa uma ferramenta — inclusive ferramentas que fazem autenticação externa ou chamadas de rede. Pro proxy, as duas pareciam idênticas: um POST batendo no mesmo endpoint. Isso obrigava manter a conexão aberta até identificar, mais adiante no fluxo, o que estava realmente sendo pedido.</p>
+
+<h2>Cabeçalhos explícitos resolvem o problema de limite de taxa</h2>
+
+<p><img src="../assets/images/2026-08-12-mcp-stateless-2-headers.jpg" alt="Uma requisição HTTP com cabeçalhos explícitos de método e recurso sendo direcionada para diferentes regras de limite de taxa"></p>
+
+<p>Listar as ferramentas de um servidor deveria levar milissegundos — mas na prática podia travar a conexão por dezenas de segundos, porque a camada intermediária não conseguia distinguir "me diga quais ferramentas você tem" de "execute essa ferramenta agora". Isso é crítico pra controle de taxa: faz sentido permitir que um cliente pergunte quais ferramentas existem com bastante frequência, mas não faz sentido permitir que uma ferramenta de autenticação seja chamada na mesma cadência — ninguém autentica repetidamente em poucos segundos a não ser que esteja tentando algo indevido.</p>
+
+<p>A especificação atualizada resolve isso colocando método e recurso de forma explícita no cabeçalho da requisição. Com essa informação disponível antes mesmo de examinar o corpo da mensagem, é possível aplicar políticas de limite de taxa diferentes por tipo de operação, sem precisar abrir a conexão e inspecionar o payload pra decidir o que fazer.</p>
+
+<h2>Estado entre chamadas, só quando necessário</h2>
+
+<p>Nem toda aplicação consegue viver sem nenhum estado entre chamadas. Pra esses casos, a especificação prevê um mecanismo específico: quando um servidor precisa manter estado entre chamadas relacionadas, ele emite um identificador opaco gerado pelo próprio servidor, que o cliente passa de volta como um argumento comum nas chamadas seguintes. Deixa de ser uma sessão implícita mantida automaticamente pelo protocolo e vira um dado explícito, visível, que o cliente carrega e devolve quando necessário. A diferença é sutil mas relevante: o estado deixa de ser responsabilidade automática da camada de transporte e vira uma decisão explícita de quem projeta a integração.</p>
+
+<h2>Por que isso importa além do detalhe técnico</h2>
+
+<p><img src="../assets/images/2026-08-12-mcp-stateless-3-escala.jpg" alt="Múltiplos servidores idênticos atrás de um balanceador de carga escalando horizontalmente sem estado compartilhado"></p>
+
+<p>MCP já passou de centenas de milhões de downloads mensais do SDK, com crescimento acelerado — deixou de ser experimento e virou padrão de facto pra conectar agentes a ferramentas e dados externos. Um protocolo nessa escala de adoção não pode continuar dependendo de infraestrutura pesada de sessão pra escalar. A mudança pra stateless-por-padrão é o tipo de decisão de design que parece pequena num changelog, mas remove o maior atrito prático de quem precisa hospedar um servidor desse tipo em produção: já não é necessário escolher entre simplicidade de deploy e suporte a múltiplos usuários simultâneos — as duas coisas deixam de ser mutuamente exclusivas.</p>
+
+<p>Isso também abre espaço pra um padrão que ainda vai amadurecer bastante: servidores que não só expõem ferramentas, mas também interfaces interativas renderizadas pelo próprio cliente — um passo além de apenas listar funções que um agente pode chamar. Com a barreira de infraestrutura reduzida, a próxima onda de adoção tende a vir muito mais rápido do que a primeira.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Um protocolo que já passa de centenas de milhões de downloads mensais acabou de remover a barreira técnica que mais travava sua adoção em escala — e quase ninguém está falando sobre isso ainda.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Servidores MCP eram stateful. Isso significava precisar de uma camada de sessão dedicada — cache, store, Redis segurando estado entre chamadas. E isso é exatamente o que impede rodar limpo em edge ou serverless.
+
+Isso acabou de mudar.
+
+Escrevi sobre a mudança que torna o núcleo do protocolo stateless:
+
+→ por que servidor remoto de MCP agora se comporta como endpoint HTTP comum
+→ o novo método de descoberta que resolve ambiguidade entre listar ferramentas e executar uma
+→ como cabeçalhos explícitos resolvem o problema de rate limiting por tipo de operação
+→ o mecanismo pra quando você ainda precisa de estado entre chamadas
+
+#MCP #ModelContextProtocol #AIAgents #Arquitetura #Backend
+
+https://felvieira.github.io/blog/posts/2026-08-12-mcp-stateless.html</div>
+  </section>
+
+  <footer class="post">
+    <span>11 de agosto de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
