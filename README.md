@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-09-03** — [Grok Bot na prática: o truque não é o chat, é a rotina](posts/2026-09-03-grok-bot-na-pratica.html) (🇧🇷 PT)
 - **2026-09-02** — [A camada operacional da sua empresa não precisa mais de um programador](posts/2026-09-02-agentes-sem-terminal.html) (🇧🇷 PT)
 - **2026-09-02** — [O funil de vendas parou de descrever como as pessoas realmente compram](posts/2026-09-02-fim-do-funil.html) (🇧🇷 PT)
 - **2026-08-12** — [Por que servidores MCP ficaram mais fáceis de escalar do dia pra noite](posts/2026-08-12-mcp-stateless.html) (🇧🇷 PT)

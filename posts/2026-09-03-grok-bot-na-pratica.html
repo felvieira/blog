@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Grok Bot na prática: o truque não é o chat, é a rotina — felvieira's blog</title>
+<meta name="description" content="Passar uma tarefa pontual pra um agente é fácil. O difícil é fazer o mesmo trabalho toda semana, a partir de uma fonte que você controla, sem o agente inventar duração, nível ou link no caminho.">
+<meta property="og:title" content="Grok Bot na prática: o truque não é o chat, é a rotina">
+<meta property="og:description" content="Passar uma tarefa pontual pra um agente é fácil. O difícil é fazer o mesmo trabalho toda semana, a partir de uma fonte que você controla, sem o agente inventar duração, nível ou link no caminho.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-03-grok-bot-na-pratica-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Grok Bot na prática: o truque não é o chat, é a rotina</h1>
+  <p class="meta">
+    <span>2 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-03-grok-bot-na-pratica-cover.jpg" alt="Grok Bot na prática: o truque não é o chat, é a rotina — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Passar uma tarefa pontual pra um agente é fácil. O difícil é fazer o mesmo trabalho <strong>toda semana</strong>, a partir de uma fonte que você controla, sem o agente inventar duração, nível ou link no caminho.</p>
+<p>É pra isso que o Grok Bot existe. Não é o chat do Grok. Não é o Grok Build, a CLI de código. É o app de agentes da SpaceXAI, via Cursor: bots com nome, conversa própria e um computador em nuvem que continua ligado quando você fecha o laptop.</p>
+<p>Eu uso assim. Um bot escreve. Outro ilustra. Outro faz a copy da rede. Outro publica. Cada um com um trabalho só. O que segura o time não é o modelo. É o perfil, o arquivo de verdade, a habilidade e a rotina — nessa ordem.</p>
+<p><img src="../assets/images/2026-09-03-grok-bot-na-pratica-1-time.jpg" alt="Time de bots no chat Conteúdo: Scout, Studio, Copy e Blog, com o artigo pronto pra revisão"></p>
+<h2>Quatro peças, uma ordem</h2>
+<p>Um <strong>Bot</strong> é um agente com nome, função, conversa e contexto salvo. Dê a ele <strong>um</strong> objetivo claro no perfil. Regras que valem toda semana ficam aí. O tema desta semana não.</p>
+<p>O <strong>computador em nuvem</strong> é uma máquina Linux persistente, com navegador, arquivos e terminal. Ele pertence à <strong>conta</strong>, não ao bot. Todos os seus bots veem os mesmos logins, cookies e arquivos. Cada um tem a própria tela. Separar bots <strong>não</strong> é barreira de segurança. Se um entra no Notion, o outro também consegue. Delete o bot e a sessão pode continuar lá. Saia e limpe o que não quiser compartilhado.</p>
+<p>Uma <strong>habilidade</strong> é o método: passos, como validar, o que devolver, quando pedir aprovação. Serve em qualquer bot da conta (se ele tiver o conector certo).</p>
+<p>Uma <strong>rotina</strong> diz <strong>quando</strong> aquele bot roda o método: agenda ou evento (Slack, GitHub, etc.). Rotina por último. Sempre.</p>
+<h2>Perfil, mensagem e arquivo</h2>
+<p>Três lugares, três perguntas:</p>
+<ul>
+<li><strong>Perfil</strong> — como o bot trabalha, toda semana.</li>
+<li><strong>Mensagem</strong> — o que ele faz <strong>agora</strong>.</li>
+<li><strong>Arquivo</strong> — o que muda (meta, orçamento, o que já foi feito). Algo tipo <code>learner-profile.md</code> no computador compartilhado. O bot relê isso <strong>antes</strong> de cada execução. Memória não é fonte da verdade pra fato que muda.</li>
+</ul>
+<p>Se você enfia o tema da semana no perfil, o bot acorda e já sai pesquisando o assunto antigo. Aconteceu comigo. Interrompi, reescrevi o perfil com “espera a mensagem da tarefa” e “não cria conta, não compra, não se inscreve”, e aí ele esperou.</p>
+<h2>Não confie no snippet</h2>
+<p>Busca serve pra achar candidato. Evidência é a <strong>página aberta</strong>. Duração, nível e pré-requisito saem do HTML da página, não do card do Google. Se a página não lista duração, a resposta é “não listado”. Não é “uns 2h”. Não transforme XP, vídeo ou exercício em hora.</p>
+<p>Site pode bloquear, pedir login ou CAPTCHA. Aí o bot para e pede pra você assumir. Senha não vai no chat.</p>
+<p><img src="../assets/images/2026-09-03-grok-bot-na-pratica-2-rotina.jpg" alt="Checklist perfil, arquivo e habilidade marcados; rotina ainda em aberto, ao lado da tela de agendar rotina semanal"></p>
+<h2>O jeito que funciona de verdade</h2>
+<ol>
+<li>Instala o app (macOS, Windows, iPhone iOS 18+). Login com Cursor. Sem API key. Se a conta está em Legacy Privacy Mode, o Grok Bot nem sobe: precisa de armazenamento em nuvem.</li>
+<li>Cria o bot. Perfil curto, regras duráveis, um trabalho só.</li>
+<li>Manda a primeira tarefa com resultado, fonte, limite, formato de saída e <strong>onde parar</strong>. Ex.: três recursos, somar as durações da página, caber em 4h, parar no plano, não se inscrever em nada.</li>
+<li>Olha o Agent Computer: ele está <strong>abrindo a página</strong> ou colando snippet?</li>
+<li>Confere o plano na fonte. Link resolve? Nível é o que está impresso? Pré-requisito o aluno já tem? A soma das durações cabe no orçamento? Tem progressão ou são três cursos iniciantes intercambiáveis?</li>
+<li><strong>Só então</strong> salva a habilidade. Método estreito: uma família de fonte, um formato, um limite de aprovação. Testa a habilidade com <strong>outra</strong> meta. Se ela arrastar o plano da semana passada, a habilidade está errada.</li>
+<li><strong>Só então</strong> agenda a rotina. Timezone em Settings. Test run faz trabalho de verdade — use input seguro. Se o arquivo de perfil sumir, a rotina <strong>reporta e para</strong>. Não inventa a semana com dado velho.</li>
+</ol>
+<p>Esconder o bot da sidebar <strong>não</strong> pausa a rotina. Pause ou apague a rotina se quiser que pare. Depois de um tempo longe, o app pode perguntar se as rotinas continuam; se ninguém responde, pausa.</p>
+<h2>O que a revisão pega (e o modelo esconde)</h2>
+<p>Três erros clássicos, todos “bonitos” na primeira resposta:</p>
+<ul>
+<li>Nível “Beginner” quando a página diz <strong>Basic</strong>.</li>
+<li>Um chip “1–3h” tratado como total fixo de 3h.</li>
+<li>Curso recomendado com pré-requisito que o aluno <strong>não</strong> fez.</li>
+</ul>
+<p>Os dois primeiros se resolvem reabrindo a página canônica. O terceiro a habilidade tem que comparar com o arquivo de perfil <strong>antes</strong> de incluir o recurso. Se nada passar no filtro, o total é zero. Encher a semana quebrando a regra é pior.</p>
+<h2>Aprovação não é enfeite</h2>
+<p>Rascunhar, reconciliar, recomendar: o bot faz. Enviar, comprar, apagar, publicar, mexer em produção: <strong>você</strong> aprova. Rotina herda as ações bloqueadas do bot. Teste a rotina depois que o site, o conector ou o formato da fonte mudar.</p>
+<p>Grupo no Grok Bot cabe de 2 a 6 bots. Serve pra ver o passe. Mensagem de handoff no grupo é texto. Trabalho com arquivo e imagem vai no 1:1.</p>
+<h2>Acesso, sem enrolação</h2>
+<p>Não tem camada grátis permanente. Tem trial de crédito. Acesso pago entra por plano Cursor elegível (Pro, Pro+, Ultra; Teams self-serve) ou SuperGrok. Confirme no app, porque o anúncio e a página de help já divergiram uma vez. O Cursor conta <strong>passos de agente e tokens</strong>, não mensagens. Uma tarefa grande come o trial inteiro.</p>
+<p>Linux desktop, Android e iPad: confira a lista atual. O computador em nuvem é Linux; o app da sua mesa, não necessariamente.</p>
+<p>Não tem seletor de modelo. Grok 4.6 está no produto; o roteamento é do app.</p>
+<h2>Por que isso importa pra quem já vive de conteúdo e código</h2>
+<p>O padrão é o mesmo que eu uso no time de conteúdo: quem escreve não publica. Quem ilustra não inventa copy. Quem posta não pesquisa. Perfil estreito, fonte num arquivo, habilidade depois que o manual funciona, rotina depois do teste.</p>
+<p>Se você ainda está no “me pesquisa isso”, comece por um bot com um trabalho. Arquivo de verdade. Página aberta. Habilidade. Rotina na segunda, se sobreviver à sexta.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O truque do Grok Bot não é o chat. É a rotina.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Passar uma tarefa pontual pra um agente é fácil.
+
+O difícil é fazer o mesmo trabalho toda semana, a partir de uma fonte que você controla, sem o agente inventar duração, nível ou link no caminho.
+
+É pra isso que o Grok Bot existe. Não é o chat do Grok. Não é o Grok Build. É o app de agentes da SpaceXAI, via Cursor: bots com nome, conversa própria e um computador em nuvem que continua ligado quando você fecha o laptop.
+
+Eu uso assim. Um bot escreve. Outro ilustra. Outro faz a copy da rede. Outro publica. Cada um com um trabalho só.
+
+O que segura o time não é o modelo. É o perfil, o arquivo de verdade, a habilidade e a rotina — nessa ordem.
+
+Três lugares, três perguntas:
+
+Perfil: como o bot trabalha, toda semana.
+
+Mensagem: o que ele faz agora.
+
+Arquivo: o que muda. Meta, orçamento, o que já foi feito. O bot relê isso antes de cada execução.
+
+Se você enfia o tema da semana no perfil, o bot acorda e já sai pesquisando o assunto antigo. Aconteceu comigo.
+
+E não confie no snippet. Busca serve pra achar candidato. Evidência é a página aberta. Duração, nível e pré-requisito saem do HTML, não do card do Google. Se a página não lista duração, a resposta é “não listado”. Não é “uns 2h”.
+
+A ordem que funciona de verdade:
+
+1. Bot com um trabalho só.
+2. Primeira tarefa com resultado, fonte, limite e onde parar.
+3. Você confere na página canônica.
+4. Só então salva a habilidade.
+5. Só então agenda a rotina.
+
+Esconder o bot da sidebar não pausa a rotina. Pause ou apague se quiser que pare.
+
+Rascunhar, reconciliar, recomendar: o bot faz. Enviar, comprar, apagar, publicar: você aprova.
+
+Se você ainda está no “me pesquisa isso”, comece por um bot com um trabalho. Arquivo de verdade. Página aberta. Habilidade. Rotina na segunda, se sobreviver à sexta.
+
+https://felvieira.github.io/blog/posts/2026-09-03-grok-bot-na-pratica.html</div>
+  </section>
+
+  <footer class="post">
+    <span>2 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
