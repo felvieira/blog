@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>GPT-6 Astra chegou. O 99,9% só conta se você souber o harness — felvieira's blog</title>
+<meta name="description" content="Toda vez que um modelo novo chega, o feed entrega um card com três porcentagens. Desta vez: GPT-6 Astra. 98%. 99,9%. 100%. A tentação é copiar e colar. Eu abri as páginas.">
+<meta property="og:title" content="GPT-6 Astra chegou. O 99,9% só conta se você souber o harness">
+<meta property="og:description" content="Toda vez que um modelo novo chega, o feed entrega um card com três porcentagens. Desta vez: GPT-6 Astra. 98%. 99,9%. 100%. A tentação é copiar e colar. Eu abri as páginas.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-03-gpt-6-astra-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>GPT-6 Astra chegou. O 99,9% só conta se você souber o harness</h1>
+  <p class="meta">
+    <span>2 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-03-gpt-6-astra-cover.jpg" alt="GPT-6 Astra chegou. O 99,9% só conta se você souber o harness — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Toda vez que um modelo novo chega, o feed entrega um card com três porcentagens. Desta vez: GPT-6 Astra. 98%. 99,9%. 100%. A tentação é copiar e colar. Eu abri as páginas.</p>
+<p>A OpenAI lançou o GPT-6 Astra em 3 de setembro de 2026, no <a href="https://openai.com/index/gpt-6-astra/">post oficial</a>. É o sucessor da família GPT-5.6 (Sol, Terra, Luna). O texto fala em código, pesquisa, uso de computador e trabalho de vários passos. O rollout: organizações limitadas hoje; Plus, Pro, Business, Enterprise, API e AWS nos próximos dias. Ainda não é disponibilidade geral. Na API o id é <code>gpt-6-astra</code>. Preço Standard: US$ 10 / US$ 50 por milhão de tokens (input/output). Também no Amazon Bedrock.</p>
+<p>Isso é fato. O resto do card merece asterisco.</p>
+<h2>O 99,9% tem um harness</h2>
+<p>A ARC Prize publicou os números no mesmo dia. No harness <strong>padrão</strong> (o que compara provedor com provedor, notas visíveis, interface mínima), o Astra (max) fez <strong>62,7%</strong> no ARC-AGI-3 Semi-Private, a uns US$ 26 mil de custo de avaliação. No harness <strong>Provider Adapter</strong> (que guarda o raciocínio opaco entre requests e compacta conversa longa), o Astra (high) fez <strong>99,9%</strong>, a uns US$ 19 mil.</p>
+<p>Os dois são SOTA. Não são o mesmo teste.</p>
+<p>A ARC Prize foi explícita: saturar o ARC-AGI-3 <strong>não</strong> é prova de AGI. O benchmark mede exploração, modelo de mundo, objetivo e planejamento em jogos novos. O Astra, no Adapter, usou menos ações que a mediana humana em 96% dos níveis. Isso é um salto. Continua sendo um ambiente fechado, determinístico, com mecânica e meta definidas. Não é o mundo aberto.</p>
+<p>Se alguém te mandar só “99,9% no ARC-AGI-3”, pergunta: qual harness?</p>
+<h2>ExploitBench 100% é número da OpenAI</h2>
+<p>No <a href="https://openai.com/index/gpt-6-astra/">post de lançamento</a>, a OpenAI escreve que o Astra satura o ExploitBench com <strong>100%</strong>. Na tabela do mesmo post: Astra <strong>100,0%</strong>, GPT-5.6 Sol <strong>78,5%</strong>. Por risco de contaminação, eles montaram o <strong>ExploitBench – Internal Port (junho–agosto de 2026)</strong> com 20 CVEs recentes do V8. Aí o número cai: Astra <strong>39,0%</strong> de execução arbitrária de código versus Sol <strong>11,5%</strong>. No <a href="https://openai.com/index/path-to-astra/">Path to Astra</a> eles ainda relatam o Astra usando <strong>dois zero-days</strong> numa cadeia — em divulgação com os maintainers.</p>
+<p>O 100% é o conjunto histórico, com asterisco de contaminação. O 39% é o conjunto recente, ainda interno. Eu não achei laboratório independente republicando nenhum dos dois com o código da eval aberto. Trate como claim da OpenAI até uma réplica externa.</p>
+<p>O que a OpenAI <strong>designou</strong> é mais importante que o porcentual: o Astra é o primeiro modelo no limiar <strong>Critical</strong> de cibersegurança do Preparedness Framework. Tradução deles: com as ferramentas certas, o modelo consegue achar falha desconhecida e montar exploit em sistemas endurecidos, sem humano guiando cada passo. Por isso o cyber avançado começa em alpha / Daybreak Blue, não no ChatGPT de todo mundo.</p>
+<h2>O 98% de FrontierMath: prosa da OpenAI, não a Epoch</h2>
+<p>No post de lançamento, a OpenAI escreve <strong>98%</strong> na prosa e <strong>97,6%</strong> na tabela do FrontierMath Tier 4 (v2). Na mesma tabela, Claude Fable 5 aparece com 87,8% e o Sol com 80,5%. A página da Epoch do <a href="https://epoch.ai/benchmarks/frontiermath-tier-4-v2">FrontierMath Tier 4 v2</a> descreve o benchmark (43 problemas privados no Tier 4 depois da correção de junho de 2026) e o conflito de interesse (OpenAI financiou e tem acesso exclusivo a um subconjunto). <strong>Não encontrei o Astra listado na tabela da Epoch no momento em que escrevi.</strong> 98% e 97,6% são números da OpenAI até a Epoch publicar. Não vou arredondar um no outro.</p>
+<h2>Atrasaram de propósito</h2>
+<p>Isso, sim, a OpenAI documentou. Depois do incidente com a Hugging Face — modelo <strong>não</strong> era o Astra, era da linha Sol — eles pausaram treino, endureceram isolamento e só retomaram o RL grande em 28 de agosto. O Path to Astra é o texto de “seguramos o lançamento até o Preparedness deixar passar”. Recusa a jailbreak de cyber: 91,5% no Astra versus 59% no Sol, número deles. No mesmo lançamento, a OpenAI diz que o raciocínio escrito do Astra ficou <strong>mais difícil de monitorar</strong> do que o do Sol. Eles tratam isso como prioridade de pesquisa. Tempo extra de safety não é alignment resolvido. Monitor de desalinhamento pode pausar a conversa no ChatGPT/Codex se o agente parecer fora do combinado.</p>
+<p>Greg Brockman, em briefing, falou em “era AGI”. A ARC Prize, no mesmo dia, recusou esse salto. Os dois textos cabem na mesma tarde. Você escolhe qual lê primeiro.</p>
+<h2>O que isso muda pra quem constrói</h2>
+<p>Computer use, browser, planilha, apresentação, código em repositório de verdade: é o pitch. A API ganhou async tool calling, steering no meio do turno e mudança de esforço de raciocínio sem quebrar o cache. <code>none</code> de reasoning o Astra não tem. Fast mode não roda com residência de dados na UE.</p>
+<p>Na prática, pra quem já vive de agente:</p>
+<ol>
+<li><strong>Não rode o score do card.</strong> Abra a página da eval. Harness padrão versus adapter. Interno versus público.</li>
+<li><strong>Cyber Critical não é “pode pentestar o cliente”.</strong> Default vem mais travado. Daybreak é outro produto.</li>
+<li><strong>O modelo pergunta mais.</strong> A própria OpenAI admite: o Astra para e pede clarificação onde o Sol chutava. Se o seu agente precisa terminar sozinho, o prompt de iniciativa vai ter que ser explícito — ou você aprova o último passo, que é o que eu já faço.</li>
+<li><strong>Ainda não está no plano grátis.</strong> Espera a janela de Plus/Pro. Não inventa acesso.</li>
+<li><strong>Preço Standard da API:</strong> US$ 10 / US$ 50 por milhão de tokens (input/output). Fast mode: até 2× a velocidade, 2× o preço. Também no Amazon Bedrock.</li>
+</ol>
+<p>Eu não vou chamar isso de AGI. Vou chamar de modelo que, no teste interativo da ARC, aprende a regra do jogo mais rápido que a mediana humana — e que, no teste de cyber da OpenAI, passou do limiar que eles mesmos desenharam. São duas frases. Nenhuma delas cabe num card de 99,9%.</p>
+<p>Quando a Epoch publicar o Tier 4 e a system card sair com a metodologia do ExploitBench, eu volto aqui e corrijo o que estiver frouxo.</p>
+<h2>Fontes que eu abri</h2>
+<ul>
+<li><a href="https://openai.com/index/gpt-6-astra/">GPT-6 Astra, OpenAI, 3 set 2026</a></li>
+<li><a href="https://help.openai.com/en/articles/6825453-chatgpt-release-notes">ChatGPT Release Notes, 3 set 2026</a></li>
+<li><a href="https://deploymentsafety.openai.com/gpt-6-astra">System card hub</a></li>
+<li><a href="https://developers.openai.com/api/docs/guides/latest-model">Model guidance: GPT-6 Astra</a></li>
+<li><a href="https://openai.com/index/path-to-astra/">Path to Astra</a></li>
+<li><a href="https://arcprize.org/blog/astra">ARC Prize: OpenAI's GPT-6 Astra on ARC-AGI-3</a></li>
+<li><a href="https://epoch.ai/benchmarks/frontiermath-tier-4-v2">FrontierMath Tier 4 v2, Epoch AI</a></li>
+</ul>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O 99,9% só conta se você souber o harness.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">GPT-6 Astra chegou. O 99,9% só conta se você souber o harness.
+
+A OpenAI lançou em 3 de setembro de 2026. Na API o id é gpt-6-astra. Rollout ainda limitado: organizações hoje; Plus, Pro, Business, Enterprise, API e AWS nos próximos dias. Não é disponibilidade geral. Preço Standard: US$ 10 / US$ 50 por milhão de tokens. Fast mode: 2× a velocidade, 2× o preço.
+
+Isso é fato. O card com 98%, 99,9% e 100% merece asterisco.
+
+A ARC Prize no mesmo dia: harness padrão, Astra (max) 62,7% no ARC-AGI-3 Semi-Private. Provider Adapter, Astra (high) 99,9%. Os dois são SOTA. Não são o mesmo teste. Saturar ARC-AGI-3 não é AGI — a própria ARC Prize disse isso.
+
+ExploitBench 100% é o conjunto histórico na tabela da OpenAI (Sol 78,5%). Não é o Internal Port. O Internal Port (jun–ago 2026, 20 CVEs recentes do V8) é o número mais honesto de cyber: Astra 39,0% ACE versus Sol 11,5%. Os dois são claim da OpenAI. Eu não achei réplica independente com a eval aberta.
+
+Astra é o primeiro modelo no limiar Critical de cibersegurança do Preparedness. Critical ≠ pentest no cliente. Default vem mais travado. Daybreak é outro produto.
+
+FrontierMath: a prosa da OpenAI diz 98%. A tabela deles diz 97,6% no Tier 4 v2. A Epoch ainda não listava o Astra. Não vou arredondar um no outro.
+
+Se alguém te mandar só o card: pergunta o harness. Padrão ou adapter? Histórico ou Internal Port?
+
+https://felvieira.github.io/blog/posts/2026-09-03-gpt-6-astra.html</div>
+  </section>
+
+  <footer class="post">
+    <span>2 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
