@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Recorte de fundo: o MCP só passa o arquivo — felvieira's blog</title>
+<meta name="description" content="Doze ícones clay no mesmo recorte local. Sete checkpoints. Três ficam no CLI. O quadrado arredondado volta no CSS.">
+<meta property="og:title" content="Recorte de fundo: o MCP só passa o arquivo">
+<meta property="og:description" content="Doze ícones clay no mesmo recorte local. Sete checkpoints. Três ficam no CLI. O quadrado arredondado volta no CSS.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-05-recorte-fundo-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Recorte de fundo: o MCP só passa o arquivo</h1>
+  <p class="meta">
+    <span>5 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-05-recorte-fundo-cover.jpg" alt="Recorte de fundo: o MCP só passa o arquivo — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Passei doze ícones de clay no mesmo recorte local. Mesma foto. Sete checkpoints. O que muda o corte não é o nome do MCP. É o peso que você carrega.</p>
+<p>Eu precisava de PNG com alpha pra um app. Os ícones vieram em JPG, objeto lima no roxo. O fundo quadrado fazia parte da foto. Se o modelo come o fundo, some o tile. Se come o objeto, some o ícone. Queria ver os dois erros lado a lado, no mesmo checkerboard.</p>
+<p><img src="../assets/images/2026-09-05-recorte-fundo/resultado-isnet.jpg" alt="Quatro ícones clay recortados com isnet-general-use sobre fundo xadrez"></p>
+<h2>O cano não recorta</h2>
+<p>rembg, bg-vanish, qualquer wrapper: abrem o ONNX e devolvem máscara. Trocar o pacote sem trocar o modelo é teatro. u2net no cano A e u2net no cano B saem iguais. A qualidade mora no checkpoint.</p>
+<p>Rodei tudo no Python, CPU, sem API. <code>withoutbg</code> pediu chave e saiu da mesa. Os outros baixam o ONNX na primeira chamada e ficam em disco.</p>
+<h2>O teste</h2>
+<p>Doze JPG de ícone 1:1. Clay lima, fundo roxo. Quatro deles cabem neste post: moedas, mesa de reunião, palácio, carteira. Em cada linha, a original e cinco recortes. Xadrez é transparência.</p>
+<p>Da esquerda pra direita: original, u2net, isnet-anime, isnet-general-use, birefnet-massive, bria-rmbg.</p>
+<h3>Moedas</h3>
+<div style="overflow-x:auto;margin:0 0 18px">
+<table>
+<thead><tr><th>original</th><th>u2net</th><th>isnet-anime</th><th>isnet-general-use</th><th>birefnet-massive</th><th>bria-rmbg</th></tr></thead>
+<tbody><tr>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--original.jpg" alt="moedas, foto original"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--u2net.jpg" alt="moedas recortadas com u2net"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--isnet-anime.jpg" alt="moedas recortadas com isnet-anime"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--isnet-general-use.jpg" alt="moedas recortadas com isnet-general-use"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--birefnet-massive.jpg" alt="moedas recortadas com birefnet-massive"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-coins-cut--bria-rmbg.jpg" alt="moedas recortadas com bria-rmbg"></td>
+</tr></tbody>
+</table>
+</div>
+<p>Objeto grosso, fundo liso. Quase todo mundo acerta. Aqui o empate engana. Ícone fácil não escolhe modelo.</p>
+<h3>Reunião</h3>
+<div style="overflow-x:auto;margin:0 0 18px">
+<table>
+<thead><tr><th>original</th><th>u2net</th><th>isnet-anime</th><th>isnet-general-use</th><th>birefnet-massive</th><th>bria-rmbg</th></tr></thead>
+<tbody><tr>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--original.jpg" alt="mesa de reunião, foto original"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--u2net.jpg" alt="mesa recortada com u2net"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--isnet-anime.jpg" alt="mesa recortada com isnet-anime"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--isnet-general-use.jpg" alt="mesa recortada com isnet-general-use"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--birefnet-massive.jpg" alt="mesa recortada com birefnet-massive"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-meeting-cut--bria-rmbg.jpg" alt="mesa recortada com bria-rmbg"></td>
+</tr></tbody>
+</table>
+</div>
+<p>A foto trazia um card arredondado atrás da mesa. O modelo trata o card como fundo e some com ele. u2net ainda deixa halo roxo. isnet-anime come cadeira. isnet-general-use e birefnet-massive deixam mesa e cadeiras. O tile eu devolvo no CSS. Não peço isso de volta pro ONNX.</p>
+<h3>Palácio</h3>
+<div style="overflow-x:auto;margin:0 0 18px">
+<table>
+<thead><tr><th>original</th><th>u2net</th><th>isnet-anime</th><th>isnet-general-use</th><th>birefnet-massive</th><th>bria-rmbg</th></tr></thead>
+<tbody><tr>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--original.jpg" alt="palácio, foto original"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--u2net.jpg" alt="palácio recortado com u2net"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--isnet-anime.jpg" alt="palácio recortado com isnet-anime"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--isnet-general-use.jpg" alt="palácio recortado com isnet-general-use"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--birefnet-massive.jpg" alt="palácio recortado com birefnet-massive"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-gov-cut--bria-rmbg.jpg" alt="palácio recortado com bria-rmbg"></td>
+</tr></tbody>
+</table>
+</div>
+<p>Base creme, torre, bandeira. Quase todos mantêm o volume. Diferença está na borda da grama e no mastro. Massive e bria mordem menos o céu.</p>
+<h3>Carteira</h3>
+<div style="overflow-x:auto;margin:0 0 18px">
+<table>
+<thead><tr><th>original</th><th>u2net</th><th>isnet-anime</th><th>isnet-general-use</th><th>birefnet-massive</th><th>bria-rmbg</th></tr></thead>
+<tbody><tr>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--original.jpg" alt="carteira, foto original"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--u2net.jpg" alt="carteira recortada com u2net"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--isnet-anime.jpg" alt="carteira recortada com isnet-anime"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--isnet-general-use.jpg" alt="carteira recortada com isnet-general-use"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--birefnet-massive.jpg" alt="carteira recortada com birefnet-massive"></td>
+<td><img src="../assets/images/2026-09-05-recorte-fundo/ico-wallet-cut--bria-rmbg.jpg" alt="carteira recortada com bria-rmbg"></td>
+</tr></tbody>
+</table>
+</div>
+<p>isnet-anime apaga o objeto. Vira mancha. Esse modelo existe pra ilustração. Clay 3D não é anime. Se o default do seu MCP for esse, o ícone some e você culpa o wrapper.</p>
+<h2>O que o olho decidiu</h2>
+<p>Olhei a tabela inteira, não o paper. Ranking neste set:</p>
+<ol>
+<li><strong>isnet-general-use</strong>. Default. Clay e produto “bom o bastante”. Apache-2.0.</li>
+<li><strong>birefnet-massive</strong>. Quase empate. Melhor em borda fina. MIT, uso comercial sem dor de cabeça.</li>
+<li><strong>bria-rmbg</strong> (RMBG-2.0). Recorte mais limpo. Licença não comercial sem acordo com a Bria.</li>
+</ol>
+<p>u2net fica pra máquina fraca. isnet-anime só se a arte for de fato anime. birefnet-general e portrait foram bem. Massive cobre o caso comercial, então não exponho os três da família no CLI.</p>
+<p>API paga (remove.bg, Photoroom, withoutBG cloud) ainda ganha no pior caso: cabelo contra fundo bagunçado, vidro, reflexo. Pra ícone clay em fundo liso, o teto local chega.</p>
+<h2>Os três no CLI</h2>
+<p>Ficaram no comando. Default é o primeiro da lista.</p>
+<pre><code>webimg bg foto.jpg --out saida.png
+webimg bg foto.jpg --out saida.png --model birefnet-massive
+webimg bg foto.jpg --out saida.png --model bria-rmbg
+</code></pre>
+<p>Python por baixo: <code>rembg[cpu]</code>, <code>new_session(model)</code>. Primeira chamada baixa o ONNX. Massive pesa na casa de 1 GB. isnet cabe em uns 170 MB.</p>
+<p>O PNG vai pro app sem o quadrado. O componente de ícone desenha o tile de novo: raio ~22%, fundo roxo, borda fina. Recorte é máscara. Moldura é layout.</p>
+<h2>Regra que ficou</h2>
+<p>Pessoal, máxima qualidade local: <code>bria-rmbg</code>. Produto que você vai vender: <code>birefnet-massive</code>. Ícone clay no dia a dia: <code>isnet-general-use</code>, e o arredondado no CSS.</p>
+<p>Não discuta wrapper. Abra o mesmo arquivo nos três. Checkerboard. O olho escolhe em um minuto.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Rodei o mesmo ícone de clay em sete recortes locais. O que ganhou não foi o wrapper.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Rodei o mesmo ícone de clay em sete recortes locais.
+
+O MCP não decide o corte. O checkpoint decide.
+
+Três ficaram no CLI:
+isnet-general-use no dia a dia
+birefnet-massive se for vender
+bria-rmbg só uso pessoal (licença)
+
+O quadrado arredondado volta no CSS. O modelo só tira o fundo.
+
+#rembg #computervision #indiehackers
+
+https://felvieira.github.io/blog/posts/2026-09-06-recorte-fundo.html</div>
+  </section>
+
+  <footer class="post">
+    <span>5 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
