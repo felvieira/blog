@@ -3,10 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>Recorte de fundo: o MCP só passa o arquivo — felvieira's blog</title>
-<meta name="description" content="Doze ícones clay no mesmo recorte local. Sete checkpoints. Três ficam no CLI. O quadrado arredondado volta no CSS.">
-<meta property="og:title" content="Recorte de fundo: o MCP só passa o arquivo">
-<meta property="og:description" content="Doze ícones clay no mesmo recorte local. Sete checkpoints. Três ficam no CLI. O quadrado arredondado volta no CSS.">
+<title>Cansado de pagar pra tirar fundo? Testei os open source — felvieira's blog</title>
+<meta name="description" content="Você está cansado de recortar à mão ou pagar API pra tirar fundo? Rodei os mesmos ícones clay em u2net, ISNet, BiRefNet e RMBG-2.0. Instale, use, compare.">
+<meta property="og:title" content="Cansado de pagar pra tirar fundo? Testei os open source">
+<meta property="og:description" content="Você está cansado de recortar à mão ou pagar API pra tirar fundo? Rodei os mesmos ícones clay em u2net, ISNet, BiRefNet e RMBG-2.0. Instale, use, compare.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-05-recorte-fundo-cover.jpg">
 <meta property="og:type" content="article">
 <link rel="stylesheet" href="../assets/css/post.css">
@@ -19,25 +19,65 @@
 </nav>
 
 <main class="wrap">
-  <h1>Recorte de fundo: o MCP só passa o arquivo</h1>
+  <h1>Cansado de pagar pra tirar fundo? Testei os open source</h1>
   <p class="meta">
-    <span>5 de setembro de 2026</span>
+    <span>6 de setembro de 2026</span>
     <span class="tag">🇧🇷 Português</span>
-    <span class="tag">3 min read</span>
+    <span class="tag">6 min read</span>
   </p>
 
-  <img src="../assets/images/2026-09-05-recorte-fundo-cover.jpg" alt="Recorte de fundo: o MCP só passa o arquivo — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+  <img src="../assets/images/2026-09-05-recorte-fundo-cover.jpg" alt="Mesmo ícone de moedas clay recortado por seis modelos open source" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
 
   <article>
-<p>Passei doze ícones de clay no mesmo recorte local. Mesma foto. Sete checkpoints. O que muda o corte não é o nome do MCP. É o peso que você carrega.</p>
-<p>Eu precisava de PNG com alpha pra um app. Os ícones vieram em JPG, objeto lima no roxo. O fundo quadrado fazia parte da foto. Se o modelo come o fundo, some o tile. Se come o objeto, some o ícone. Queria ver os dois erros lado a lado, no mesmo checkerboard.</p>
+<p>Você está cansado de remover fundo na mão, pixel por pixel? Ou de pagar remove.bg, Photoroom, uma API, toda vez que um ícone precisa de PNG transparente?</p>
+<p>Eu também. Então parei de discutir wrapper e MCP. Peguei os mesmos doze JPGs de clay (objeto lima, fundo roxo) e passei em sete checkpoints open source, no CPU, sem chave. Abaixo está o que cada lib é, o link, como instala, como usa, e o olho a olho.</p>
 <p><img src="../assets/images/2026-09-05-recorte-fundo/resultado-isnet.jpg" alt="Quatro ícones clay recortados com isnet-general-use sobre fundo xadrez"></p>
-<h2>O cano não recorta</h2>
-<p>rembg, bg-vanish, qualquer wrapper: abrem o ONNX e devolvem máscara. Trocar o pacote sem trocar o modelo é teatro. u2net no cano A e u2net no cano B saem iguais. A qualidade mora no checkpoint.</p>
-<p>Rodei tudo no Python, CPU, sem API. <code>withoutbg</code> pediu chave e saiu da mesa. Os outros baixam o ONNX na primeira chamada e ficam em disco.</p>
-<h2>O teste</h2>
-<p>Doze JPG de ícone 1:1. Clay lima, fundo roxo. Quatro deles cabem neste post: moedas, mesa de reunião, palácio, carteira. Em cada linha, a original e cinco recortes. Xadrez é transparência.</p>
-<p>Da esquerda pra direita: original, u2net, isnet-anime, isnet-general-use, birefnet-massive, bria-rmbg.</p>
+
+<h2>rembg é o cano. O corte é o modelo.</h2>
+<p><a href="https://github.com/danielgatis/rembg">rembg</a> (Daniel Gatis, MIT) é a lib Python que carrega um ONNX e devolve PNG com alpha. CLI, código, servidor HTTP ou Docker. Python 3.11 a 3.13. <a href="https://pypi.org/project/rembg/">PyPI</a>.</p>
+<p>Trocar o pacote e manter o mesmo <code>-m</code> não muda o recorte. u2net no cano A e u2net no cano B saem iguais. Qualidade mora no checkpoint.</p>
+
+<h2>Instalar</h2>
+<p>CPU, lib + comando:</p>
+<pre><code>pip install "rembg[cpu,cli]"</code></pre>
+<p>NVIDIA com CUDA ok:</p>
+<pre><code>pip install "rembg[gpu,cli]"</code></pre>
+<p>Se a GPU falhar, volta pro CPU. AMD/ROCm tem extra <code>rembg[rocm,cli]</code>, depois do <code>onnxruntime-rocm</code>.</p>
+<p>A primeira chamada baixa o peso pra <code>~/.u2net</code> ou <code>~/.rembg/models</code>. <code>birefnet-massive</code> passa de 1 GB. <code>isnet-general-use</code> fica na casa de 170 MB. Pra baixar antes de processar:</p>
+<pre><code>rembg d isnet-general-use
+rembg d birefnet-massive
+rembg d bria-rmbg</code></pre>
+
+<h2>Usar</h2>
+<p>Um arquivo:</p>
+<pre><code>rembg i foto.jpg saida.png
+rembg i -m isnet-general-use foto.jpg saida.png
+rembg i -m birefnet-massive foto.jpg saida.png
+rembg i -m bria-rmbg foto.jpg saida.png</code></pre>
+<p>Pasta inteira: <code>rembg p entrada/ saida/</code>. Servidor: <code>rembg s --host 127.0.0.1 --port 7000</code>.</p>
+<p><code>-dc</code> tira franja de cor na borda. Nos BiRefNet e no RMBG o alfa já vem mole. <code>-a</code> (alpha matting) ainda ajuda u2net. Reuse a sessão se for lote. Recriar <code>new_session</code> a cada foto recarrega o ONNX.</p>
+<p>Python:</p>
+<pre><code>from rembg import new_session, remove
+from PIL import Image
+
+session = new_session("isnet-general-use")
+cut = remove(Image.open("foto.jpg").convert("RGB"), session=session)
+cut.save("saida.png")</code></pre>
+
+<h2>As libs por trás do -m</h2>
+<h3>U<sup>2</sup>-Net</h3>
+<p><a href="https://github.com/xuebinqin/U-2-Net">xuebinqin/U-2-Net</a>. O default antigo. Rápido, borda mais dura, halo em fundo colorido. No rembg: <code>u2net</code>, <code>u2netp</code> (menor), <code>u2net_human_seg</code>.</p>
+<h3>ISNet (DIS)</h3>
+<p><a href="https://github.com/xuebinqin/DIS">xuebinqin/DIS</a>, Highly Accurate Dichotomous Image Segmentation. Generalista: <code>isnet-general-use</code>. Ilustração: <code>isnet-anime</code>. Apache-2.0 no pacote que o rembg expõe. Bom equilíbrio peso × corte em produto e clay.</p>
+<h3>BiRefNet</h3>
+<p><a href="https://github.com/ZhengPeng7/BiRefNet">ZhengPeng7/BiRefNet</a>, paper <a href="https://arxiv.org/abs/2401.03407">arXiv:2401.03407</a>, MIT de verdade. Demo: <a href="https://huggingface.co/spaces/ZhengPeng7/BiRefNet_demo">HF Space</a>. No rembg: <code>birefnet-general</code>, <code>birefnet-general-lite</code>, <code>birefnet-portrait</code>, <code>birefnet-massive</code>, <code>birefnet-hrsod</code>, <code>birefnet-cod</code>. Massive é o generalista pesado. Ganha em cabelo, vidro, tecido, raio de bike.</p>
+<h3>RMBG-2.0 (Bria)</h3>
+<p><a href="https://huggingface.co/briaai/RMBG-2.0">briaai/RMBG-2.0</a> no Hugging Face. Arquitetura BiRefNet + dataset da Bria. No rembg o nome é <code>bria-rmbg</code>. Recorte local mais limpo neste teste. Licença <strong>não comercial</strong> sem acordo. Pesos gated. Se for vender o recorte, não use.</p>
+<h3>withoutBG</h3>
+<p>No rembg existe <code>withoutbg</code>, mas é API. Precisa de <code>WITHOUTBG_API_KEY</code>. Saí fora deste bake-off de propósito: aqui o critério era peso local, zero fatura.</p>
+
+<h2>O teste, no xadrez</h2>
+<p>Doze ícones 1:1. Quatro cabem aqui: moedas, mesa, palácio, carteira. Esquerda pra direita: original, u2net, isnet-anime, isnet-general-use, birefnet-massive, bria-rmbg. Xadrez é transparência.</p>
 <h3>Moedas</h3>
 <div style="overflow-x:auto;margin:0 0 18px">
 <table>
@@ -52,7 +92,7 @@
 </tr></tbody>
 </table>
 </div>
-<p>Objeto grosso, fundo liso. Quase todo mundo acerta. Aqui o empate engana. Ícone fácil não escolhe modelo.</p>
+<p>Objeto grosso, fundo liso. Quase todo mundo acerta. Ícone fácil não escolhe modelo.</p>
 <h3>Reunião</h3>
 <div style="overflow-x:auto;margin:0 0 18px">
 <table>
@@ -67,7 +107,7 @@
 </tr></tbody>
 </table>
 </div>
-<p>A foto trazia um card arredondado atrás da mesa. O modelo trata o card como fundo e some com ele. u2net ainda deixa halo roxo. isnet-anime come cadeira. isnet-general-use e birefnet-massive deixam mesa e cadeiras. O tile eu devolvo no CSS. Não peço isso de volta pro ONNX.</p>
+<p>A foto tinha um card arredondado atrás da mesa. O modelo trata o card como fundo e some com ele. u2net deixa halo roxo. isnet-anime come cadeira. isnet e massive deixam mesa e cadeiras. Tile de UI você devolve no CSS. Não peça isso de volta pro ONNX.</p>
 <h3>Palácio</h3>
 <div style="overflow-x:auto;margin:0 0 18px">
 <table>
@@ -82,7 +122,7 @@
 </tr></tbody>
 </table>
 </div>
-<p>Base creme, torre, bandeira. Quase todos mantêm o volume. Diferença está na borda da grama e no mastro. Massive e bria mordem menos o céu.</p>
+<p>Base creme, torre, bandeira. Quase todos mantêm o volume. Diferença na grama e no mastro. Massive e Bria mordem menos o céu.</p>
 <h3>Carteira</h3>
 <div style="overflow-x:auto;margin:0 0 18px">
 <table>
@@ -97,55 +137,57 @@
 </tr></tbody>
 </table>
 </div>
-<p>isnet-anime apaga o objeto. Vira mancha. Esse modelo existe pra ilustração. Clay 3D não é anime. Se o default do seu MCP for esse, o ícone some e você culpa o wrapper.</p>
-<h2>O que o olho decidiu</h2>
-<p>Olhei a tabela inteira, não o paper. Ranking neste set:</p>
+<p>isnet-anime apaga o objeto. Vira mancha. Esse peso existe pra ilustração. Clay 3D não é anime. Se o default do seu script for esse, o ícone some e você culpa a lib errada.</p>
+
+<h2>O que o olho decidiu neste set</h2>
 <ol>
-<li><strong>isnet-general-use</strong>. Default. Clay e produto “bom o bastante”. Apache-2.0.</li>
-<li><strong>birefnet-massive</strong>. Quase empate. Melhor em borda fina. MIT, uso comercial sem dor de cabeça.</li>
-<li><strong>bria-rmbg</strong> (RMBG-2.0). Recorte mais limpo. Licença não comercial sem acordo com a Bria.</li>
+<li><strong>isnet-general-use</strong>. Default. Clay e produto “bom o bastante”. Peso leve.</li>
+<li><strong>birefnet-massive</strong>. Quase empate. Melhor em borda fina. MIT, comercial ok.</li>
+<li><strong>bria-rmbg</strong>. Recorte mais limpo. Só uso pessoal, sem acordo Bria.</li>
 </ol>
-<p>u2net fica pra máquina fraca. isnet-anime só se a arte for de fato anime. birefnet-general e portrait foram bem. Massive cobre o caso comercial, então não exponho os três da família no CLI.</p>
-<p>API paga (remove.bg, Photoroom, withoutBG cloud) ainda ganha no pior caso: cabelo contra fundo bagunçado, vidro, reflexo. Pra ícone clay em fundo liso, o teto local chega.</p>
-<h2>Os três no CLI</h2>
-<p>Ficaram no comando. Default é o primeiro da lista.</p>
-<pre><code>webimg bg foto.jpg --out saida.png
-webimg bg foto.jpg --out saida.png --model birefnet-massive
-webimg bg foto.jpg --out saida.png --model bria-rmbg
-</code></pre>
-<p>Python por baixo: <code>rembg[cpu]</code>, <code>new_session(model)</code>. Primeira chamada baixa o ONNX. Massive pesa na casa de 1 GB. isnet cabe em uns 170 MB.</p>
-<p>O PNG vai pro app sem o quadrado. O componente de ícone desenha o tile de novo: raio ~22%, fundo roxo, borda fina. Recorte é máscara. Moldura é layout.</p>
-<h2>Regra que ficou</h2>
-<p>Pessoal, máxima qualidade local: <code>bria-rmbg</code>. Produto que você vai vender: <code>birefnet-massive</code>. Ícone clay no dia a dia: <code>isnet-general-use</code>, e o arredondado no CSS.</p>
+<p>u2net fica pra máquina fraca. isnet-anime só se a arte for anime. birefnet-general e portrait foram bem. Massive cobre o comercial, então não preciso dos três da família no dia a dia.</p>
+<p>API paga ainda ganha no pior caso: cabelo contra fundo bagunçado, vidro, reflexo. Pra ícone clay em fundo liso, o teto local chega. E não entra fatura.</p>
+
+<h2>Regra prática</h2>
+<p>Pessoal, máxima qualidade local: <code>rembg i -m bria-rmbg</code>.</p>
+<p>Produto que você vai vender: <code>rembg i -m birefnet-massive</code>.</p>
+<p>Ícone, lote, máquina comum: <code>rembg i -m isnet-general-use</code>.</p>
 <p>Não discuta wrapper. Abra o mesmo arquivo nos três. Checkerboard. O olho escolhe em um minuto.</p>
+<p>Links de novo, pra não caçar:</p>
+<ul>
+<li><a href="https://github.com/danielgatis/rembg">rembg</a></li>
+<li><a href="https://github.com/xuebinqin/U-2-Net">U<sup>2</sup>-Net</a></li>
+<li><a href="https://github.com/xuebinqin/DIS">ISNet / DIS</a></li>
+<li><a href="https://github.com/ZhengPeng7/BiRefNet">BiRefNet</a> · <a href="https://arxiv.org/abs/2401.03407">paper</a></li>
+<li><a href="https://huggingface.co/briaai/RMBG-2.0">RMBG-2.0</a></li>
+</ul>
 
   </article>
 
   <section class="share-block">
     <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
-    <p class="share-hook">Rodei o mesmo ícone de clay em sete recortes locais. O que ganhou não foi o wrapper.</p>
+    <p class="share-hook">Cansado de recortar fundo na mão ou pagar API? Rodei os mesmos ícones em sete modelos open source.</p>
     <div class="share-actions">
       <button type="button" class="copy-share">📋 Copiar texto do post</button>
       <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
     </div>
-    <div class="share-text">Rodei o mesmo ícone de clay em sete recortes locais.
+    <div class="share-text">Cansado de recortar fundo na mão ou pagar API?
 
-O MCP não decide o corte. O checkpoint decide.
+Rodei os mesmos ícones clay em u2net, ISNet, BiRefNet e RMBG-2.0. Sem chave. No CPU.
 
-Três ficaram no CLI:
+O cano é o rembg. O corte é o checkpoint.
+
 isnet-general-use no dia a dia
-birefnet-massive se for vender
-bria-rmbg só uso pessoal (licença)
+birefnet-massive se for vender (MIT)
+bria-rmbg só uso pessoal
 
-O quadrado arredondado volta no CSS. O modelo só tira o fundo.
-
-#rembg #computervision #indiehackers
+#rembg #opensource #computervision
 
 https://felvieira.github.io/blog/posts/2026-09-06-recorte-fundo.html</div>
   </section>
 
   <footer class="post">
-    <span>5 de setembro de 2026</span>
+    <span>6 de setembro de 2026</span>
     <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
   </footer>
 </main>
