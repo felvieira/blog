@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA — felvieira's blog</title>
+<meta name="description" content="Em termos simples, a OpenAI está tentando transformar o ChatGPT em uma interface universal para os dados internos da empresa. Data agent no ChatGPT Work: pergunta em linguagem natural, warehouse, semantic layer e permissões.">
+<meta property="og:title" content="O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA">
+<meta property="og:description" content="Em termos simples, a OpenAI está tentando transformar o ChatGPT em uma interface universal para os dados internos da empresa. Data agent no ChatGPT Work: pergunta em linguagem natural, warehouse, semantic layer e permissões.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-11-gargalo-dados-pra-ia-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA</h1>
+  <p class="meta">
+    <span>11 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">4 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-11-gargalo-dados-pra-ia-cover.jpg" alt="O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Em termos simples, a OpenAI está tentando transformar o ChatGPT em uma interface universal para os dados internos da empresa.</p>
+<p>No dia 10 de setembro de 2026, ela lançou o <a href="https://openai.com/index/put-data-to-work/">Data agent no ChatGPT Work</a>. A ideia: conectar direto em fontes que a empresa já confia — Snowflake, BigQuery, Databricks, Amazon Redshift, MongoDB, ClickHouse, Datadog, Google Drive, SharePoint e outras — e deixar a pessoa perguntar em português (ou inglês) o que antes virava ticket pro time de dados.</p>
+<p>Não precisa escrever SQL. Não precisa abrir o BI. Pergunta. O agente investiga, cruza, explica e pode montar dashboard interativo.</p>
+<h2>O fluxo que muda</h2>
+<p>Hoje, na maior parte das empresas, a jornada ainda é esta:</p>
+<p><code>funcionário → pergunta → analista → SQL → tratamento → Power BI/Tableau → relatório → funcionário</code></p>
+<p>Com o Data agent, o caminho que a OpenAI vende é outro:</p>
+<p><code>funcionário → pergunta → agente consulta dados autorizados → analisa → responde → dashboard → sugere ação</code></p>
+<p>E a conversa continua. “Por que caiu?” “Quais clientes causaram isso?” “Compare com o trimestre anterior.” “Quem precisa agir?” “Mande isso pro time.” Segundo a OpenAI, o agente pode mandar resultado por Slack ou e-mail e executar ações em sistemas conectados — <strong>mediante aprovação</strong>.</p>
+<p>Não é “jogar o warehouse no chat”. É analytics conversacional com freio.</p>
+<h2>A aposta real: camada semântica</h2>
+<p>Aqui está o ponto que mais me importa.</p>
+<p>IA em cima de tabela crua, sem definição, é receita pra resposta errada com confiança absurda. Financeiro chama “receita” de um jeito, Produto de outro, Marketing de um terceiro. O agente não inventa a verdade da empresa: ele recebe a verdade que a empresa já documentou.</p>
+<p>A OpenAI diz que o Data agent usa termos de negócio, métricas, cálculos customizados e relações entre tabelas. Esse contexto vem de semantic layers e fontes confiáveis: Databricks Genie Ontology, dbt, GitHub, Snowflake Horizon, dashboards de BI.</p>
+<p>A fórmula, na prática:</p>
+<p><code>dados + definição empresarial + permissões + IA = analytics conversacional</code></p>
+<p>Sem a definição, você só tem um modelo falando bonito em cima de caos.</p>
+<h2>Permissão não é detalhe</h2>
+<p>Administradores escolhem quais conexões entram. As consultas, segundo a OpenAI, respeitam restrições de tabela, linha e coluna que já existem. Um vendedor não deveria conseguir perguntar o salário do CEO só porque o agente “está conectado ao warehouse”.</p>
+<p>Se a sua empresa liga o agente sem governança, o problema não é o modelo. É o processo.</p>
+<h2>Quatro impactos que eu vejo</h2>
+<p><strong>1. BI deixa de ser tão centralizado.</strong></p>
+<p>Uma pessoa de produto pode perguntar: “Usuários da funcionalidade X retêm mais depois de 90 dias?” e investigar sozinha. A OpenAI afirma que quase todo o time de produto e mais de dois terços da organização de GTM já usam data agents internamente no ChatGPT Work.</p>
+<p><strong>2. O time de dados não some. Fica mais estratégico.</strong></p>
+<p>Menos fila de “roda essa query pra mim”. Mais qualidade, métricas oficiais, semantic layer, permissões, lineage, governança e infraestrutura. A própria OpenAI diz que conseguiu adotar isso porque o time de dados criou definições compartilhadas, regras de acesso e salvaguardas pra dados sensíveis.</p>
+<p><strong>3. Power BI e Tableau não precisam morrer.</strong></p>
+<p>O Data agent trabalha com Omni, Oracle BI, Power BI, Sigma, Tableau e ThoughtSpot. ChatGPT vira a interface de comando. Em vez de construir tudo na mão, você diz: “cria um dashboard de retenção por coorte e publica no Power BI.”</p>
+<p><strong>4. Aparece o ciclo completo de decisão.</strong></p>
+<p><code>pergunta → dados → análise → hipótese → dashboard → decisão → ação</code></p>
+<p>Exemplo: “Por que o churn aumentou?”</p>
+<p>O agente poderia achar concentração em clientes com três ou mais tickets nos primeiros 30 dias, cruzar com NPS e uso, montar o dashboard, sugerir que Customer Success ataque aquele grupo e preparar a lista de contas.</p>
+<p>Isso aproxima analytics de um agente operacional — ainda com humano no loop quando a ação sai do chat.</p>
+<h2>Casos que a OpenAI cita</h2>
+<ul>
+<li><strong>ServiceTitan:</strong> dashboard mostrando que usuários do Atlas (assistente de IA deles) lançavam campanhas em cerca de <strong>3×</strong> a taxa dos demais.</li>
+<li><strong>micro1:</strong> time de operações reconstruiu dashboards de performance em cerca de <strong>meia hora</strong>, pedindo em linguagem natural, e achou erros nos originais.</li>
+<li><strong>NTT Data</strong> (e outras no Alpha): análise de vendas e gasto, captura de erro de relatório, priorização de oportunidade — inclusive gente não técnica montando dashboard.</li>
+</ul>
+<p>São claims da OpenAI e dos clientes no anúncio. Trate como case de lançamento, não como estudo peer-reviewed.</p>
+<h2>O gargalo muda de lugar</h2>
+<p>A consequência empresarial que eu vejo é esta:</p>
+<p><strong>o gargalo sai de “quem sabe consultar os dados?” e vai pra “os dados da empresa estão organizados o suficiente pra uma IA entendê-los corretamente?”.</strong></p>
+<p>Empresa com banco bagunçado, definição conflitante, evento mal instrumentado e dado espalhado vai colocar IA em cima do caos e obter caos mais rápido.</p>
+<p>Empresa que tiver:</p>
+<p><code>tracking bom → warehouse → métricas padronizadas → semantic layer → permissões → agentes</code></p>
+<p>ganha outra velocidade: qualquer funcionário autorizado passa a ter algo parecido com um analista sob demanda.</p>
+<h2>Implicação pra quem faz SaaS</h2>
+<p>Talvez você não precise mais de <strong>50 dashboards fixos</strong> pra cada pergunta imaginável. A tendência que eu leio é: poucos dashboards principais + uma interface onde o usuário pergunta “o que aconteceu no meu negócio esta semana?” e o sistema gera a análise na hora.</p>
+<p>É uma das mudanças mais relevantes que agentes de IA trazem pro software corporativo: sair de <strong>software como conjunto de telas</strong> pra <strong>software como dados + capacidades que o agente consegue operar</strong>.</p>
+<p>Se a sua stack de dados ainda é um depósito de tabelas sem dono de métrica, o Data agent não é o próximo passo. O próximo passo é definir o que é cliente ativo, churn e receita líquida — e quem pode ver o quê.</p>
+<h2>Fonte</h2>
+<ul>
+<li><a href="https://openai.com/index/put-data-to-work/">Now everyone can put data to work, OpenAI, 10 set 2026</a></li>
+</ul>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA.
+
+No dia 10 de setembro de 2026, a OpenAI lançou o Data agent no ChatGPT Work. A ideia: conectar Snowflake, BigQuery, Databricks, Redshift, MongoDB, ClickHouse, Datadog, Google Drive, SharePoint e outras fontes — e deixar a pessoa perguntar em linguagem natural o que antes virava ticket pro time de dados.
+
+Não precisa escrever SQL. Não precisa abrir o BI. Pergunta. O agente investiga, cruza, explica e pode montar dashboard. Slack, e-mail e ações em sistemas conectados: com aprovação.
+
+A aposta real não é o chat. É a camada semântica.
+
+IA em cima de tabela crua, sem definição, é resposta errada com confiança absurda. Financeiro chama “receita” de um jeito, Produto de outro. O agente recebe a verdade que a empresa já documentou: Databricks Genie Ontology, dbt, GitHub, Snowflake Horizon, dashboards de BI.
+
+Dados + definição + permissões + IA = analytics conversacional.
+
+Quatro impactos que eu vejo:
+
+1. BI descentraliza. Produto pergunta retenção sozinho.
+2. Time de dados vira governança: métricas oficiais, lineage, salvaguardas. A OpenAI diz que adotou isso porque o próprio time de dados criou definições e regras de acesso — e que quase todo o product e mais de 2/3 do GTM já usam data agents internamente.
+3. Power BI e Tableau não precisam morrer. Viram ferramenta do agente (Omni, Oracle BI, Power BI, Sigma, Tableau, ThoughtSpot).
+4. Ciclo completo: pergunta → dados → análise → dashboard → decisão → ação.
+
+Cases que a OpenAI cita no anúncio (trate como case de lançamento): ServiceTitan (~3× campanhas Atlas), micro1 (~30 min rebuild de dashboards + achou erros), NTT Data no Alpha.
+
+Se a sua stack ainda é depósito de tabelas sem dono de métrica, o Data agent não é o próximo passo. O próximo passo é definir o que é cliente ativo, churn e receita — e quem pode ver o quê.
+
+https://felvieira.github.io/blog/posts/2026-09-11-gargalo-dados-pra-ia.html</div>
+  </section>
+
+  <footer class="post">
+    <span>11 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
