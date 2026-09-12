@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Não é o modelo. É o combo: voz full-duplex, router e Next agent-native — felvieira's blog</title>
+<meta name="description" content="Voz full-duplex, router multimodelo com BYOK e Next agent-native. O stack ponta a ponta que importa pra quem shipa produto com IA em 2026 — sem card de score.">
+<meta property="og:title" content="Não é o modelo. É o combo: voz full-duplex, router e Next agent-native">
+<meta property="og:description" content="Voz full-duplex, router multimodelo com BYOK e Next agent-native. O stack ponta a ponta que importa pra quem shipa produto com IA em 2026 — sem card de score.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-12-combo-voz-router-next-agent-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Não é o modelo. É o combo: voz full-duplex, router e Next agent-native</h1>
+  <p class="meta">
+    <span>12 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-12-combo-voz-router-next-agent-cover.jpg" alt="Não é o modelo. É o combo: voz full-duplex, router e Next agent-native — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Quem constrói produto com IA em 2026 já cansou de card de score. O que eu estou vendo nesta semana é outro tipo de notícia: as peças do stack ponta a ponta começaram a encaixar.</p>
+<p>Três camadas. Voz que fala e escuta ao mesmo tempo. Um router de modelos que o cliente usa de verdade. Um framework que assume que quem escreve o código é um agente. O resto — Kling versus Veo, SWE-2 mais barato, o caso da Anthropic — entra como pressão de preço e de confiança. Não como hype.</p>
+
+<h2>A voz saiu do turno de conversa</h2>
+<p>A OpenAI colocou o <a href="https://openai.com/index/introducing-gpt-live-1-in-the-api/">GPT-Live-1 na API</a> em 10 de setembro. Full-duplex: o modelo ouve e fala ao mesmo tempo. Preço da camada de voz: <strong>US$ 0,05 por minuto</strong>. Nas evals deles, <strong>+30 pontos</strong> no Full Duplex Bench contra o GPT-Realtime-2.1.</p>
+<p>O detalhe de produto que me interessa: ele não precisa ser o cérebro. Delega raciocínio e tool calling pra um modelo de texto — Astra, Codex, o que você já tiver no harness. A Speak, no anúncio, diz que o tutor interrompeu quase <strong>80% menos</strong> que o sistema turn-based anterior.</p>
+<p>Tradução pra quem shipa: a arquitetura STT → LLM → TTS em cadeia começa a ficar cara em latência e frágil em interrupção. Você paga a voz na frente e escolhe o backend. Filas, timeout e o que acontece quando o usuário corta a frase no meio deixam de ser “depois a gente vê”.</p>
+
+<h2>O router virou produto, não infra interna</h2>
+<p>A <a href="https://vercel.com/customers/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway">Tailscale publicou o case da Aperture no Vercel AI Gateway</a> (11 set). Em vez de cada funcionário, agente ou ferramenta carregar uma API key de provedor, o acesso ao modelo entra pela <strong>tailnet</strong>. Entra na rede, usa o catálogo aprovado. Sai, some o acesso.</p>
+<p>Zero data retention era mesa mínima: o Gateway em si não retém dado; dá pra ligar ZDR global ou por request (<code>zeroDataRetention</code>) e o roteamento cai só em provedores ZDR. Cliente pode trazer a própria key — e a Aperture cobra o mesmo rate do provedor, sem markup.</p>
+<p>Isso é o contrário de “escolhemos um modelo e rezamos”. É BYOK, identidade de rede, sandbox pra agente executar, e dezenas de modelos atrás de uma API. Quem ainda embute um único endpoint no produto vai sentir o cheiro de 2024.</p>
+
+<h2>Next 16.3 assume que o autor é um agente</h2>
+<p>O <a href="https://nextjs.org/blog/next-16-3">Next.js 16.3</a> saiu em agosto. Dev até 90% menos RAM em sessão longa. Instant Navigations (opt-in; vira default numa major futura). Prefetch menor. Builds que lêem artefato em cache.</p>
+<p>O post que eu li com mais atenção foi o de <a href="https://nextjs.org/blog/next-16-3-ai-improvements">AI improvements</a>: <code>AGENTS.md</code> versionado apontando docs do <strong>seu</strong> Next, não o recorte de 2024 que o modelo memorizou. Skills de primeiro partido. <code>agent-browser</code> com introspecção de React. Erro com “copy prompt”. Docs em <code>.md</code>.</p>
+<p>A pergunta da equipe do Next é a certa: “como o framework ficaria se fosse desenhado pra desenvolvimento dirigido por agente?”. Ainda não é isso o tempo todo. Já é o suficiente pra você versionar o contrato do agente junto com o app.</p>
+
+<h2>Cursor Projects: um coordenador, não mil chats</h2>
+<p>No dia 10 de setembro o Cursor lançou <a href="https://cursor.com/blog/projects">Projects</a>: um coordenador que <strong>não escreve código</strong>. Ele manda subagentes. Roda na nuvem por padrão (fechar o laptop não mata o trabalho), sobe agente local quando precisa testar na sua máquina, e guarda contexto compartilhado — o que um agente aprendeu a testar, o próximo já lê.</p>
+<p>Número deles: usuário novo mergeia <strong>30% mais PRs</strong>; quem usa Projects de verdade, <strong>6×</strong>. Trate como claim do Cursor. O desenho, pra mim, vale mais que o múltiplo: você dirige o corpo de trabalho, não o chat.</p>
+
+<h2>A parte que ninguém quer no press release</h2>
+<p>A Anthropic passou a semana no <a href="https://www.theverge.com/ai-artificial-intelligence/994064/anthropic-spent-this-week-in-hot-water-over-cybersecurity">Verge</a> por causa de quatro incidentes em que modelos Claude, em evals de cyber, ganharam acesso não autorizado a sistemas reais de terceiros. Internet vazou no ambiente de teste. A empresa chamou a <strong>METR</strong> pra investigação independente (oito semanas, acesso amplo a transcripts e a funcionários).</p>
+<p>Isso não é “o modelo é mau”. É o recado pra quem dá tool pro agente: simulacro e produção se misturam mais fácil do que o slide admite. Identidade, sandbox, allowlist de rede e orçamento de token não são formalidade.</p>
+
+<h2>Preço em duas frentes</h2>
+<p>Vídeo: no <a href="https://megaton.ai/compare/kling-3-standard-vs-veo_3_1">Megaton</a> (10 set), Kling 3 Standard marca <strong>69,4</strong> no overall contra <strong>62,4</strong> do Veo 3.1, a <strong>US$ 8,40/min</strong> versus <strong>US$ 24/min</strong>. Veo ainda ganha em texto legível. Quem gera clipe no produto roteia: qualidade/custo por categoria, não “o melhor modelo”.</p>
+<p>Código: a Cognition lançou o <a href="https://cognition.com/blog/swe-2">SWE-2</a> (10 set). <strong>50,0%</strong> no FrontierCode 1.1 Main — um ponto atrás do Fable 5.1, <strong>64% mais barato</strong> no número deles; perto do Astra a um quarto do custo. Disponível no Devin. Promo de um mês unlimited nos planos Pro/Max/Teams. São números da Cognition. A pressão de preço no coding agent, essa eu acredito mesmo sem replicar o bench.</p>
+
+<h2>O combo, sem poesia</h2>
+<ol>
+<li><strong>Voz</strong> full-duplex na frente, modelo de raciocínio atrás. Paga o minuto da camada certa.</li>
+<li><strong>Router</strong> com identidade, ZDR e BYOK — o cliente escolhe o modelo, você não carrega a key no repo.</li>
+<li><strong>App</strong> com <code>AGENTS.md</code> versionado, browser do agente e navegação que não derrete o RAM do <code>next dev</code>.</li>
+<li><strong>Coordenação</strong> de frota, não de thread.</li>
+<li><strong>Confiança</strong>: tool só no sandbox, rede fechada, humano no loop quando a ação sai do chat.</li>
+<li><strong>Roteamento de mídia e de código</strong> por preço/qualidade, não por marca.</li>
+</ol>
+<p>Se a sua semana ainda é “qual modelo é o melhor do mundo”, você está lendo o card. O trabalho é o combo que deixa o agente falar, escolher backend, navegar o app e não vazar a rede do cliente.</p>
+
+<h2>Fontes</h2>
+<ul>
+<li><a href="https://openai.com/index/introducing-gpt-live-1-in-the-api/">GPT-Live-1 na API, OpenAI, 10 set 2026</a></li>
+<li><a href="https://vercel.com/customers/how-tailscale-built-a-customer-facing-model-router-on-ai-gateway">Tailscale Aperture no AI Gateway, Vercel, 11 set 2026</a></li>
+<li><a href="https://nextjs.org/blog/next-16-3">Next.js 16.3</a> e <a href="https://nextjs.org/blog/next-16-3-ai-improvements">AI improvements</a></li>
+<li><a href="https://cursor.com/blog/projects">Cursor Projects, 10 set 2026</a></li>
+<li><a href="https://www.theverge.com/ai-artificial-intelligence/994064/anthropic-spent-this-week-in-hot-water-over-cybersecurity">Anthropic / METR, The Verge, 11 set 2026</a></li>
+<li><a href="https://megaton.ai/compare/kling-3-standard-vs-veo_3_1">Kling 3 Standard vs Veo 3.1, Megaton</a></li>
+<li><a href="https://cognition.com/blog/swe-2">SWE-2, Cognition</a></li>
+</ul>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Não é o modelo. É o combo: voz full-duplex, router e Next agent-native.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Não é o modelo. É o combo.
+
+Voz full-duplex (GPT-Live-1), router multimodelo com BYOK (Tailscale no AI Gateway) e Next agent-native. O stack ponta a ponta que importa pra quem shipa produto com IA em 2026.
+
+Escrevi o recorte completo no blog:
+
+https://felvieira.github.io/blog/posts/2026-09-12-combo-voz-router-next-agent.html</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
