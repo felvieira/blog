@@ -79,7 +79,7 @@ const tmpl     = readFileSync(TEMPLATE, "utf8");
 
 const readingTime = Math.max(1, Math.round(bodyHtml.split(/\s+/).length / 220));
 const dateHuman   = new Date(today).toLocaleDateString(args.lang === "pt-BR" ? "pt-BR" : "en-US", {
-  year: "numeric", month: "long", day: "numeric",
+  year: "numeric", month: "long", day: "numeric", timeZone: "UTC",
 });
 
 const langLabel = args.lang === "pt-BR" ? "🇧🇷 Português" : "🌎 English";

@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale — felvieira's blog</title>
+<meta name="description" content="Testei 11 modelos locais em 133 imagens numa RTX 5060 Ti de 16 GB. Veja tempos, resultados, prompts, custos escondidos e o fluxo que realmente compensa.">
+<meta property="og:title" content="Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale">
+<meta property="og:description" content="Testei 11 modelos locais em 133 imagens numa RTX 5060 Ti de 16 GB. Veja tempos, resultados, prompts, custos escondidos e o fluxo que realmente compensa.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-18-imagem-ia-local-cover.png">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale</h1>
+  <p class="meta">
+    <span>18 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-18-imagem-ia-local-cover.png" alt="Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>IA local não é grátis. A máquina, a energia, o armazenamento e o seu tempo continuam na conta. O que desaparece é outra coisa: <strong>a cobrança por imagem, o pacote de créditos e o prompt saindo do computador</strong>.</p>
+
+<p>Para descobrir se essa troca compensa, rodei 133 imagens em 11 modelos e pipelines, cobrindo sete perfis de uso na mesma máquina. Não encontrei um campeão universal. Encontrei algo mais útil: um mapa de decisão para saber qual modelo usar para explorar, fotografar, desenhar, recortar e finalizar.</p>
+
+<div class="stats-grid">
+  <div class="stat-card"><strong>133</strong><span>imagens concluídas</span></div>
+  <div class="stat-card"><strong>11</strong><span>modelos e pipelines locais</span></div>
+  <div class="stat-card"><strong>7</strong><span>perfis de prompt</span></div>
+  <div class="stat-card"><strong>18,6 s</strong><span>menor tempo registrado</span></div>
+</div>
+
+<div class="verdict">
+  <p><strong>Minha conclusão curta:</strong> o Pony GGUF venceu no relógio, mas não nos resultados finais. Para fotografia, DreamShaper, Juggernaut e EpicRealism entregaram imagens mais utilizáveis; para anime, os checkpoints Illustrious foram muito mais coerentes. O melhor fluxo combina velocidade para explorar com especialização para finalizar.</p>
+</div>
+
+<h2>“Sem pagar por geração” é o termo correto</h2>
+
+<p>Na API, o custo é visível: tantas imagens, tantos créditos. Localmente, ele se espalha entre GPU, energia, armazenamento e manutenção. A recompensa vem depois da instalação: testar cem variações deixa de significar acompanhar um contador diminuindo a cada tentativa.</p>
+
+<p>Por isso eu separo três afirmações que parecem iguais, mas não são:</p>
+
+<ul>
+  <li><strong>Sem cobrança por geração:</strong> verdadeiro neste teste. Nenhuma API foi chamada para produzir as imagens.</li>
+  <li><strong>Sem assinatura ou créditos:</strong> verdadeiro para os modelos e ferramentas locais usados.</li>
+  <li><strong>Custo zero:</strong> falso. Hardware, energia, armazenamento, download e tempo continuam na conta.</li>
+</ul>
+
+<p>A conta honesta é <code>custo local = energia + amortização do hardware + operação</code>. A troca vale quando privacidade, volume, liberdade de experimentar ou previsibilidade pesam mais que a conveniência de uma API.</p>
+
+<h2>O laboratório do teste</h2>
+
+<p>A bateria foi executada em Windows com <strong>RTX 5060 Ti de 16 GB de VRAM, 96 GB de RAM e ComfyUI 0.34.0</strong>. Stability Matrix cuidou da instalação; ComfyUI executou os workflows; SwarmUI ficou como opção de interface mais simples para checkpoints de imagem. Rodei um backend por vez para não criar disputa artificial por VRAM.</p>
+
+<p>Os modelos de imagem ocupam, em geral, vários gigabytes. Na instalação usada no teste, os checkpoints foram centralizados em uma biblioteca compartilhada e expostos aos aplicativos por links do sistema. Isso evita o erro mais caro de uma estação local: guardar a mesma coleção de modelos duas ou três vezes.</p>
+
+<div class="callout">
+  <p><strong>Limite importante:</strong> estes números pertencem a esta máquina, a estas versões e a estes workflows. Trocar GPU, sampler, passos, resolução, quantização, versão do PyTorch ou estado do cache muda o tempo. O benchmark é uma referência operacional, não uma promessa universal.</p>
+</div>
+
+<h2>Como eu mantive a comparação útil</h2>
+
+<p>O teste principal congelou a seed <code>20260913</code>, separou os prompts por finalidade e registrou modelo, workflow, duração, resolução e arquivo de saída. Também usei perfis diferentes para fotografia, anime, imagem de referência, personagem em quatro poses e ícones com ou sem fundo.</p>
+
+<p>Usar o mesmo prompt, sozinho, não torna um benchmark justo. Um checkpoint fotográfico e outro treinado para anime podem obedecer às mesmas palavras e perseguir objetivos incompatíveis. A pergunta útil não é “qual ficou mais bonito?”, mas “qual resolveu melhor a tarefa para a qual eu o escolheria?”.</p>
+
+<details class="prompt-details">
+  <summary>Ver o prompt fotográfico exato</summary>
+  <p>Photorealistic editorial photograph of an attractive adult red-haired woman with long wavy copper hair, green eyes, elegant features, and a confident, sensual presence. She wears a stylish black silk dress, standing in a luxurious modern apartment at sunset. Warm golden lighting, confident eye contact with the camera, graceful body language, sophisticated and tasteful mood, realistic skin texture, high-end fashion editorial style, shallow depth of field, 85mm lens, no nudity, no explicit content.</p>
+</details>
+
+<details class="prompt-details">
+  <summary>Ver o negative prompt</summary>
+  <p>worst quality, low quality, blurry, jpeg artifacts, watermark, text, bad anatomy, deformed, extra limbs, duplicate subject, cropped, distorted hands, child, minor, nsfw, nude, nudity</p>
+</details>
+
+<p>O prompt segue uma estrutura reproduzível: <strong>sujeito</strong>, <strong>contexto</strong>, <strong>composição e lente</strong>, <strong>luz</strong>, <strong>estilo</strong> e <strong>restrições</strong>. Quando eu mudei fotografia para manga, mantive personagem, ambiente e luz, trocando apenas a linguagem visual. Isso reduz a chance de comparar duas cenas diferentes e atribuir a diferença ao modelo.</p>
+
+<h2>Os tempos medidos</h2>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Modelo</th><th>Execuções</th><th>Mínimo</th><th>Máximo</th><th>Média</th></tr></thead>
+    <tbody>
+      <tr><td><code>pony_gguf</code></td><td>13</td><td>20,1 s</td><td>32,2 s</td><td><strong>24,9 s</strong></td></tr>
+      <tr><td><code>dreamshaper_xl_lightning</code></td><td>13</td><td>19,3 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>juggernaut_xl_lightning</code></td><td>13</td><td>20,2 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>nova_reality_illustrious</code></td><td>13</td><td>19,5 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>plant_milk_illustrious</code></td><td>13</td><td>19,7 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>wai_illustrious_v170</code></td><td>13</td><td>18,6 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>perfect_deliberate_illustrious</code></td><td>13</td><td>19,3 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>hardcore_asian_illustrious</code></td><td>13</td><td>21,3 s</td><td>3min01s</td><td>2min15s</td></tr>
+      <tr><td><code>epicrealism_xl</code></td><td>13</td><td>19,7 s</td><td>3min01s</td><td>2min14s</td></tr>
+      <tr><td><code>cyberrealistic_sd15</code></td><td>13</td><td>22,3 s</td><td>3min00s</td><td>2min15s</td></tr>
+      <tr><td><code>lustify_krea2</code></td><td>3</td><td>2min40s</td><td>2min45s</td><td>2min44s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>A média mistura geração e pós-processamento; ela serve para planejar o trabalho, não para declarar uma arquitetura vencedora. No perfil fotográfico, o recorte mais claro, o Pony terminou em 25,1 segundos e os checkpoints principais ficaram perto de 2min40s. Mais de seis vezes de diferença. As imagens abaixo mostram o preço visual dessa velocidade.</p>
+
+<div class="media-grid">
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-dreamshaper.png" alt="Retrato fotográfico gerado pelo DreamShaper XL Lightning" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">DreamShaper XL Lightning</strong><span class="media-card-meta">Boa leitura de luz, pele e ambiente editorial. 2min40s neste perfil.</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-juggernaut.png" alt="Retrato fotográfico gerado pelo Juggernaut XL Lightning" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">Juggernaut XL Lightning</strong><span class="media-card-meta">Retrato limpo e convincente, embora vestido e enquadramento se afastem do texto. 2min40s.</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-pony.png" alt="Retrato gerado pelo pipeline Pony GGUF" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">Pony GGUF</strong><span class="media-card-meta">Muito mais rápido, mas com textura ruidosa, cenário e acabamento menos fiéis. 25,1s.</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-lustify.png" alt="Retrato gerado pelo pipeline Lustify Krea2" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">Lustify Krea2</strong><span class="media-card-meta">Aderência fraca à luz natural: cores artificiais dominaram a cena. 2min45s.</span></figcaption>
+  </figure>
+</div>
+
+<h2>O que as imagens mostram além do cronômetro</h2>
+
+<h3>Fotografia: especialização ainda vence velocidade</h3>
+
+<p>DreamShaper, Juggernaut e EpicRealism foram os resultados mais aproveitáveis em retrato e editorial. Nenhum obedeceu a cada palavra: o vestido preto recebeu reflexos verdes em algumas saídas, enquanto pose e enquadramento mudaram. Ainda assim, pele, cabelo, luz e profundidade de campo ficaram coerentes o bastante para justificar uma segunda rodada.</p>
+
+<p>O Pony GGUF funciona muito bem como <em>rascunho operacional</em>: responde rápido o suficiente para testar composição e direção geral. Neste perfil, porém, a velocidade trouxe ruído, cenário simplificado e menor aderência. Promovê-lo a resultado final só porque ganhou no relógio seria otimizar a métrica errada.</p>
+
+<h3>Anime: o checkpoint muda mais que o prompt</h3>
+
+<figure>
+  <img src="../assets/images/2026-09-18-imagem-ia-local-wai.png" alt="Resultado anime do WAI Illustrious v170" loading="lazy">
+  <figcaption>WAI Illustrious v170: linhas limpas, paleta estável e linguagem visual claramente anime. O mesmo sujeito e cenário produziram uma solução muito diferente dos modelos fotográficos.</figcaption>
+</figure>
+
+<p>Nos modelos Illustrious, a personagem ganhou olhos maiores, contorno mais controlado e cel shading mais previsível. WAI e Hardcore Asian responderam melhor à intenção de manga do que os checkpoints fotográficos. Isso confirma a regra mais útil de toda a bateria: <strong>escolha o checkpoint pelo domínio antes de tentar corrigir tudo com um prompt maior</strong>.</p>
+
+<h3>Ícones: obedecer “sem texto” ainda é uma loteria</h3>
+
+<div class="media-grid">
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-icon-epicrealism.png" alt="Ícone 3D de raposa gerado pelo EpicRealism XL" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">EpicRealism XL</strong><span class="media-card-meta">Entendeu forma de app icon, simetria, material e fundo controlado.</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <img src="../assets/images/2026-09-18-imagem-ia-local-icon-wai.png" alt="Tentativa de ícone do WAI Illustrious com texto inventado" loading="lazy">
+    <figcaption class="media-card-body"><strong class="media-card-title">WAI Illustrious v170</strong><span class="media-card-meta">Criou lettering mesmo com “no text, no letters” no prompt: um bom exemplo de falha de aderência.</span></figcaption>
+  </figure>
+</div>
+
+<p>A bateria de ícones adicionou 40 imagens, entre versões normais e 3D, com fundo e com transparência. O recorte transparente veio do <code>rembg</code> aplicado à mesma imagem, não de uma segunda geração. Por isso, os 18 a 27 segundos dessas versões medem pós-processamento, não velocidade do checkpoint.</p>
+
+<h2>Qual modelo eu escolheria</h2>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Objetivo</th><th>Primeira escolha</th><th>Estratégia</th></tr></thead>
+    <tbody>
+      <tr><td>Explorar ideias depressa</td><td><code>pony_gguf</code></td><td>Gerar muitas composições e promover só as melhores para outro modelo.</td></tr>
+      <tr><td>Retrato realista</td><td>DreamShaper, Juggernaut ou EpicRealism</td><td>Comparar duas seeds antes de aumentar resolução.</td></tr>
+      <tr><td>Anime/manga</td><td>WAI ou outro Illustrious especializado</td><td>Usar vocabulário visual do domínio, não apenas “anime style”.</td></tr>
+      <tr><td>Ícone 3D</td><td>EpicRealism neste conjunto</td><td>Validar silhueta pequena, texto acidental e fundo antes do recorte.</td></tr>
+      <tr><td>Imagem de referência</td><td>Checkpoint compatível com img2img</td><td>Fixar denoise e avaliar identidade separadamente de beleza.</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<h2>Se eu começasse hoje, usaria este fluxo</h2>
+
+<ol>
+  <li><strong>Comece por uma interface.</strong> SwarmUI é mais amigável para checkpoints; ComfyUI é melhor quando o workflow precisa de controle e nós especializados.</li>
+  <li><strong>Centralize os modelos.</strong> Use uma pasta canônica e links/junctions para os aplicativos. Não duplique dezenas de gigabytes.</li>
+  <li><strong>Rode um backend por vez.</strong> Duas interfaces disputando VRAM transformam qualquer benchmark em ruído.</li>
+  <li><strong>Crie um prompt-base.</strong> Separe sujeito, ação, ambiente, composição, luz, estilo e restrições.</li>
+  <li><strong>Fixe seed e parâmetros.</strong> Registre resolução, passos, sampler, CFG, denoise e versão do workflow.</li>
+  <li><strong>Compare por finalidade.</strong> Fotografia com fotografia; anime com anime; img2img com img2img.</li>
+  <li><strong>Faça triagem em resolução menor.</strong> Só aumente custo depois de aprovar composição e direção visual.</li>
+  <li><strong>Guarde metadados junto da saída.</strong> Uma imagem bonita sem prompt, seed e modelo é difícil de reproduzir.</li>
+</ol>
+
+<h2>Os erros que mais desperdiçam tempo</h2>
+
+<ul>
+  <li>Baixar checkpoints de divulgação sem conferir licença e compatibilidade.</li>
+  <li>Comparar modelos com seeds, resoluções ou denoise diferentes.</li>
+  <li>Chamar pós-processamento de “geração mais rápida”.</li>
+  <li>Confiar em uma única imagem e declarar um vencedor universal.</li>
+  <li>Tentar consertar um checkpoint inadequado com um prompt gigantesco.</li>
+  <li>Medir apenas beleza e ignorar aderência, anatomia, texto acidental e consistência.</li>
+  <li>Assumir que “roda local” significa “uso comercial liberado”. Licença do modelo continua valendo.</li>
+</ul>
+
+<h2>O que este benchmark ainda não prova</h2>
+
+<p>Uma seed por perfil não mede estabilidade estatística. A próxima rodada correta precisa de pelo menos quatro seeds, mesma resolução, mesmos parâmetros e uma rubrica fixa: aderência ao prompt, anatomia, identidade, composição, artefatos e utilidade final. Também precisa separar tempo de carregamento, geração e pós-processamento.</p>
+
+<p>Os resultados sustentam decisões operacionais, como quais modelos merecem nova rodada e quanto tempo reservar, mas não um ranking científico de qualidade. O limite faz parte do resultado: saber o que o dado não prova evita transformar impressão em certeza.</p>
+
+<h2>Vale a pena?</h2>
+
+<p>Vale para quem gera em volume, trabalha com material sensível, quer testar sem vigiar créditos ou precisa controlar o pipeline inteiro. Para poucas imagens ocasionais, uma API ainda pode ser a troca mais sensata: você paga pela conveniência e não pela infraestrutura.</p>
+
+<p>Na minha máquina, a regra ficou simples: <strong>modelo rápido para buscar a ideia, modelo especializado para fechar a imagem, parâmetros congelados para comparar e biblioteca compartilhada para não desperdiçar disco</strong>. IA local não elimina custo. Ela troca cobrança variável e dependência externa por capacidade própria.</p>
+
+<p>O próximo degrau é bem mais pesado: vídeo local. Nele, a unidade deixa de ser segundos por imagem e passa a ser minutos, às vezes horas, por cinco segundos de clipe. <a href="2026-09-18-video-ia-local-16gb-benchmark.html">Veja o teste completo de vídeo com IA local em 16 GB</a>.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O modelo mais rápido terminou em 25 segundos. Isso não significa que ele venceu o teste.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Eu rodei 133 imagens em 11 modelos locais, na mesma máquina.
+
+O mais rápido terminou em 25 segundos. Os modelos fotográficos levaram perto de 2min40s. E o resultado mais rápido não foi o melhor.
+
+O aprendizado principal não foi escolher um campeão. Foi separar modelo de exploração, modelo de acabamento e custo real de rodar tudo localmente.
+
+No artigo eu mostro os outputs, os tempos, o prompt exato, o setup com 16 GB de VRAM e o fluxo que evita desperdiçar horas e espaço em disco.
+
+Local não é custo zero. É parar de pagar por geração e assumir o controle do pipeline.
+
+https://felvieira.github.io/blog/posts/2026-09-18-imagem-ia-local-sem-pagar-por-geracao.html</div>
+  </section>
+
+  <footer class="post">
+    <span>18 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

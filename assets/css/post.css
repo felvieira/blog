@@ -163,6 +163,155 @@ article img {
   border: 1px solid var(--border);
 }
 
+article video {
+  display: block;
+  width: 100%;
+  height: auto;
+  background: #05060a;
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+article figure {
+  margin: 24px 0;
+}
+
+article figure img {
+  display: block;
+  margin: 0;
+}
+
+article figcaption {
+  margin-top: 9px;
+  color: var(--muted);
+  font-size: 13px;
+  line-height: 1.5;
+}
+
+.table-wrap {
+  width: 100%;
+  overflow-x: auto;
+  margin: 18px 0;
+  border-radius: 8px;
+}
+
+.table-wrap table {
+  min-width: 620px;
+  margin: 0;
+}
+
+.stats-grid,
+.media-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 16px;
+  margin: 24px 0;
+}
+
+.stat-card,
+.media-card,
+.callout,
+.verdict {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: 10px;
+}
+
+.stat-card {
+  padding: 18px;
+}
+
+.stat-card strong {
+  display: block;
+  color: #fff;
+  font-size: 27px;
+  line-height: 1.15;
+}
+
+.stat-card span {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.media-card {
+  overflow: hidden;
+}
+
+.media-card img {
+  width: 100%;
+  aspect-ratio: 1 / 1;
+  object-fit: cover;
+  border: 0;
+  border-radius: 0;
+  margin: 0;
+}
+
+.media-card video {
+  border: 0;
+  border-radius: 0;
+  aspect-ratio: 16 / 9;
+  object-fit: contain;
+}
+
+.media-card-body {
+  padding: 14px 16px 16px;
+}
+
+.media-card-body p:last-child {
+  margin-bottom: 0;
+}
+
+.media-card-title {
+  display: block;
+  margin-bottom: 5px;
+  color: #fff;
+  font-size: 15px;
+}
+
+.media-card-meta {
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.callout,
+.verdict {
+  margin: 24px 0;
+  padding: 18px 20px;
+}
+
+.callout {
+  border-left: 4px solid var(--accent3);
+}
+
+.verdict {
+  border-left: 4px solid var(--accent2);
+  background: linear-gradient(135deg, rgba(16,185,129,0.08), rgba(99,102,241,0.06));
+}
+
+.callout p:last-child,
+.verdict p:last-child {
+  margin-bottom: 0;
+}
+
+.prompt-details {
+  margin: 20px 0;
+  padding: 14px 16px;
+  background: var(--code-bg);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+}
+
+.prompt-details summary {
+  color: var(--link);
+  cursor: pointer;
+  font-weight: 700;
+}
+
+.prompt-details p {
+  margin: 14px 0 0;
+  color: var(--muted);
+}
+
 article hr {
   border: 0;
   border-top: 1px solid var(--border);
@@ -318,4 +467,5 @@ footer.post a { color: var(--link); }
   .feat-secondary { flex-direction: column; }
   .list-thumb { flex-basis: 84px; }
   .feat-hero h2 { font-size: 22px; }
+  .stats-grid, .media-grid { grid-template-columns: 1fr; }
 }

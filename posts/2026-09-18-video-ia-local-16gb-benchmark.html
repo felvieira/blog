@@ -1,0 +1,274 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline — felvieira's blog</title>
+<meta name="description" content="Comparei Wan 2.2 5B, A14B, Hunyuan e pipelines de I2V em uma GPU de 16 GB. Os clipes mostram por que rodar é diferente de iterar.">
+<meta property="og:title" content="Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline">
+<meta property="og:description" content="Comparei Wan 2.2 5B, A14B, Hunyuan e pipelines de I2V em uma GPU de 16 GB. Os clipes mostram por que rodar é diferente de iterar.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-18-video-ia-local-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline</h1>
+  <p class="meta">
+    <span>18 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-18-video-ia-local-cover.jpg" alt="Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>“Roda em 16 GB” é uma resposta incompleta. No meu benchmark, o mesmo clipe de 5,06 segundos levou <strong>5min55s</strong> no pipeline mais rápido da rodada controlada e <strong>50min48s</strong> no modelo maior. Em outro perfil, o Hunyuan passou de três horas.</p>
+
+<p>A pergunta, portanto, não é apenas se a GPU consegue executar o modelo. É quantas ideias você consegue explorar em uma tarde e em que momento um take merece ser promovido para um pipeline mais caro.</p>
+
+<div class="stats-grid">
+  <div class="stat-card"><strong>20</strong><span>vídeos concluídos</span></div>
+  <div class="stat-card"><strong>9</strong><span>pipelines e modelos</span></div>
+  <div class="stat-card"><strong>9</strong><span>perfis de vídeo</span></div>
+  <div class="stat-card"><strong>18,5×</strong><span>maior diferença direta medida</span></div>
+</div>
+
+<div class="verdict">
+  <p><strong>Minha conclusão curta:</strong> numa RTX 5060 Ti de 16 GB, o Wan 2.2 TI2V 5B serve para pensar; Wan 2.2 A14B Q5 e HunyuanVideo 1.5 servem para apostar em um take já decidido. Os modelos maiores rodam com quantização e offload, mas são lentos demais para explorar às cegas.</p>
+</div>
+
+<h2>O que foi testado</h2>
+
+<p>A bateria reuniu texto-para-vídeo, texto+imagem-para-vídeo, imagem-para-vídeo e dois experimentos de áudio. O ambiente foi o mesmo do teste de imagens: <strong>Windows, RTX 5060 Ti de 16 GB, 96 GB de RAM, ComfyUI 0.34.0 e execução sequencial</strong>.</p>
+
+<ul>
+  <li><strong>T2V:</strong> o clipe nasce apenas do texto.</li>
+  <li><strong>TI2V:</strong> o workflow Wan aceita texto e imagem; nesta bateria apareceu em perfis comparativos.</li>
+  <li><strong>I2V:</strong> uma imagem de referência condiciona identidade e composição.</li>
+  <li><strong>InfiniteTalk:</strong> pipeline especializado em fala e sincronização.</li>
+  <li><strong>TTS mux:</strong> apenas adiciona áudio ao MP4; não reescreve a boca e não prova lip-sync.</li>
+</ul>
+
+<p>Essas siglas mudam o trabalho executado. Um I2V precisa preservar a referência; um T2V constrói a cena do zero; um pipeline de fala resolve ainda outro problema. Misturar tudo em uma tabela e declarar um vencedor produziria um ranking fácil de ler e difícil de defender.</p>
+
+<h2>A rodada controlada que mais importa</h2>
+
+<p>O comparativo mais limpo usou texto puro, seed <code>20260916</code>, resolução 1280×720, 81 frames, 16 fps e duração de 5,06 segundos. Sem imagem de referência.</p>
+
+<details class="prompt-details">
+  <summary>Ver o prompt T2V de ação</summary>
+  <p>Photorealistic cinematic action scene with two adult real human characters, a woman and a man in practical modern outdoor clothing, sprinting across a rain-soaked city street while escaping a collapsing construction barrier, the woman jumps over debris and the man follows, powerful full-body movement, hair and clothing reacting to the wind, handheld tracking camera, dramatic daylight, realistic skin and anatomy, coherent faces, natural motion blur, wide shot, high-end live-action film, no fantasy, no animation, no text, no subtitles.</p>
+</details>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Modelo</th><th>Resolução</th><th>Frames/FPS</th><th>Clipe</th><th>Tempo</th></tr></thead>
+    <tbody>
+      <tr><td><code>wan22_t2v_5b</code></td><td>1280×720</td><td>81 / 16</td><td>5,06s</td><td><strong>5min55s</strong></td></tr>
+      <tr><td><code>wan22_a14b_q5_t2v</code></td><td>1280×720</td><td>81 / 16</td><td>5,06s</td><td>50min48s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>Com os parâmetros alinhados, o 5B foi <strong>8,6 vezes mais rápido</strong>. O A14B construiu uma cena mais densa e escura; o 5B entregou ação legível, rua molhada e movimento lateral. O modelo menor não vence em tudo, mas deixa responder a pergunta mais urgente muito antes: esta ideia funciona em movimento?</p>
+
+<div class="media-grid">
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-action-5b.jpg">
+      <source src="../assets/videos/2026-09-18-action-wan22-5b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 5B</strong><span class="media-card-meta">5min55s · 1280×720 · 81 frames · 16 fps</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-action-a14b.jpg">
+      <source src="../assets/videos/2026-09-18-action-wan22-a14b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 A14B Q5</strong><span class="media-card-meta">50min48s · 1280×720 · 81 frames · 16 fps</span></figcaption>
+  </figure>
+</div>
+
+<div class="callout">
+  <p><strong>Como ler os clipes:</strong> tempo e formato vêm do manifesto. Qualidade temporal não recebeu uma nota humana estruturada nesta rodada. Os vídeos devem ser assistidos por inteiro; um frame bonito não mede flicker, coerência de movimento, ritmo de câmera ou deformação entre quadros.</p>
+</div>
+
+<h2>Todos os tempos úteis da bateria</h2>
+
+<div class="table-wrap">
+  <table>
+    <thead><tr><th>Perfil</th><th>Pipeline</th><th>Formato</th><th>Tempo</th><th>Segundos gerados</th></tr></thead>
+    <tbody>
+      <tr><td>T2V ação controlada</td><td>Wan 2.2 5B</td><td>1280×720 · 81/16</td><td><strong>5min55s</strong></td><td>5,06s</td></tr>
+      <tr><td>T2V ação controlada</td><td>Wan 2.2 A14B Q5</td><td>1280×720 · 81/16</td><td>50min48s</td><td>5,06s</td></tr>
+      <tr><td>Manga</td><td>Wan 2.2 TI2V 5B</td><td>1280×720 · 121/24</td><td>14min11s</td><td>5,04s</td></tr>
+      <tr><td>Manga</td><td>Wan 2.2 A14B Q5</td><td>1280×720 · 81/16</td><td>44min02s</td><td>5,06s</td></tr>
+      <tr><td>Manga</td><td>HunyuanVideo 1.5</td><td>1280×720 · 81/16</td><td>1h42min20s</td><td>5,06s</td></tr>
+      <tr><td>I2V horizontal</td><td>Wan 2.2 TI2V 5B</td><td>1280×720 · 121/24</td><td>11min12s</td><td>5,04s</td></tr>
+      <tr><td>I2V horizontal</td><td>Wan 2.2 A14B Q5</td><td>1280×720 · 81/16</td><td>42min23s</td><td>5,06s</td></tr>
+      <tr><td>I2V horizontal</td><td>HunyuanVideo 1.5</td><td>1280×720 · 81/16</td><td><strong>3h27min30s</strong></td><td>5,06s</td></tr>
+      <tr><td>I2V vertical</td><td>Wan 2.2 TI2V 5B</td><td>720×1280 · 121/24</td><td>10min51s</td><td>5,04s</td></tr>
+      <tr><td>I2V vertical</td><td>Wan 2.2 A14B Q5</td><td>720×1280 · 81/16</td><td>41min49s</td><td>5,06s</td></tr>
+      <tr><td>I2V vertical</td><td>HunyuanVideo 1.5</td><td>720×1280 · 81/16</td><td>1h49min29s</td><td>5,06s</td></tr>
+      <tr><td>I2V expressões</td><td>Wan 2.2 TI2V 5B</td><td>720×1280 · 121/24</td><td>10min41s</td><td>5,04s</td></tr>
+      <tr><td>I2V expressões</td><td>Wan 2.2 A14B Q5</td><td>720×1280 · 81/16</td><td>42min57s</td><td>5,06s</td></tr>
+      <tr><td>I2V ação</td><td>Wan 2.2 TI2V 5B</td><td>720×1280 · 121/24</td><td>10min26s</td><td>5,04s</td></tr>
+      <tr><td>I2V ação</td><td>Wan 2.2 A14B Q5</td><td>720×1280 · 81/16</td><td>42min42s</td><td>5,06s</td></tr>
+      <tr><td>Fala</td><td>InfiniteTalk + Wan 2.1</td><td>720×1280 · 113/16</td><td>3h07min03s</td><td>7,06s</td></tr>
+    </tbody>
+  </table>
+</div>
+
+<p>A maior diferença direta apareceu no I2V horizontal: 11min12s no Wan 5B contra 3h27min30s no Hunyuan, cerca de <strong>18,5 vezes</strong>. Em termos de produção, é a distância entre comparar cinco tentativas durante o trabalho e ocupar a máquina por metade do dia com uma única variação.</p>
+
+<div class="callout">
+  <p><strong>Regra para ler a tabela:</strong> use o 5B para eliminar ideias ruins cedo. Só pague o custo de A14B ou Hunyuan quando enquadramento, ação e direção de câmera já tiverem sobrevivido à triagem.</p>
+</div>
+
+<h2>A estética muda tanto quanto o tempo</h2>
+
+<p>No perfil manga, os três pipelines receberam a mesma direção: mulher ruiva adulta, vestido preto, apartamento luxuoso ao pôr do sol, linha limpa, cel shading e câmera suave. Os resultados não convergiram para o mesmo desenho. Cada modelo trouxe uma interpretação própria de personagem, enquadramento e intensidade da luz.</p>
+
+<div class="media-grid">
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-manga-5b.jpg">
+      <source src="../assets/videos/2026-09-18-manga-wan22-5b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 TI2V 5B</strong><span class="media-card-meta">14min11s · leitura anime direta e composição simples</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-manga-a14b.jpg">
+      <source src="../assets/videos/2026-09-18-manga-wan22-a14b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 A14B Q5</strong><span class="media-card-meta">44min02s · luz mais atmosférica e composição diferente</span></figcaption>
+  </figure>
+</div>
+
+<p>O Hunyuan levou 1h42min20s no mesmo perfil e produziu outra personagem, com outro grau de estilização. Sem uma rubrica temporal e múltiplas seeds, não dá para afirmar que o tempo adicional compra qualidade de forma consistente. Ele compra <em>outra distribuição de resultados</em>, e explorar essa distribuição custa caro.</p>
+
+<h2>O perfil realista expõe o trade-off</h2>
+
+<div class="media-grid">
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-real-5b.jpg">
+      <source src="../assets/videos/2026-09-18-real-wan22-5b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 TI2V 5B</strong><span class="media-card-meta">121 frames a 24 fps · tempo histórico não registrado neste perfil</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-real-hunyuan.jpg">
+      <source src="../assets/videos/2026-09-18-real-hunyuan15.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">HunyuanVideo 1.5</strong><span class="media-card-meta">81 frames a 16 fps · tempo histórico não registrado neste perfil</span></figcaption>
+  </figure>
+  <figure class="media-card">
+    <video controls playsinline preload="metadata" poster="../assets/images/2026-09-18-video-ia-local-real-a14b.jpg">
+      <source src="../assets/videos/2026-09-18-real-wan22-a14b.mp4" type="video/mp4">
+    </video>
+    <figcaption class="media-card-body"><strong class="media-card-title">Wan 2.2 A14B Q5</strong><span class="media-card-meta">81 frames a 16 fps · tempo histórico não registrado neste perfil</span></figcaption>
+  </figure>
+</div>
+
+<p>Este trio é valioso justamente porque não permite uma conclusão fácil. Os arquivos vieram de uma rodada antiga cujo manifesto não preservou os tempos. Os clipes continuam úteis como evidência visual, mas não sustentam uma comparação de velocidade. Benchmark bom também mostra onde o dado termina.</p>
+
+<h2>Por que 16 GB bastam para rodar, mas não para correr</h2>
+
+<p>O Wan 2.2 TI2V 5B usa um modelo de aproximadamente 10 GB, VAE de cerca de 1,4 GB e text encoder quantizado de aproximadamente 6,7 GB. O workflow consegue trabalhar com os 16 GB sem depender do mesmo nível de offload dos modelos maiores.</p>
+
+<p>O Wan 2.2 A14B em precisão cheia ultrapassa o orçamento de VRAM. A solução usada foi GGUF Q5, com dois experts de aproximadamente 10,79 GB cada e troca entre high-noise e low-noise durante a amostragem. A GPU executa, mas os 96 GB de RAM e o offload entram no caminho. Nesse ponto, “caber” e “ser rápido” deixam de ser sinônimos.</p>
+
+<p>HunyuanVideo 1.5 também roda com offload. LTX-2.5 foi validado fora da bateria principal em 384×384, 121 frames, 24 fps e oito passos: 2h10min37s para 5,04 segundos de vídeo. O arquivo era válido e não preto, mas a experiência confirma a mesma regra: memória de sistema pode viabilizar um modelo; não transforma a GPU em uma placa maior.</p>
+
+<h2>O fluxo que transforma horas em decisões</h2>
+
+<ol>
+  <li><strong>Escreva o plano do take.</strong> Sujeito, ação, câmera, ambiente, luz, estilo e áudio em campos separados.</li>
+  <li><strong>Gere curto.</strong> Cinco segundos revelam prompt ruim, enquadramento errado e movimento impossível sem gastar uma tarde.</li>
+  <li><strong>Comece no Wan 5B.</strong> Use 480p ou 720p e reduza frames antes de ativar <code>--lowvram</code> ou offload mais agressivo.</li>
+  <li><strong>Congele tudo.</strong> Seed, resolução, frames, FPS, passos, scheduler, negative prompt e versão do workflow.</li>
+  <li><strong>Assista do começo ao fim.</strong> Avalie identidade, anatomia, flicker, câmera, trajetória, deformações e último frame.</li>
+  <li><strong>Promova um take.</strong> Só então tente A14B, Hunyuan ou um pipeline especializado.</li>
+  <li><strong>Edite fora do gerador.</strong> Corte, montagem, som, cor e legendas não precisam ser pagos novamente em tempo de difusão.</li>
+</ol>
+
+<h2>Prompt de vídeo: o que precisa estar explícito</h2>
+
+<p>Para imagem, descrever sujeito, composição e luz costuma bastar. Para vídeo, o prompt precisa carregar tempo. Eu uso esta ordem:</p>
+
+<ol>
+  <li><strong>Sujeito:</strong> quem aparece e quais atributos não podem mudar.</li>
+  <li><strong>Ação:</strong> um verbo observável, com começo e direção.</li>
+  <li><strong>Câmera:</strong> enquadramento, lente, trajetória e velocidade.</li>
+  <li><strong>Ambiente:</strong> espaço, hora, clima e elementos que reagem.</li>
+  <li><strong>Movimento secundário:</strong> cabelo, roupa, fumaça, chuva, reflexos.</li>
+  <li><strong>Estilo:</strong> live action, anime, publicidade, documentário.</li>
+  <li><strong>Restrições:</strong> sem texto, sem legenda, sem personagem extra.</li>
+</ol>
+
+<p>Um prompt cheio de adjetivos e sem ação tende a produzir um pôster que respira. No extremo oposto, três ações, duas câmeras e uma mudança de cenário em cinco segundos pedem ao modelo uma montagem inteira dentro de um único take. Melhor dividir a cena.</p>
+
+<h2>Áudio: mux não é lip-sync</h2>
+
+<p>Um experimento adicionou TTS ao clipe em 0,7 segundo. Esse número mede apenas o <em>mux</em>: colocar a faixa de áudio dentro do MP4. A boca não foi reprocessada. Chamar isso de lip-sync seria falso.</p>
+
+<p>O InfiniteTalk gerou 7,06 segundos em 3h07min03s, mas uma avaliação séria precisa ouvir o áudio e observar fonemas, atraso, fechamento labial e estabilidade do rosto. Também precisa alinhar exatamente a duração da fala ao vídeo. Áudio presente é uma coluna booleana; sincronização é uma avaliação humana.</p>
+
+<h2>Licença também faz parte do pipeline</h2>
+
+<p>Executar o modelo localmente não apaga sua licença. O <a href="https://huggingface.co/Wan-AI/Wan2.2-TI2V-5B" target="_blank" rel="noopener">Wan 2.2 TI2V 5B</a> é distribuído sob Apache 2.0. O <a href="https://huggingface.co/tencent/HunyuanVideo-1.5/blob/main/LICENSE" target="_blank" rel="noopener">HunyuanVideo 1.5</a> usa a licença comunitária da Tencent, cujo território exclui União Europeia, Reino Unido e Coreia do Sul. A <a href="https://huggingface.co/Lightricks/LTX-2/blob/main/LICENSE" target="_blank" rel="noopener">licença da família LTX-2</a>, que cobre o LTX-2.5 deste setup, exige licença comercial paga para entidades com receita anual a partir de US$ 10 milhões. Antes de colocar uma saída em campanha, produto ou banco de mídia, confira a licença da versão exata e o território de uso.</p>
+
+<h2>Como repetir o benchmark sem se enganar</h2>
+
+<ul>
+  <li>Use pelo menos quatro seeds por perfil.</li>
+  <li>Não compare 121 frames a 24 fps com 81 frames a 16 fps como se o custo fosse equivalente.</li>
+  <li>Separe T2V, TI2V, I2V e fala.</li>
+  <li>Registre tempo de geração, duração, FPS real, frames, resolução e tamanho do arquivo.</li>
+  <li>Use uma rubrica de 1 a 5 para aderência, estabilidade temporal, deformação, identidade e lip-sync.</li>
+  <li>Não sobrescreva resultados antigos; evolução de workflow precisa de histórico.</li>
+  <li>Valide o MP4 com <code>ffprobe</code> e assista com áudio antes de aprovar.</li>
+</ul>
+
+<h2>Então, vídeo local vale a pena?</h2>
+
+<p>Vale para quem precisa de privacidade, controle, experimentação sem créditos e disponibilidade do pipeline. O custo real, porém, é throughput. Cinco segundos finais podem exigir dezenas de tentativas; quando cada tentativa pesada se aproxima de uma hora, a arquitetura de trabalho importa mais que o modelo da moda.</p>
+
+<p>Na GPU de 16 GB deste teste, a decisão prática ficou simples: <strong>Wan 5B para pensar, A14B ou Hunyuan para uma tentativa final justificada, e pipelines de fala apenas quando o áudio for central ao resultado</strong>. O hardware conseguiu rodar tudo. O benchmark revelou o dado que normalmente desaparece atrás do “sim, roda”: quanto tempo custa chegar a cada tentativa.</p>
+
+<p>Se você ainda está montando a base, comece pelo teste anterior: <a href="2026-09-18-imagem-ia-local-sem-pagar-por-geracao.html">133 gerações de imagem local sem pagar por imagem</a>.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Todos os modelos rodaram em 16 GB. A diferença foi de minutos para horas por clipe.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">“Roda numa GPU de 16 GB” é uma informação incompleta.
+
+No meu benchmark, um clipe de 5,06 segundos levou 5min55s no Wan 5B, 50min48s no A14B e, em outro perfil, mais de 3h no Hunyuan.
+
+Os três rodam. Só um deles faz sentido para descobrir se a ideia funciona.
+
+Publiquei os 20 testes com os clipes, parâmetros, prompts, diferenças entre T2V/TI2V/I2V, offload, áudio e um workflow prático para não gastar uma tarde em cada tentativa.
+
+O gargalo de vídeo local não é apenas VRAM. É throughput.
+
+https://felvieira.github.io/blog/posts/2026-09-18-video-ia-local-16gb-benchmark.html</div>
+  </section>
+
+  <footer class="post">
+    <span>18 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

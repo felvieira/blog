@@ -13,6 +13,8 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-09-18** — [Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale](posts/2026-09-18-imagem-ia-local-sem-pagar-por-geracao.html) (🇧🇷 PT)
+- **2026-09-18** — [Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline](posts/2026-09-18-video-ia-local-16gb-benchmark.html) (🇧🇷 PT)
 - **2026-09-12** — [Não é o modelo. É o combo: voz full-duplex, router e Next agent-native](posts/2026-09-12-combo-voz-router-next-agent.html) (🇧🇷 PT)
 - **2026-09-11** — [O gargalo não é mais quem sabe SQL. É se a empresa organizou os dados pra IA](posts/2026-09-11-gargalo-dados-pra-ia.html) (🇧🇷 PT)
 - **2026-09-06** — [Cansado de pagar pra tirar fundo? Testei os open source](posts/2026-09-06-recorte-fundo.html) (🇧🇷 PT)
