@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-09-18** — [Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói](posts/2026-09-18-agentes-fora-do-lab-astra-claude-openai-set-2026.html) (🇧🇷 PT)
 - **2026-09-18** — [Imagem com IA local sem pagar por geração: 133 testes, 11 modelos e o que realmente vale](posts/2026-09-18-imagem-ia-local-sem-pagar-por-geracao.html) (🇧🇷 PT)
 - **2026-09-18** — [Vídeo com IA local em 16 GB: 20 testes e o custo real de cada pipeline](posts/2026-09-18-video-ia-local-16gb-benchmark.html) (🇧🇷 PT)
 - **2026-09-12** — [Não é o modelo. É o combo: voz full-duplex, router e Next agent-native](posts/2026-09-12-combo-voz-router-next-agent.html) (🇧🇷 PT)
