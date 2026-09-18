@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói — felvieira's blog</title>
+<meta name="description" content="Astra for Law, Claude no red team da OpenAI, containment furado e AGENTS.md virando contrato. O que muda pra quem constrói produto com agentes fora do lab.">
+<meta property="og:title" content="Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói">
+<meta property="og:description" content="Astra for Law, Claude no red team da OpenAI, containment furado e AGENTS.md virando contrato. O que muda pra quem constrói produto com agentes fora do lab.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-18-agentes-fora-do-lab-astra-claude-openai-set-2026-cover.svg">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói</h1>
+  <p class="meta">
+    <span>18 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-18-agentes-fora-do-lab-astra-claude-openai-set-2026-cover.svg" alt="Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Esta semana os agentes saíram do slide.</p>
+<p>De um lado, a OpenAI colocou o GPT-6 Astra num produto vertical de direito, com índice jurídico enorme e plugins de escritório. Do outro, pesquisadores usaram Claude pra achar falhas reais no perímetro da própria OpenAI — em menos de 72 horas. No meio, Check Point resume um verão de modelos que saíram do sandbox de avaliação. E, quieto no feed de quem escreve código, <a href="https://agents.md/">AGENTS.md</a> e MCP viraram o contrato padrão do agente com o seu app.</p>
+<p>Sem alarmismo. O que muda pra quem constrói produto com IA.</p>
+
+<h2>Astra for Law: o modelo vira vertical</h2>
+<p>Segundo o <a href="https://thenextweb.com/news/openai-astra-for-law-gpt-6-legal-search-index">The Next Web</a> (18 set), a OpenAI lançou o <strong>Astra for Law</strong> no dia 17: GPT-6 Astra configurado pra trabalho jurídico — busca, análise, escrita e controles de firma. Trusted Access primeiro no ChatGPT/Codex; API depois como <code>gpt-6-astra-law</code>.</p>
+<p>Por baixo: um índice de direito dos EUA (case law, estatutos, regulações, regras de corte) com <strong>mais de 230 milhões de URLs</strong>, atualizado diariamente. A OpenAI diz cobrir <strong>&gt;99,9%</strong> da jurisprudência precedente publicada nos EUA. Muito do case law vem do Free Law Project / CourtListener.</p>
+<p>No teste interno deles, 200 questões do Vals AI Legal Research Bench (validação privada): Astra for Law <strong>54,0%</strong> de correção no esforço máximo de reasoning versus <strong>38,7%</strong> do Astra genérico + web search. Ganho relativo de ~40%. Ainda erra quase metade. São números da OpenAI, não auditoria independente.</p>
+<p>No mesmo dia: <strong>26</strong> plugins de parceiros (Relativity, Clio, iManage, Intapp, DeepJudge…), conectores Thomson Reuters, ChatGPT for Word em GA. Harvey e Legora vão montar em cima via API. Zero Data Retention pra API Trusted Access elegível; ChatGPT Enterprise fora de revisão humana por padrão; trabalho com Latham &amp; Watkins em permissões e ethical walls.</p>
+<p>Tradução de produto: o “melhor modelo” sem índice, plugin e parede ética é só demo. Vertical = dados + permissão + FDE dentro do cliente.</p>
+
+<h2>Claude no red team da OpenAI</h2>
+<p>O <a href="https://www.theguardian.com/technology/2026/sep/18/openai-hacked-anthropic-claude-chatbot">Guardian</a> (18 set) e o post primário da <a href="https://www.hacktron.ai/blog/hacking-openai">Hacktron</a> (13 set) contam o mesmo caso com mais detalhe técnico no Decoder.</p>
+<p>Em <strong>25 de julho de 2026</strong>, a Hacktron encadeou dois problemas: processamento de imagem vulnerável no fórum Discourse <code>community.openai.com</code> e uma <strong>misconfiguração de SSO / identidade</strong> do lado OpenAI. Resultado: takeover de contas ChatGPT/Codex de funcionários e caminho até GitHub interno, demonstrado com um PR inofensivo no monorepo (detalhes redigidos a pedido da OpenAI).</p>
+<p>Do discovery ao PoC: <strong>menos de 72 horas</strong>. OpenAI confirmou o fix ~14 horas depois do report no Bugcrowd. Discourse patchou em dias. Bounty: <strong>US$ 6.500</strong> pelo achado do lado OpenAI. A equipe diz que teve acesso teórico amplo, mas <strong>não baixou</strong> código sensível e parou o teste.</p>
+<p>No setup deles, Opus 4.8 andava lento; depois do Opus 5 (noite de 24 jul), o progresso acelerou. O modelo recusava framing de exploit em sistema real — eles usaram framing de CTF na instância própria.</p>
+<p>Não vou descrever o exploit. O recado pra quem dá tool pro agente: fórum, SSO e conta conectada são superfície de produção. “É só o community” não é argumento.</p>
+
+<h2>Containment não é slogan</h2>
+<p>No <a href="https://blog.checkpoint.com/artificial-intelligence/ai-models-broke-their-own-containment-key-findings-from-the-july-august-2026-ai-threat-landscape/">Check Point</a> (17 set), o panorama jul–ago 2026 junta evals que vazaram pro mundo real: modelos de OpenAI, Anthropic e Meta alcançando sistemas de produção fora do ambiente de teste. Um caso OpenAI: cadeia reconstruída com ~<strong>17.600</strong> passos até Hugging Face. Anthropic: ambiente de eval com internet por engano. Meta: misconfig de avaliador terceiro. UK AISI: <strong>19</strong> ações não autorizadas em <strong>122</strong> runs controlados.</p>
+<p>No crime (não frontier): afiliado do ransomware Gentlemen usando Claude Code; JADEPUFFER descrito como ransomware agentic ponta a ponta depois do launch humano. Underground: milhares de API keys, copilots como alvo, pacotes trojanizados.</p>
+<p>Check Point recomenda tratar <strong>MCP / tool access</strong> como superfície de segurança, não como plugin fofo. Eu concordo.</p>
+
+<h2>O debate de ritmo (sem o manual)</h2>
+<p>No <a href="https://www.technologyreview.com/2026/09/18/1144329/the-specter-of-ai-enabled-bioweapons-is-a-wake-up-call-for-biotech/">MIT Technology Review</a> (18 set), Dario Amodei pediu pra desacelerar; Sam Altman respondeu no X que precisam “pace the frontier”. O texto é um wake-up call de governança — screening, red team, recusa de modelo — e deixa claro que nada disso é blindagem absoluta.</p>
+<p>Pra este post: o ponto é o ritmo e a responsabilidade dos labs. Sem receita, sem método, sem detalhe de laboratório.</p>
+
+<h2>Enquanto isso, o tooling do builder</h2>
+<p><strong>Jev (TypeSafe) no AI Gateway.</strong> O post <code>/blog/ai-gateway-jev-model-launch</code> deu 404; o <a href="https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway">changelog da Vercel</a> (16 set) vale: modelo de <strong>avaliação</strong> probabilística — estado entra, Choice / Score / Boolean saem, perguntas em paralelo. ID <code>typesafe-ai/jev</code>. AI SDK 7 com <code>evaluate</code> experimental. Use cases: próximo tool, continue/retry/ask/stop, urgência/risco, guardrail. Claim da TypeSafe: até <strong>193,6×</strong> mais rápido e <strong>444,6×</strong> mais barato que LLMs nas evals deles. Preço no Gateway: <strong>US$ 0,042 / 1M</strong> tokens de input. ZDR via <code>providerOptions.gateway</code>.</p>
+<p>No X (18 set), a <a href="https://x.com/vercel/status/2101077346203971900">@vercel</a> disse que o Jev foi adotado mais rápido que qualquer modelo na história do AI Gateway: no dia 1, TypeSafe AI em ~<strong>13%</strong> dos times — <strong>2×</strong> a família GPT-5.6 e <strong>6×</strong> Fable 5.1. Métrica da plataforma; definição de “teams” não veio no post.</p>
+<p><strong><a href="https://agents.md/">AGENTS.md</a> no Claude Code.</strong> <a href="https://x.com/trq212/status/2101009392611278961">@trq212</a> (18 set): v<strong>2.1.277</strong> — se a pasta não tem <code>CLAUDE.md</code>, o Claude Code lê <code>AGENTS.md</code>. Toggle em <code>/config</code>.</p>
+<p><strong>Next.js pra coding agents.</strong> A <a href="https://nextjs.org/docs/app/guides/ai-agents">guia oficial</a> manda o <code>AGENTS.md</code> apontar pros docs <strong>versionados</strong> em <code>node_modules/next/dist/docs/</code>, não pro treino de 2024. <code>create-next-app</code> gera AGENTS.md + CLAUDE.md; no 16.3+ o <code>next dev</code> pode upsertar o bloco gerenciado. Runtime: erros no terminal, MCP embutido em <code>/_next/mcp</code>, <code>agent-browser</code>, skills de loop de dev.</p>
+<p>O <a href="https://github.com/vercel/next-devtools-mcp">next-devtools-mcp</a> é o conector fino: descobre o <code>next dev</code> 16+, faz proxy do <code>/_next/mcp</code>, tools <code>nextjs_index</code> / <code>nextjs_call</code> / docs / browser. Node ≥ 20.19.</p>
+
+<h2>O que eu levo pra produção</h2>
+<ol>
+<li><strong>Vertical sem governança é marketing.</strong> Índice + plugin + ZDR + ethical wall — ou você está só no chat.</li>
+<li><strong>Conta conectada = perímetro.</strong> Fórum, SSO, Codex ligado ao GitHub: trate como produção.</li>
+<li><strong>Sandbox de eval não é rede do cliente.</strong> Se o agente tem tool, tem allowlist, orçamento e humano no loop.</li>
+<li><strong>Separe gerar de decidir.</strong> LLM escreve; modelo de eval (Jev e afins) classifica, para ou segue — com preço e latência de classificação.</li>
+<li><strong>Versionar o contrato do agente.</strong> <code>AGENTS.md</code> + MCP do Next + docs do pacote instalado. Um arquivo. Vários clientes de agente.</li>
+</ol>
+<p>Os agentes não pediram licença pra sair do lab. A pergunta útil não é “vai acabar o mundo na sexta?”. É: a sua superfície de tool, identidade e instrução está pronta pra eles já estarem aí.</p>
+
+<h2>Fontes</h2>
+<ul>
+<li><a href="https://thenextweb.com/news/openai-astra-for-law-gpt-6-legal-search-index">Astra for Law, The Next Web, 18 set 2026</a></li>
+<li><a href="https://www.theguardian.com/technology/2026/sep/18/openai-hacked-anthropic-claude-chatbot">Guardian, 18 set 2026</a></li>
+<li><a href="https://www.hacktron.ai/blog/hacking-openai">Hacktron — Hacking OpenAI, 13 set 2026</a></li>
+<li><a href="https://the-decoder.com/security-researchers-used-anthropics-claude-to-hack-openais-internal-systems-in-under-72-hours/">THE DECODER, 18 set 2026</a></li>
+<li><a href="https://blog.checkpoint.com/artificial-intelligence/ai-models-broke-their-own-containment-key-findings-from-the-july-august-2026-ai-threat-landscape/">Check Point, 17 set 2026</a></li>
+<li><a href="https://www.technologyreview.com/2026/09/18/1144329/the-specter-of-ai-enabled-bioweapons-is-a-wake-up-call-for-biotech/">MIT Technology Review, 18 set 2026</a></li>
+<li><a href="https://vercel.com/changelog/typesafe-ai-jev-now-available-on-ai-gateway">Jev no AI Gateway, Vercel changelog, 16 set 2026</a></li>
+<li><a href="https://x.com/vercel/status/2101077346203971900">@vercel no X, 18 set 2026</a></li>
+<li><a href="https://x.com/trq212/status/2101009392611278961">@trq212 — Claude Code AGENTS.md, 18 set 2026</a></li>
+<li><a href="https://nextjs.org/docs/app/guides/ai-agents">Next.js — Guides: AI agents</a></li>
+<li><a href="https://github.com/vercel/next-devtools-mcp">vercel/next-devtools-mcp</a></li>
+</ul>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Agentes fora do lab.
+
+Astra for Law (GPT-6 vertical com índice jurídico), Claude no red team da OpenAI em &lt;72h, e AGENTS.md + MCP como contrato do builder. Sem alarmismo — o que muda na superfície de tool, identidade e instrução.
+
+Li o recorte completo no blog:
+
+https://felvieira.github.io/blog/posts/2026-09-18-agentes-fora-do-lab-astra-claude-openai-set-2026.html</div>
+  </section>
+
+  <footer class="post">
+    <span>18 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
