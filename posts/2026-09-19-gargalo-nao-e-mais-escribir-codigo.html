@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O gargalo não é mais escrever código — é orquestrar o que a IA já faz — felvieira's blog</title>
+<meta name="description" content="O custo caiu, o modelo escreve. O que falta é pipeline, revisão e ownership — não mais digitação.">
+<meta property="og:title" content="O gargalo não é mais escrever código — é orquestrar o que a IA já faz">
+<meta property="og:description" content="O custo caiu, o modelo escreve. O que falta é pipeline, revisão e ownership — não mais digitação.">
+<meta property="og:image" content="https://opengraph.githubassets.com/1/felvieira/blog">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O gargalo não é mais escrever código — é orquestrar o que a IA já faz</h1>
+  <p class="meta">
+    <span>19 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">4 min read</span>
+  </p>
+
+  
+
+  <article>
+<p>Durante anos, o gargalo foi <strong>escrever código</strong>. Os agentes resolveron isso: hoje um pull request sai no tempo que antes levava uma pausa para o café. O problema não sumiu, só <strong>se moveu de lugar</strong>. Agora o gargalo é outro: <strong>decidir o que entra no main</strong>.</p>
+
+<p>Um CTO resumiu bem o dilema num fio da comunidade que rodou bastante entre devs: <em>"revisar código é mais difícil que escrever código"</em>. E se a IA multiplica por dez o volume de código, a revisão humana se transforma no gargalo fatal. Não é pessimismo: são os dados de 2026.</p>
+
+<h2>Os números que mostram que o problema se moveu</h2>
+
+<p>Várias medições independentes apontam na mesma direção. O <a href="https://linearb.io/resources/software-engineering-benchmarks">benchmark de LinearB 2026</a> achou que os PRs feitos por agentes demoram <strong>5,3x mais tempo para serem retomados</strong> por um revisor que os PRs sem assistência; os PRs assistidos por IA esperam <strong>2,47x mais</strong>. O revisor não ficou lento: simplesmente há muito mais para revisar.</p>
+
+<ul>
+  <li><strong>CircleCI 2026:</strong> o throughput das feature branches cresceu <strong>59%</strong> de um ano para o outro, mas o da principal caiu ~7% para a equipe mediana, e a taxa de sucesso caiu a <strong>70,8%</strong>. Se produz mais código e se mergea peggio de lo que parece.</li>
+  <li><strong>GitHub Octoverse 2025:</strong> os merges de PRs cresceron <strong>29%</strong> de um ano para o outro, impulsionados pelos asistentes de código.</li>
+  <li><strong>Faros AI / DORA 2025:</strong> <strong>31% mais de PRs fazem merge sem revisão</strong>. Quando a cola cresce, o primeiro que se corta é a rigurosidade.</li>
+  <li><strong>Qodo (1M de PRs analizados):</strong> <strong>17% tinham issues de severidade alta</strong> que terian passado uma revisão manual feita sob pressão de tempo.</li>
+</ul>
+
+<p>O <a href="https://blog.codacy.com/ai-breaking-code-review-how-engineering-teams-survive-pr-bottleneck">análisis de Codacy</a> o diz direto: <em>"o gargalo se moveu de escrever código para decidir se é seguro mergear"</em>. Generar código ficou barato. <strong>Verificarlo se converteu no produto.</strong></p>
+
+<h2>Por qué revisar código de agentes é diferente</h2>
+
+<p>Não é o mesmo trabalho de sempre com mais volume. Son três problemas nuevos:</p>
+
+<ol>
+  <li><strong>Volumen:</strong> un dev con asistente abre vários PRs no tempo que antes abría um.</li>
+  <li><strong>Contexto:</strong> el revisor recibe o diff já terminado, sem a travesía de decisões que o produjo. Tiene que reconstruir a intenção só com o ticket, a descrição do PR e o código.</li>
+  <li><strong>Confianza:</strong> o código de IA <em>parece</em> correto numa leitura casual. É mais difícil de revisar, não mais fácil: há que caçar discrepâncias sutiles entre intenção, arquitetura e comportamento real.</li>
+</ol>
+
+<p>Por isso, os revisores genéricos de diff não alcanzan. Un revisor de IA sem contexto do repo se comporta como <em>"un junior sin memoria del repositorio"</em>: comenta coisas que soan razoáveis e ruido que a equipe já decidió há meses. No <a href="https://www.qodo.ai/blog/github-ai-code-review/">reporte de Qodo</a>, <strong>44%</strong> de quem sente que a IA degrada a qualidade culpa a falta de contexto. Ese é o ponto: o contexto separa a señal do ruido.</p>
+
+<h2>O fix real não é más revisores: é cambiar o pipeline</h2>
+
+<p>Contratar más revisores humanos não escala. O que escala é <strong>mover o trabalho onde corresponde, em três capas</strong>:</p>
+
+<p><strong>Capa 1 — Checks deterministas, antes de que chegue um humano.</strong> Lint, type check, SAST, detección de secretos, cobertura, complejidad. Se falham, o PR nem entra na cola de review. Son baratos, repetibles e não se cansam. Essa capa sozinha já descongestiona a fila.</p>
+
+<p><strong>Capa 2 — Triaje com IA.</strong> Um agente de review que resuma o que cambió, agrupe riscos por severidade e arranque com os pontos quentes. O humano já não começa desde um diff em branco. Há opções de sobra: o PR review de GitHub Copilot, CodeRabbit, PR-Agent ou Qodo — cada uma com seu trade-off entre contexto, ruido e preço. O requisito não negociable: <strong>que tenha contexto do repo, não só o diff</strong>.</p>
+
+<p><strong>Capa 3 — O humano só em juicios.</strong> Alineação com a arquitetura (o código de IA costuma satisfazer o prompt e violar o diseño), lógica de negocio, mantenibilidad e impacto cross-team. Decisións que uma herramienta não pode tomar porque não esteve nas reuniões.</p>
+
+<p>O pipeline completo se ve assim — o propuso un dev no <a href="https://github.com/orgs/community/discussions/187143">discusión más votada de GitHub Community sobre herramientas de IA em 2026</a>:</p>
+
+<p><code>análisis estático → revisão de IA → tests → revisão humana → merge</code></p>
+
+<p>Cada capa atrapa uma clase de erro distinta. Ninguna substituye à seguinte; se empilhan. E um truco barato que suma muito: a <strong>revisão cruzada entre modelos</strong> — que um agente revise o que escreviu outro — porque os erros que comete um modelo rara vez os detecta ele mesmo (como nos passa com nosso próprio código). <a href="https://medium.com/@addyosmani/my-llm-coding-workflow-going-into-2026-52fe1681325e">Addy Osmani o resume</a> como o passo de "conductores a orquestadores": o humano dirige, os agentes ejecutan e se fiscalizan entre eles.</p>
+
+<h2>Checklist prático para esta semana</h2>
+
+<ul>
+  <li>Se o CI falha, que o PR <strong>nem chegue</strong> ao revisor humano. Que a fila só receba diffs que já passaron os checks.</li>
+  <li>Faz que o agente documente as decisões no PR: <em>por que</em> escolheu esse caminho, não só o que cambió. Reconstruir intenção é o que más tempo roba.</li>
+  <li>O agente de review precisa contexto do repo (convenções, arquitetura, reglas do projeto), não um diff pelado. Se comenta ruido, não é problema do modelo: é falta de contexto.</li>
+  <li>Separa por severidade. O humano deveria ver 5 riscos priorizados, não 50 comentarios no mesmo nível.</li>
+  <li>Mide o <em>pickup time</em> dos teus PRs, não as líneas generadas. Essa métrica te diz se o teu pipeline de review aguanta.</li>
+</ul>
+
+<p>A boa noticia: não hace falta bajar a barra nem trabalhar más horas. Há que <strong>cambiar onde se aplica o esforzo</strong>. Escrever se volvió commodity; a vantaxe competitiva agora está em decidir rápido e bem o que se mergea. Quem resolve isso, destrava o único gargalo que le queda a seu equipa.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O custo caiu, o modelo escreve. O que falta é pipeline, revisão e ownership — não mais digitação.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O custo caiu, o modelo escreve. O que falta é pipeline, revisão e ownership — não mais digitação.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-09-19-gargalo-nao-e-mais-escribir-codigo.html</div>
+  </section>
+
+  <footer class="post">
+    <span>19 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
