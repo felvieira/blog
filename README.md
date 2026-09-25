@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-09-25** — [Tu flujo de desarrollo con agentes de IA en 2026](posts/2026-09-25-flujo-trabajo-agentes-ia-2026.html) (🇧🇷 PT)
 - **2026-09-25** — [Você não escreve mais código. Você orquestra agentes.](posts/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra.html) (🇧🇷 PT)
 - **2026-09-19** — [O gargalo não é mais escrever código — é orquestrar o que a IA já faz](posts/2026-09-19-gargalo-nao-e-mais-escribir-codigo.html) (🇧🇷 PT)
 - **2026-09-18** — [Agentes fora do lab: Astra for Law, Claude no red team da OpenAI e o que muda pra quem constrói](posts/2026-09-18-agentes-fora-do-lab-astra-claude-openai-set-2026.html) (🇧🇷 PT)

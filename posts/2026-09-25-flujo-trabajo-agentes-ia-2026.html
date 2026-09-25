@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tu flujo de desarrollo con agentes de IA en 2026 — felvieira's blog</title>
+<meta name="description" content="De prompts sueltos a equipos de agentes coordinados: cómo cambió la forma de programar y qué hábitos valen la pena este año.">
+<meta property="og:title" content="Tu flujo de desarrollo con agentes de IA en 2026">
+<meta property="og:description" content="De prompts sueltos a equipos de agentes coordinados: cómo cambió la forma de programar y qué hábitos valen la pena este año.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-25-flujo-trabajo-agentes-ia-2026-cover.png">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Tu flujo de desarrollo con agentes de IA en 2026</h1>
+  <p class="meta">
+    <span>25 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">4 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-25-flujo-trabajo-agentes-ia-2026-cover.png" alt="Tu flujo de desarrollo con agentes de IA en 2026 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Dois anos atrás eu abria um arquivo, escrevia uma função, testava, quebrava, consertava. Sozinho, linha por linha. Hoje eu abro o terminal, escrevo um parágrafo explicando o problema, e um agente sai escrevendo código enquanto eu tomo café. Não é exagero: mudou o verbo do meu trabalho. Antes eu "escrevia código". Agora eu "reviso decisões". E essa mudança de verbo é o assunto deste post.</p>
+
+<h2>Contexto primeiro, código depois</h2>
+<p>O erro mais comum que ainda vejo — e que eu mesmo cometia — é pedir código antes de explicar o problema. "Cria uma função que valida CPF" gera código genérico, sem saber se é para um formulário, uma API, um batch job. O resultado funciona, mas não serve.</p>
+<p>O que muda o jogo é inverter a ordem: primeiro você descreve o contexto. Qual é a regra de negócio, quais são as restrições, o que já existe no repositório, o que não pode quebrar. Só depois vem o pedido de implementação. Isso parece óbvio, mas é raro na prática porque dá trabalho escrever um bom parágrafo de contexto quando parece mais rápido só "jogar o prompt".</p>
+<ul>
+  <li>Descreva o problema de negócio, não a solução técnica que você já imaginou.</li>
+  <li>Cite arquivos, padrões e convenções existentes no projeto.</li>
+  <li>Deixe claro o que <strong>não</strong> pode mudar — isso evita refatorações não pedidas.</li>
+</ul>
+
+<p><img src="../assets/images/2026-09-25-flujo-trabajo-agentes-ia-2026-1-contexto.png" alt="Contexto primero: organizar o problema antes de pedir código" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Commit como save point, não como cerimônia</h2>
+<p>Outra coisa que mudou de verdade: a frequência dos commits. Eu costumava fazer commits grandes, no fim do dia, com mensagens tipo "ajustes diversos". Isso não funciona mais quando um agente pode reescrever meio módulo em trinta segundos.</p>
+<p>Hoje eu faço commit a cada passo pequeno que funciona. Não é disciplina de boy scout, é sobrevivência: se o agente entrar numa direção ruim daqui a dez minutos, eu quero poder voltar exatamente para o ponto anterior sem perder o que já estava certo. Commit virou o botão de "salvar jogo", não um marco histórico.</p>
+<ul>
+  <li>Commite antes de pedir uma mudança arriscada, não só depois.</li>
+  <li>Mensagens curtas e descritivas bastam — o objetivo é navegação, não documentação.</li>
+  <li><code>git diff</code> antes de aceitar qualquer coisa grande vira hábito, não exceção.</li>
+</ul>
+
+<h2>De um agente a uma equipe de agentes</h2>
+<p>No começo, era um agente, uma tarefa, um resultado. Você pedia, ele respondia, fim. Isso ainda existe, mas já não é o cenário mais interessante. O que mudou em 2026 é a duração e a coordenação: agentes que ficam trabalhando por dezenas de iterações numa mesma sessão, ajustando o próprio plano conforme encontram problemas — sem eu precisar reformular o prompt a cada erro.</p>
+<p>E mais: agora é comum orquestrar vários agentes ao mesmo tempo, cada um com um pedaço isolado do trabalho. Um cuida do backend, outro escreve os testes, outro faz a revisão de segurança. Ferramentas como Claude Code e Codex já suportam esse padrão de subagentes trabalhando em paralelo, com um agente "líder" decidindo como dividir o problema. Isso parece luxo, mas na prática é a única forma de lidar com tarefas grandes sem estourar o contexto de um único agente.</p>
+<p>A parte que exige mais maturidade do time é decidir o que dividir. Tarefas independentes — front separado de back, testes separados de implementação — se prestam bem a isso. Tarefas acopladas, onde um agente precisa saber exatamente o que o outro decidiu, geram conflito e retrabalho. Isso é decisão de arquitetura, não de prompt.</p>
+
+<p><img src="../assets/images/2026-09-25-flujo-trabajo-agentes-ia-2026-2-savepoints.png" alt="Commits frequentes como save points de um jogo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Os limites que ninguém resolveu ainda</h2>
+<p>Dito isso, não virou mágica. Existem limites reais que continuam travando o fluxo, e vale nomear com honestidade:</p>
+<ul>
+  <li><strong>Contexto ainda é finito.</strong> Repositórios grandes não cabem inteiros na cabeça do agente. Ele erra por não saber que aquela função já existe em outro lugar, ou que aquele padrão foi abandonado há dois meses.</li>
+  <li><strong>Segurança exige atenção redobrada.</strong> Um agente com acesso a shell, a credenciais, a produção, é uma superfície de ataque nova. Dar permissão de escrita irrestrita para um agente autônomo sem sandboxing é pedir problema.</li>
+  <li><strong>Revisão humana continua sendo o gargalo — e está certo que seja.</strong> A geração de código ficou rápida, mas ler, entender e aprovar um diff continua sendo trabalho humano. Isso não é um bug do processo, é o ponto onde a responsabilidade fica com alguém.</li>
+</ul>
+<p>Quem trata revisão de código como etapa burocrática está se enganando. É o único lugar onde alguém pergunta "isso realmente resolve o problema, ou só parece resolver?" — pergunta que nenhum agente faz sozinho.</p>
+
+<p><img src="../assets/images/2026-09-25-flujo-trabajo-agentes-ia-2026-3-equipo.png" alt="De agente único a equipes coordenadas de agentes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>O que eu recomendo na prática</h2>
+<p>Se você está construindo esse fluxo no seu time, aqui vai o que tem funcionado para mim:</p>
+<ol>
+  <li>Escreva o contexto antes do pedido — invista tempo na descrição do problema, não na engenharia do prompt perfeito.</li>
+  <li>Commit pequeno e frequente. Trate cada commit como um checkpoint que você pode restaurar sem culpa.</li>
+  <li>Divida tarefas grandes em partes independentes antes de acionar múltiplos agentes — a orquestração só ajuda quando as partes não se pisam.</li>
+  <li>Restrinja o acesso do agente ao mínimo necessário: sandbox, permissões explícitas, nada de credenciais de produção soltas.</li>
+  <li>Nunca pule a revisão humana em código que vai para produção, mesmo quando o agente "parece confiante".</li>
+</ol>
+<p>No fim, a ferramenta mudou, mas a responsabilidade não. Quem assina o commit ainda é você.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">De prompts sueltos a equipos de agentes coordinados: cómo cambió la forma de programar y qué hábitos valen la pena este año.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">De prompts sueltos a equipos de agentes coordinados: cómo cambió la forma de programar y qué hábitos valen la pena este año.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-09-25-flujo-trabajo-agentes-ia-2026.html</div>
+  </section>
+
+  <footer class="post">
+    <span>25 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
