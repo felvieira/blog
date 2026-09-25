@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Você não escreve mais código. Você orquestra agentes. — felvieira's blog</title>
+<meta name="description" content="O dev virou arquiteto e revisor de um time de agentes que escrevem código por ele. O que muda no dia a dia, na carreira e no bolso — e como se preparar para isso.">
+<meta property="og:title" content="Você não escreve mais código. Você orquestra agentes.">
+<meta property="og:description" content="O dev virou arquiteto e revisor de um time de agentes que escrevem código por ele. O que muda no dia a dia, na carreira e no bolso — e como se preparar para isso.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra-cover.png">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Você não escreve mais código. Você orquestra agentes.</h1>
+  <p class="meta">
+    <span>25 de setembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">6 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra-cover.png" alt="Você não escreve mais código. Você orquestra agentes. — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Sexta-feira, 23h40, e eu tô olhando pra um pull request que eu não escrevi uma linha sequer. Abri o terminal, descrevi o que precisava — um endpoint novo, validação, testes, tudo — e fui fazer café. Voltei, li o diff, pedi pra ajustar dois nomes de variável e mudar uma estratégia de cache, aprovei. Dez minutos, feature pronta. Há três anos isso teria sido uma tarde inteira de mim digitando, testando, quebrando a cabeça com um edge case idiota às 2h da manhã. Hoje eu só disse "não, faz assim" duas vezes. Essa é a mudança que ninguém te avisou que ia doer tanto o ego.</p>
+
+<p>Deixa eu ser direto: em 2026, se você ainda mede seu valor como dev pela quantidade de código que digita, você tá jogando um jogo que já acabou. O jogo agora é outro. Você não é mais o cara que escreve a função. Você é o cara que decide se a função devia existir, se ela tá certa, se ela vai explodir em produção às 3h de um domingo. Virou arquiteto. Virou revisor. Virou, sejamos sinceros, o chato que fica de braço cruzado olhando o agente trabalhar e falando "não, assim não" — só que esse chato agora entrega dez vezes mais rápido.</p>
+
+<h2>O harness virou commodity, e isso é o ponto</h2>
+
+<p>Repara no que aconteceu só neste mês de setembro. A OpenAI abriu a Agents API em beta público, pegando o mesmo motor que roda o Codex e botando atrás de uma chamada de API qualquer. Isso significa que o "agente que escreve código sozinho" deixou de ser feature de produto fechado pra virar peça de infraestrutura que qualquer empresa pode plugar no próprio fluxo. Junto veio o GPT-6 Astra como modelo padrão do Codex, e depois o GPT-6 Sol e o Luna, mais baratos, pra quem quer volume sem quebrar o orçamento.</p>
+
+<p>Do lado da Anthropic, o Opus 5.5 chegou com contexto de 1 milhão de tokens e virou padrão no Claude Code no mesmo dia do lançamento — 22 de setembro. Um milhão de tokens não é número bonito de slide, é a diferença entre um agente que esquece o que você pediu há vinte minutos e um que segura o contexto de um repositório inteiro, com histórico, documentação e decisões de arquitetura, sem perder o fio. O Fable 5.1 já vinha com isso também. Quando o "esquecimento" deixa de ser problema, o agente para de ser assistente de trecho de código e passa a ser participante de verdade do projeto.</p>
+
+<p><img src="../assets/images/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra-1-torre-controle.png" alt="Torre de controle: o dev monitorando dezenas de agentes autônomos trabalhando em paralelo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<p>E não é só modelo. O Cursor lançou o Projects, que é basicamente um agente coordenador que pega uma tarefa grande, quebra em pedaços e delega pra subagentes — cada um cuidando de uma parte, tudo orquestrado. Isso é o mesmo movimento que a gente já vê em ferramentas internas de orquestração multiagente: você não conversa mais com "um" agente, você gerencia uma equipe de agentes que conversam entre si. Se isso te lembra gerenciar um time de estagiários muito rápidos e um pouco teimosos, é porque é exatamente isso.</p>
+
+<h2>Os números não mentem, mas também não contam a história toda</h2>
+
+<p>Tem uma pesquisa da Stack Overflow rodando por aí com números que valem a pena repetir: quem usa agentes relata 70% mais rapidez em tarefas específicas, 69% de aumento de produtividade, 64% de automação de tarefas repetitivas e 63% de aprendizado mais rápido em codebases novas. Esse último dado é o que eu acho mais subestimado. A gente fala muito de velocidade, mas o real ganho é entender um repositório estranho de dez anos atrás em uma tarde em vez de uma semana, porque o agente lê o código todo e te resume o que importa.</p>
+
+<p>Só que produtividade sem critério é só velocidade pra bater no muro mais rápido. E aqui entra outro dado que eu acho revelador: segundo a JetBrains, o OpenCode, que é agente open source, já tem 7% de adoção. Isso não é sobre qual ferramenta é melhor — é sobre um mercado inteiro migrando pra um modelo onde o "motor" que escreve código é intercambiável, tratado quase como dependência de projeto. Você escolhe o motor pelo caso de uso, não porque é fiel a uma marca. Isso é maduro. É sinal de que o mercado parou de tratar "ter um agente" como diferencial e começou a tratar como pré-requisito, tipo ter internet no escritório.</p>
+
+<p><img src="../assets/images/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra-2-arquiteto-robos.png" alt="Arquiteto com a planta na mão enquanto robôs constroem — o dev especifica, os agentes executam" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Curadoria vale mais que digitação — e isso muda tudo na carreira</h2>
+
+<p>Aqui é onde eu preciso ser cru com você: se sua identidade profissional é "eu sou bom em escrever código limpo rapidinho", você tá otimizando pra habilidade que tá sendo comoditizada na sua frente. O que não comoditiza é saber o que pedir. É entender o domínio do problema a ponto de escrever uma especificação que não deixa brecha pro agente inventar bobagem. É ter o olho clínico de code review pra pegar a hora que o agente, com toda confiança do mundo, gerou uma solução plausível e completamente errada — porque agente não tem vergonha de estar errado, ele só continua com a mesma convicção de sempre.</p>
+
+<p>Vi isso de perto quando pedi pra um agente fazer uma feature inteira a partir de uma URL do Figma. Ele gerou os componentes, ligou o estado, fez a responsividade. Bonito. Só que ele também decidiu, por conta própria, reescrever uma parte da lógica de autenticação que não tinha nada a ver com o pedido, porque "parecia relacionado". Se eu não tivesse revisado linha por linha aquele trecho, teria ido pra produção um buraco de segurança com a assinatura de "só ajustei o frontend". Esse é o trabalho agora: não é escrever, é vigiar. É ser o adulto na sala enquanto a criança superdotada mexe em tudo com muita energia e pouco senso de consequência.</p>
+
+<p><img src="../assets/images/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra-3-engrenagens.png" alt="Engrenagens de tamanhos e cores diferentes encaixadas numa única máquina — modelos diversos trabalhando juntos" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<p>E isso muda o que vale a pena estudar. Estudar sintaxe nova de framework virou quase perda de tempo comparado a estudar arquitetura de sistemas, modelagem de dados, segurança, e — isso é sério — escrita clara. Porque especificar bem pra um agente é, no fundo, escrever bem. É a mesma habilidade de redigir um requisito que não deixa margem pra ambiguidade. Quem escreve mal, especifica mal, e quem especifica mal recebe código ruim de volta, só que ruim em escala industrial e em segundos.</p>
+
+<h2>Então o que fazer segunda-feira de manhã</h2>
+
+<p>Não estou dizendo pra parar de programar. Estou dizendo pra parar de confundir programar com digitar. Programar sempre foi pensar — a digitação era só o jeito mais lento de externar esse pensamento. Agora você externa mais rápido, mas precisa pensar melhor, porque a distância entre uma ideia mal formada e um sistema em produção diminuiu pra quase zero.</p>
+
+<p>Se eu fosse te dar três coisas pra levar pra segunda: primeiro, aprenda a escrever especificações e prompts como se fossem contratos — precisos, com critério de aceite, sem depender de o agente "adivinhar" sua intenção. Segundo, treine seu code review como se fosse a habilidade mais importante da sua carreira, porque ela é. Terceiro, entenda que orquestrar múltiplos agentes é uma competência nova, parecida com gerenciar time, e quem aprender isso primeiro vai estar anos-luz na frente de quem ainda insiste em escrever cada função à mão só pra provar que "sabe programar de verdade". Ninguém duvida que você sabe. A pergunta agora é se você sabe dirigir.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O dev virou arquiteto e revisor de um time de agentes que escrevem código por ele. O que muda no dia a dia, na carreira e no bolso — e como se preparar para isso.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O dev virou arquiteto e revisor de um time de agentes que escrevem código por ele. O que muda no dia a dia, na carreira e no bolso — e como se preparar para isso.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra.html</div>
+  </section>
+
+  <footer class="post">
+    <span>25 de setembro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
