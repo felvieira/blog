@@ -55,12 +55,33 @@ const args = Object.fromEntries(
 );
 
 const required = ["slug", "title", "lang", "excerpt", "body"];
+
+// Spanish-only tokens. Do not match Portuguese "como", "fluxo" or "artigo".
+const SPANISH = /\b(flujo|trabajo|desarrollo|primero|equipos|sueltos|cómo|art[ií]culo|coordinados|cambió)\b/i;
+function rejectSpanish(label, text) {
+  if (args.lang !== "pt-BR") return;
+  const hit = String(text || "").match(SPANISH);
+  if (hit) {
+    console.error(`ERROR idioma: ${label} em espanhol ("${hit[0]}"). Reescreva em pt-BR.`);
+    process.exit(2);
+  }
+}
+rejectSpanish(
+  "slug/título/excerpt",
+  `${args.slug} ${args.title} ${args.excerpt} ${args["share-hook"] || ""} ${args.linkedin || ""}`,
+);
+
 for (const k of required) {
   if (!args[k]) { console.error(`Missing --${k}`); process.exit(1); }
 }
 
 // ─── Build post ──────────────────────────────────────────────────────────────
-const today    = new Date().toISOString().slice(0, 10);
+const today = new Intl.DateTimeFormat("en-CA", {
+  timeZone: "America/Sao_Paulo",
+  year: "numeric",
+  month: "2-digit",
+  day: "2-digit",
+}).format(new Date());
 const filename = `${today}-${args.slug}.html`;
 const outPath  = join(ROOT, "posts", filename);
 
@@ -75,6 +96,7 @@ if (!existsSync(args.body)) {
 }
 
 const bodyHtml = readFileSync(args.body, "utf8");
+rejectSpanish("corpo/alt", bodyHtml);
 const tmpl     = readFileSync(TEMPLATE, "utf8");
 
 const readingTime = Math.max(1, Math.round(bodyHtml.split(/\s+/).length / 220));
