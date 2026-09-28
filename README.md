@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-09-28** — [Revisar código virou o novo gargalo: como destravar com agentes de IA](posts/2026-09-28-revisao-de-codigo-novo-gargalo-2026.html) (🇧🇷 PT)
 - **2026-09-25** — [Seu fluxo de trabalho com agentes de IA em 2026](posts/2026-09-25-flujo-trabajo-agentes-ia-2026.html) (🇧🇷 PT)
 - **2026-09-25** — [Você não escreve mais código. Você orquestra agentes.](posts/2026-09-25-voce-nao-escreve-mais-codigo-voce-orquestra.html) (🇧🇷 PT)
 - **2026-09-19** — [O gargalo não é mais escrever código — é orquestrar o que a IA já faz](posts/2026-09-19-gargalo-nao-e-mais-escribir-codigo.html) (🇧🇷 PT)
