@@ -1,0 +1,341 @@
+<!doctype html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Teste de apresentador: 9 modelos de vídeo com a mesma frase em português</title><meta name="description" content="Comparativo interativo de 9 modelos de vídeo com IA: custo, tempo, qualidade e fala em português com o mesmo quadro-base e a mesma frase.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=IBM+Plex+Mono:wght@400;500&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0d1014; --panel:#151a21; --panel2:#1b222b; --line:#28313b; --text:#e9edf2; --mute:#93a0ae; --faint:#5d6977;
+  --amber:#ffb454; --teal:#4fd1b5; --red:#ff7a7a; --blue:#6aa8ff; --tela:#0b0d10; --shadow:0 18px 50px rgba(0,0,0,.45);
+  --display:'Bricolage Grotesque','Segoe UI Variable Display','Segoe UI',system-ui,sans-serif;
+  --body:'IBM Plex Sans','Segoe UI',system-ui,sans-serif; --mono:'IBM Plex Mono',ui-monospace,Consolas,monospace;
+  color-scheme:dark;
+}
+@media (prefers-color-scheme:light){:root:not([data-tema="escuro"]){
+  --bg:#f4f1ec; --panel:#ffffff; --panel2:#f0ebe3; --line:#ddd5c8; --text:#1b1f24; --mute:#5e6874; --faint:#8b94a0;
+  --amber:#c46a00; --teal:#0f8a74; --red:#c93a3a; --blue:#2563c9; --shadow:0 18px 40px rgba(60,40,10,.18); color-scheme:light;}}
+:root[data-tema="claro"]{--bg:#f4f1ec;--panel:#fff;--panel2:#f0ebe3;--line:#ddd5c8;--text:#1b1f24;--mute:#5e6874;--faint:#8b94a0;--amber:#c46a00;--teal:#0f8a74;--red:#c93a3a;--blue:#2563c9;--shadow:0 18px 40px rgba(60,40,10,.18);color-scheme:light}
+*{box-sizing:border-box}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--bg);color:var(--text);font:400 15px/1.55 var(--body);-webkit-font-smoothing:antialiased}
+body::before{content:"";position:fixed;inset:0;pointer-events:none;background:radial-gradient(900px 500px at 85% -10%,rgba(255,180,84,.09),transparent 60%),radial-gradient(700px 500px at -10% 30%,rgba(79,209,181,.06),transparent 60%)}
+.wrap{position:relative;max-width:1240px;margin:0 auto;padding:28px 20px 80px}
+a{color:var(--amber)}
+.topo{display:flex;justify-content:space-between;align-items:center;gap:12px;margin-bottom:34px;color:var(--mute);font:500 12px var(--mono);letter-spacing:.08em;text-transform:uppercase}
+.topo button{all:unset;cursor:pointer;padding:6px 12px;border:1px solid var(--line);border-radius:999px;color:var(--mute)}
+.topo button:hover{color:var(--text);border-color:var(--faint)}
+h1{font:700 clamp(34px,5.4vw,60px)/1.02 var(--display);letter-spacing:-.02em;margin:0 0 14px;max-width:16ch;text-wrap:balance}
+h1 em{font-style:normal;color:var(--amber)}
+.lead{max-width:62ch;color:var(--mute);font-size:17px;margin:0 0 26px}
+.chips{display:flex;flex-wrap:wrap;gap:10px;margin-bottom:40px}
+.chip{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:10px 14px;min-width:150px}
+.chip b{display:block;font:500 22px var(--mono);letter-spacing:-.02em}
+.chip span{color:var(--mute);font-size:12.5px}
+.barra{position:sticky;top:0;z-index:20;display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 0;margin-bottom:18px;background:linear-gradient(var(--bg) 70%,transparent)}
+.grupo{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+label.sel,.seg button,.btn{font:500 13px var(--body);color:var(--text);background:var(--panel);border:1px solid var(--line);border-radius:10px;padding:8px 12px;cursor:pointer;text-decoration:none;display:inline-block}
+select{font:inherit;color:inherit;background:transparent;border:0;outline:0;cursor:pointer;padding-left:4px}
+select option{color:#111}
+.seg{display:flex}.seg button{border-radius:0;margin-left:-1px}.seg button:first-child{border-radius:10px 0 0 10px;margin-left:0}.seg button:last-child{border-radius:0 10px 10px 0}
+.seg button[aria-pressed="true"]{background:var(--amber);color:#1a1205;border-color:var(--amber);font-weight:600}
+.btn.primario{background:var(--amber);color:#1a1205;border-color:var(--amber);font-weight:600}
+.btn[disabled]{opacity:.4;cursor:not-allowed}
+:focus-visible{outline:2px solid var(--amber);outline-offset:2px}
+.grade{display:grid;grid-template-columns:repeat(auto-fill,minmax(262px,1fr));gap:18px}
+.card{position:relative;background:var(--panel);border:1px solid var(--line);border-radius:16px;overflow:hidden;display:flex;flex-direction:column;transition:transform .2s,border-color .2s}
+.card:hover{transform:translateY(-3px);border-color:var(--faint)}
+.card.selecionado{border-color:var(--amber);box-shadow:0 0 0 1px var(--amber)}
+.thumb{position:relative;aspect-ratio:9/12;background:var(--tela);cursor:pointer;border:0;padding:0;display:block;width:100%;overflow:hidden}
+.thumb img{width:100%;height:100%;object-fit:cover;display:block;transition:transform .35s}
+.card:hover .thumb img{transform:scale(1.04)}
+.play{position:absolute;inset:auto 12px 12px auto;width:46px;height:46px;border-radius:50%;background:rgba(11,13,16,.62);display:grid;place-items:center;border:1px solid rgba(255,255,255,.25)}
+.play::before{content:"";border-left:14px solid #f5f5f5;border-top:9px solid transparent;border-bottom:9px solid transparent;margin-left:4px}
+.rank{position:absolute;top:10px;left:10px;font:500 11px var(--mono);background:rgba(11,13,16,.68);color:#f5f5f5;border-radius:6px;padding:3px 8px;letter-spacing:.06em}
+.selo{position:absolute;top:10px;right:10px;font:600 11px var(--body);border-radius:6px;padding:3px 8px;color:#10130f}
+.selo.fiel{background:var(--teal)}.selo.custo{background:var(--amber)}.selo.barato{background:#b8a6ff}.selo.pior{background:var(--red)}.selo.mov{background:var(--blue)}
+.corpo{padding:14px 15px 15px;display:flex;flex-direction:column;gap:10px;flex:1}
+.nome{font:700 20px/1.15 var(--display);letter-spacing:-.01em}
+.vendor{font:500 11.5px var(--mono);color:var(--mute);text-transform:uppercase;letter-spacing:.07em}
+.linha{display:flex;justify-content:space-between;gap:10px;align-items:baseline}
+.preco{font:500 24px var(--mono);letter-spacing:-.03em}.preco small{font-size:12px;color:var(--mute)}
+.meta{font:400 12px var(--mono);color:var(--mute);text-align:right}
+.notas{display:grid;grid-template-columns:auto 1fr;gap:5px 10px;font-size:12.5px;color:var(--mute);align-items:center}
+.pontos{display:flex;gap:3px}.pontos i{width:14px;height:6px;border-radius:2px;background:var(--line)}.pontos i.on{background:var(--teal)}
+.pontos.baixo i.on{background:var(--red)}.pontos.medio i.on{background:var(--amber)}
+.resumo{font-size:13.5px;color:var(--mute);margin:0}
+.rodape{display:flex;gap:8px;margin-top:auto;padding-top:4px;align-items:center;justify-content:space-between}
+.rodape .btn{text-align:center;padding:8px 12px;font-size:12.5px}
+.chk{display:flex;gap:7px;align-items:center;font-size:12.5px;color:var(--mute);cursor:pointer;user-select:none}
+.chk input{accent-color:var(--amber);width:16px;height:16px}
+section{margin-top:70px}
+h2{font:700 clamp(26px,3.6vw,38px)/1.1 var(--display);letter-spacing:-.015em;margin:0 0 6px}
+.sub{color:var(--mute);margin:0 0 22px;max-width:70ch}
+.tabela-wrap{overflow-x:auto;border:1px solid var(--line);border-radius:14px;background:var(--panel)}
+table{border-collapse:collapse;width:100%;min-width:880px;font-size:13.5px}
+th,td{padding:11px 14px;text-align:left;border-bottom:1px solid var(--line);white-space:nowrap}
+th{font:500 11.5px var(--mono);color:var(--mute);text-transform:uppercase;letter-spacing:.06em;background:var(--panel2)}
+tr:last-child td{border-bottom:0}
+td.num{font-family:var(--mono)}
+td.melhor{color:var(--teal);font-weight:600}
+td.pior{color:var(--red)}
+tr.linha-click{cursor:pointer}tr.linha-click:hover td{background:rgba(255,180,84,.06)}
+.barras{display:grid;gap:26px;grid-template-columns:repeat(auto-fit,minmax(340px,1fr))}
+.painel{background:var(--panel);border:1px solid var(--line);border-radius:14px;padding:18px}
+.painel h3{margin:0 0 14px;font:700 16px var(--display)}
+.bar{display:grid;grid-template-columns:128px 1fr 64px;gap:10px;align-items:center;margin:8px 0;font-size:12.5px}
+.bar .t{height:12px;background:var(--panel2);border-radius:99px;overflow:hidden}
+.bar .t i{display:block;height:100%;border-radius:99px;background:var(--amber)}
+.bar .v{font-family:var(--mono);text-align:right;color:var(--mute)}
+.fala{display:grid;gap:10px}
+.fala .item{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:grid;grid-template-columns:170px 1fr auto;gap:12px;align-items:center}
+.fala .alvo{border-color:var(--amber);background:rgba(255,180,84,.07)}
+.fala q{quotes:none;font-size:14.5px}
+.fala mark{background:rgba(255,122,122,.22);color:inherit;border-radius:4px;padding:0 3px}
+.fala .cob{font:500 12px var(--mono);color:var(--mute)}
+details{background:var(--panel);border:1px solid var(--line);border-radius:12px;padding:14px 18px;margin-top:12px}
+summary{cursor:pointer;font:600 15px var(--body)}
+details p,details li{color:var(--mute)}
+pre{white-space:pre-wrap;background:var(--panel2);border:1px solid var(--line);padding:14px;border-radius:10px;font:12.5px/1.55 var(--mono);color:var(--mute);margin:12px 0 0}
+.pendentes{display:grid;gap:14px;grid-template-columns:repeat(auto-fit,minmax(250px,1fr))}
+.pend{background:var(--panel);border:1px dashed var(--faint);border-radius:14px;padding:16px}
+.pend b{font:700 17px var(--display)}.pend .p{font:500 18px var(--mono);margin:6px 0}
+.tag{display:inline-block;font:500 11px var(--mono);padding:2px 8px;border-radius:6px;background:var(--panel2);color:var(--mute);margin-bottom:6px}
+.tag.alerta{background:rgba(255,122,122,.18);color:var(--red)}
+footer{margin-top:60px;color:var(--faint);font-size:12.5px;border-top:1px solid var(--line);padding-top:18px}
+dialog{border:0;padding:0;background:transparent;color:var(--text);max-width:none;max-height:none;width:100%;height:100%}
+dialog::backdrop{background:rgba(8,10,13,.9);}
+.modal{position:relative;margin:auto;height:100%;display:grid;place-items:center;padding:18px}
+.caixa{position:relative;display:grid;grid-template-columns:minmax(0,auto) minmax(300px,420px);gap:22px;max-height:calc(100vh - 36px);background:var(--panel);border:1px solid var(--line);border-radius:20px;box-shadow:var(--shadow);padding:18px;overflow:auto;max-width:min(1060px,100%)}
+.player{position:relative;background:var(--tela);border-radius:12px;overflow:hidden;height:min(82vh,820px);aspect-ratio:9/16;max-width:100%}
+.player video{width:100%;height:100%;object-fit:contain;display:block;background:var(--tela)}
+.info{display:flex;flex-direction:column;gap:12px;min-width:0;padding-top:30px}
+.info h3{font:700 28px/1.1 var(--display);margin:0}
+.info .kv{display:grid;grid-template-columns:auto 1fr;gap:5px 14px;font-size:13.5px;margin:0}
+.info .kv dt{color:var(--mute)}.info .kv dd{margin:0;font-family:var(--mono);font-size:12.5px;word-break:break-all}
+.x{position:absolute;top:10px;right:10px;z-index:3;width:38px;height:38px;border-radius:50%;border:1px solid var(--line);background:var(--panel2);color:var(--text);font-size:16px;cursor:pointer}
+.nav{display:flex;gap:8px;flex-wrap:wrap}
+.cmp{width:min(1240px,100%);background:var(--panel);border:1px solid var(--line);border-radius:20px;padding:18px;box-shadow:var(--shadow);max-height:calc(100vh - 36px);overflow:auto}
+.cmp-grade{display:grid;gap:12px;margin:14px 0}
+.cmp-grade figure{margin:0;position:relative;background:var(--tela);border-radius:10px;overflow:hidden}
+.cmp-grade video{width:100%;height:min(62vh,640px);object-fit:contain;display:block}
+.cmp-grade figcaption{position:absolute;left:8px;bottom:8px;background:rgba(11,13,16,.7);color:#f5f5f5;font:500 12px var(--mono);padding:3px 8px;border-radius:6px;pointer-events:none}
+.cmp-grade figure .som{position:absolute;right:8px;bottom:8px;border:1px solid rgba(255,255,255,.3);background:rgba(11,13,16,.7);color:#f5f5f5;border-radius:6px;font:500 11px var(--mono);padding:3px 8px;cursor:pointer}
+.cmp-grade figure .som[aria-pressed="true"]{background:var(--amber);color:#1a1205;border-color:var(--amber)}
+.ctrl{display:flex;gap:10px;align-items:center;flex-wrap:wrap}
+.ctrl input[type=range]{flex:1;min-width:160px;accent-color:var(--amber)}
+@media (max-width:820px){.caixa{grid-template-columns:1fr}.player{height:min(64vh,640px);margin:auto}.fala .item{grid-template-columns:1fr}.bar{grid-template-columns:100px 1fr 56px}}
+@media (prefers-reduced-motion:reduce){*{transition:none!important;scroll-behavior:auto!important}}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="topo"><span><a href="../../../posts/2026-10-01-video-ia-apresentador-9-modelos.html" style="color:inherit">← voltar ao post</a> · Higgsfield API · 30/09/2026</span><button id="tema" type="button" aria-label="Alternar tema">tema</button></div>
+
+  <h1>O mesmo apresentador em <em>9 modelos</em> de vídeo</h1>
+  <p class="lead">Mesmo quadro-base, mesma frase em português, 5 segundos na vertical. Aqui estão as 9 gerações, o que cada uma custou, quanto demorou e como se saiu em identidade, naturalidade e sincronia.</p>
+  <div class="chips" id="chips"></div>
+
+  <div class="barra" role="toolbar" aria-label="Controles">
+    <div class="grupo">
+      <label class="sel">Ordenar: <select id="ordem">
+        <option value="qualidade">Melhor qualidade</option><option value="preco">Menor preço</option><option value="tempo">Mais rápido</option><option value="valor">Melhor custo-benefício</option></select></label>
+      <div class="seg" role="group" aria-label="Versão do vídeo">
+        <button type="button" data-v="mg" aria-pressed="true">Com motion graphics</button>
+        <button type="button" data-v="orig" aria-pressed="false">Original do modelo</button>
+      </div>
+    </div>
+    <div class="grupo"><button class="btn primario" id="btnComparar" type="button" disabled>Comparar selecionados (0)</button><button class="btn" id="btnLimpar" type="button">Limpar</button></div>
+  </div>
+
+  <div class="grade" id="grade"></div>
+
+  <section id="comparativo">
+    <h2>Comparativo</h2>
+    <p class="sub">Clique em uma linha para abrir o vídeo. Em verde está o melhor valor de cada coluna; em vermelho, o pior.</p>
+    <div class="tabela-wrap"><table id="tabela"></table></div>
+    <div class="barras" style="margin-top:26px">
+      <div class="painel"><h3>Preço por clipe (US$)</h3><div id="bPreco"></div></div>
+      <div class="painel"><h3>Tempo de geração (s)</h3><div id="bTempo"></div></div>
+      <div class="painel"><h3>Nota geral (0–5)</h3><div id="bNota"></div></div>
+      <div class="painel"><h3>Custo por ponto de qualidade (US$)</h3><div id="bValor"></div></div>
+    </div>
+  </section>
+
+  <section id="fala">
+    <h2>A frase e o que cada modelo disse</h2>
+    <p class="sub">Transcrição automática (ElevenLabs STT, idioma <code>por</code>) do áudio gerado pelo próprio modelo. “Front-end” no lugar de “frontend” e nomes próprios trocados contam como diferença no texto, mas a frase foi dita por inteiro em todos.</p>
+    <div class="fala" id="falaLista"></div>
+  </section>
+
+  <section id="pendentes">
+    <h2>O que ficou de fora</h2>
+    <p class="sub">Não rodei os extras para poupar saldo: os modelos que valiam a pena já estão na comparação. O Genjutsu falhou uma vez por saldo (sem cobrança) e foi refeito depois da recarga.</p>
+    <div class="pendentes">
+            <div class="pend"><span class="tag">não rodado</span><br><b>Seedance 2.0</b><div class="p">US$ 1,51</div><p class="resumo">Imagem-para-vídeo, até 4K. Perfil separado do 2.5.</p></div>
+      <div class="pend"><span class="tag">não rodado</span><br><b>Wan 3.0 Prime</b><div class="p">US$ 0,70</div><p class="resumo">Variante do Wan 3.0, parecida em custo-benefício.</p></div>
+      <div class="pend"><span class="tag">não rodado</span><br><b>Happy Horse 1.1</b><div class="p">US$ 0,70</div><p class="resumo">1080p, até 15 s.</p></div>
+      <div class="pend"><span class="tag">não rodado</span><br><b>Wan 2.7</b><div class="p">US$ 0,50</div><p class="resumo">Aceita áudio de referência.</p></div>
+    </div>
+  </section>
+
+  <section id="metodo">
+    <h2>Como o teste foi feito</h2>
+    <details open><summary>Quadro-base e frase</summary>
+      <p>A folha de identidade (retrato, corpo e rótulos) não serve como primeiro quadro. Gerei um quadro limpo no fal (Nano Banana 2 edit), peito para cima, com a folha como autoridade do rosto. O primeiro enquadramento, mais aberto, deixou o rosto pequeno; o segundo, de peito para cima, deu rosto grande e muito melhor sincronia labial.</p>
+      <p><b>Frase:</b> “Eu sou Felipe Vieira, dev frontend sênior, com 16 anos de experiência.” — 11 palavras, cerca de 29 sílabas, cabe em 5 s.</p>
+    </details>
+    <details><summary>Prompt usado (estrutura enxuta, corpo em inglês, fala literal em português)</summary>
+<pre>FORMAT: One continuous 5-second vertical 9:16 shot. No cuts.
+SCENE CONTEXT: a senior frontend developer introduces himself straight to the camera for a social-media video, in his own home workspace.
+FIRST FRAME: the attached image is the exact first frame of the shot; keep his face, beard, glasses, hair, outfit, room and lighting identical to it.
+CAMERA: locked-off medium close-up at eye level with a very slow push-in of about 5 percent. No handheld shake, no zoom jumps, no cuts.
+ACTION: He already faces the lens with a closed warm smile. At 0.3 s he starts to speak with a natural conversational rhythm, small head nods on the stressed words. His lip movements match every word. He finishes before the last second and holds a small warm smile. He never looks away, never walks, never turns his body.
+SPEECH: In Brazilian Portuguese, exactly once, spoken only by him: "Eu sou Felipe Vieira, dev frontend sênior, com 16 anos de experiência."
+AUDIO: only his clear warm mid-low voice over very quiet room tone. No music, no other voices, no subtitles, no captions.
+LOOK: photoreal live action, warm window key light and cool monitor rim light, shallow depth of field, natural skin texture.
+CONTINUITY: exactly one person; round tortoiseshell glasses stay on; same turtleneck, beard and hair; the room does not change.</pre>
+    </details>
+    <details><summary>Motion graphics e conferência</summary>
+      <p>Texto e arrobas nunca saem do modelo (as letras vêm erradas). Entram depois, como legenda animada: terceiro inferior com nome e cargo, e cartela final com Instagram, TikTok e YouTube. Cada vídeo foi conferido com 6 quadros (rosto, óculos, barba, boca) e pela transcrição da fala. As notas deste relatório são minha leitura visual desses quadros, não uma métrica automática.</p>
+    </details>
+  </section>
+
+  <footer>Vídeos com motion graphics e originais do modelo, folhas de 6 quadros de cada geração e o quadro-base usado no teste. Preços conferidos na API de estimativa da Higgsfield e imagens no fal. As notas de 0 a 5 são avaliação visual minha, não uma métrica automática.</footer>
+</div>
+
+<dialog id="dlgVer" aria-label="Visualizar vídeo">
+  <div class="modal"><div class="caixa" id="caixa">
+    <div class="player"><video id="vGrande" controls playsinline preload="auto"></video></div>
+    <div class="info" id="info"></div>
+    <button class="x" id="fecharVer" type="button" aria-label="Fechar">✕</button>
+  </div></div>
+</dialog>
+
+<dialog id="dlgCmp" aria-label="Comparar vídeos">
+  <div class="modal"><div class="cmp">
+    <div class="linha"><h3 style="margin:0;font:700 22px var(--display)">Comparação lado a lado</h3><button class="btn" id="fecharCmp" type="button">Fechar</button></div>
+    <div class="cmp-grade" id="cmpGrade"></div>
+    <div class="ctrl">
+      <button class="btn primario" id="cmpPlay" type="button">Reproduzir todos</button>
+      <button class="btn" id="cmpPause" type="button">Pausar</button>
+      <button class="btn" id="cmpReiniciar" type="button">Reiniciar</button>
+      <input type="range" id="cmpSeek" min="0" max="1000" value="0" aria-label="Posição">
+      <span class="meta" id="cmpTempo">0,0 s</span>
+    </div>
+    <p class="resumo" style="margin-top:10px">O som sai de um vídeo por vez. Clique em “som” no vídeo que quiser ouvir.</p>
+  </div></div>
+</dialog>
+
+<script>
+const M = [
+ { id:'seedance25', nome:'Seedance 2.5', vendor:'ByteDance', modo:'reference-to-video', endpoint:'bytedance/seedance-2.5/reference-to-video', preco:2.31, tempo:544, dur:5.06, res:'720×1280', fps:24, ini:0.46, fim:4.76, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, Dev Front-end Sênior, com 16 anos de experiência',
+   n:{id:5,nat:5,cena:5,sinc:5}, selo:['fiel','Mais fiel'], resumo:'O mais fiel ao quadro-base: mesma sala, mesmo rosto, expressões calmas e naturais. Também o mais lento e um dos mais caros.' },
+ { id:'cinema40', nome:'Cinema Studio 4.0', vendor:'Higgsfield', modo:'cinema-studio', endpoint:'higgsfield/cinema-studio/4.0', preco:2.31, tempo:963, dur:5.06, res:'720×1280', fps:24, ini:0.54, fim:4.78, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, Dev Front Sênior, com 16 anos de experiência',
+   n:{id:5,nat:5,cena:4,sinc:4}, selo:null, resumo:'No nível do Seedance 2.5 (mesmo motor). Identidade e naturalidade boas; o enquadramento recua um pouco e o final de “frontend” ficou pouco audível. O mais demorado da rodada.' },
+ { id:'wan30', nome:'Wan 3.0', vendor:'Alibaba', modo:'image-to-video', endpoint:'alibaba/wan-3.0/image-to-video', preco:0.50, tempo:127, dur:5.04, res:'720×1280', fps:30, ini:0.58, fim:4.88, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, dev front-end sênior com 16 anos de experiência',
+   n:{id:4,nat:4,cena:5,sinc:5}, selo:['custo','Melhor custo-benefício'], resumo:'Boa identidade, cena preservada e fala completa por US$ 0,50. A melhor relação entre qualidade e preço da rodada.' },
+ { id:'h3', nome:'MiniMax H3', vendor:'MiniMax', modo:'image-to-video', endpoint:'minimax/h3/image-to-video', preco:0.65, tempo:343, dur:5.17, res:'1440×2560', fps:24, ini:0.48, fim:4.74, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, dev front-end sênior com 16 anos de experiência',
+   n:{id:4,nat:4,cena:5,sinc:5}, selo:null, resumo:'Boa identidade e cena preservada, em 2K vertical (1440×2560). Não tem parâmetro de áudio, mas falou a frase inteira.' },
+ { id:'kling30', nome:'Kling 3.0 Standard', vendor:'Kling', modo:'image-to-video', endpoint:'kling-video/v3.0/std/image-to-video', preco:0.63, tempo:81, dur:5.04, res:'716×1284', fps:24, ini:0.62, fim:4.90, cob:0.83,
+   ouvido:'Eu sou Filipe Vieira, dev front-end senior com 16 anos de experiência',
+   n:{id:4,nat:3,cena:5,sinc:4}, selo:null, resumo:'Rápido e com boa identidade, mas a boca faz “bico” exagerado em alguns quadros e há reflexo nos óculos. O nome saiu como “Filipe” na transcrição.' },
+ { id:'pixverse6', nome:'PixVerse V6', vendor:'PixVerse', modo:'image-to-video', endpoint:'pixverse/v6/image-to-video', preco:0.26, tempo:64, dur:5.04, res:'720×1280', fps:24, ini:0.58, fim:4.86, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, dev front-end senior com 16 anos de experiência',
+   n:{id:4,nat:3,cena:5,sinc:5}, selo:['barato','Mais barato'], resumo:'O mais barato e rápido que ficou bom. Sorri demais e fecha os olhos no fim, mas a identidade e a fala estão corretas.' },
+ { id:'grok15', nome:'Grok Imagine Video 1.5', vendor:'xAI', modo:'reference-to-video', endpoint:'xai/grok-imagine-video/v1.5/reference-to-video', preco:0.71, tempo:66, dur:5.04, res:'720×1280', fps:24, ini:0.32, fim:4.24, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, dev front-end sênior com 16 anos de experiência',
+   n:{id:3,nat:4,cena:2,sinc:5}, selo:null, resumo:'Reinterpretou a sala (monitor, abajur e janela mudaram): modo de referência não é primeiro quadro. Fala boa e rápida, identidade razoável.' },
+ { id:'ltx25pro', nome:'LTX 2.5 Pro', vendor:'Lightricks', modo:'image-to-video', endpoint:'lightricks/ltx-2.5/image-to-video/pro', preco:0.72, tempo:51, dur:6.12, res:'720×1280', fps:25, ini:0.56, fim:6.02, cob:0.83,
+   ouvido:'Eu sou Felipe Viera, dev front-end senior com 16 anos de experiência',
+   n:{id:2,nat:2,cena:4,sinc:3}, selo:['pior','Pior da rodada'], resumo:'O rosto deforma, as expressões ficam exageradas e o zoom somado ao movimento de câmera do prompt ampliou demais o rosto. Duração mínima de 6 s.' },
+  { id:'genjutsu', nome:'Genjutsu (motion transfer)', vendor:'Higgsfield', modo:'motion-transfer', endpoint:'higgsfield/genjutsu/motion-transfer/v1.0', preco:1.59, tempo:632, dur:4.71, res:'480×854', fps:24, ini:0.58, fim:4.68, cob:0.92,
+   ouvido:'Eu sou Felipe Vieira, dev front-end Sênior com 16 anos de experiência',
+   n:{id:4,nat:4,cena:5,sinc:5}, selo:['mov','Transfere atuação'], resumo:'Pega a atuação e a fala de um vídeo-fonte (aqui, o clipe do Wan 3.0) e a coloca na sua imagem. Saiu praticamente o mesmo vídeo do Wan, em 480p e com 4,7 s, por US$ 1,59 (mais US$ 0,50 do clipe-fonte). Serve para trocar o personagem de uma atuação que você já aprovou, não para criar do zero.' },
+];
+const ALVO='Eu sou Felipe Vieira, dev frontend sênior, com 16 anos de experiência.';
+M.forEach(m=>{ m.nota=(m.n.id+m.n.nat+m.n.cena+m.n.sinc)/4; m.valor=m.preco/m.nota; m.thumb='miniaturas/'+m.id+'.jpg'; m.mg='com_motion_graphics/'+m.id+'.mp4'; m.orig='originais_do_modelo/'+m.id+'.mp4'; m.sheet='folhas_de_contato/'+m.id+'.jpg'; });
+const $ = s=>document.querySelector(s); const fmt=(n,d=2)=>n.toFixed(d).replace('.',',');
+const tempoTxt=s=>s>=60?Math.floor(s/60)+' min '+String(Math.round(s%60)).padStart(2,'0')+' s':Math.round(s)+' s';
+let versao='mg', ordem='qualidade'; const sel=new Set();
+
+function ordenar(){ const k={qualidade:(a,b)=>b.nota-a.nota||a.preco-b.preco, preco:(a,b)=>a.preco-b.preco, tempo:(a,b)=>a.tempo-b.tempo, valor:(a,b)=>a.valor-b.valor}[ordem]; return [...M].sort(k); }
+function pontos(v){ const cl=v<=2?'baixo':v===3?'medio':''; return '<span class="pontos '+cl+'" role="img" aria-label="'+v+' de 5">'+[1,2,3,4,5].map(i=>'<i class="'+(i<=v?'on':'')+'"></i>').join('')+'</span>'; }
+
+function chips(){ const gasto=M.reduce((s,m)=>s+m.preco,0);
+  $('#chips').innerHTML=[['9','vídeos gerados'],['US$ '+fmt(gasto),'gasto na Higgsfield'],['US$ 0,27','quadros-base e transcrições (fal)'],['5 s · 9:16','vertical, com fala em português'],['US$ 0','cobrados em tentativas que falharam']].map(c=>'<div class="chip"><b>'+c[0]+'</b><span>'+c[1]+'</span></div>').join(''); }
+
+function cards(){ const lista=ordenar();
+  $('#grade').innerHTML=lista.map((m,i)=>`
+   <article class="card ${sel.has(m.id)?'selecionado':''}" data-id="${m.id}">
+     <button class="thumb" type="button" data-ver="${m.id}" aria-label="Abrir ${m.nome}">
+       <img src="${m.thumb}" alt="Quadro do vídeo ${m.nome}" loading="lazy"><span class="rank">#${i+1}</span>
+       ${m.selo?'<span class="selo '+m.selo[0]+'">'+m.selo[1]+'</span>':''}<span class="play"></span></button>
+     <div class="corpo">
+       <div><div class="vendor">${m.vendor} · ${m.modo}</div><div class="nome">${m.nome}</div></div>
+       <div class="linha"><div class="preco"><small>US$</small> ${fmt(m.preco)}</div><div class="meta">${tempoTxt(m.tempo)} · ${m.res}<br>nota ${fmt(m.nota,1)}</div></div>
+       <div class="notas"><span>Identidade</span>${pontos(m.n.id)}<span>Naturalidade</span>${pontos(m.n.nat)}<span>Cena preservada</span>${pontos(m.n.cena)}<span>Sincronia</span>${pontos(m.n.sinc)}</div>
+       <p class="resumo">${m.resumo}</p>
+       <div class="rodape"><label class="chk"><input type="checkbox" data-sel="${m.id}" ${sel.has(m.id)?'checked':''}> comparar</label><button class="btn" data-ver="${m.id}" type="button">Ver grande</button></div>
+     </div></article>`).join(''); atualizarBotao(); }
+
+function tabela(){ const col=(f,menor=true)=>{ const v=M.map(f); const b=menor?Math.min(...v):Math.max(...v), p=menor?Math.max(...v):Math.min(...v); return x=>x===b?'melhor':x===p?'pior':''; };
+  const cP=col(m=>m.preco), cT=col(m=>m.tempo), cN=col(m=>m.nota,false), cV=col(m=>m.valor), cC=col(m=>m.cob,false);
+  const linhas=ordenar().map(m=>`<tr class="linha-click" data-ver="${m.id}"><td><b>${m.nome}</b><br><span class="vendor">${m.vendor}</span></td><td class="num ${cP(m.preco)}">US$ ${fmt(m.preco)}</td><td class="num ${cT(m.tempo)}">${tempoTxt(m.tempo)}</td><td class="num">${m.res}</td><td class="num">${fmt(m.dur,1)} s</td><td class="num ${cN(m.nota)}">${fmt(m.nota,1)}</td><td class="num">${m.n.id} / ${m.n.nat} / ${m.n.cena} / ${m.n.sinc}</td><td class="num ${cC(m.cob)}">${Math.round(m.cob*100)}%</td><td class="num ${cV(m.valor)}">US$ ${fmt(m.valor)}</td></tr>`).join('');
+  $('#tabela').innerHTML='<thead><tr><th>Modelo</th><th>Preço</th><th>Tempo</th><th>Resolução</th><th>Duração</th><th>Nota</th><th>Ident. / Nat. / Cena / Sinc.</th><th>Frase coberta</th><th>US$ por ponto</th></tr></thead><tbody>'+linhas+'</tbody>'; }
+
+function barras(){ const g=(id,f,fv,asc=true,cor)=>{ const lista=[...M].sort((a,b)=>asc?f(a)-f(b):f(b)-f(a)); const mx=Math.max(...M.map(f)); $(id).innerHTML=lista.map(m=>`<div class="bar"><span>${m.nome}</span><span class="t"><i style="width:${(f(m)/mx*100).toFixed(1)}%;${cor?'background:'+cor:''}"></i></span><span class="v">${fv(f(m))}</span></div>`).join(''); };
+  g('#bPreco',m=>m.preco,v=>fmt(v)); g('#bTempo',m=>m.tempo,v=>Math.round(v)+' s'); g('#bNota',m=>m.nota,v=>fmt(v,1),false,'var(--teal)'); g('#bValor',m=>m.valor,v=>fmt(v)); }
+
+function falas(){ const dif=t=>t.replace(/front-end/gi,'<mark>front-end</mark>').replace(/\b(Filipe|Viera)\b/g,'<mark>$1</mark>').replace(/Front Sênior/,'<mark>Front</mark> Sênior');
+  $('#falaLista').innerHTML='<div class="item alvo"><b>Frase pedida</b><q>'+ALVO+'</q><span class="cob">alvo</span></div>'+ordenar().map(m=>`<div class="item"><b>${m.nome}</b><q>${dif(m.ouvido)}</q><span class="cob">${fmt(m.ini,2)}–${fmt(m.fim,2)} s</span></div>`).join(''); }
+
+function atualizarBotao(){ const n=sel.size; const b=$('#btnComparar'); b.textContent='Comparar selecionados ('+n+')'; b.disabled=n<2; }
+
+const dlgV=$('#dlgVer'), vG=$('#vGrande'); let atual=null;
+function abrir(id){ atual=M.find(m=>m.id===id); const m=atual;
+  vG.src=versao==='mg'?m.mg:m.orig; vG.load(); vG.play().catch(()=>{});
+  $('#info').innerHTML=`<div class="vendor">${m.vendor} · ${m.modo}</div><h3>${m.nome}</h3>
+   <div class="linha"><div class="preco"><small>US$</small> ${fmt(m.preco)}</div><div class="meta">nota ${fmt(m.nota,1)} / 5</div></div>
+   <div class="seg" role="group" aria-label="Versão"><button type="button" data-vv="mg" aria-pressed="${versao==='mg'}">Com motion graphics</button><button type="button" data-vv="orig" aria-pressed="${versao==='orig'}">Original</button></div>
+   <p class="resumo">${m.resumo}</p>
+   <div class="notas"><span>Identidade</span>${pontos(m.n.id)}<span>Naturalidade</span>${pontos(m.n.nat)}<span>Cena preservada</span>${pontos(m.n.cena)}<span>Sincronia</span>${pontos(m.n.sinc)}</div>
+   <dl class="kv"><dt>Endpoint</dt><dd>${m.endpoint}</dd><dt>Tempo</dt><dd>${tempoTxt(m.tempo)}</dd><dt>Resolução</dt><dd>${m.res} · ${m.fps} fps · ${fmt(m.dur,2)} s</dd><dt>Fala</dt><dd>${fmt(m.ini,2)} s → ${fmt(m.fim,2)} s</dd><dt>Ouvido</dt><dd style="font-family:var(--body)">“${m.ouvido}”</dd><dt>US$/s</dt><dd>${fmt(m.preco/m.dur)}</dd></dl>
+   <div class="nav"><button class="btn" data-nav="-1" type="button">← Anterior</button><button class="btn" data-nav="1" type="button">Próximo →</button><a class="btn" href="${m.sheet}" target="_blank" rel="noopener">Folha de 6 quadros</a></div>`;
+  if(!dlgV.open) dlgV.showModal(); }
+function navegar(d){ const l=ordenar(); const i=l.findIndex(m=>m.id===atual.id); abrir(l[(i+d+l.length)%l.length].id); }
+$('#fecharVer').onclick=()=>dlgV.close(); dlgV.addEventListener('close',()=>{vG.pause();vG.removeAttribute('src');vG.load();});
+dlgV.addEventListener('click',e=>{ if(e.target.classList.contains('modal')) dlgV.close(); });
+$('#info').addEventListener('click',e=>{ const b=e.target.closest('[data-vv]'); if(b){ versao=b.dataset.vv; sincSeg(); abrir(atual.id);} const n=e.target.closest('[data-nav]'); if(n) navegar(+n.dataset.nav); });
+document.addEventListener('keydown',e=>{ if(dlgV.open&&(e.key==='ArrowRight'||e.key==='ArrowLeft')&&e.target.tagName!=='INPUT'){ e.preventDefault(); navegar(e.key==='ArrowRight'?1:-1);} });
+
+const dlgC=$('#dlgCmp'); let vids=[];
+function abrirCmp(){ const itens=[...sel].map(id=>M.find(m=>m.id===id)); const n=itens.length; $('#cmpGrade').style.gridTemplateColumns='repeat('+Math.min(n,4)+',minmax(0,1fr))';
+  $('#cmpGrade').innerHTML=itens.map((m,i)=>`<figure><video src="${versao==='mg'?m.mg:m.orig}" playsinline preload="auto" loop></video><figcaption>${m.nome} · US$ ${fmt(m.preco)}</figcaption><button class="som" type="button" aria-pressed="${i===0}" data-som="${i}">${i===0?'som ligado':'som'}</button></figure>`).join('');
+  vids=[...$('#cmpGrade').querySelectorAll('video')]; vids.forEach((v,i)=>{ v.muted=i!==0; }); dlgC.showModal(); setTimeout(tocar,250); }
+const tocar=()=>{ vids.forEach(v=>{v.currentTime=0;}); Promise.all(vids.map(v=>v.play().catch(()=>{}))); };
+$('#cmpPlay').onclick=()=>vids.forEach(v=>v.play().catch(()=>{})); $('#cmpPause').onclick=()=>vids.forEach(v=>v.pause()); $('#cmpReiniciar').onclick=tocar;
+$('#cmpSeek').oninput=e=>{ const d=Math.max(...vids.map(v=>v.duration||0)); vids.forEach(v=>{ v.currentTime=(e.target.value/1000)*d; }); };
+setInterval(()=>{ if(!dlgC.open||!vids.length) return; const d=Math.max(...vids.map(v=>v.duration||0))||1; $('#cmpSeek').value=Math.round(vids[0].currentTime/d*1000); $('#cmpTempo').textContent=fmt(vids[0].currentTime,1)+' s'; },200);
+$('#cmpGrade').addEventListener('click',e=>{ const b=e.target.closest('[data-som]'); if(!b) return; const k=+b.dataset.som; vids.forEach((v,i)=>{ v.muted=i!==k; }); $('#cmpGrade').querySelectorAll('.som').forEach((s,i)=>{ s.setAttribute('aria-pressed',i===k); s.textContent=i===k?'som ligado':'som'; }); });
+$('#fecharCmp').onclick=()=>dlgC.close(); dlgC.addEventListener('close',()=>vids.forEach(v=>{v.pause();v.removeAttribute('src');v.load();}));
+dlgC.addEventListener('click',e=>{ if(e.target.classList.contains('modal')) dlgC.close(); });
+
+function sincSeg(){ document.querySelectorAll('.barra .seg button').forEach(b=>b.setAttribute('aria-pressed',b.dataset.v===versao)); }
+document.addEventListener('click',e=>{ const v=e.target.closest('[data-ver]'); if(v&&!e.target.closest('input')) abrir(v.dataset.ver); });
+document.addEventListener('change',e=>{ const c=e.target.closest('[data-sel]'); if(!c) return; if(c.checked){ if(sel.size>=4){ c.checked=false; alert('Dá para comparar até 4 vídeos de uma vez.'); return; } sel.add(c.dataset.sel);} else sel.delete(c.dataset.sel); c.closest('.card').classList.toggle('selecionado',c.checked); atualizarBotao(); });
+$('#ordem').onchange=e=>{ ordem=e.target.value; cards(); tabela(); falas(); };
+document.querySelectorAll('.barra .seg button').forEach(b=>b.onclick=()=>{ versao=b.dataset.v; sincSeg(); });
+$('#btnComparar').onclick=abrirCmp; $('#btnLimpar').onclick=()=>{ sel.clear(); cards(); };
+$('#tema').onclick=()=>{ const r=document.documentElement; const claro=getComputedStyle(r).colorScheme.includes('light'); r.setAttribute('data-tema',claro?'escuro':'claro'); };
+chips(); cards(); tabela(); barras(); falas();
+</script>
+</body>
+</html>
