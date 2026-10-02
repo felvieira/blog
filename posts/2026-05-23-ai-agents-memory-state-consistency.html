@@ -9,18 +9,22 @@
 <meta property="og:description" content="A parte difícil de construir um agente de IA não é chamar o modelo — é mantê-lo coerente ao longo de horas ou dias. State, memory e consistency rules: o que cada peça faz, onde quebra em produção, e como ferramentas reais como LangGraph e Mem0 resolvem isso.">
 <meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-05-23-ai-agents-memory-state-consistency-cover.jpg">
 <meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
 <link rel="stylesheet" href="../assets/css/post.css">
 </head>
 <body>
 <nav class="top">
-  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a class="brand" href="../">felvieira's blog</a>
   <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
-  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
 </nav>
 
 <main class="wrap">
   <h1>AI Agents: Memória, Estado e Consistência (o que ninguém te conta sobre rodar em produção)</h1>
   <p class="meta">
+    <span class="author">Felipe Vieira</span>
     <span>22 de maio de 2026</span>
     <span class="tag">🇧🇷 Português</span>
     <span class="tag">9 min read</span>
@@ -204,7 +208,7 @@ hotel near city center</code></pre>
 
 <h2>Onde isso aparece no Dev Team Kit (transparência: é meu projeto)</h2>
 
-<p>Boa parte desses conceitos aparecem materializados no <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a> que mantenho:</p>
+<p>Boa parte desses conceitos aparecem materializados no <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a> que mantenho:</p>
 
 <ul>
 <li><strong>State como checkpoint:</strong> pipelines YAML executáveis (<code>programs/*.yml</code>) têm steps com gates humanos. Cada step pode pausar, salvar progresso, retomar de outra sessão.</li>

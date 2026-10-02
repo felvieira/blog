@@ -55,7 +55,8 @@ function extractPostMeta(filename) {
     const tail = og.match(/(assets\/images\/[^"]+)$/);
     cover = tail ? tail[1] : og;
   }
-  return { filename, title, lang, excerpt: desc, date, cover };
+  const readMin = html.match(/(\d+)\s*min read/)?.[1] ?? "";
+  return { filename, title, lang, excerpt: desc, date, cover, readMin };
 }
 
 const posts = readdirSync(POSTS_DIR)
@@ -63,12 +64,17 @@ const posts = readdirSync(POSTS_DIR)
   .map(extractPostMeta)
   .sort((a, b) => b.date.localeCompare(a.date));
 
-const langLabel = p => (p.lang === "pt-BR" ? "🇧🇷 Português" : "🌎 English");
 // ISO date (YYYY-MM-DD) -> short BR format (DD/MM/YYYY) for landing cards.
 const dateShort = p => {
   const [y, m, d] = p.date.split("-");
   return y && m && d ? `${d}/${m}/${y}` : p.date;
 };
+// Card byline: "DD/MM/YYYY · N min de leitura" (language is only flagged when not pt-BR).
+const metaLine = p => [
+  dateShort(p),
+  p.readMin && `${p.readMin} min de leitura`,
+  p.lang !== "pt-BR" && "🌎 English",
+].filter(Boolean).join(" · ");
 
 // Featured = up to 3 newest (1 hero + 2 secondary); rest = compact list with thumbnail.
 const featured = posts.slice(0, 3);
@@ -78,7 +84,7 @@ function heroCard(p) {
   return `      <a class="feat-hero${p.cover ? "" : " no-img"}" href="posts/${p.filename}">
         ${p.cover ? `<div class="feat-hero-img" style="background-image:url('${p.cover}')"></div>` : ""}
         <div class="feat-hero-body">
-          <p class="meta">${dateShort(p)} · ${langLabel(p)}</p>
+          <p class="meta">${metaLine(p)}</p>
           <h2>${escapeHtml(p.title)}</h2>
           ${p.excerpt ? `<p class="excerpt">${escapeHtml(p.excerpt)}</p>` : ""}
         </div>
@@ -89,7 +95,7 @@ function secondaryCard(p) {
   return `        <a class="feat-sec${p.cover ? "" : " no-img"}" href="posts/${p.filename}">
           ${p.cover ? `<div class="feat-sec-img" style="background-image:url('${p.cover}')"></div>` : ""}
           <div class="feat-sec-body">
-            <p class="meta">${dateShort(p)} · ${langLabel(p)}</p>
+            <p class="meta">${metaLine(p)}</p>
             <h3>${escapeHtml(p.title)}</h3>
           </div>
         </a>`;
@@ -100,7 +106,7 @@ function listItem(p) {
         ${p.cover ? `<div class="list-thumb" style="background-image:url('${p.cover}')"></div>` : ""}
         <div class="list-body">
           <h3>${escapeHtml(p.title)}</h3>
-          <p class="meta">${dateShort(p)} · ${langLabel(p)}</p>
+          <p class="meta">${metaLine(p)}</p>
           ${p.excerpt ? `<p class="excerpt">${escapeHtml(p.excerpt)}</p>` : ""}
         </div>
       </a>`;
@@ -117,6 +123,7 @@ ${featured.slice(1).map(secondaryCard).join("\n")}
 
 const restHtml = rest.length
   ? `    <section class="post-list">
+      <h2 class="section-label">Mais posts</h2>
 ${rest.map(listItem).join("\n")}
     </section>`
   : "";
