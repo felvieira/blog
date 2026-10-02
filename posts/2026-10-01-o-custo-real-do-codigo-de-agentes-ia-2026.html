@@ -1,0 +1,118 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O custo real do código de agentes de IA: manter pesa mais que escrever — felvieira's blog</title>
+<meta name="description" content="Gerar código com IA ficou rápido. Entender, revisar e manter o sistema continua exigindo contexto, testes e decisões bem registradas.">
+<meta property="og:title" content="O custo real do código de agentes de IA: manter pesa mais que escrever">
+<meta property="og:description" content="Gerar código com IA ficou rápido. Entender, revisar e manter o sistema continua exigindo contexto, testes e decisões bem registradas.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-09-30-o-custo-real-do-codigo-de-agentes-ia-2026-cover.png">
+<meta property="og:type" content="article">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">📝 felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O custo real do código de agentes de IA: manter pesa mais que escrever</h1>
+  <p class="meta">
+    <span>1 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">6 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-09-30-o-custo-real-do-codigo-de-agentes-ia-2026-cover.png" alt="O custo real do código de agentes de IA: manter pesa mais que escrever — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<h2>O custo real do código de agentes de IA: manter pesa mais que escrever</h2>
+
+<p>No post anterior eu falei sobre como revisar código deixou de ser de graça quando os agentes de IA entraram no fluxo. Hoje quero ir um passo além, porque revisar é só a primeira fatura. A conta grande chega depois, quando aquele código precisa ser mantido, ajustado, entendido de novo meses depois por alguém que não escreveu nada daquilo.</p>
+
+<p>Gerar código ficou barato. Isso já é fato consumado, ninguém discute mais. O que eu quero discutir é a outra ponta: manter não ficou barato junto. E essa diferença de custo é onde os times estão se queimando sem perceber.</p>
+
+<h2>A geração baratou; a manutenção não</h2>
+
+<p>Pedir para um agente escrever uma função, um endpoint, até um módulo inteiro, hoje é trivial. Minutos, às vezes segundos. O problema é que o custo de um sistema nunca esteve concentrado em escrever a primeira versão. Sempre esteve em manter: corrigir bug, adaptar para um caso novo, entender por que aquela decisão foi tomada daquele jeito específico.
+
+Quando a geração é rápida e a manutenção continua lenta, você não economizou tempo. Você só empurrou o custo para frente, geralmente para uma pessoa diferente, em um momento em que o contexto já evaporou.</p>
+
+<p>Isso cria uma ilusão perigosa dentro dos times: parece que a produtividade disparou, porque o volume de código entregue por semana aumentou. Mas produtividade não é volume de código. É capacidade de evoluir o sistema sem quebrar ele. E aí o número que ninguém mostra no dashboard é o tempo gasto consertando e entendendo código que ninguém no time lembra de ter revisado com calma.</p>
+
+<img src="../assets/images/2026-09-30-o-custo-real-do-codigo-de-agentes-ia-2026-1-balanca.png" alt="Balança editorial entre a velocidade de geração e o trabalho contínuo de manutenção do código." style="width:100%; height:auto; border-radius:8px; margin:24px 0; border:1px solid var(--border)">
+
+<h2>Por que agentes não mantêm bem o código que eles mesmos geram</h2>
+
+<p>Existe um estudo que eu recomendo todo mundo ler, que levantou um retrato bem concreto desse problema: analisando 3.238 commits em repositórios que usam agentes de IA, os pesquisadores isolaram as alterações feitas depois, especificamente em arquivos que tinham sido gerados por IA. Entre essas alterações subsequentes, 1.284 (83,21%) foram feitas por humanos e apenas 259 (16,79%) por agentes. Ou seja: quem gera o código não é, na prática, quem depois cuida dele.</p>
+
+<p>O estudo também mostra que arquivos gerados por IA recebem manutenção com menor frequência e menor magnitude do que arquivos escritos por humanos. Os próprios autores são cautelosos sobre o porquê: entre as explicações possíveis que eles citam estão a dificuldade de compreensão desses arquivos por quem precisa alterá-los depois, e o fato de alguns desses arquivos simplesmente serem pouco usados no sistema. Ou seja, o dado é real, mas a causa exata ainda é uma pergunta aberta, e eu não vou fingir que é mais fechada do que é.</p>
+
+<p>Dito isso, a minha leitura de campo, vendo isso de perto em times que uso agentes no dia a dia, é que existe um motivo estrutural que ajuda a explicar esse padrão. Um agente opera com uma janela de contexto curta. Ele vê o arquivo, talvez os vizinhos diretos, raramente o sistema inteiro. Ele não carrega a história do porquê aquela decisão de arquitetura foi tomada, nem lembra da reunião em que alguém decidiu não usar tal biblioteca por causa de um incidente de produção do ano passado.</p>
+
+<ul>
+<li>Sem visão de sistema: o agente otimiza o arquivo na frente dele, não o conjunto. Ele pode resolver um problema local criando um problema de acoplamento que só aparece três módulos depois.</li>
+<li>Sem memória do porquê: código tem razões históricas. Um agente novo, numa sessão nova, não sabe que aquele workaround estranho existe porque uma API externa tinha um bug específico. Ele só vê código estranho e tende a "arrumar" ele, reintroduzindo o problema original.</li>
+<li>Sem responsabilidade de longo prazo: o agente termina a tarefa e some. Quem fica com o sistema depois é você. A dívida de entendimento não é dele, é sua.</li>
+</ul>
+
+<p>Então não é que os agentes sejam ruins em manter código, e isso o estudo não chega a afirmar. É que manter exige exatamente o tipo de contexto contínuo que a arquitetura atual de agente, por sessão, por tarefa isolada, não guarda, e isso é compatível com o padrão que os dados mostram.</p>
+
+<img src="../assets/images/2026-09-30-o-custo-real-do-codigo-de-agentes-ia-2026-2-curva.png" alt="Curva de manutenção ao longo do tempo, mostrando que o contexto precisa ser preservado." style="width:100%; height:auto; border-radius:8px; margin:24px 0; border:1px solid var(--border)">
+
+<h2>O custo invisível: dívida técnica e o contexto que ninguém documentou</h2>
+
+<p>Tem uma coisa que eu gosto de acompanhar em times que adotaram agentes de forma intensa: quanto tempo o time gasta reescrevendo ou reentendendo um trecho de código depois da primeira entrega. Não tenho um número fechado para te dar aqui, mas o padrão qualitativo é sempre o mesmo: o código sai rápido, mas sai com menos contexto registrado, e isso cobra o preço na próxima vez que alguém precisa tocar nele.</p>
+
+<p>O pior é que esse custo não aparece de cara. Nos primeiros meses, tudo parece ótimo: entregas rápidas, backlog andando, todo mundo elogiando a velocidade. A conta chega depois, quando o acúmulo de decisões não documentadas, padrões inconsistentes entre arquivos gerados em sessões diferentes e dependências mal entendidas vira uma massa que ninguém consegue mais mexer com confiança.</p>
+
+<p>Eu já vi isso de perto. Um sistema inteiro de regras de negócio gerado aos poucos, cada pedaço por uma sessão de agente diferente, sem ninguém revisando a coerência entre as partes. Funcionava. Até precisar mudar uma regra que tocava em quatro arquivos escritos por quatro "mentalidades" de agente diferentes, cada um com sua própria convenção. Levou dias para entender o que já devia estar documentado desde o início.</p>
+
+<h2>O que fazer na prática</h2>
+
+<p>Isso não é motivo para parar de usar agente. É motivo para tratar manutenção como parte do trabalho, não como efeito colateral. Algumas coisas que realmente funcionam no dia a dia:</p>
+
+<ul>
+<li><strong>Contrato por commit:</strong> cada commit gerado por agente devia vir com uma descrição clara do que mudou e por quê, não só o que mudou. Isso é o mínimo de contexto que sobra para quem for manter depois.</li>
+<li><strong>Testes como rede de segurança:</strong> se o agente não tem memória do sistema, os testes são a memória institucional que sobrevive entre sessões. Um agente que roda contra uma suíte de testes robusta tem muito menos chance de quebrar algo que ele nem sabia que existia.</li>
+<li><strong>Documentar o porquê, não o o quê:</strong> código já mostra o que faz. O que falta sempre é por que foi feito daquele jeito. Um comentário curto explicando a decisão vale mais que qualquer comentário descrevendo a linha de código.</li>
+<li><strong>Limites de alcance claros para cada agente:</strong> dar para um agente uma tarefa bem delimitada, com fronteiras explícitas do que ele pode e não pode tocar, reduz drasticamente o tipo de acoplamento acidental que gera dor de cabeça meses depois.</li>
+</ul>
+
+<p>Nenhuma dessas práticas é nova. Todas existiam antes dos agentes. A diferença é que agora elas são obrigatórias, não opcionais, porque o volume de código sem contexto acumulado está crescendo muito mais rápido do que a capacidade do time de absorver esse contexto depois.</p>
+
+<img src="../assets/images/2026-09-30-o-custo-real-do-codigo-de-agentes-ia-2026-3-contexto.png" alt="Engenheira conectando módulos de software com decisões documentadas durante a manutenção." style="width:100%; height:auto; border-radius:8px; margin:24px 0; border:1px solid var(--border)">
+
+<h2>Manter é a nova habilidade sênior</h2>
+
+<p>Durante anos, a habilidade que separava um engenheiro sênior de um júnior era escrever código bom na primeira tentativa. Isso está mudando. Escrever ficou acessível para praticamente qualquer pessoa com um agente decente. O que continua raro, e cada vez mais valioso, é a capacidade de olhar para um sistema complexo, entender as partes que ninguém documentou e decidir com segurança o que pode mudar sem quebrar o resto.</p>
+
+<p>Se revisar código deixou de ser de graça, manter código nunca foi de graça, só que agora a fatura é maior e, no meu dia a dia, parece chegar mais rápido. Quem perceber isso primeiro e começar a investir em contexto, testes e documentação do porquê vai sair na frente. Quem continuar medindo produtividade só pelo volume de código gerado vai descobrir o preço real bem depois de já ter assinado o cheque.</p>
+
+<p>Para quem quiser ver os números com mais detalhe, a fonte principal deste post é o estudo <a href="https://arxiv.org/abs/2605.06464">"To What Extent Does Agent-generated Code Require Maintenance? An Empirical Study"</a>, que investigou comparativamente a manutenção de arquivos gerados por IA e arquivos escritos por humanos.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Gerar código com IA ficou rápido. Entender, revisar e manter o sistema continua exigindo contexto, testes e decisões bem registradas.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Gerar código com IA ficou rápido. Entender, revisar e manter o sistema continua exigindo contexto, testes e decisões bem registradas.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-01-o-custo-real-do-codigo-de-agentes-ia-2026.html</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de outubro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
