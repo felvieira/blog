@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-10-05** — [O contexto é o novo código: por que seus agentes de IA erram](posts/2026-10-05-o-contexto-e-o-novo-codigo-2026.html) (🇧🇷 PT)
 - **2026-10-01** — [O custo real do código de agentes de IA: manter pesa mais que escrever](posts/2026-10-01-o-custo-real-do-codigo-de-agentes-ia-2026.html) (🇧🇷 PT)
 - **2026-10-01** — [Coloquei meu rosto em 9 modelos de vídeo com IA e pedi a mesma frase em português](posts/2026-10-01-video-ia-apresentador-9-modelos.html) (🇧🇷 PT)
 - **2026-09-28** — [Revisar código virou o novo gargalo: como destravar com agentes de IA](posts/2026-09-28-revisao-de-codigo-novo-gargalo-2026.html) (🇧🇷 PT)

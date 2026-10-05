@@ -1,0 +1,90 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O contexto é o novo código: por que seus agentes de IA erram — felvieira's blog</title>
+<meta name="description" content="Trocar de modelo não resolve agente que erra. Contexto sim: a disciplina de dar à IA só o que importa, do jeito que ela entende.">
+<meta property="og:title" content="O contexto é o novo código: por que seus agentes de IA erram">
+<meta property="og:description" content="Trocar de modelo não resolve agente que erra. Contexto sim: a disciplina de dar à IA só o que importa, do jeito que ela entende.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-10-05-o-contexto-e-o-novo-codigo-2026-cover.png">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O contexto é o novo código: por que seus agentes de IA erram</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>5 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-10-05-o-contexto-e-o-novo-codigo-2026-cover.png" alt="O contexto é o novo código: por que seus agentes de IA erram — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Toda vez que um agente de IA erra uma refatoração, a resposta automática é trocar de modelo. GPT para Claude, Claude para Gemini, Gemini para o mais novo lançamento. E, por uns dias, parece que funcionou — até o agente voltar a inventar um método que não existe ou editar o arquivo errado. O problema nunca foi o modelo. É o que você coloca na frente dele.</p>
+<p>91% das empresas já adotaram pelo menos uma ferramenta de IA para codificar. Isso é quase unanimidade. E ainda assim, só 28% dos times com seis ou mais ferramentas de IA dizem confiar no próprio fluxo de trabalho. Tem gente usando IA todos os dias e não confiando no resultado. Essa conta não fecha se o problema for "modelo fraco". Fecha se o problema for contexto mal gerenciado.</p>
+<h2>O mito do modelo melhor</h2>
+<p>Eu caí nessa armadilha também. Passei meses achando que bastava esperar a próxima versão do modelo favorito para os agentes pararem de alucinar import, de reescrever função que já existia em outro arquivo, de ignorar o padrão de erro que o time usa há dois anos. Modelo novo chegou, ficou melhor em benchmark, e continuou cometendo o mesmo tipo de erro burro em repositório real.</p>
+<p>Isso porque benchmark não é o seu código. Modelo de ponta sabe TypeScript genérico muito bem. Ele não sabe o <em>seu</em> TypeScript — como seu time nomeia hooks, onde ficam os tipos compartilhados, por que aquele serviço específico não pode fazer chamada síncrona. Essa lacuna não é de capacidade de raciocínio, é de informação. E informação é problema de contexto, não de modelo.</p>
+<p><img src="../assets/images/2026-10-05-o-contexto-e-o-novo-codigo-2026-1-contexto-caos.png" alt="Mesa com regras contraditórias e telas em conflito, metáfora do caos de contexto" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>Contexto é recurso escasso, não depósito</h2>
+<p>A tentação é jogar o repositório inteiro na janela de contexto e deixar o modelo se virar. Parece generoso, mas é o oposto de ajuda. Janela de contexto grande não é pasta sem fundo — é memória de trabalho. Quanto mais você enche com coisa irrelevante, mais diluída fica a atenção do modelo para o que de fato importa naquela tarefa.</p>
+<p>Isso explica um número que assusta: a duplicação de código subiu 4 vezes com a adoção de IA. Agente sem contexto direcionado não encontra a função que já resolve o problema — ele simplesmente escreve uma nova, porque nunca viu a antiga. E sem visibilidade das convenções de segurança do time, não é raro que 48% do código gerado por IA carregue alguma vulnerabilidade. Mais contexto bruto não resolve isso. Contexto <em>certo</em> resolve.</p>
+<p>Pensar em contexto como recurso escasso muda a pergunta. Não é "quanto posso colocar aqui", é "o que esse agente precisa saber agora para dar o próximo passo certo". Isso é context engineering: curadoria deliberada, não despejo.</p>
+<h2>Contexto just-in-time: buscar, não pré-carregar</h2>
+<p>A prática que mudou meu fluxo foi parar de pré-carregar contexto e passar a buscar sob demanda. Em vez de anexar dez arquivos "pra garantir", deixo o agente fazer uma busca direcionada — grep, leitura de assinatura, navegação por referência — exatamente no momento em que precisa daquele dado específico.</p>
+<p>É a diferença entre entregar uma biblioteca inteira para alguém resolver uma dúvida e indicar a página certa. O agente que busca just-in-time gasta menos tokens em ruído, mantém foco na tarefa e, coisa importante, erra menos porque o que está na cabeça dele naquele instante é relevante de verdade. Ferramentas de navegação de código — ir para definição, achar referências, ler só o trecho que importa — valem mais do que qualquer prompt mágico.</p>
+<p><img src="../assets/images/2026-10-05-o-contexto-e-o-novo-codigo-2026-2-sob-demanda.png" alt="Pescador puxando um único peixe brilhante do rio de dados, metáfora do contexto sob demanda" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>Documente convenções, não suposições</h2>
+<p>Aqui entra a parte que todo time deveria levar mais a sério: arquivos de instrução versionados, tipo <code>CLAUDE.md</code> ou <code>AGENTS.md</code>. Não é documentação de usuário, é um manual direto para o agente: como rodar os testes, qual padrão de nomenclatura o time usa, que biblioteca de data é proibida, onde ficam os tipos de domínio, qual o jeito certo de tratar erro numa API.</p>
+<p>O modelo já sabe programar. O que ele não sabe é a sua decisão de arquitetura tomada numa sexta-feira há oito meses, a razão pela qual aquele módulo é tratado como legado, ou que ninguém mais deve criar novo endpoint REST porque o time migrou pra GraphQL. Isso só existe na cabeça do time — até alguém escrever.</p>
+<h2>Contexto versionado é playbook de time, não config pessoal</h2>
+<p>Um erro comum é tratar esse arquivo de instrução como ajuste pessoal, cada um com o seu, perdido num dotfile local. Isso é desperdício. Esse contexto deveria estar no repositório, versionado junto com o código, revisado em pull request como qualquer outra mudança de padrão.</p>
+<p>Quando o contexto é commitado, ele vira conhecimento coletivo: todo agente que qualquer pessoa do time rodar naquele repositório parte do mesmo chão. Alguém descobre que o agente está confundindo dois serviços parecidos? Atualiza o arquivo, sobe o PR, resolvido para todo mundo — não só para quem bateu de frente com o problema. É o mesmo princípio de documentação de engenharia de sempre, só que agora o leitor principal também é uma IA.</p>
+<h2>O caso prático: refatoração cross-file</h2>
+<p>Peguei uma refatoração clássica para testar isso: renomear um campo usado em seis arquivos diferentes, com tipos compartilhados, validação e dois testes dependentes. Sem contexto direcionado, o agente tateava — abria arquivo por arquivo, lia trecho errado, editava e desfazia, facilmente trinta ou quarenta chamadas de ferramenta, muita delas redundantes, uns bons minutos de ida e volta.</p>
+<p>Com o <code>AGENTS.md</code> apontando onde ficam os tipos de domínio e com busca just-in-time em vez de leitura cega, o mesmo agente resolveu em menos de dez chamadas de ferramenta, direto ao ponto: localizar referências, editar, confirmar teste. Minutos virou minuto e meio. Não troquei o modelo. Troquei o que ele via.</p>
+<p><img src="../assets/images/2026-10-05-o-contexto-e-o-novo-codigo-2026-3-playbook-time.png" alt="Playbook aberto e iluminado lido por um braço robótico, metáfora do contexto versionado do time" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>O que fazer a partir de hoje</h2>
+<p>Se seu agente está errando, resista ao impulso de trocar de modelo antes de perguntar: ele tem contexto suficiente e relevante, ou está tateando no escuro? Escreva um <code>AGENTS.md</code> de verdade, revise como código, prefira busca direcionada a pré-carregamento. O modelo já é bom. O trabalho que falta é seu: curar o que ele vê.</p>
+<ul>
+<li>Trate a janela de contexto como memória de trabalho escassa, não depósito.</li>
+<li>Prefira buscar informação sob demanda a empacotar o repositório inteiro.</li>
+<li>Escreva as convenções do time num arquivo de instrução versionado no git.</li>
+<li>Revise esse arquivo como qualquer outro artefato de engenharia, não como anotação pessoal.</li>
+</ul>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Trocar de modelo não resolve agente que erra. Contexto sim: a disciplina de dar à IA só o que importa, do jeito que ela entende.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Trocar de modelo não resolve agente que erra. Contexto sim: a disciplina de dar à IA só o que importa, do jeito que ela entende.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-05-o-contexto-e-o-novo-codigo-2026.html</div>
+  </section>
+
+  <footer class="post">
+    <span>5 de outubro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
