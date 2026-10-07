@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>A especificação é o novo código: como guiar agentes de IA no frontend — felvieira's blog</title>
+<meta name="description" content="Quando os agentes de IA escrevem o código, você escreve o mapa. Especificar antes de codificar é o novo superpoder do frontend.">
+<meta property="og:title" content="A especificação é o novo código: como guiar agentes de IA no frontend">
+<meta property="og:description" content="Quando os agentes de IA escrevem o código, você escreve o mapa. Especificar antes de codificar é o novo superpoder do frontend.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-10-07-a-especificacao-e-o-novo-codigo-2026-cover.png">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>A especificação é o novo código: como guiar agentes de IA no frontend</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>7 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">5 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-10-07-a-especificacao-e-o-novo-codigo-2026-cover.png" alt="A especificação é o novo código: como guiar agentes de IA no frontend — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo mundo está pagando por modelo mais caro. Opus, GPT, Gemini, o que sair nesta semana. E o pull request continua voltando torto: botão no lugar errado, estado que some no refresh, um <code>useEffect</code> que o time já proibiu há um ano. Não é o modelo. É a especificação.</p>
+<p>Em 2026, Claude Code, Codex, Cursor com agentes e o Gemini CLI — o Antigravity, pra quem já entrou nessa onda — escrevem a maior parte do código de frontend que eu reviso. O gargalo não é mais montar JSX. É dizer, sem folga, o que aquele componente faz quando o usuário erra o formulário, quando a API volta 429, quando o tema escuro encontra um modal legado. Código ficou barato. Clareza ficou cara.</p>
+<p>No post anterior eu disse que o contexto é o novo código. Continuo achando isso. Só que a forma mais alta de contexto não é o <code>AGENTS.md</code> nem o grep bem feito. É a especificação. Prompt solto morre na sessão. Spec boa sobrevive ao chat, ao modelo e à pessoa que sai de férias. Vira o artefato mais importante do time.</p>
+<h2>O código já não é o que a gente escreve</h2>
+<p>Eu ainda abro o editor. Só que cada vez menos pra digitar a feature. Abro pra ler o diff que o agente gerou, pra recusar um padrão, pra apontar o token de cor que já existe no design system. Orquestro. Não sou o autor da linha. Sou o autor da intenção.</p>
+<p>Isso muda o centro de gravidade do frontend. Componente, hook, teste — o agente faz. O que ele não inventa bem sozinho é o contrato: o que é sucesso, o que é erro, o que não pode acontecer. Se você não escreve isso, ele preenche o vazio. E o vazio no frontend vira loading infinito, toast genérico, formulário que aceita CEP inválido e um CSS que fura o grid do produto.</p>
+<p><img src="../assets/images/2026-10-07-a-especificacao-e-o-novo-codigo-2026-1-blueprint.png" alt="Blueprint de especificação se transformando em uma aplicação web acabada" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>Spec-first de verdade não é waterfall</h2>
+<p>Quando eu falo spec-first, alguém ainda escuta documento de 40 páginas aprovado por comitê. Esquece. Waterfall é spec morta. Spec-first em 2026 é spec executável: curta, versionada, com critério de aceite que um agente consegue checar e um humano consegue recusar em dois minutos.</p>
+<p>Não é planejar o produto inteiro antes. É recusar começar a gerar código com um “faz a tela de checkout”. É escrever o comportamento e só então soltar o Claude Code. Se o spec muda no review — e vai mudar — você atualiza o spec. O código acompanha. Não o contrário.</p>
+<p>Pedido vago: “monta o formulário de endereço”. Pedido que funciona:</p>
+<ul>
+<li><strong>Objetivo:</strong> capturar endereço de entrega no checkout, reusando o <code>AddressField</code> do design system.</li>
+<li><strong>Entrada e saída:</strong> CEP com máscara entra; sai um objeto <code>{ cep, street, number, city, state }</code> válido.</li>
+<li><strong>Sucesso:</strong> CEP com 8 dígitos dispara a busca; campos preenchidos ficam editáveis; número e complemento nunca vêm da API.</li>
+<li><strong>Borda:</strong> CEP inexistente mostra erro no campo, não toast; timeout de 3s; botão Continuar desabilitado enquanto inválido.</li>
+<li><strong>Limite:</strong> não criar cliente HTTP novo; usar o <code>useCepLookup</code> que já existe. Sem página extra. Sem persistir no <code>localStorage</code>.</li>
+<li><strong>Aceite:</strong> teclado no mobile não cobre o botão; labels visíveis; erro anunciado pra leitor de tela.</li>
+</ul>
+<h2>Como escrever specs que o agente entende</h2>
+<p>Agente não lê sua mente. Lê estrutura. Eu uso sempre o mesmo esqueleto, no ticket ou num <code>SPEC.md</code> ao lado da pasta do componente:</p>
+<ol>
+<li>Objetivo em uma frase.</li>
+<li>Entrada e saída, com tipos.</li>
+<li>Caso feliz, passo a passo.</li>
+<li>Casos de borda — a parte que o agente mais inventa se você omitir.</li>
+<li>Limites: o que não fazer, o arquivo que não mexer, a lib que não adicionar.</li>
+<li>Critérios de aceite observáveis. Se não dá pra ver no browser ou no teste, não é aceite.</li>
+</ol>
+<p>O item 5 é o que mais economiza retrabalho. “Não mexer em <code>auth/</code>.” “Não instalar lib de formulário.” “Seguir o padrão de erro do <code>FormMessage</code>.” Sem limite, o Cursor inventa um schema Zod paralelo, o Codex cria um context provider novo, o Claude Code “melhora” a paleta. Tudo com convicção. Tudo errado.</p>
+<p><img src="../assets/images/2026-10-07-a-especificacao-e-o-novo-codigo-2026-2-conversacao.png" alt="Desenvolvedor e agente de IA revisando juntos uma especificação na mesa" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>O ciclo curto: spec, agente, review, spec v2</h2>
+<p>O ciclo que pegou no meu dia a dia é curto de propósito. Escrevo o spec. Mando o agente. Reviso o diff como se fosse de um júnior muito rápido. O que estiver errado não vira só “ajusta isso” no chat. Vira emenda no spec. Aí roda de novo.</p>
+<p>Esse loop cabe numa hora. Spec de checkout, Claude Code gera a tela, eu recuso o toast, atualizo o aceite pra “erro no campo”, segunda passagem já nasce certa. Quem tenta acertar o código no feeling, sem voltar pro spec, treina o agente a improvisar. Review sem atualizar o spec é retrabalho disfarçado: daqui a duas semanas outro modelo, mesma feature, e a regra do CEP inexistente some de novo.</p>
+<h2>Armadilhas que eu já pisei</h2>
+<ul>
+<li><strong>Spec vaga.</strong> “Deixa bonito e responsivo.” Bonito pra quem? Responsivo até qual breakpoint? O agente escolhe. Você herda. Sem copy do estado vazio, vai aparecer “No data” em inglês no meio do checkout em português.</li>
+<li><strong>Spec gigante.</strong> Um arquivo que descreve o produto inteiro. O modelo dilui a atenção, começa bem e termina inventando tela que ninguém pediu. Uma fatia por vez. Checkout não é o mesmo spec do catálogo.</li>
+<li><strong>Agente que inventa requisito.</strong> Ele “aproveita” e adiciona dark mode, skeleton, analytics. Se não estava no spec, é bug — mesmo que fique bonito. Recuso no review e registro o limite: sem feature extra.</li>
+</ul>
+<p><img src="../assets/images/2026-10-07-a-especificacao-e-o-novo-codigo-2026-3-fonte-unica.png" alt="Uma única especificação no centro da mesa, todo o time apontando ao mesmo documento" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>O código é barato. A clareza é cara.</h2>
+<p>Senioridade em 2026 não é quem digita o hook mais rápido. É quem escreve o contrato que o hook precisa honrar. Agente escreve código. Humano escreve especificação. E se o contexto é o novo código, a spec é o contexto que o time inteiro — gente e modelo — consegue executar.</p>
+<p>Paga pelo modelo que quiser. Sem spec clara, você só comprou um júnior confiante em escala. Com spec clara, você comprou um time. A diferença não está no token. Está na frase que você teve coragem de deixar inequívoca.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quando os agentes de IA escrevem o código, você escreve o mapa. Especificar antes de codificar é o novo superpoder do frontend.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Quando os agentes de IA escrevem o código, você escreve o mapa. Especificar antes de codificar é o novo superpoder do frontend.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-07-a-especificacao-e-o-novo-codigo-2026.html</div>
+  </section>
+
+  <footer class="post">
+    <span>7 de outubro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
