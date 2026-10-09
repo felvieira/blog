@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Skills vs MCP: quando usar cada um no seu fluxo com agentes de IA — felvieira's blog</title>
+<meta name="description" content="MCP conecta seu agente ao mundo; Skills ensinam o agente a trabalhar do seu jeito. A diferença prática entre ferramentas e receitas — e quando cada abordagem faz sentido no seu stack.">
+<meta property="og:title" content="Skills vs MCP: quando usar cada um no seu fluxo com agentes de IA">
+<meta property="og:description" content="MCP conecta seu agente ao mundo; Skills ensinam o agente a trabalhar do seu jeito. A diferença prática entre ferramentas e receitas — e quando cada abordagem faz sentido no seu stack.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-10-09-skills-vs-mcp-quando-usar-cada-um-cover.png">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Skills vs MCP: quando usar cada um no seu fluxo com agentes de IA</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>9 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-10-09-skills-vs-mcp-quando-usar-cada-um-cover.png" alt="Skills vs MCP: quando usar cada um no seu fluxo com agentes de IA — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Vou ser sincero: a primeira vez que eu vi MCP e Skills no mesmo projeto, eu tratei os dois como se fossem a mesma coisa. “Ah, é jeito de dar ferramenta pro modelo.” Errado. Um diz o que o agente consegue tocar. O outro diz como ele deveria trabalhar. Confundir isso custa token, custa tempo e, no pior caso, custa um agente que autentica em tudo e ainda assim faz o fluxo errado.</p>
+<p>Se você está construindo agente em 2026, essa distinção não é filosofia. É decisão de arquitetura. Eu uso a metáfora que grudou na minha cabeça: MCP são as ferramentas da caixa. Skills são as receitas. Uma sem a outra até funciona. As duas juntas, no lugar certo, é o que separa agente de brinquedo de agente que aguenta o tranco no dia a dia.</p>
+<h2>O que o MCP é de fato</h2>
+<p>MCP, o Model Context Protocol, é um protocolo aberto. Ele não ensina o modelo a cozinhar. Ele conecta o agente a ferramentas e sistemas externos. Banco, rastreador de ticket, drive da empresa, API de pagamento: o MCP é o cabo que liga a conversa ao mundo lá fora.</p>
+<p>Na prática, cada ferramenta chega com um schema no contexto. O modelo vê o nome, os parâmetros, o que aquela chamada faz. Tem autenticação OAuth embutida, e isso muda o jogo quando o destino é um SaaS de verdade, com conta de gente, com permissão, com token que expira. Em ambiente corporativo isso não é detalhe. É o motivo de o MCP existir com cara de produto sério, não de script solto no canto da máquina.</p>
+<p>O lado feio também é simples: schema demais incha o contexto. Você pluga dez, quinze ferramentas “porque pode” e de repente o modelo gasta uma fatia absurda só pra lembrar que existe <code>create_issue</code>, <code>list_files</code> e mais um monte de verbo que ele talvez nem use naquela conversa. MCP responde bem a pergunta “o que o agente pode acessar?”. Ele não responde “em que ordem eu faço isso sem fazer caca”.</p>
+<p>Eu penso em MCP como a gaveta de chaves da oficina. Cada chave abre uma porta. Nenhuma chave te ensina a montar o motor. Se a sua dor é autenticação, permissão e acesso a sistema que não é seu, o protocolo está no lugar certo. Se a sua dor é o agente improvisar o procedimento, chave nova não resolve. Só aumenta a gaveta.</p>
+<p><img src="../assets/images/2026-10-09-skills-vs-mcp-quando-usar-cada-um-1-mcp-encanamento.png" alt="Robô conectado ao mundo por encanamentos de cobre que levam pacotes de luz até serviços externos, representando o MCP como a tubulação dos agentes" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>O que Skills são de fato</h2>
+<p>Agent Skills são outra história. Não é protocolo. É pasta. Dentro dela, um <code>SKILL.md</code>: markdown com frontmatter YAML. Ali você descreve um fluxo de trabalho completo. Não um verbo isolado. O caminho inteiro: quando começar, o que checar, que arquivo olhar, que decisão tomar se der ruim.</p>
+<p>O truque que eu gosto é o jeito de carregar o conteúdo. O modelo, no começo, vê só o nome e uma descrição curta. O miolo da receita só entra no contexto quando ele realmente precisa. Isso é economia de token na veia. Contexto enxuto por padrão, detalhe quando a tarefa pede. Você não despeja o manual inteiro na mesa pra fritar um ovo.</p>
+<p>O que Skills não têm: autenticação nativa. Elas não abrem a porta do sistema de mensagens por você. Elas não negociam OAuth. Se o fluxo precisa de um sistema externo de verdade, a Skill aponta o caminho; alguém — em geral o MCP — segura a chave. Skills brilham quando o trabalho se repete e o jeito certo cabe num texto. Elas respondem “como o agente deve trabalhar?”, não “o que ele pode acessar?”.</p>
+<p>Se MCP é a gaveta de chaves, Skill é aquele caderno sujo de óleo com o passo a passo que o sênior da oficina escreveu depois de errar três vezes. Eu leio aquele caderno. Eu não finjo que a chave de fenda já sabe o torque.</p>
+<p><img src="../assets/images/2026-10-09-skills-vs-mcp-quando-usar-cada-um-2-skills-receita.png" alt="Chef numa cozinha aconchegante seguindo um cartão de receita passo a passo com ingredientes em ordem, representando as Skills como receitas de trabalho do agente" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>A diferença prática: ferramentas versus receitas</h2>
+<p>Vamos cravar a metáfora, porque é ela que eu uso quando alguém me pede pra “só plugar mais uma ferramenta” e acha que o agente vai ficar mais esperto.</p>
+<p>MCP são os verbos. As capacidades. Listar, criar, buscar, autenticar, ler um arquivo remoto. Cada ferramenta é uma ação possível. O modelo escolhe o verbo. Se você só entrega verbo, ele improvisa a coreografia. Às vezes acerta. Às vezes comenta no ticket antes de ler o diff. Às vezes chama três APIs quando uma bastava. Capacidade sem ofício vira agente ansioso.</p>
+<p>Skills são as receitas. Elas dizem a ordem, o critério, o atalho. É o procedimento. Não substitui a ferramenta. Ensina a usá-la sem reinventar a roda a cada prompt. O valor não está em mais um schema. Está no “a gente sempre faz assim, e tem motivo”.</p>
+<p>Resumo que eu escrevo no quadro quando alguém mistura as duas coisas:</p>
+<ul>
+<li>MCP responde: o que o agente pode acessar?</li>
+<li>Skills respondem: como o agente deve trabalhar?</li>
+<li>MCP traz OAuth, schema e porta de entrada pra sistema externo.</li>
+<li>Skills trazem fluxo completo, texto, e contexto que só engorda quando precisa.</li>
+<li>MCP sem Skill é caixa cheia e serviço torto. Skill sem MCP, quando a tarefa exige SaaS, é receita sem ingrediente.</li>
+</ul>
+<h2>Quando usar cada um</h2>
+<p>Não existe regra esculpida em pedra, mas existe o meu critério depois de quebrar a cara. Eu não escolho tecnologia. Eu escolho a pergunta que está sem resposta.</p>
+<p>Eu vou de MCP quando:</p>
+<ul>
+<li>Preciso autenticar de verdade, com OAuth, em conta que não é a minha máquina.</li>
+<li>O agente mora em ambiente corporativo e vai falar com SaaS externo.</li>
+<li>A capacidade é um verbo claro: buscar ticket, ler planilha, mandar mensagem, consultar API.</li>
+<li>Várias pessoas e vários agentes precisam da mesma porta, não do mesmo jeito de trabalhar.</li>
+<li>O risco real é acesso errado, token expirado, permissão, não é “o modelo não leu o runbook”.</li>
+</ul>
+<p>Eu vou de Skills quando:</p>
+<ul>
+<li>O fluxo se repete. Review, triagem, publicar post, montar relatório semanal.</li>
+<li>O valor está no procedimento, não na tomada da porta.</li>
+<li>Eu quero contexto enxuto: nome e descrição curta no começo, miolo só na hora H.</li>
+<li>Token está caro ou o contexto já está lotado de schema de ferramenta.</li>
+<li>O time já sabe o caminho certo e esse caminho cabe num <code>SKILL.md</code>, não numa dezena de verbos soltos.</li>
+</ul>
+<p>E eu fujo de dois erros clássicos. Primeiro: empilhar MCP até o schema comer o contexto inteiro. Segundo: escrever Skill como se ela fosse um conector. Skill sem ferramenta, quando a tarefa exige sistema externo, vira receita de bolo sem farinha. Bonita. Inútil. Do outro lado, MCP demais vira aquela caixa de ferramentas que você não fecha e ainda assim nunca acha a chave Phillips.</p>
+<h2>Como os dois se combinam na prática</h2>
+<p>O desenho que eu curto é chato de tão óbvio. MCP abre as portas. Skill ensina a caminhada. Eu não quero que a receita carregue a chave. Eu não quero que a chave invente o passo a passo.</p>
+<p>Exemplo do meu dia: o agente precisa atualizar um ticket, puxar o diff e escrever um resumo no canal da equipe. O MCP segura o acesso — OAuth, schema da ferramenta, chamada autenticada. A Skill descreve a receita: leia o ticket, não comente se o diff for só formatação, use este tom, só então poste. O modelo vê a Skill pelo nome. Quando a tarefa casa com a descrição, ele puxa o <code>SKILL.md</code>. Aí sim os verbos do MCP entram na dança, na ordem certa, sem despejar o manual no contexto antes da hora.</p>
+<p>Outro jeito de ver: se amanhã o SaaS mudar o OAuth, eu mexo no MCP. Se amanhã o time mudar o critério de “pronto pra revisar”, eu mexo no <code>SKILL.md</code>. Separar o cabo da receita me deixa dormir melhor. Cada peça quebra no lugar certo. Cada conserto fica pequeno.</p>
+<p>Dá pra viver só com um dos dois? Dá. Agente interno, sem auth, fluxo único, Skill pura resolve. Agente que só consulta um sistema e o usuário já sabe o que pedir, MCP puro resolve. O ponto em que a coisa fica boa é quando a caixa de ferramentas está conectada e o caderno de receitas está ao lado, sem misturar as páginas. Eu quero verbo quando preciso agir. Eu quero receita quando preciso acertar o ofício.</p>
+<p><img src="../assets/images/2026-10-09-skills-vs-mcp-quando-usar-cada-um-3-escolha-caminho.png" alt="Viajante de mochila numa bifurcação na estrada diante de uma placa de madeira com dois caminhos, um com símbolo de chave inglesa e outro de livro aberto, representando a escolha entre MCP e Skills" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+<h2>Minha opinião, sem rodeio</h2>
+<p>Se você me perguntar no corredor o que priorizar, eu não começo pelo protocolo da moda. Eu pergunto: o agente está perdido porque não alcança o sistema, ou porque alcança e ainda assim trabalha torto? Porta fechada é MCP. Porta aberta e serviço ruim é Skill. Se as duas dores existem, os dois entram. Sem drama. Sem bandeira.</p>
+<p>Em 2026 os dois convivem. Tratar MCP e Skills como time que se completa, não como briga de padrão, é o que tem funcionado pra mim. Ferramenta sem receita vira agente ansioso, chamando API à toa. Receita sem ferramenta vira texto bonito que não mexe em nada. Eu quero os dois. Na dose certa. Com o contexto magro. Com a chave na porta certa. E com o caderno aberto só quando a comida está no fogo.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">MCP conecta seu agente ao mundo; Skills ensinam o agente a trabalhar do seu jeito. A diferença prática entre ferramentas e receitas — e quando cada abordagem faz sentido no seu stack.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">MCP conecta seu agente ao mundo; Skills ensinam o agente a trabalhar do seu jeito. A diferença prática entre ferramentas e receitas — e quando cada abordagem faz sentido no seu stack.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-09-skills-vs-mcp-quando-usar-cada-um.html</div>
+  </section>
+
+  <footer class="post">
+    <span>9 de outubro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
