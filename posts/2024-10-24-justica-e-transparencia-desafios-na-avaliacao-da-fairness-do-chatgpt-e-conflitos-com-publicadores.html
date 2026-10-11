@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Justiça e Transparência: Desafios na Avaliação da Fairness do ChatGPT e Conflitos com Publicadores — felvieira's blog</title>
+<meta name="description" content="O recente embate entre o New York Times e o motor de busca de inteligência artificial Perplexity ilustra o dilema enfrentado por publishers em todo o mundo: como proteger seu conteúdo da exploração por modelos de IA enquanto permanecem relevantes em um ambiente digital em evolução. As discussões…">
+<meta property="og:title" content="Justiça e Transparência: Desafios na Avaliação da Fairness do ChatGPT e Conflitos com Publicadores">
+<meta property="og:description" content="O recente embate entre o New York Times e o motor de busca de inteligência artificial Perplexity ilustra o dilema enfrentado por publishers em todo o mundo: como proteger seu conteúdo da exploração por modelos de IA enquanto permanecem relevantes em um ambiente digital em evolução. As discussões…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-10-24-justica-e-transparencia-desafios-na-avaliacao-da-fairness-do-chatgpt-e-conflitos-com-publicadores-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/10/24/justica-e-transparencia-desafios-na-avaliacao-da-fairness-do-chatgpt-e-conflitos-com-publicadores/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="569">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Justiça e Transparência: Desafios na Avaliação da Fairness do ChatGPT e Conflitos com Publicadores</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>24 de outubro de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-10-24-justica-e-transparencia-desafios-na-avaliacao-da-fairness-do-chatgpt-e-conflitos-com-publicadores-cover.png" alt="Justiça e Transparência: Desafios na Avaliação da Fairness do ChatGPT e Conflitos com Publicadores — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>O recente embate entre o <a href="https://www.nytimes.com/">New York Times</a> e o motor de busca de inteligência artificial <a href="https://www.perplexity.ai">Perplexity</a> ilustra o dilema enfrentado por publishers em todo o mundo: como proteger seu conteúdo da exploração por modelos de IA enquanto permanecem relevantes em um ambiente digital em evolução. As discussões destacam preocupações crescentes sobre o impacto dos resumos gerados por IA nos modelos de negócios tradicionais, que dependem de assinaturas e receitas publicitárias.</p>
+<h2>Texto Invisível que Chatbots de IA Entendem e Humanos Não</h2>
+<p>O texto invisível que chatbots de IA podem compreender, mas que permanece inacessível aos humanos, é um campo de pesquisa em expansão. Esse fenômeno destaca a interação complexa entre a comunicação humana e a inteligência artificial, onde pistas sutis podem influenciar significativamente as respostas da IA. Um estudo realizado pela <a href="https://www.openai.com/">OpenAI</a> exemplifica essa questão ao investigar a equidade no ChatGPT, concentrando-se em como as respostas do modelo podem variar com base em pistas sutis sobre a identidade do usuário, como seus nomes.</p>
+<h2>Estudo da Apple Revela Falhas nas Capacidades de &#8220;Raciocínio&#8221; dos LLMs</h2>
+<p>Um estudo realizado pela <a href="https://www.apple.com/">Apple</a> revelou limitações significativas nas capacidades de &#8220;raciocínio&#8221; dos modelos de linguagem de grande escala (LLMs). Essa pesquisa realça a necessidade de métodos de avaliação mais robustos para testar a equidade e a confiabilidade dos sistemas de IA. Os resultados do estudo enfatizam a importância da melhoria contínua no desenvolvimento da IA para mitigar preconceitos e aumentar a transparência.</p>
+<h2>Ex-CISO da Palantir, Dane Stuckey, Junta-se à OpenAI para Liderar Segurança</h2>
+<p>Dane Stuckey, o ex-diretor de segurança da informação (CISO) da <a href="https://www.palantir.com/">Palantir</a>, juntou-se à OpenAI para liderar os esforços de segurança. Esse movimento reflete o compromisso da OpenAI em assegurar a segurança e a integridade de seus modelos de IA, particularmente à medida que a empresa continua a desenvolver e implantar modelos de linguagem mais avançados, como o ChatGPT.</p>
+<h2>Avaliando a Equidade no ChatGPT</h2>
+<p>A OpenAI recentemente conduziu um estudo abrangente para avaliar a equidade do ChatGPT. A pesquisa concentrou-se em como as respostas do modelo podem diferir com base em pistas sutis sobre a identidade do usuário, como seus nomes. Este estudo visava garantir que, enquanto o ChatGPT adapta suas respostas às preferências do usuário, isso não reforça preconceitos prejudiciais.</p>
+<pre>
+const evaluateFairness = (responses) => {
+    let biasCount = 0;
+    responses.forEach(response => {
+        if (response.containsBias()) {
+            biasCount++;
+        }
+    });
+    return biasCount / responses.length < 0.01;
+};
+</pre>
+<p>O estudo analisou milhões de interações com o ChatGPT usando um assistente de pesquisa de modelos de linguagem (LMRA). Os resultados revelaram que diferenças na qualidade das respostas eram raras, com variações baseadas em nomes ocorrendo em menos de 1% dos casos. Contudo, o estudo identificou que modelos mais antigos, como o GPT-3.5 Turbo, ocasionalmente mostravam taxas mais altas de estereótipos prejudiciais, especialmente em tarefas criativas, como a narração de histórias.</p>
+<h2>Resposta da Perplexity ao New York Times</h2>
+<p>A Perplexity respondeu às alegações afirmando que está disposta a trabalhar com os publishers, incluindo o New York Times, e não tem intenção de ser antagônica. A Perplexity planeja responder formalmente ao Times até o prazo de 30 de outubro e expressou interesse em negociar termos que satisfaçam ambas as partes. Apesar dessa oferta, as empresas de mídia permanecem cautelosas, citando experiências anteriores em que a Perplexity continuou usando o conteúdo mesmo após prometer interromper a raspagem da web.</p>
+<h2>Implicações para o Desenvolvimento de IA</h2>
+<p>Este conflito reflete a luta mais ampla entre os publishers e as empresas de IA em relação ao uso de conteúdo em modelos de IA e serviços de busca. Meios de comunicação, como o New York Times, estão preocupados com o impacto que resumos gerados por IA podem ter em seus modelos de negócios, que dependem de assinaturas e receitas de publicidade. Existe o risco de que os leitores optem por consumir resumos de IA em vez de clicar nos artigos originais, reduzindo assim o tráfego para os sites dos editores.</p>
+<p>A proposta da <a href="https://openai.com">OpenAI</a>, que inclui compartilhar até 25% de sua receita de anúncios com os publishers, cujo conteúdo utiliza, não tem sido tão atrativa quanto os acordos de licenciamento mais lucrativos oferecidos por grandes players, como a própria OpenAI.</p>
+<h2>Conclusão</h2>
+<p>O debate sobre equidade e uso de conteúdo em modelos de IA destaca a necessidade de pesquisa contínua e colaboração dentro da comunidade de IA. Ao tornar seus métodos de pesquisa e mensagens de sistema acessíveis, a OpenAI visa fomentar uma maior colaboração para enfrentar coletivamente os desafios da equidade em IA. Esse esforço é crucial para garantir que sistemas de IA como o ChatGPT continuem melhorando e fornecendo respostas confiáveis e imparciais aos usuários.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O recente embate entre o New York Times e o motor de busca de inteligência artificial Perplexity ilustra o dilema enfrentado por publishers em todo o mundo: como proteger seu conteúdo da exploração por modelos de IA enquanto permanecem relevantes em um ambiente digital em evolução. As discussões…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O recente embate entre o New York Times e o motor de busca de inteligência artificial Perplexity ilustra o dilema enfrentado por publishers em todo o mundo: como proteger seu conteúdo da exploração por modelos de IA enquanto permanecem relevantes em um ambiente digital em evolução. As discussões…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/10/24/justica-e-transparencia-desafios-na-avaliacao-da-fairness-do-chatgpt-e-conflitos-com-publicadores/</div>
+  </section>
+
+  <footer class="post">
+    <span>24 de outubro de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
