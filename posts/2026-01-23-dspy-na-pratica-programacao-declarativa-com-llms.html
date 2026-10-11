@@ -1,0 +1,256 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DSPy na prática: programação declarativa com LLMs — felvieira's blog</title>
+<meta name="description" content="O DSPy transforma a forma como lidamos com prompts ao permitir a definição de assinaturas em Python para otimização automática de LLMs. Isso resulta em processos mais estruturados, modulares e reprodutíveis para extrações e outras tarefas com texto.">
+<meta property="og:title" content="DSPy na prática: programação declarativa com LLMs">
+<meta property="og:description" content="O DSPy transforma a forma como lidamos com prompts ao permitir a definição de assinaturas em Python para otimização automática de LLMs. Isso resulta em processos mais estruturados, modulares e reprodutíveis para extrações e outras tarefas com texto.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-01-23-dspy-na-pratica-programacao-declarativa-com-llms-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2026/01/23/dspy-na-pratica-programacao-declarativa-com-llms/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1511">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>DSPy na prática: programação declarativa com LLMs</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>23 de janeiro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">12 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-01-23-dspy-na-pratica-programacao-declarativa-com-llms-cover.webp" alt="DSPy na prática: programação declarativa com LLMs — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Eu lembro da primeira vez que precisei padronizar extração de e-mails — gastei horas ajustando prompts. Com DSPy, mudei a abordagem: descrevo assinaturas (input/output) como classes em Python e deixo o framework procurar o melhor prompt. Neste post vou contar como isso mudou meu fluxo, mostrar exemplos com Sabia4 (modelo usado em PT-BR), dar dicas de otimização e discutir quando agentes são realmente úteis — tudo com uns devaneios e uma anedota sobre um bug que só apareceu em produção.</p>
+<p><a href="https://dspy.ai/">https://dspy.ai/</a></p>
+<h2>1) Por que DSPy muda o jogo (DSPy introdução)</h2>
+<p>Quando eu comecei a mexer com LLMs, eu caí no padrão de sempre: <em>“interagir com modelo = escrever prompt”</em>. E por um tempo isso funcionou. Só que, na prática, prompt vira uma <strong>string frágil</strong>: qualquer ajuste pequeno muda o resultado, fica difícil versionar, testar e repetir. Foi aí que eu entendi a proposta do DSPy: <strong>e se eu pudesse programar o comportamento da LLM</strong> sem ficar gerenciando prompt manualmente?</p>
+<h3>DSPy como <em>framework declarativo</em> (menos prompt, mais estrutura)</h3>
+<p>O DSPy (ou “DSPy”, como a maioria chama) é uma biblioteca em Python que traz um jeito diferente de construir soluções de IA generativa focadas em texto. A ideia central é tratar o sistema como código estruturado, com módulos e regras claras, em vez de um amontoado de prompts colados no projeto. Como o Cobus Greyling resume:</p>
+<blockquote>
+<p>DSPy é um framework declarativo para construir sistemas AI modulares em vez de prompts frágeis. — Cobus Greyling</p>
+</blockquote>
+<p>Na prática, isso muda o meu trabalho: eu paro de “tunar prompt” no braço e começo a <strong>declarar o que entra e o que sai</strong>, deixando a biblioteca otimizar o resto.</p>
+<h3>Assinaturas input/output: trocando strings por contratos</h3>
+<p>O coração dessa abordagem são as <strong>assinaturas input/output</strong>. Em vez de eu escrever um prompt gigante, eu descrevo um “contrato” do comportamento: quais campos entram, quais campos saem, e o que eu espero do modelo. Isso costuma ser feito como classes (muitas vezes no estilo Pydantic), o que deixa tudo mais legível e testável.</p>
+<p><code>class ResumoAssinatura(Signature):<br />&nbsp;&nbsp;texto: str<br />&nbsp;&nbsp;resumo: str</code></p>
+<p>Repara como isso é diferente de “prompt engineering”: eu não estou discutindo vírgula, tom e formatação numa string. Eu estou definindo um <strong>componente</strong> com entradas e saídas.</p>
+<h3>Compilation: o DSPy cria o prompt “ideal” para o seu caso</h3>
+<p>O detalhe que me fez virar a chave é que o prompt ainda existe, só que <strong>não sou eu que gerencio</strong>. O DSPy faz a <strong>signature compilation</strong>: ele compila essas assinaturas em prompts otimizados para aquele cenário, usando um <strong>dataset</strong> para treinar/testar e escolher o melhor caminho. Eu achei que era exagero… até ver a primeira compilação gerar um prompt melhor do que o que eu tinha escrito.</p>
+<h3>Benefício prático: menos retrabalho e mais reprodutibilidade</h3>
+<ul>
+<li>
+<p><strong>Menos mão-de-obra</strong> ajustando prompt na tentativa e erro.</p>
+</li>
+<li>
+<p><strong>Mais reprodutibilidade</strong>: assinaturas e dados viram referência do comportamento.</p>
+</li>
+<li>
+<p><strong>Mais modularidade</strong>: dá para trocar modelos (ex.: projetos em português com Sabia4) sem reescrever tudo.</p>
+</li>
+</ul>
+<p>Se você quiser a fonte oficial, eu recomendo começar por <strong>dspy.ai</strong> (link na descrição do vídeo), além do código e exemplos no GitHub.</p>
+<h2>2) Assinaturas em ação: input fields, output fields e compilação (assinaturas DSPy)</h2>
+<p>No DSPy, o “core” da ideia são as <strong>assinaturas DSPy</strong>. Eu gosto de pensar nelas como um contrato: eu descrevo <em>o que entra</em> e <em>o que sai</em>, e deixo o DSPy encontrar o melhor jeito de transformar uma coisa na outra. Em vez de eu ficar “na unha” escrevendo prompt, eu declaro a estrutura do processo.</p>
+<h3>Como escrever uma signature (assinatura campos)</h3>
+<p>Na prática, uma assinatura é uma classe em Python, normalmente estendendo <strong>BaseModel</strong> do Pydantic. Dentro dela, eu declaro <strong>input_field</strong> (campos de entrada) e <strong>output_field</strong> (campos de saída), com <strong>tipos</strong> e <strong>descrições</strong>. Isso é importante porque o DSPy usa essas informações para guiar a geração.</p>
+<blockquote>
+<p>Descrever o comportamento de cada campo melhora a saída gerada pelo compilador DSPy. — trecho do vídeo</p>
+</blockquote>
+<h3>Por que descrever bem os campos ajuda (assinaturas input/output)</h3>
+<p>Quando eu capricho nas descrições dos campos, eu estou dando contexto para o compilador. E aí entra um ponto-chave: <strong>signature compilation</strong>. O DSPy pega a assinatura e <strong>compila</strong> isso em prompts e instruções otimizadas, reduzindo a necessidade de prompt manual e melhorando consistência. Ou seja: eu declaro o comportamento, e o DSPy monta o “prompt certo” para aquele objetivo.</p>
+<h3>Exemplo prático: triagem de tickets com ExtractTicket</h3>
+<p>Um caso bem comum é classificar tickets de suporte a partir de um e-mail. Aqui vai um exemplo simples:</p>
+<p><code> from pydantic import BaseModel<br />import dspy</p>
+<p>class ExtractTicket(BaseModel):<br />&nbsp;&nbsp;email: str = dspy.InputField(desc="Texto do e-mail do cliente")<br />&nbsp;&nbsp;nome: str = dspy.OutputField(desc="Nome do cliente, se aparecer")<br />&nbsp;&nbsp;problema: str = dspy.OutputField(desc="Problema principal em uma frase")<br />&nbsp;&nbsp;urgencia: int = dspy.OutputField(desc="Nível de urgência de 0 a 9")<br />&nbsp;&nbsp;sentimento: str = dspy.OutputField(desc="positivo, neutro ou negativo")<br /></code></p>
+<p>Repara como eu não escrevi “o prompt”. Eu só defini a <strong>assinatura campos</strong> e deixei claro o que cada saída significa. Isso é ouro para triagem e priorização automatizada.</p>
+<h3>Dica: use Enum no Pydantic para consistência</h3>
+<p>Para evitar variações (“negativo”, “ruim”, “insatisfeito”), eu limito valores com Enum:</p>
+<p><code> from enum import Enum</p>
+<p>class Sentimento(str, Enum):<br />&nbsp;&nbsp;positivo = "positivo"<br />&nbsp;&nbsp;neutro = "neutro"<br />&nbsp;&nbsp;negativo = "negativo"<br /></code></p>
+<p>Depois, eu uso <code>sentimento: Sentimento</code> na assinatura. Isso melhora validação, padroniza saída e ajuda quando eu treino com <em>golden datasets</em> ou <em>bootstrapped demos</em> para fortalecer os few-shots gerados na compilação.</p>
+<h2>3) Módulos essenciais: Predict, ChainOfThought e providers (módulos DSPy)</h2>
+<p>O que mais me chamou atenção no DSPy é que ele já nasce pensando em <em>múltiplos modelos</em> e em como eu descrevo comportamento como código. Em vez de eu ficar só “escrevendo prompt”, eu monto módulos e conecto tudo com um provider. Como o vídeo reforça, frameworks hoje já dão suporte a diferentes LLMs, e o DSPy entra forte nisso: OpenAI, Anthropic, Databricks, Gemini e também LLMs locais via OLAMA e LM Studio. Isso muda o jogo pra testar rápido, inclusive em PT-BR com o <strong>Sabia4</strong> (“Sabiazinho 4”).</p>
+<blockquote>
+<p>No final das contas, é literalmente criar uma classe que descreve o comportamento desejado e usar módulos existentes. — trecho do vídeo</p>
+</blockquote>
+<h3>Predict: o “chamando LM” mais direto</h3>
+<p>O <strong>dspy.Predict</strong> é o módulo mais simples: ele parece uma chamada comum de LLM. Eu uso quando quero <em>inferência direta</em>, tipo “dado X, gere Y”, sem muita cerimônia. É ótimo pra tarefas de extração, classificação e respostas curtas, onde eu só preciso do output final.</p>
+<ul>
+<li>
+<p><strong>Quando usar:</strong> respostas objetivas, pipelines simples, baseline rápido.</p>
+</li>
+<li>
+<p><strong>Vantagem:</strong> menos complexidade e fácil de plugar em qualquer fluxo.</p>
+</li>
+</ul>
+<p><code># exemplo conceitual<br />import dspy<br />extract = dspy.Predict("texto -&gt; campos")<br />out = extract(texto="...")</code></p>
+<h3>ChainOfThought: reasoning e diagnóstico</h3>
+<p>Já o <strong>ChainOfThought</strong> entra quando eu quero mais transparência e capacidade de depurar. Ele tenta produzir um raciocínio intermediário (o famoso <em>reasoning</em>) e isso ajuda a entender por que o modelo chegou naquela resposta. Em muitos setups, dá pra inspecionar esse “miolo” via channel/atributos do retorno, o que é útil pra ajustar comportamento e identificar falhas.</p>
+<ul>
+<li>
+<p><strong>Quando usar:</strong> problemas com múltiplos passos, lógica, validação, explicações.</p>
+</li>
+<li>
+<p><strong>Vantagem:</strong> melhora o diagnóstico e facilita otimização/tuning.</p>
+</li>
+</ul>
+<h3>LM providers: um API unificado pra vários modelos</h3>
+<p>Os <strong>LM providers</strong> são a ponte entre seus módulos DSPy e o modelo de fato. Eu gosto porque posso trocar de provider sem reescrever tudo: OpenAI, Anthropic, Databricks, Gemini, e também rodar local com <strong>OLAMA</strong> ou <strong>LM Studio</strong>. No exemplo com Maritaca/Sabia4, a ideia é usar uma API “OpenAI-like”, mantendo o mesmo formato de chamada.</p>
+<table>
+<colgroup>
+<col>
+<col></colgroup>
+<tbody>
+<tr>
+<th>
+<p>Provider</p>
+</th>
+<th>
+<p>Uso típico</p>
+</th>
+</tr>
+<tr>
+<td>
+<p>OpenAI/Anthropic/Gemini</p>
+</td>
+<td>
+<p>produção via API</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Databricks</p>
+</td>
+<td>
+<p>ambiente corporativo</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>OLAMA / LM Studio</p>
+</td>
+<td>
+<p>testes locais e custo baixo</p>
+</td>
+</tr>
+</tbody>
+</table>
+<h3>Setup: config + .env (e venv)</h3>
+<p>Pra não virar bagunça, eu sigo a recomendação do vídeo: uso <strong>venv</strong> no Python e centralizo configuração. Normalmente eu deixo chaves e base URL num <code>.env</code> e aponto o DSPy pro provider escolhido (incluindo <code>API_BASE</code> quando for OpenAI-like).</p>
+<p><code># .env (exemplo)<br />API_KEY="..."<br />API_BASE="https://..."</code></p>
+<h2>4) Otimização automática: MIPRO, teleprompter e pipelines (otimizadores DSPy)</h2>
+<p>Uma das coisas que mais me chamou atenção no DSPy é que eu paro de “escrever prompt no braço” o tempo todo e começo a <em>programar o comportamento</em> como código. Em vez de ficar ajustando texto e torcendo pra dar certo, eu descrevo o que eu quero (via módulos e signatures) e deixo a biblioteca me ajudar a chegar no melhor resultado. E é aqui que entram os <strong>otimizadores DSPy</strong>: eles fazem o tuning automático para o meu desafio, com base em métricas e testes.</p>
+<h3>Otimizadores DSPy: MIPROv2 extensão e teleprompter</h3>
+<p>Na prática, os otimizadores pegam o meu programa (módulos + signature) e tentam melhorar a performance gerando:</p>
+<ul>
+<li>
+<p><strong>Instruções automáticas</strong> (um “prompt” melhor, só que derivado do meu objetivo e dos dados).</p>
+</li>
+<li>
+<p><strong>Few-shot examples</strong> (demonstrações curtas e relevantes, escolhidas/geradas para aumentar acerto).</p>
+</li>
+</ul>
+<blockquote>
+<p>MIPROv2 melhora propostas de instruções e busca discreta para otimização. — trecho da documentação DSPy</p>
+</blockquote>
+<p>Eu costumo pensar assim: <strong>MIPRO (MIPROv2)</strong> é forte para propor e refinar instruções (inclusive com essa ideia de “busca discreta”), enquanto o <strong>teleprompter</strong> brilha quando eu preciso compilar boas demos (few-shot) e organizar exemplos que “ensinam” o modelo a responder do jeito certo.</p>
+<h3>Compilação iterativa e otimização pipeline com métricas</h3>
+<p>O fluxo é bem direto: eu rodo uma <strong>teleprompter compile</strong> ou um otimizador como MIPROv2 em cima de um dataset (pode ser um <em>golden dataset</em> pequeno). A cada rodada, o DSPy avalia com uma métrica e recompila o programa, ajustando instruções e exemplos. Mesmo quando eu não tenho labels perfeitos, dá para usar heurísticas, validações parciais e checks de formato para guiar a <strong>otimização pipeline</strong>.</p>
+<p>Exemplo bem simples de como isso aparece no código:</p>
+<p><code>compiled = teleprompter.compile(program, trainset=golden, metric=score_fn)</code></p>
+<h3>Recursos para produção: do pipeline ao deploy</h3>
+<p>Além de otimizar, eu gosto que o ecossistema já pensa em produção: <strong>streaming</strong> de saída, <strong>caching</strong> para reduzir custo/latência, e caminhos mais claros para <strong>deploy</strong> e <strong>monitoramento</strong>. Isso ajuda quando o pipeline cresce (por exemplo, com <strong>RAG</strong>, etapas de extração, classificação e resposta), porque eu consigo evoluir o sistema sem virar uma colcha de retalhos.</p>
+<h3>Minha experiência: menos erro em tickets com poucas iterações</h3>
+<p>Num projeto de triagem de tickets, eu rodei tuning por <strong>algumas rodadas</strong> em um golden dataset (curto, mas bem revisado). Depois da compilação iterativa, eu vi uma queda clara nos erros de classificação, principalmente nos casos “cinzentos” (assuntos parecidos). O ganho veio mais de <strong>instruções melhores + few-shot examples</strong> do que de qualquer ajuste manual que eu fazia antes.</p>
+<h2>5) Agentes, hype e o que realmente usar (compilação programa)</h2>
+<p>Agora eu entro no item dois do projeto: <strong>agentes</strong>. É o termo da modinha, tá em alta, e sim, pode ser extremamente relevante. Mas eu bato na mesma tecla do vídeo: a gente precisa separar o que é tendência do que realmente melhora o nosso processo.</p>
+<blockquote>
+<p>Precisamos sempre saber separar o que é hype do que é realmente útil dentro do processo. — trecho do vídeo</p>
+</blockquote>
+<h3>Quando “agente” é útil de verdade (e quando é só barulho)</h3>
+<p>Pra mim, agente vale a pena quando existe <strong>trabalho multi-step</strong>, com decisões no meio do caminho, e quando a <strong>programação modular</strong> ajuda a manter tudo legível e testável. Se o seu problema é “pegar um input e gerar um output”, muitas vezes um <code>Predict</code> ou um <code>ChainOfThought</code> bem definido já resolve, sem inventar uma orquestra inteira.</p>
+<h3>Casos práticos: onde eu vejo ganho real</h3>
+<ul>
+<li>
+<p><strong>Automação de triagem</strong>: classificar tickets, priorizar bugs, encaminhar para o time certo e pedir mais dados quando faltar contexto.</p>
+</li>
+<li>
+<p><strong>Workflows multi-step com RAG</strong>: buscar documentos, checar evidências, responder e registrar as fontes. Aqui, agentes podem coordenar etapas, mas o coração continua sendo RAG + avaliação.</p>
+</li>
+<li>
+<p><strong>Deploy e monitoramento</strong>: em produção, o “agente” só faz sentido se vier junto de <em>deploy monitoring</em>, cache, logs e métricas. Sem isso, você só automatiza erro em escala.</p>
+</li>
+</ul>
+<h3>DSPy: menos mágica, mais engenharia (instruções automáticas)</h3>
+<p>O que eu gosto no DSPy é que ele puxa a conversa pra engenharia: <strong>signatures</strong> claras, módulos pequenos e otimização. Em vez de “prompt artesanal”, você pode usar <strong>instruções automáticas</strong> via otimizadores, e isso combina bem com pipelines mais complexos. Muitos tutoriais do ecossistema já cobrem RAG, otimizadores e <em>core development</em> pra apps de produção, além de integração com provedores de LM.</p>
+<h3>Minha regra prática: protótipo pequeno antes de comprar a promessa</h3>
+<p>Tem muita solução paga e curso vendendo “agentes milagrosos”. Eu prefiro um teste simples, com métrica e dataset mínimo. Começo assim:</p>
+<ol>
+<li>
+<p>Defino uma <strong>signature</strong> objetiva (inputs/outputs).</p>
+</li>
+<li>
+<p>Provo o fluxo com <code>Predict</code> ou <code>ChainOfThought</code>.</p>
+</li>
+<li>
+<p>Se precisar, componho módulos e só então penso em agente.</p>
+</li>
+<li>
+<p>Faço <strong>compilação programa</strong> e avalio: melhorou custo, tempo, qualidade?</p>
+</li>
+</ol>
+<p>Se o ganho não for claro, eu não “agentifico” o sistema. Eu simplifico.</p>
+<h2>6) Wild cards: anedotas, analogias e um cenário hipotético</h2>
+<h3>Uma anedota (bem real) sobre assinatura e um bug “fantasma”</h3>
+<p>Teve um dia em que eu jurei que o problema era o modelo. O pipeline funcionava lindo no meu ambiente, mas em produção aparecia um erro intermitente: respostas truncadas, campos faltando, e um “tom” diferente do esperado. Eu estava naquela fase clássica de “deve ser o prompt”, porque a gente cresce achando que interagir com LLM é só isso: escrever prompt e torcer.</p>
+<p>O que resolveu foi quase anticlimático: eu formalizei a <em>assinatura</em> no DSPy e, na primeira rodada, percebi que um campo estava mal tipado. Era um detalhe bobo (string onde eu tratava como lista), mas em produção chegava com variações reais de dados. Quando eu trouxe isso pra uma assinatura clara, o erro deixou de ser “místico” e virou “engenharia”. Aí caiu a ficha do valor da <strong>programação modular</strong>: manutenção vira ajuste de contrato, não caça ao tesouro.</p>
+<h3>Uma analogia: DSPy como “compilador de prompts” (meu tutorial visão)</h3>
+<p>Hoje eu explico DSPy assim: é como um <strong>compilador de prompts</strong>. Você descreve <em>o que</em> quer (tipos, campos, critérios) e ele tenta transformar isso em instruções otimizadas pro modelo. Parece exagero até você ver a primeira compilação gerar um prompt melhor que o que você escreveu.</p>
+<blockquote>
+<p>Pareceu exagero até eu ver a primeira compilação gerar um prompt melhor que o que eu escrevi. — relato pessoal</p>
+</blockquote>
+<p>E aqui entra meu “tutorial visão”: em vez de ficar lapidando texto, eu lapido estrutura. Isso é o coração do <strong>framework declarativo</strong>: menos adivinhação, mais especificação.</p>
+<h3>Cenário hipotético: e se uma sprint de QA virasse um pipeline DSPy + golden dataset?</h3>
+<p>Imagina substituir uma sprint inteira de QA manual por um pipeline com DSPy, um <em>golden dataset</em> e métricas automáticas. Benefícios? Regressão todo dia, comparação objetiva, e menos fricção quando você troca um módulo. Eu já senti isso em PT-BR usando o Sabia4 (no lançamento recente do modelo SAB, dia 17): bom custo-benefício e respostas bem alinhadas ao nosso contexto.</p>
+<p>Mas tem risco: teste automatizado não é sinônimo de verdade. Você pode “overfit” no golden dataset, e produção sempre inventa um caso novo. Então fica meu aviso: <strong>não teste em produção sem monitoramento</strong>. Log, métricas, amostragem humana e rollback precisam existir.</p>
+<h3>Confissão final: às vezes eu ainda escrevo prompt na mão</h3>
+<p>Pra fechar: eu ainda escrevo um prompt à mão de vez em quando, por nostalgia e por velocidade. Só que agora eu faço isso sabendo que, quando o projeto cresce, o caminho mais seguro é declarar contratos, modularizar e deixar o DSPy “compilar” o comportamento. Esse é o tipo de prática que faz LLM parar de ser truque e virar produto.</p>
+<p><strong>TL;DR: </strong>DSPy transforma prompts em código: você define assinaturas, usa módulos como Predict e ChainOfThought, aplica otimizadores (MIPRO/teleprompter) e conecta provedores (Sabia4, OpenAI, modelos locais) para pipelines mais robustos.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O DSPy transforma a forma como lidamos com prompts ao permitir a definição de assinaturas em Python para otimização automática de LLMs. Isso resulta em processos mais estruturados, modulares e reprodutíveis para extrações e outras tarefas com texto.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O DSPy transforma a forma como lidamos com prompts ao permitir a definição de assinaturas em Python para otimização automática de LLMs. Isso resulta em processos mais estruturados, modulares e reprodutíveis para extrações e outras tarefas com texto.
+
+Leia o post completo: https://blog.felvieira.com.br/2026/01/23/dspy-na-pratica-programacao-declarativa-com-llms/</div>
+  </section>
+
+  <footer class="post">
+    <span>23 de janeiro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

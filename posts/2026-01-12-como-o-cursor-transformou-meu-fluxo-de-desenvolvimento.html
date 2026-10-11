@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como o Cursor transformou meu fluxo de desenvolvimento — felvieira's blog</title>
+<meta name="description" content="O Cursor uniu editor, agentes e automações: planos rastreáveis (.cursor/plans/), Rules &amp; Skills, cloud agents em cursor.com/agents, Debug Mode e comandos (/pr, /fix-issue) que economizam tempo e trazem consistência.">
+<meta property="og:title" content="Como o Cursor transformou meu fluxo de desenvolvimento">
+<meta property="og:description" content="O Cursor uniu editor, agentes e automações: planos rastreáveis (.cursor/plans/), Rules &amp; Skills, cloud agents em cursor.com/agents, Debug Mode e comandos (/pr, /fix-issue) que economizam tempo e trazem consistência.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-01-12-como-o-cursor-transformou-meu-fluxo-de-desenvolvimento-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2026/01/12/como-o-cursor-transformou-meu-fluxo-de-desenvolvimento/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1505">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como o Cursor transformou meu fluxo de desenvolvimento</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de janeiro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">11 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-01-12-como-o-cursor-transformou-meu-fluxo-de-desenvolvimento-cover.png" alt="Como o Cursor transformou meu fluxo de desenvolvimento — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Descobri o Cursor num dia que eu precisava rebobinar um projeto legado: abri o editor, pressionei Shift+Tab e o agente me devolveu um plano em Markdown que salvou horas de reuniões. A partir dali passei a construir um jeito próprio de trabalhar com agentes: misturei regras versionadas, comandos customizados e cloud agents que abrem PRs enquanto eu tomo café. Neste post conto, em primeira pessoa, como cada recurso — do Plan Mode ao Debug Mode, passando por Skills e automações — virou parte do meu fluxo. Algumas anedotas aparecerão pelo caminho (sou péssimo com commits às 2am).</p>
+<h2>1) Por que o Cursor mudou meu fluxo</h2>
+<h3>Cursor AI Editor + Integração VSCode: eu não “troquei de editor”, eu ganhei um copiloto</h3>
+<p>O que me virou a chave no <b>Cursor AI Editor</b> foi a forma como ele junta o editor com modelos LLM (como <b>GPT-4</b>, <b>Claude</b>, <b>Gemini</b> e <b>xAI</b>) sem quebrar meu jeito de trabalhar. Como ele mantém <b>Integração VSCode</b> e aceita extensões, eu continuei com meus atalhos, temas e ferramentas — só que agora com um <i>Editor Código AI</i> realmente integrado ao dia a dia.</p>
+<h3>Chat “codebase-aware”: respostas com contexto real do projeto</h3>
+<p>Em vez de um chat genérico, o Cursor entende o repositório. Isso muda tudo no onboarding e na manutenção de legado: eu pergunto coisas específicas e recebo respostas ancoradas no código. Exemplo real: <code>Por que setUser() na linha 1738?</code>. O agente busca referências, cruza chamadas e explica o impacto, sem eu ficar caçando arquivo por arquivo. Esse “awareness” acelera onboarding e refatoração porque o editor + agente trabalham como uma dupla, não como ferramentas separadas.</p>
+<h3>Autocompletar Inteligente (Tab) que prevê mais do que uma linha</h3>
+<p>O <b>Autocompletar Inteligente</b> do Tab não é só sugestão de token. Ele antecipa blocos inteiros, ajusta imports, cria funções e até sugere mudanças em múltiplos trechos. Em MVPs de startup, isso encurta o caminho entre ideia e primeira versão rodando. Em projetos full-stack, DevOps ou engenharia de dados, ele reduz o “trabalho de cola” entre arquivos.</p>
+<h3>Múltiplos modelos: escolho o trade-off de velocidade, custo e qualidade</h3>
+<p>Outro ponto que mudou meu fluxo foi poder alternar modelos conforme a tarefa: um mais rápido para rotinas, outro mais forte para revisão e arquitetura. Isso deixa o processo mais previsível e eficiente.</p>
+<ul>
+<li><b>Onboarding:</b> perguntas diretas sobre o codebase e decisões antigas.</li>
+<li><b>Refatoração:</b> sugestões consistentes e revisão contextual.</li>
+<li><b>MVP:</b> geração de múltiplos arquivos com menos fricção.</li>
+</ul>
+<blockquote><p>Desde que adotei o Cursor, passei a confiar nos agentes para tarefas repetitivas e ganhar foco nas decisões hard. — Mariana Silva, Engenheira de Software Sênior</p></blockquote>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/fe3916e8-98ab-4588-badc-d3a24a4cf0b2.webp" alt="2) Plan Mode: da ideia a um plano versionado"></p>
+<h2>2) Plan Mode: da ideia a um plano versionado</h2>
+<h3>Plan Mode Cursor + Documentação Automática sem fricção</h3>
+<p>Quando a tarefa começa a ficar grande, eu paro de “pedir código” e passo a pedir <b>plano</b>. No Cursor, isso virou hábito: pressiono <code>Shift+Tab</code> e ativo o <em>Plan Mode Cursor</em>. Em segundos, o agente me devolve um plano em <b>Markdown</b>, com etapas, riscos e checkpoints. Eu edito o texto como se fosse um README de execução e salvo em <code>.cursor/plans/</code>. Essa <b>Documentação Automática</b> vira parte do repositório, com histórico no Git, e melhora muito a rastreabilidade em tarefas longas.</p>
+<h3>Planos que reduzem reuniões e facilitam retomadas</h3>
+<p>O ganho mais claro é colaboração: com o plano versionado, a equipe entende o “porquê” e o “como” sem reunião extra. Em trabalhos longos, isso também acelera retomadas: dias depois, eu abro o arquivo em <code>.cursor/plans/</code> e volto exatamente do ponto em que parei, com contexto preservado.</p>
+<ul>
+<li><b>Divisão de tarefas</b> por etapas e responsáveis</li>
+<li><b>Sincronia</b> com worktrees Git para testar abordagens em paralelo</li>
+<li><b>Checklist</b> de validação (build, lint, testes)</li>
+</ul>
+<h3>TDD e Refatoração Código Legado com mais controle</h3>
+<p>Eu uso planos principalmente em <b>TDD</b> e em <b>Refatoração Código Legado</b>. No TDD, o plano já vem com o fluxo: <i>criar testes → rodar → validar falha → implementação</i>. Em refatorações, ele me obriga a quebrar o problema em passos pequenos, com commits mais seguros.</p>
+<h4>Exemplo prático: CommonJS → ES Modules</h4>
+<p>Recentemente, criei um plano para migrar módulos CommonJS para ES Modules. No próprio Markdown, deixei explícito um checkpoint obrigatório: após cada bloco de mudanças, rodar <code>npm run typecheck</code>. Isso evitou regressões silenciosas e manteve o ritmo do time.</p>
+<blockquote><p>Salvar planos em .cursor/plans/ mudou como minha equipe documenta decisões complexas — virou histórico prático. — Lucas Oliveira, Tech Lead</p></blockquote>
+<h2>3) Agents, Rules e Skills: personalizando o agente</h2>
+<p>O que mais mudou meu fluxo no Cursor foi perceber que eu não preciso “torcer” para o agente acertar: eu posso <b>personalizar o comportamento</b> dele. Na prática, eu trato isso como um <i>agent harness</i>: minhas mensagens + ferramentas + modelos + um conjunto de <b>Regras AI Customizadas</b> e <b>Skills</b> que deixam o resultado consistente.</p>
+<h3>Regras AI Customizadas e Regras Memórias Customizadas (RULE.md)</h3>
+<p>Eu centralizo padrões e checagens em <code>.cursor/rules/</code>, com arquivos <code>RULE.md</code>. Essas <b>Regras Memórias Customizadas</b> reduzem erros recorrentes e padronizam como o agente trabalha, mesmo quando eu troco de modelo. Exemplo: eu forço ES modules, destruturação de imports e uma checagem obrigatória após mudanças grandes:</p>
+<ul>
+<li>Usar <b>ES modules</b> e evitar <code>require()</code></li>
+<li>Preferir <b>imports com destruturação</b> quando fizer sentido</li>
+<li>Rodar <code>npm run typecheck</code> antes de abrir PR</li>
+</ul>
+<p>O melhor: eu versiono tudo no Git e ajusto incrementalmente quando encontro um padrão de erro. Às vezes, eu peço para o próprio agente atualizar as regras e abrir commit/PR via GitHub.</p>
+<blockquote><p>As Rules me permitiram evitar regressões óbvias — e pedir ao agent para commitar mudanças nas regras economiza tempo. — Ana Costa, Engenheira de Plataforma</p></blockquote>
+<h3>Skills e Comandos Personalizados (SKILL.md)</h3>
+<p>Já as <b>Skills</b> ficam em <code>.cursor/skills/</code> com <code>SKILL.md</code>. Eu uso para criar <b>Comandos Personalizados</b> (disparados por “/”), hooks pré/pós-etapas e conhecimento de domínio carregado só quando preciso — isso mantém o agente leve e focado.</p>
+<ul>
+<li>Hook: rodar linters e testes <em>antes</em> de abrir PR</li>
+<li>Integrações: secrets managers, Datadog, Sentry e <b>Figma MCP</b></li>
+<li>Controle de loops: <code>MAX_ITERATIONS = 5</code> para evitar iteração infinita</li>
+</ul>
+<p>Com Rules + Skills, eu deixo o agente mais previsível, mais “da equipe” e muito mais rápido no dia a dia.</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/595d4e01-022c-4831-9d1a-3eb986208903.webp" alt="4) Automação prática: cloud agents, comandos e worktrees"></p>
+<h2>4) Automação prática: cloud agents, comandos e worktrees</h2>
+<h3>Agente Automatizado: PRs prontos enquanto eu sigo o dia</h3>
+<p>Quando percebi que eu gastava energia demais com tarefas repetitivas (atualizar dependências, ajustar lint, abrir PR “padrão”), comecei a delegar isso para um <b>Agente Automatizado</b>. Pelo <code>cursor.com/agents</code> — no editor ou até no celular — eu disparo um agente em sandbox: ele clona o repositório, cria uma branch, executa as <b>Operações Terminal</b> necessárias, faz commits e abre o PR. Na prática, cloud agents substituem esse trabalho mecânico e aceleram merges/PRs, porque eu entro só na parte que importa: revisar e decidir.</p>
+<blockquote><p>Ter agents abrindo PRs enquanto eu reviso no café tornou o ciclo de feedback muito mais suave. — Pedro Almeida, Desenvolvedor Fullstack</p></blockquote>
+<h3>Comandos Personalizados versionados no Git (consistência de time)</h3>
+<p>Para o dia a dia, eu padronizei <b>Comandos Personalizados</b> em <code>.cursor/commands/</code>. O ganho real é que eles ficam <i>versionados no Git</i>, então todo mundo roda o mesmo fluxo, com o mesmo checklist, sem “cada um faz de um jeito”. Exemplos que uso direto:</p>
+<ul>
+<li><code>/pr</code> para preparar descrição, checklist e validações</li>
+<li><code>/fix-issue</code> para reproduzir, criar teste e corrigir</li>
+<li><code>/update-deps</code> para atualizar pacotes e rodar verificações</li>
+</ul>
+<h3>Worktrees: paralelismo seguro + comparação de outputs</h3>
+<p>Quando a tarefa é grande, eu rodo múltiplos agentes/modelos em paralelo e comparo soluções. Cada um trabalha em uma <b>worktree</b> isolada do Git, o que evita conflito e deixa fácil avaliar edge cases. Eu também incentivo <em>Mensagens Commit AI</em> consistentes, para o histórico ficar claro mesmo com várias tentativas em paralelo.</p>
+<h3>Notificações e integrações (MCP)</h3>
+<p>Assim que o agente termina, eu recebo alertas por Slack, email ou web. Com MCP, eu conecto essas notificações e automações a ferramentas externas, mantendo o fluxo rodando sem eu ficar “vigiando” o terminal.</p>
+<h2>5) Debug Mode e TDD: diagnóstico e ciclo seguro</h2>
+<h3>Debugging Inteligente: do sintoma à evidência</h3>
+<p>Quando aparece um bug chato, eu não começo “tentando coisas”. Eu abro o <b>Debug Mode</b> e trato o agente como um parceiro de investigação. Ele faz perguntas objetivas, pede um passo a passo de reprodução, e entra no ciclo de <i>hipótese → logs → reprodução → evidência → Correção Erros</i>. Isso muda tudo: em vez de palpites, eu ganho um caminho claro.</p>
+<p>No meu fluxo de <b>Debugging Erros Stack</b>, eu colo o stack trace, digo o que eu esperava e o que aconteceu, e o agente sugere onde instrumentar logs e quais variáveis observar. Quando o modelo é bom de terminal, eu deixo ele rodar comandos; quando é melhor em leitura de código, eu peço para usar <code>grep</code> e buscas rápidas. Eu sigo benchmarks internos: a estratégia muda conforme o modelo, mas o objetivo é sempre o mesmo—diagnóstico rápido e justificável.</p>
+<blockquote><p>O Debug Mode trabalha como um colega investigativo — ele me mostra onde olhar e me entrega evidências, não só opiniões. — Rafael Mendes, Engenheiro de QA</p></blockquote>
+<h3>TDD: confiança para mudar sem medo</h3>
+<p>Para evitar regressões, eu uso <b>TDD</b> com o agente como disciplina, não como “atalho”. Eu peço explicitamente: <em>crie os testes, sem implementar nada</em>. Rodo, vejo falhar, faço commit, e só então autorizo a implementação. Esse ciclo me dá segurança e deixa claro quando o agente realmente resolveu o problema.</p>
+<ol>
+<li>Gerar testes (sem implementação)</li>
+<li>Rodar e confirmar falha</li>
+<li><b>Commit</b> dos testes</li>
+<li>Implementar com o agente até passar tudo</li>
+</ol>
+<h3>Sinais de sucesso: linters, typecheck e revisão automática</h3>
+<p>Em mudanças grandes, eu exijo <code>npm run typecheck</code> e rodo linters sob demanda. Depois, reviso com <b>Review → Find Issues</b>, comparo com <b>Agent Review vs main</b> e, em PR, chamo o <b>Bugbot</b>. Assim, o Cursor vira um ciclo seguro: diagnostica melhor, corrige com base em evidência e mantém o código estável.</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/4297744f-ab19-4b00-aa41-eec9d4fe6d95.webp" alt="6) Visão computacional, design e teste no Browser"></p>
+<h2>6) Visão computacional, design e teste no Browser</h2>
+<h3>Visão Computacional para tirar ambiguidade do design</h3>
+<p>Uma das viradas no meu fluxo foi usar <b>Visão Computacional</b> direto no Cursor. Em vez de explicar “o botão está 4px desalinhado” ou “a cor parece mais clara”, eu simplesmente <em>colo um screenshot</em> ou arrasto um arquivo de design. O agente lê a imagem, entende <b>layout, cores e espaçamentos</b> e já sugere o código bem próximo do mockup. Isso confirma na prática um ponto importante: <i>reconhecimento visual reduz ambiguidade em especificações de UI</i>, porque a referência é objetiva.</p>
+<h3>Figma MCP e Casos Uso reais no dia a dia</h3>
+<p>Quando o design está no Figma, eu conecto via <b>Figma MCP</b> e peço para o agente transformar frames em componentes. O ganho aparece em vários <b>Casos Uso</b>: criar um card novo, ajustar tipografia, padronizar tokens e até mapear estados (hover/disabled). Em alguns cenários, a diferença é gritante:</p>
+<blockquote><p>“Transformar um mockup em HTML/CSS com um screenshot levou de horas para minutos em alguns casos.” — Beatriz Fernandes, UX Engineer</p></blockquote>
+<h3>Browser integrado: design e implementação no mesmo fluxo</h3>
+<p>Com o <b>Browser integrado</b> no sidebar, eu testo a tela enquanto codifico: abro a rota, valido responsividade, capturo mudanças e comparo rapidamente. Isso aproxima design e implementação num fluxo único, sem ficar alternando entre abas e ferramentas. Quando encontro um bug visual, eu tiro um print, marco a área e peço: “corrija o padding e mantenha o grid”. É mais rápido e mais preciso do que descrever por texto.</p>
+<h4>Conversão Linguagens e validação com observabilidade</h4>
+<p>Também uso o agente para <b>Conversão Linguagens</b> em UI: por exemplo, converter um protótipo em HTML/CSS para React/Next, ou adaptar estilos para Tailwind. E, quando o problema é intermitente, eu cruzo com integrações MCP de <b>Datadog</b> e <b>Sentry</b> para validar erros e regressões com evidência.</p>
+<ul>
+<li><b>Input</b>: screenshot, path de imagem, frame do Figma</li>
+<li><b>Output</b>: componente funcional + ajustes finos no Browser</li>
+<li><b>Benefício</b>: menos retrabalho e menos “achismo” em UI</li>
+</ul>
+<h2>7) Revisão, prompts e ética do fluxo com IA</h2>
+<h3>Conversas Naturais começam com prompts claros</h3>
+<p>O que mais mudou meu ritmo com o <b>Agente Código</b> foi entender que produtividade não vem de “pedir código”, e sim de <em>pedir bem</em>. Eu descrevo objetivo, restrições, estrutura de pastas, padrões de import e, principalmente, <b>edge cases</b>. Prompts claros e revisão contínua viraram meu filtro de segurança e qualidade: quanto mais contexto eu dou, menos suposições o agente faz. Também trabalho em iterações curtas, para corrigir rota cedo e evitar refatorações gigantes no fim.</p>
+<h3>Análise Código: diff view e Review → Find Issues</h3>
+<p>Eu nunca aceito a saída no automático. Enquanto o agente gera mudanças, acompanho pelo <b>diff view</b> como se estivesse revisando um PR. Depois, rodo <b>Review → Find Issues</b> para uma <b>Análise Código</b> linha a linha: inconsistências, imports inúteis, riscos de segurança, nomes confusos e regressões. Para “sinalizar sucesso”, eu uso o que não mente: <b>testes</b>, <b>linters</b> e <b>tipagens</b>. Se o typecheck falha, o trabalho não terminou, mesmo que a resposta pareça bonita.</p>
+<h3>Documentação Automática com Mermaid para mudanças grandes</h3>
+<p>Quando a alteração é ampla, eu peço diagramas em <b>Mermaid</b> e uma <b>Documentação Automática</b> mínima da arquitetura: fluxos, módulos, pontos de integração e decisões. Isso reduz dúvidas no time e deixa rastros claros para quem vai manter depois. É aqui que a IA deixa de ser “geradora de código” e vira suporte real de entendimento.</p>
+<h3>Contexto preservado evita retrabalho</h3>
+<p>Para manter foco, eu organizo conversas em ciclos. Mudou a tarefa? Abro um chat novo e recupero o essencial com <code>@Past Chats</code>. Se o assunto é uma feature específica, uso <code>@Branch</code> para ancorar a conversa no lugar certo. Esse contexto preservado evita perda de histórico e retrabalho.</p>
+<blockquote><p>Tratar o agente como colega, questionando e revisando, é o que realmente faz a IA ser útil no time. — Carolina Ribeiro, CTO</p></blockquote>
+<p>No fim, minha regra ética é simples: IA acelera, mas não substitui responsabilidade. Eu delego execução, não decisões críticas. Revisar, testar e documentar é o que torna esse fluxo confiável — e é assim que o Cursor realmente transformou meu desenvolvimento.</p>
+<p><b>TL;DR: </b>O Cursor uniu editor, agentes e automações: planos rastreáveis (.cursor/plans/), Rules &amp; Skills, cloud agents em cursor.com/agents, Debug Mode e comandos (/pr, /fix-issue) que economizam tempo e trazem consistência.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O Cursor uniu editor, agentes e automações: planos rastreáveis (.cursor/plans/), Rules &amp; Skills, cloud agents em cursor.com/agents, Debug Mode e comandos (/pr, /fix-issue) que economizam tempo e trazem consistência.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O Cursor uniu editor, agentes e automações: planos rastreáveis (.cursor/plans/), Rules &amp; Skills, cloud agents em cursor.com/agents, Debug Mode e comandos (/pr, /fix-issue) que economizam tempo e trazem consistência.
+
+Leia o post completo: https://blog.felvieira.com.br/2026/01/12/como-o-cursor-transformou-meu-fluxo-de-desenvolvimento/</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de janeiro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

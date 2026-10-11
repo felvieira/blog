@@ -1,0 +1,252 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por Trás dos Bastidores da IA: Minha Jornada Entre Cursor, Claude e o Impacto Surpreendente do Gemini CLI — felvieira's blog</title>
+<meta name="description" content="O post explora a jornada de um desenvolvedor na criação do UserJot, destacando a competição acirrada entre ferramentas de IA como Cursor, Claude Code e Gemini CLI. O autor analisa as mudanças nos preços e planos, refletindo sobre como essas inovações afetam a produtividade e as escolhas dos…">
+<meta property="og:title" content="Por Trás dos Bastidores da IA: Minha Jornada Entre Cursor, Claude e o Impacto Surpreendente do Gemini CLI">
+<meta property="og:description" content="O post explora a jornada de um desenvolvedor na criação do UserJot, destacando a competição acirrada entre ferramentas de IA como Cursor, Claude Code e Gemini CLI. O autor analisa as mudanças nos preços e planos, refletindo sobre como essas inovações afetam a produtividade e as escolhas dos…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-11-29-por-tras-dos-bastidores-da-ia-minha-jornada-entre-cursor-claude-e-o-impacto-surpreendente-do-gemini-cli-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/11/29/por-tras-dos-bastidores-da-ia-minha-jornada-entre-cursor-claude-e-o-impacto-surpreendente-do-gemini-cli/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1476">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Por Trás dos Bastidores da IA: Minha Jornada Entre Cursor, Claude e o Impacto Surpreendente do Gemini CLI</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>29 de novembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">11 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-11-29-por-tras-dos-bastidores-da-ia-minha-jornada-entre-cursor-claude-e-o-impacto-surpreendente-do-gemini-cli-cover.webp" alt="Por Trás dos Bastidores da IA: Minha Jornada Entre Cursor, Claude e o Impacto Surpreendente do Gemini CLI — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Há alguns meses, encarei o desafio de criar o UserJot — sem saber que cairia de cabeça numa espécie de &#8220;leilão selvagem&#8221; das IAs de programação. O que começou com confiança no Cursor e no Opus tornou-se uma saga carregada de comparações, planos caros, boatos em grupos e, claro, reviravoltas de gigantes como Google. Senti na pele o que é ser desenvolvedor em 2024: cada semana, uma surpresa nova (e às vezes bem-vinda). Mas calma — vou contar como fui do conforto do Cursor ao duelo feroz entre Claude Code e o imbatível Gemini CLI gratuito — e as pequenas incertezas que vêm junto. Borá acompanhar?</p>
+<h2>O Leilão dos Preços de IA: Quando Grátis Compete com $200/mês</h2>
+<p>Se tem uma coisa que mudou radicalmente meu dia a dia como <strong>desenvolvedor com IA</strong> foi a guerra de preços entre as principais ferramentas de <em>AI code completion</em>. Nos últimos meses, vi de perto o cenário se transformar: todo mês um novo plano, uma oferta relâmpago, e aquela sensação de que “agora vai”. Mas foi só o Google lançar o <strong>Gemini CLI gratuito</strong> que o jogo virou de verdade.</p>
+<h3>Comparativo real: Cursor, Claude Code Max e Gemini CLI gratuito</h3>
+<p>Para quem está de fora, pode parecer tudo igual, mas na prática, cada plano tem limites e preços que mudam completamente a experiência. Olha só essa tabela que montei com os dados mais recentes:</p>
+<table>
+<colgroup>
+<col>
+<col>
+<col></colgroup>
+<tbody>
+<tr>
+<th>
+<p>Plano</p>
+</th>
+<th>
+<p>Preço</p>
+</th>
+<th>
+<p>Limite de Uso</p>
+</th>
+</tr>
+<tr>
+<td>
+<p>Cursor Pro</p>
+</td>
+<td>
+<p>$20/mês</p>
+</td>
+<td>
+<p>225 requisições/mês</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Cursor Pro+</p>
+</td>
+<td>
+<p>$60/mês</p>
+</td>
+<td>
+<p>675 requisições/mês</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Cursor Ultra</p>
+</td>
+<td>
+<p>$200/mês</p>
+</td>
+<td>
+<p>4.500 requisições/mês</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Claude Code Pro</p>
+</td>
+<td>
+<p>$20/mês</p>
+</td>
+<td>
+<p>10-40 prompts a cada 5h</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Claude Code Max</p>
+</td>
+<td>
+<p>$200/mês</p>
+</td>
+<td>
+<p>200-800 prompts a cada 5h</p>
+</td>
+</tr>
+<tr>
+<td>
+<p>Gemini CLI</p>
+</td>
+<td>
+<p>Grátis</p>
+</td>
+<td>
+<p>60 solicitações/min, até 1.000/dia</p>
+</td>
+</tr>
+</tbody>
+</table>
+<p>O que mais me chamou atenção foi ver até os mais resistentes admitindo:</p>
+<blockquote>
+<p>“Até os mais resistentes estão reconhecendo que o plano Max de $200 do Claude Code vale a pena, já que oferece limites de uso muito superiores ao Ultra do Cursor na mesma faixa de preço.”</p>
+</blockquote>
+<h3>Sentindo o “valor” de verdade</h3>
+<p>Com o <strong>Cursor IDE</strong>, sempre tive aquela sensação de estar no limite: cada requisição contada, medo de ficar sem créditos no meio de uma sprint. Quando testei o <strong>Claude Code Max</strong>, a diferença foi gritante. Os limites generosos e a qualidade do Opus 4 realmente entregam valor, principalmente para quem depende de IA para revisar código, sugerir melhorias e automatizar tarefas.</p>
+<h3>O fator Gemini CLI: Google chacoalha o mercado</h3>
+<p>Mas aí veio o <strong>Gemini CLI gratuito</strong>. De repente, qualquer dev pode acessar 1.000 requisições por dia, sem pagar nada. O Google não só igualou, mas superou a média de uso dos devs, segundo eles próprios. E não é uma solução improvisada: estamos falando de integração com o Gemini 2.5 Pro, contexto gigante, multimodalidade e código aberto. Para quem usa <strong>VS Code</strong>, ainda tem integração nativa.</p>
+<h3>Discussões, migrações e busca pelo melhor custo-benefício</h3>
+<p>O resultado? Discussões acaloradas em grupos, gente migrando de plano, e todo mundo repensando se vale mesmo pagar caro por IA. O <strong>leilão dos preços</strong> está só começando, e nunca foi tão vantajoso ser desenvolvedor com IA. O desafio agora é escolher entre o “de graça” do Google e o “premium” do Claude Code Max. E, sinceramente, nunca vi tanta opção boa disponível.</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/22f6c79e-b461-4e5d-a226-c115988af6c7.webp" alt="Por Dentro da Experiência: Cursor, Claude, Gemini e os Dilemas do Dev Moderno"></p>
+<h2>Por Dentro da Experiência: Cursor, Claude, Gemini e os Dilemas do Dev Moderno</h2>
+<p>Alternar entre ferramentas de IA no dia a dia de desenvolvimento virou quase um ritual para mim. Cada uma tem seus encantos e suas frustrações. O <strong>Cursor AI</strong> foi meu companheiro fiel por meses no desenvolvimento do <em>UserJot</em>, principalmente com os modelos <strong>Claude Sonnet</strong> e <strong>Opus 4</strong>. A experiência sempre foi sólida, mas, conforme o projeto crescia, comecei a sentir os limites impostos pelos planos do Cursor. O lançamento dos novos planos — Pro, Pro+ e Ultra — trouxe melhorias, mas, sinceramente, ainda sinto que a concorrência está um passo à frente, especialmente quando o assunto é <strong>AI code completion</strong> em projetos mais complexos.</p>
+<p>O <strong>Opus 4</strong> do Claude Code, por exemplo, virou referência entre os devs que conheço. Ele entende contexto como poucos, gera código limpo e, o mais impressionante, identifica aqueles casos de borda que normalmente passam batido. Não é à toa que, mesmo com o preço salgado do plano Max, vejo muita gente migrando do Cursor para o Claude. O dilema é real: vale pagar caro pelo desempenho do Opus 4 ou apostar na gratuidade do <strong>Gemini CLI</strong>?</p>
+<p>Foi aí que o Google lançou seu “tiro de canhão”: o <strong>Gemini CLI</strong>, rodando sobre o <strong>Gemini 2.5 Pro</strong>, totalmente gratuito para uso individual. Não é só o preço que impressiona. Como muitos desenvolvedores já comentam,</p>
+<blockquote>
+<p>O diferencial não é apenas o preço. O Gemini CLI não é uma solução improvisada pelo Google: ele roda sobre o Gemini 2.5 Pro, considerado o modelo predileto de muitos desenvolvedores.</p>
+</blockquote>
+<p> Com uma janela de contexto de <strong>1 milhão de tokens</strong>, consigo alimentar o Gemini com praticamente todo o código do UserJot sem perder desempenho. Além disso, a <strong>multimodalidade</strong> permite trabalhar com PDFs, imagens e sketches, tudo integrado. E para quem usa <strong>VS Code</strong>, a integração com o <strong>Gemini Code Assist</strong> é um bônus que faz diferença no fluxo de trabalho.</p>
+</p>
+<p>Na prática, a escolha entre Opus 4 e Gemini CLI mexe diretamente com minha produtividade. O Opus 4 me dá confiança para entregar features complexas com menos revisões. Já o Gemini CLI, com seus <strong>1.000 prompts diários gratuitos</strong>, me permite experimentar, errar e iterar sem medo de estourar orçamento. Cada nova funcionalidade do UserJot vira um pequeno laboratório, onde testo limites das ferramentas e comemoro microvitórias — como quando a IA sugere uma refatoração perfeita ou encontra um bug escondido.</p>
+<p>Esse cenário de disputa entre Cursor, Claude e Gemini me obriga a repensar constantemente meus fluxos. O debate interno é inevitável: será que vale abrir mão do Opus 4 para economizar com o Gemini CLI? Ou ainda faz sentido insistir no Cursor, mesmo com suas limitações? O fato é que, hoje, a experiência do dev moderno é feita de adaptações rápidas, experimentação constante e, claro, uma boa dose de curiosidade tecnológica.</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/8a6bfdf9-f229-457d-81e8-36015e8dda0b.webp" alt="Wild Card – O Efeito Google: Estratégias, Analogias e (Quase) Nostalgia"></p>
+<h2>Wild Card – O Efeito Google: Estratégias, Analogias e (Quase) Nostalgia</h2>
+<p>Se tem algo que aprendi nesses meses como <strong>desenvolvedor com IA</strong> é que o mercado nunca fica parado por muito tempo. Quando achei que já tinha entendido o jogo entre Cursor AI features e Claude Code, o Google apareceu com o <strong>Gemini CLI gratuito</strong> e virou tudo de cabeça para baixo. Não tem como não lembrar de outros momentos históricos em que o Google chegou “atrasado”, mas mudou completamente as regras.</p>
+<h3>O “Cânion de Preços” e as Lições do Passado</h3>
+<p>Quem viveu a época do Gmail sabe do que estou falando. Lembro bem do choque quando, do nada, o Google ofereceu 1GB de espaço — enquanto Hotmail e Yahoo davam uns míseros 2MB. Foi um divisor de águas. O mesmo aconteceu com o Chrome, que entrou no mercado quando o Firefox já era queridinho dos devs, mas trouxe velocidade e simplicidade que ninguém esperava. Agora, vejo esse <em>déjà vu</em> com o <strong>Gemini CLI gratuito</strong>: “Por que pagar $200/mês se você pode obter mais de graça?”</p>
+<h3>Estratégia Google: Chegar Depois, Mas Chacoalhar o Mercado</h3>
+<p>O padrão se repete. O Google observa, espera o momento certo e, quando entra, oferece algo tão agressivo que obriga todo mundo a repensar suas escolhas. O <strong>Gemini CLI gratuito</strong> não só entrega mais limites de uso do que Cursor AI features ou Claude Code Max, mas faz isso sem cobrar nada do desenvolvedor individual.</p>
+<blockquote>
+<p>O momento escolhido não poderia ser mais oportuno: justo quando o Claude Code ganhava tração com os planos Pro/Max integrados, o Google lança sua alternativa gratuita.</p>
+</blockquote>
+<h3>Questionamento Aberto: As Outras IA’s de Código Vão Acompanhar?</h3>
+<p>Essa movimentação do Google me faz pensar: será que Claude e Cursor vão conseguir acompanhar esse ritmo? Nos fóruns, vejo a mesma energia de quando o Chrome foi lançado. Discussões acaloradas, comparações de features, e muita gente migrando só pelo custo-benefício. O Gemini CLI, além de gratuito, é open source, multimodal, e já chega integrado ao ecossistema Google — algo que pesa muito para quem já vive no universo do VS Code, Google Search e afins.</p>
+<h3>Analogias e (Quase) Nostalgia</h3>
+<p>É impossível não sentir uma certa nostalgia. A sensação de estar vivendo um novo “Gmail VS Hotmail”, só que agora no universo das <strong>IA’s para desenvolvedores</strong>. O ciclo se repete: concorrentes precisam se reinventar — e rápido. Enquanto isso, nós, desenvolvedores, assistimos de camarote a esse leilão de preços e recursos. Vi essa mesma energia nos fóruns e em conversas descontraídas: todo mundo curioso, testando, debatendo e, claro, aproveitando o melhor momento para experimentar novas ferramentas.</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/ai/7dee4c20-023b-48ea-8f99-91d9a5913a24.webp" alt="Construindo o UserJot na Era das IAs: O que Muda de Verdade no Trabalho Real"></p>
+<h2>Construindo o PosterFlix na Era das IAs: De Ideia a 15k/mês em 30 Dias<br /></h2>
+<p>Desenvolver o <strong>PosterFlix</strong> na era das IAs foi uma experiência que mostrou, na prática, como ferramentas de AI code completion e automação podem transformar uma ideia em produto rentável em tempo recorde. Antes, o ciclo entre conceito, MVP e validação de mercado levava meses. Com assistentes como Claude Sonnet 4, Cursor e <a href="http://Bolt.new">Bolt.new</a>, lancei o PosterFlix e alcancei <strong>15 mil reais por mês</strong> em menos de 30 dias. Acesse:<a href="https://posterflix.online/">https://posterflix.online/</a></p>
+<h2>O Ciclo de Build Acelerado: IA como Copiloto Real</h2>
+<p>Desde o início, usar o Cursor e ferramentas de &#8220;vibe coding&#8221; mudou completamente o ritmo de desenvolvimento. Não foi só autocomplete — a IA entendia o contexto do projeto, sugeria arquiteturas, otimizava prompts para geração de imagens e até antecipava bugs de integração com APIs de IA generativa.</p>
+<p><strong>Exemplo prático:</strong> Quando precisei integrar a geração de pôsteres via Stable Diffusion e otimizar os prompts para resultados consistentes, a IA sugeriu variações, testou parâmetros e automatizou refinamentos. O que levaria dias de tentativa e erro virou horas de iteração inteligente.</p>
+<p>A cada novo estilo de pôster adicionado, as ferramentas de refatoração automatizada mantinham o código limpo, escalável e pronto para novas features — sem acumular débito técnico.</p>
+<h2>Feedback dos Usuários: IA Traduzindo Dados em Ação</h2>
+<p>O <strong>PosterFlix</strong> resolveu um problema real: pessoas queriam criar pôsteres profissionais de filmes sem precisar de designer ou Photoshop. Com a IA integrada ao fluxo de desenvolvimento, consegui:</p>
+<ul>
+<li>
+<p><strong>Analisar padrões de uso:</strong> quais estilos de pôster eram mais populares</p>
+</li>
+<li>
+<p><strong>Otimizar conversões:</strong> ajustes de UX baseados em dados reais</p>
+</li>
+<li>
+<p><strong>Priorizar features:</strong> o que os usuários pediam vs. o que realmente usavam</p>
+</li>
+</ul>
+<p>Ferramentas como Google Ads (mesmo com os desafios de tracking) e análise de ASO mostraram o caminho. A IA ajudou a transformar métricas brutas em decisões de produto — desde ajustar CTAs até criar variações A/B de landing pages.</p>
+<h2>Da Adivinhação à Certeza: Construindo com Propósito</h2>
+<p>O maior ganho foi <strong>parar de adivinhar</strong> o que construir. Antes, era comum desenvolver features que ninguém usava. Com o PosterFlix, cada linha de código tinha razão de existir:</p>
+<ol>
+<li>
+<p><strong>Validação rápida:</strong> MVP em dias, não meses</p>
+</li>
+<li>
+<p><strong>Iteração baseada em dados:</strong> usuários reais usando e pagando</p>
+</li>
+<li>
+<p><strong>Foco no que converte:</strong> features que geram receita, não só &#8220;seriam legais&#8221;</p>
+</li>
+</ol>
+<p>A IA não apenas acelerou o código — ela me ajudou a <strong>construir o produto certo</strong>, validando hipóteses em tempo real.</p>
+<h2>Automação que Libera para o Estratégico</h2>
+<p>Com refatorações automatizadas, otimização de prompts de IA e sugestões contextualizadas, sobrou tempo para o que realmente importa:</p>
+<ul>
+<li>
+<p><strong>Marketing:</strong> otimizar campanhas de Google Ads</p>
+</li>
+<li>
+<p><strong>Monetização:</strong> testar modelos de pricing</p>
+</li>
+<li>
+<p><strong>Escala:</strong> preparar infraestrutura para crescimento</p>
+</li>
+<li>
+<p><strong>Conteúdo:</strong> criar tutoriais e material educativo no YouTube</p>
+</li>
+</ul>
+<p>O PosterFlix provou que, na era das IAs, <strong>velocidade é vantagem competitiva</strong>. Não é sobre substituir o desenvolvedor — é sobre amplificar capacidade, validar mais rápido e entregar valor real para quem paga.</p>
+<p><strong>Nunca foi tão possível transformar uma ideia em negócio real em 30 dias.</strong> E isso muda tudo.</p>
+<hr>
+<p><strong>Quer saber mais sobre como construí o PosterFlix usando IA?</strong> Tenho conteúdo completo no meu canal do YouTube sobre vibe coding, ferramentas no-code/low-code e como validar ideias com IA.</p>
+<p><a href="http://www.youtube.com/@felvieira_dev">http://www.youtube.com/@felvieira_dev</a></p>
+<h2>Conclusão – O Futuro dos IDEs e das IAs: Escolhas, Mudanças e o Prazer de Ser Dev em 2024</h2>
+<p>Nunca imaginei que, em tão pouco tempo, o universo de <em>AI-powered development</em> se tornaria tão plural e acessível. Olhando para trás, lembro de quando as <strong>Cursor AI features</strong> eram quase uma exclusividade, e o simples fato de contar com uma IA integrada ao IDE já era motivo de orgulho. Hoje, o cenário mudou radicalmente: nunca tivemos tantas opções de IA para desenvolvimento, com soluções como Cursor, Claude Code e agora o Gemini CLI, cada uma trazendo suas próprias vantagens e desafios.</p>
+<p>O mercado de <strong>IDEs e IA</strong> está em ebulição. A competição entre grandes players e novas soluções open source está forçando uma queda nos preços e, ao mesmo tempo, elevando a qualidade das ferramentas. A balança entre qualidade e preço nunca esteve tão dinâmica. O desenvolvedor com IA, que antes precisava escolher entre pagar caro por recursos avançados ou se contentar com limitações, agora tem poder de escolha real. Seja pelas <strong>Cursor IDE features</strong>, pelo desempenho do Opus 4 no Claude Code, ou pela gratuidade e robustez do Gemini CLI, cada ferramenta oferece um caminho diferente para aumentar produtividade e criatividade.</p>
+<p>Minha decisão, por enquanto, é clara: sigo testando, experimentando e adaptando o fluxo do UserJot. O projeto cresce junto com o ecossistema de IA, e cada nova funcionalidade que implemento me faz perceber o quanto essas ferramentas potencializam meu trabalho. O mais interessante é que, nesse ambiente de mudanças rápidas, não existe mais zona de conforto. Somos forçados a pensar, comparar e, muitas vezes, arriscar novas soluções. E isso é ótimo! Afinal, a pluralidade de ofertas marca o futuro: seja mantendo fidelidade ao Cursor, explorando o Claude ou migrando para o Gemini, é tempo de experimentar e ganhar em produtividade.</p>
+<p>Olhando para o futuro, vejo um ecossistema de IA para desenvolvedores cada vez mais aberto, acessível e repleto de oportunidades inovadoras. A pluralidade de soluções faz desse o melhor momento para quem cria software. Não é exagero dizer que</p>
+<blockquote>
+<p>Nunca houve momento melhor para ser desenvolvedor, com tantas ferramentas de IA, planos, marcas e possibilidades à disposição.</p>
+</blockquote>
+<p>A cada nova escolha, a cada ajuste no fluxo de trabalho, percebo que o verdadeiro prazer de ser dev em 2024 está justamente nessa liberdade: poder experimentar, comparar e adaptar. O cenário de IA e desenvolvimento segue evoluindo, e quem se permite sair da zona de conforto só tem a ganhar. Meu conselho? Aproveite esse momento, teste tudo que puder e descubra qual IA faz mais sentido para o seu jeito de programar. O futuro dos IDEs e das IAs é agora — e ele está nas nossas mãos.</p>
+<p><strong>TL;DR: </strong>Resumindo: nunca foi tão acessível nem tão difícil escolher entre as principais IAs de programação. Se Cursor ainda entrega praticidade, Claude Code Max encanta pelo Opus 4 e, no fim das contas, o novo Gemini CLI do Google mexeu com todo mundo — inclusive comigo. Vale testar, comparar e lembrar: o cenário está mudando, e quem ganha somos nós, desenvolvedores.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O post explora a jornada de um desenvolvedor na criação do UserJot, destacando a competição acirrada entre ferramentas de IA como Cursor, Claude Code e Gemini CLI. O autor analisa as mudanças nos preços e planos, refletindo sobre como essas inovações afetam a produtividade e as escolhas dos…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O post explora a jornada de um desenvolvedor na criação do UserJot, destacando a competição acirrada entre ferramentas de IA como Cursor, Claude Code e Gemini CLI. O autor analisa as mudanças nos preços e planos, refletindo sobre como essas inovações afetam a produtividade e as escolhas dos…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/11/29/por-tras-dos-bastidores-da-ia-minha-jornada-entre-cursor-claude-e-o-impacto-surpreendente-do-gemini-cli/</div>
+  </section>
+
+  <footer class="post">
+    <span>29 de novembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

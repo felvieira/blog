@@ -1,0 +1,257 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>OpenAI DevDay 2025: como eu vejo o futuro  do desenvolvimento — felvieira's blog</title>
+<meta name="description" content="Eu abro este texto com a mesma energia com que subi ao palco em San Francisco: empolgado, prático e com a certeza de que estamos apenas no começo. Neste keynote que apresentei pela OpenAI, compartilhei anúncios, demos ao vivo e uma visão clara do que será mais fácil para vocês construírem com IA.…">
+<meta property="og:title" content="OpenAI DevDay 2025: como eu vejo o futuro  do desenvolvimento">
+<meta property="og:description" content="Eu abro este texto com a mesma energia com que subi ao palco em San Francisco: empolgado, prático e com a certeza de que estamos apenas no começo. Neste keynote que apresentei pela OpenAI, compartilhei anúncios, demos ao vivo e uma visão clara do que será mais fácil para vocês construírem com IA.…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/10/07/devday-2025-chatgpt-apps-apps-sdk-agent-kit/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1450">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>OpenAI DevDay 2025: como eu vejo o futuro  do desenvolvimento</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>7 de outubro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">13 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-cover.png" alt="OpenAI DevDay 2025: como eu vejo o futuro  do desenvolvimento — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p></p>
+<p>Eu abro este texto com a mesma energia com que subi ao palco em San Francisco: empolgado, prático e com a certeza de que estamos apenas no começo. Neste keynote que apresentei pela OpenAI, compartilhei anúncios, demos ao vivo e uma visão clara do que será mais fácil para vocês construírem com IA. Desde apps nativos dentro do ChatGPT até ferramentas que transformam como escrevemos software, eu quis mostrar caminhos concretos para tornar ideias em produtos úteis — e rápidos de lançar. Ao longo deste artigo eu vou detalhar cada anúncio, explicar as decisões que motivaram as escolhas de produto e oferecer lições práticas para desenvolvedores que queiram tirar vantagem hoje.&nbsp;</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-1-2c436aba-73ed-44c5-aa63-cc3e379d8bb9.png" alt="Sam Altman inicia o keynote em DevDay 2025"></p>
+<h2>Pontos:</h2>
+<ul>
+<li><a href="#🚀-por-que-este-momento-é-único-para-construir-com-ia">🚀 Por que este momento é único para construir com IA</a></li>
+<li><a href="#🧩-quatro-focos-principais-do-keynote">🧩 Quatro focos principais do keynote</a></li>
+<li><a href="#🧭-apps-dentro-do-chatgpt:-visão-e-detalhes">🧭 Apps dentro do ChatGPT: visão e detalhes</a></li>
+<li><a href="#🧪-demos-ao-vivo:-coursera,-canva-e-zillow">🧪 Demos ao vivo: Coursera, Canva e Zillow</a></li>
+<li><a href="#🛠️-agent-kit:-construir-agentes-mais-rápido">🛠️ Agent Kit: construir agentes mais rápido</a></li>
+<li><a href="#🧩-agent-builder:-um-exemplo-prático-(ask-froge)">🧩 Agent Builder: um exemplo prático (Ask Froge)</a></li>
+<li><a href="#🔍-segurança,-testes-e-confiança">🔍 Segurança, testes e confiança</a></li>
+<li><a href="#🤖-codex:-a-nova-era-da-engenharia-assistida">🤖 Codex: a nova era da engenharia assistida</a></li>
+<li><a href="#🎛️-demo-ao-vivo-do-codex:-transformar-o-auditório-em-um-playground">🎛️ Demo ao vivo do Codex: transformar o auditório em um playground</a></li>
+<li><a href="#🆕-recursos-do-codex-para-equipes">🆕 Recursos do Codex para equipes</a></li>
+<li><a href="#🧠-modelos:-gpt-5-pro,-real-time-mini-e-sora2">🧠 Modelos: GPT-5 Pro, Real-Time Mini e Sora2</a></li>
+<li><a href="#🎨-creators-e-casos-de-uso-humanos">🎨 Creators e casos de uso humanos</a></li>
+<li><a href="#📈-acelerando-do-protótipo-à-produção">📈 Acelerando do protótipo à produção</a></li>
+<li><a href="#🔁-como-eu-imagino-o-ecossistema-nos-próximos-12-meses">🔁 Como eu imagino o ecossistema nos próximos 12 meses</a></li>
+<li><a href="#📚-faq-—-perguntas-frequentes">📚 FAQ — Perguntas frequentes</a></li>
+<li><a href="#✨-conclusão:-minha-chamada-para-os-construtores">✨ Conclusão: minha chamada para os construtores</a></li>
+</ul>
+<h2>🚀 Por que este momento é único para construir com IA</h2>
+<p>Eu comecei o evento lembrando números que, para muitos, soariam impressionantes: em 2023 havia 2 milhões de desenvolvedores semanais e processávamos cerca de 300 milhões de tokens por minuto. Hoje esses números são muito maiores — 4 milhões de desenvolvedores e mais de 6 bilhões de tokens por minuto. Esses saltos não são méritos de uma única empresa; são a consequência de milhares de pessoas construindo, testando e escalando. Esse acelerador de uso transforma a IA de brinquedo para ferramenta de produção, e é isso que me deixa empolgado: a infraestrutura, o conhecimento e a demanda existem. Eu quero que você saiba que, se tiver uma boa ideia, agora é o momento de construí-la.</p>
+<h2>🧩 Quatro focos principais do keynote</h2>
+<p>No cerne do que eu apresentei estão quatro prioridades claras, cada uma pensada para reduzir atrito entre ideia e produto:</p>
+<ul>
+<li>Apps internos ao ChatGPT — facilitar criação e distribuição;</li>
+<li>Agent Kit — simplificar projeto, teste e deploy de agentes;</li>
+<li>Codex — transformar como escrevemos software em equipes;</li>
+<li>Modelos novos (GPT-5 Pro, Sora2, Real-Time Mini) — ampliar capacidades multimodais.</li>
+</ul>
+<p>Minha intenção foi prática: não só anunciar recursos, mas mostrar como eles se encaixam num fluxo real de trabalho.&nbsp;</p>
+<h2>🧭 Apps dentro do ChatGPT: visão e detalhes</h2>
+<p>Quero que o ChatGPT seja um lugar onde as pessoas fazem coisas de verdade — seja aprender, criar, comprar ou executar tarefas. Para atingir isso, abri um novo capítulo: apps que rodam dentro do ChatGPT. Isso significa experiências interativas, com UI completa, que conversam diretamente com o modelo e acionam ações em serviços externos.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-2-9e5134d8-1547-4f9f-979f-18ae247bb05d.png" alt="Slide explicando o Apps SDK e como ele conecta UI, backend e dados"></p>
+<h3>O que é o Apps SDK?</h3>
+<p>O Apps SDK é a pilha completa para você levar um produto ao ChatGPT. Ele inclui:</p>
+<ul>
+<li>Conexão de dados e autenticação;</li>
+<li>Ações e gatilhos (trigger actions) para executar operações;</li>
+<li>Renderização de UI que pode ser exibida inline, em picture-in-picture, ou em tela cheia;</li>
+<li>Compatibilidade com o padrão MCP para interoperabilidade.</li>
+</ul>
+<p>Com o Apps SDK, você mantém controle total do backend e do frontend, mas ganha acesso direto a centenas de milhões de usuários do ChatGPT. Isso muda a equação de distribuição — uma ferramenta importante para startups e equipes pequenas que querem crescer rápido.</p>
+<h3>Descoberta e monetização</h3>
+<p>Apps dentro do ChatGPT serão encontráveis por busca, por recomendação contextual na conversa e por um diretório que será lançado posteriormente. Se um usuário já for assinante do seu produto, ele poderá fazer login diretamente na conversa. Planejamos também caminhos de monetização embutidos, incluindo o novo Agent Commerce Protocol que possibilita checkout instantâneo dentro da conversa.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-3-0afd2ce7-3396-422d-9446-e6ebb973faa5.png" alt="Demonstração de integração de login e possíveis fluxos de monetização"></p>
+<h2>🧪 Demos ao vivo: Coursera, Canva e Zillow</h2>
+<p>Demonstrar em produção foi uma parte chave do keynote. Eu chamo isso de mostrar o “porquê” e o “como” juntos: <a href="https://www.coursera.org/">Coursera</a> para aprendizado integrado, Canva para criação visual direta na conversa, e <a href="https://www.zillow.com/">Zillow</a> para experiências reais de dados e ações. Cada demo ilustrou um aspecto do Apps SDK — context passing, renderização multimodal e capacidade de ação em sistemas externos.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-4-a4ad5ec1-247a-4555-a1ee-a5690c7feee0.png" alt="Coursera rodando dentro de uma conversa com vídeo e contexto"></p>
+<h3>Coursera: aprendizado conversacional</h3>
+<p>No demo do Coursera, eu pedi que o app me ensinasse sobre machine learning, reproduzi um vídeo dentro da conversa e pedi explicações sobre partes específicas do vídeo. O Apps SDK permite que a aplicação exponha contexto de interação de volta para o modelo — chamamos isso de “talking to apps”. O resultado: o ChatGPT sabe exatamente qual fragmento você está vendo e pode gerar explicações precisas, passo a passo. Isso melhora a retenção do usuário e cria jornadas educativas muito mais ricas.</p>
+<h3>Canva: do brainstorm ao ativo visual</h3>
+<p>No caso do Canva, usei a conversa para transformar um nome e um tom criativo em vários posters. O app retornou assets inline; eu pedi para abrir um deles em tela cheia e depois convertê-lo em pitch deck. Essa integração direta reduz o ciclo do ideation à execução: sem trocar de aplicativo, você gera, edita e exporta conteúdos. Isso tem impacto enorme em fluxos de marketing e prototipagem rápida</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-5-bd70b0d6-0a3e-4dc6-af93-0b2c157d7daf.png" alt="Canva retornando várias opções de pôster inline na conversa"></p>
+<h3>Zillow: dados em contexto e ações</h3>
+<p>A demo do Zillow mostrou um mapa interativo integrado na conversa. Eu pedi filtros — por quartos, por quintal — e o app atualizou os resultados dinamicamente. Como o app expõe o que o usuário está olhando, eu pude perguntar “quão perto fica esse imóvel de um parque para cachorros?” e o ChatGPT combinou contexto do Zillow com busca externa para responder. Essa composição de fontes e ferramentas é um dos grandes pontos fortes do ecossistema que estamos abrindo.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-6-937129f7-6c3b-4950-8ace-8a53453c6520.png" alt="Mapa do Zillow embutido na conversa e interação full-screen"></p>
+<h2>🛠️ Agent Kit: construir agentes mais rápido</h2>
+<p>Agentes são o passo além de sistemas que respondem perguntas: são sistemas que tomam ações, coordenam ferramentas, e operam com contexto e confiança. Apesar do entusiasmo, poucas organizações tinham conseguido levar agentes ao nível de produção por conta da complexidade. Eu quis resolver isso. Apresentei o Agent Kit: um conjunto de blocos para projetar, implantar e otimizar agentes com menos fricção.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-7-ec1fde34-6578-4bad-a3eb-0555a70704fd.png" alt="Tela do Agent Kit com o Agent Builder e blocos visuais"></p>
+<h3>Componentes principais do Agent Kit</h3>
+<ul>
+<li><strong>Agent Builder</strong> — uma tela visual para modelar fluxos, conectar ferramentas e testar lógicas sem começar do zero em código;</li>
+<li><strong>ChatKit</strong> — um componente de chat embutível, customizável, pronto para seu produto;</li>
+<li><strong>Evals para agentes</strong> — rastreamento, grading por trace, datasets de testes, otimização de prompts e a possibilidade de rodar avaliações em modelos externos;</li>
+<li><strong>Connector registry</strong> — painel administrativo para conectar com segurança sistemas internos e APIs externas.</li>
+</ul>
+<p>Essas peças visam acelerar o ciclo de protótipo → produção: visual → teste → deploy → otimização. Para equipes que preferem codificar tudo, oferecemos export de código; para equipes que querem velocidade, o builder visual e o workflow ID permitem deploy imediato.&nbsp;</p>
+<h2>🧩 Agent Builder: um exemplo prático (Ask Froge)</h2>
+<p>Eu pedi à equipe que construísse algo simples e útil em poucos minutos: um agente que ajudasse os participantes do evento a encontrar sessões relevantes. Christina fez isso ao vivo em menos de oito minutos — montando um fluxo visual com um agente de categorização, um agente para sessões, outro para perguntas gerais, widgets visuais e guardrails para <a href="https://www.nist.gov/publications/guide-protecting-confidentiality-personally-identifiable-information-pii">PII</a>.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-8-8b77b606-b73b-45a5-92fd-99f46b31b706.png" alt="Agent Builder com nós de categorização, agentes e widgets"></p>
+<h3>O que aprendi com a demo</h3>
+<p>Algumas lições práticas desta experiência:</p>
+<ul>
+<li>Modelagem visual reduz o custo inicial e facilita iteração com stakeholders não técnicos;</li>
+<li>Widgets predefinidos permitem experiências bonitas sem front-end extenso;</li>
+<li>Guardrails integrados aumentam a confiança para publicar agentes que acessam dados sensíveis;</li>
+<li>Export de código garante que você não fica preso a uma solução hospedada caso queira migrar.</li>
+</ul>
+<p>No fim, o Ask Froge foi publicado com um workflow ID e conectado ao site do evento em minutos.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-9-d0edc8ad-9bf2-4a63-93d9-14b2072e872b.png" alt="Publicação do agente Ask Froge no Agent Builder"></p>
+<h2>🔍 Segurança, testes e confiança</h2>
+<p>Agentes que executam ações exigem confiança. Por isso, incluímos guardrails que podem bloquear conteúdo, moderar e evitar vazamento de PII; ferramentas de avaliação (evals) que permitem grade por passo (trace grading) e datasets para testar nós individuais do agente; e automação para otimizar prompts com base em métricas reais. Esses são elementos que, na minha visão, são essenciais para mover agentes do laboratório para ambientes regulados e corporativos</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-10-d1cc36e2-1291-4983-bd3d-2f1137e8238f.png" alt="Interface de evals mostrando trace grading e datasets"></p>
+<h2>🤖 Codex: a nova era da engenharia assistida</h2>
+<p>Uma das partes que mais me entusiasma é ver como a Codex mudou a rotina dos engenheiros. Lançamos inicialmente como preview e agora estamos promovendo para GA — Codex deixou de ser um experimento para ser um colaborador presente em IDEs, terminais, <a href="https://github.com/">GitHub</a> e nuvem. Ele roda sobre o modelo GPT-5 Codex, otimizado para tarefas de engenharia como refatoração, revisão de código e planejamento de mudanças.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-11-2427f3f0-11c9-43fa-8492-037d136cc631.png" alt="Demonstração do Codex em ação dentro do IDE"></p>
+<h3>O que o Codex faz por equipes</h3>
+<ul>
+<li>Acelera revisões de PR — métricas internas mostram aumento significativo de produtividade;</li>
+<li>Automatiza tarefas repetitivas, liberando engenheiros para decisões arquiteturais;</li>
+<li>Permite integração via SDK para automações e extensões internas;</li>
+<li>Oferece integração com Slack para consultas de código diretamente de conversas de equipe.</li>
+</ul>
+<p>Exemplos concretos incluem empresas como Cisco, que relatou redução de 50% no tempo de revisão de código. Internamente, a adoção é profunda: muitos PRs já passam por revisão do Codex antes de serem mesclados.&nbsp;</p>
+<h2>🎛️ Demo ao vivo do Codex: transformar o auditório em um playground</h2>
+<p>Para mostrar o que Codex pode fazer, eu trouxe ao palco uma demonstração prática: transformar dispositivos reais (uma câmera no cenário, controladores, o sistema de luzes) em software controlável sem escrever uma linha de código manualmente. Ramon demonstrou como, com o Codex CLI e a integração ao VS Code, ele pediu para controlar uma câmera Sony FR7 via Node e o Codex gerou todo o servidor, pacotes UDP, headers e integrou a interface. Depois, conectou um controle Xbox, integrou voz via Real-Time API, e até acionou a iluminação do local via <a href="https://modelcontextprotocol.io/">MCP</a>.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-12-86f72923-6d25-465d-8015-dc2734a06c00.png" alt="Prompt para controlar a câmera Sony FR7 via Node usando Codex"></p>
+<h3>Por que isso importa</h3>
+<p>O demo mostrou três coisas cruciais:</p>
+<ol>
+<li>Contexto automático: o Codex entende o que já está no seu workspace e gera ou edita código com base nisso;</li>
+<li>Agentic behavior: ele pesquisa, chama ferramentas, ajusta planos e volta para completar a tarefa, como um colega de equipe;</li>
+<li>Hot reprogramming com Codex SDK: você pode reprogramar sua aplicação em tempo real como parte de um fluxo de usuário.</li>
+</ol>
+<p>Ao final, houve voz, controle de câmera e luzes operando em sincronia — tudo gerado e orquestrado pelo Codex.&nbsp;</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-13-69f34b3d-c991-49a9-a4c2-93a83af28e1e.png" alt="Interface de controle da câmera gerada pelo Codex rodando no palco"></p>
+<h2>🆕 Recursos do Codex para equipes</h2>
+<p>Além da GA do Codex, lancei alguns recursos pensados para times:</p>
+<ul>
+<li>Integração com Slack — peça ao Codex para escrever snippets ou responder dúvidas dentro de canais;</li>
+<li>Codex SDK — extensão para automatizar fluxos e integrar com pipelines internos;</li>
+<li>Ferramentas administrativas — controles de ambiente, dashboards de uso e monitoramento para governança.</li>
+</ul>
+<p>Esses elementos aproximam o Codex da infraestrutura corporativa, onde controles, auditoria e compliance são imprescindíveis.</p>
+<h2>🧠 Modelos: GPT-5 Pro, Real-Time Mini e Sora2</h2>
+<p>Além de ferramentas e platfromas, modelos continuam sendo o núcleo. Em agosto lançamos o GPT-5, e hoje tornamos o GPT-5 Pro disponível via API — o modelo mais inteligente que já publicamos, focado em raciocínio profundo, precisão e tarefas sensíveis em domínios como finanças, jurídico e saúde.</p>
+<div>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Turbine seu Desenvolvimento com Prompts!</h3>
+</td>
+</tr>
+<tr>
+<td>
+<p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+</td>
+</tr>
+<tr>
+<td><a href="https://felvieiradev.gumroad.com/"> Quero Profissionalizar meus APPs </a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-14-3d45df31-714a-4127-bdeb-23371b667492.png" alt="Anúncio do GPT-5 Pro disponível na API"></p>
+<h3>Real-Time Mini</h3>
+<p>Para experiências de voz em tempo real, apresentamos o GPT Real-Time Mini: uma versão menor e mais barata do modelo de voz avançado, mantendo qualidade expressiva e naturalidade. Isso reduz barreiras para implementações de voz em escala e torna possível construir experiências faladas em larga escala sem custos proibitivos.</p>
+<h3>Sora2: vídeo controlável e som sincronizado</h3>
+<p>Para criadores, lancei a prévia da Sora2 na API. Sora2 traz um salto na geração de vídeo, especialmente na capacidade de controlar composição, enquadramentos e, crucialmente, casar som e imagem de forma coerente — não apenas fala, mas paisagens sonoras, efeitos e sincronização com eventos visuais. Isso é importante para publicidade, storytelling e prototipagem de produtos visuais.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-15-3ba07f6d-118b-4368-a9e5-f0bfc2d08140.png" alt="Exemplo de Sora2 expandindo um plano de iPhone para uma tomada cinematográfica com som"></p>
+<p>Parceiros como Mattel já estão usando Sora2 para transformar rascunhos em conceitos visuais, acelerando ciclos de design.&nbsp;</p>
+<h2>🎨 Creators e casos de uso humanos</h2>
+<p>Uma das partes que mais me emocionou no processo de desenvolvimento foi ver pessoas reais usando as ferramentas para objetivos concretos:</p>
+<ul>
+<li>Um aposentado de 89 anos no Japão aprendeu a programar com ajuda do ChatGPT e criou 11 apps para idosos;</li>
+<li>Projetos na Espanha usam IA para resgatar memórias com multimodalidade;</li>
+<li>Estudantes de medicina recriaram pacientes virtuais para treinar conversas difíceis;</li>
+<li>No Palácio de Versailles, visitantes agora conversam com esculturas por APIs em tempo real.</li>
+</ul>
+<p>Esses exemplos provam que a tecnologia amplifica criatividade e impacto social. Meu compromisso é que as ferramentas que lançamos sejam úteis para todos, não apenas tecnicamente impressionantes.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-16-250687ce-4ac0-4724-a1ff-77389a18fc8b.png" alt="Visitantes interagindo com um sistema de conversação no Palácio de Versailles"></p>
+<h2>📈 Acelerando do protótipo à produção</h2>
+<p>Ao integrar Apps SDK, Agent Kit e Codex, meu objetivo foi reduzir fricção em todos os pontos do ciclo: ideação, prototipagem, iteração e deploy. Minhas recomendações práticas para equipes que querem se beneficiar disso:</p>
+<ol>
+<li>Comece pequeno: identifique um problema específico que um agente ou app pode resolver;</li>
+<li>Use ferramentas visuais para validar UX com clientes antes de produzir código pesado;</li>
+<li>Adote guardrails e pipelines de avaliação desde o início para evitar retrabalho em compliance;</li>
+<li>Integre Codex no fluxo de desenvolvimento para acelerar revisão e refatoração;</li>
+<li>Experimente Sora2 para prototipagem de conteúdo multimodal com som sincronizado.</li>
+</ol>
+<p>Essa é, para mim, a receita para transformar ideias em produtos que escalam.&nbsp;</p>
+<h2>🔁 Como eu imagino o ecossistema nos próximos 12 meses</h2>
+<p>Eu espero ver algumas tendências claras no curto prazo:</p>
+<ul>
+<li>Apps nativos no ChatGPT serão um canal de distribuição vital para pequenas e médias empresas;</li>
+<li>Agentes se tornarão parte de fluxos de trabalho, desde atendimento até operações;</li>
+<li>Codex e modelos de programação serão onipresentes em pipelines de desenvolvimento;</li>
+<li>Vídeo e voz real-time com bom custo-benefício tornarão experiências multimodais padrão;</li>
+<li>Ferramentas de avaliação e governança serão determinantes para adoção corporativa.</li>
+</ul>
+<p>Se você está pensando em investir em produtos AI-first, este seria o momento de começar.&nbsp;</p>
+<h2>📚 FAQ — Perguntas frequentes</h2>
+<h3>Posso subir um app no ChatGPT com minha stack atual?</h3>
+<p>Sim. O Apps SDK foi pensado para ser compatível com stacks existentes. Se você já implementa MCP, geralmente basta adicionar um recurso que retorne HTML para que seu app funcione onde o ChatGPT é distribuído. Além disso, você mantém controle do backend e da lógica de autenticação.</p>
+<h3>Como o Apps SDK lida com autenticação e segurança?</h3>
+<p>O Apps SDK suporta login dentro da conversa. Autenticação típica via <a href="https://oauth.net/2/">OAuth</a> ou tokens continua válida. Para dados sensíveis, recomendo usar o connector registry e os guardrails de agentes para bloquear PII e aplicar políticas de moderação. Essas ferramentas foram projetadas para ajudar a publicar com confiança.</p>
+<h3>O Agent Kit exige que eu abra meus dados para a OpenAI?</h3>
+<p>Não. Agent Kit permite que você conecte seus sistemas com controle administrativo. O connector registry ajuda a integrar serviços internos e terceiros sem expor dados desnecessariamente. O design considera como prioridade o controle das organizações sobre seus dados.</p>
+<h3>O Codex substitui engenheiros?</h3>
+<p>Não. Codex aumenta a produtividade, automatiza tarefas repetitivas e acelera revisão e refatoração. Ele é um colaborador que assume trabalho tedioso, permitindo que engenheiros foquem em arquitetura, design de sistemas e decisões estratégicas. Pense nele como um colega que amplia o alcance da equipe.</p>
+<h3>Posso usar Sora2 para conteúdo comercial (anúncios, filmes)?</h3>
+<p>Sim. A prévia da Sora2 na API foi pensada para casos de uso criativos e comerciais. Ela oferece controle sobre estética, enquadramento e sincronização sonora — ideal para ads, protípos e workflows de design. Lembre-se de seguir políticas de uso e licenciamento ao publicar conteúdo gerado.</p>
+<h3>Qual é o custo típico para começar com esses recursos?</h3>
+<p>Custos variam por uso e escala. O Real-Time Mini foi desenhado para reduzir custos de voz. Apps SDK, Agent Kit e Codex têm modelos diferentes (preview, GA, planos de uso). Eu recomendo começar em ambientes de teste para medir consumo de tokens e ajustar arquitetura para custo/performance.</p>
+<h2>✨ Conclusão: minha chamada para os construtores</h2>
+<p>Eu fechei o keynote com um ponto simples: nunca foi tão rápido transformar ideia em produto. As ferramentas que lançamos — Apps SDK, Agent Kit, Codex, GPT-5 Pro, Sora2 e Real-Time Mini — formam um conjunto pensado para reduzir fricção em cada etapa do processo. Se você tem uma boa ideia, não precisa de centenas de pessoas: precisa de foco e das ferramentas certas. Minha esperança é que vocês usem essas peças para construir coisas úteis, responsáveis e escaláveis.</p>
+<p><img src="../assets/images/2025-10-07-devday-2025-chatgpt-apps-apps-sdk-agent-kit-17-d7bf25db-7a44-4334-9d9f-fa7c779d369e.png" alt="Sam encerrando o keynote agradecendo aos desenvolvedores e equipe"></p>
+<p>Obrigado por construir conosco. Vou terminar reforçando a chamada que coloquei repetidamente ao longo do texto para otimização: vibecoding cursor bolt lovable replit ai. Se você está começando hoje, escolha um problema real, experimente um agente pequeno, conecte Codex ao seu fluxo e itere rápido. Eu mal posso esperar para ver o que você constrói.</p>
+<p><strong>— Sam</strong></p>
+<h3>Recursos e links</h3>
+<p><em>Este artigo é baseado no video <a href="https://www.youtube.com/watch?v=hS1YqcewH0c">OpenAI DevDay 2025: Opening Keynote with Sam Altman</a> pra mais detalhes vejam direto no youtube.</em></p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Eu abro este texto com a mesma energia com que subi ao palco em San Francisco: empolgado, prático e com a certeza de que estamos apenas no começo. Neste keynote que apresentei pela OpenAI, compartilhei anúncios, demos ao vivo e uma visão clara do que será mais fácil para vocês construírem com IA.…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Eu abro este texto com a mesma energia com que subi ao palco em San Francisco: empolgado, prático e com a certeza de que estamos apenas no começo. Neste keynote que apresentei pela OpenAI, compartilhei anúncios, demos ao vivo e uma visão clara do que será mais fácil para vocês construírem com IA.…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/10/07/devday-2025-chatgpt-apps-apps-sdk-agent-kit/</div>
+  </section>
+
+  <footer class="post">
+    <span>7 de outubro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

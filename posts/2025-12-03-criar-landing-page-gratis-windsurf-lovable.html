@@ -1,0 +1,273 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Usar Windsurf e Lovable para Criar Landing Pages que Convertem 100% GRÁTIS — felvieira's blog</title>
+<meta name="description" content="Quero mostrar um fluxo prático e reproduzível para criar uma landing page de captura de leads que funcione de verdade, totalmente sem custo com ferramentas modernas: Windsurf (IDE), Lovable (gerador + backend opcional), Supabase (banco) e LLMs gratuitos. A ideia é que você saia daqui com um produto…">
+<meta property="og:title" content="Como Usar Windsurf e Lovable para Criar Landing Pages que Convertem 100% GRÁTIS">
+<meta property="og:description" content="Quero mostrar um fluxo prático e reproduzível para criar uma landing page de captura de leads que funcione de verdade, totalmente sem custo com ferramentas modernas: Windsurf (IDE), Lovable (gerador + backend opcional), Supabase (banco) e LLMs gratuitos. A ideia é que você saia daqui com um produto…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/12/03/criar-landing-page-gratis-windsurf-lovable/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1502">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como Usar Windsurf e Lovable para Criar Landing Pages que Convertem 100% GRÁTIS</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>3 de dezembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-cover.png" alt="Como Usar Windsurf e Lovable para Criar Landing Pages que Convertem 100% GRÁTIS — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Quero mostrar um fluxo prático e reproduzível para criar uma landing page de captura de leads que funcione de verdade, totalmente sem custo com ferramentas modernas: <a href="https://windsurf.com/refer?referral_code=e8ae700926">Windsurf</a> (IDE), <a href="http://url.felvieira.com.br/lovable">Lovable</a> (gerador + backend opcional), <a href="https://supabase.com">Supabase</a> (banco) e LLMs gratuitos. A ideia é que você saia daqui com um produto mínimo viável completo: página responsiva, opt-in de saída, integração com banco, painel administrativo e otimizações básicas de SEO.</p>
+<p><span><iframe></iframe></span></p>
+<h2>Sumário</h2>
+<ul><li><a href="#ferramentas-que-eu-uso-e-por-que">🛠️ Ferramentas que eu uso e por que</a></li><li><a href="#como-eu-inicio-a-criacao-no-lovable">💬 Como eu inicio a criação no Lovable</a></li><li><a href="#resultado-inicial-e-avaliacao-rapida">🧩 Resultado inicial e avaliação rápida</a></li><li><a href="#implementando-opt-in-de-saida-exit-intent-para-capturar-leads">📥 Implementando opt-in de saída (exit intent) para capturar leads</a></li><li><a href="#integracao-com-supabase-credenciais-mcp-e-paineis">🔐 Integração com Supabase: credenciais, MCP e painéis</a></li><li><a href="#exportando-o-projeto-do-lovable-para-windsurf-e-github">🔁 Exportando o projeto do Lovable para Windsurf e GitHub</a></li><li><a href="#escolha-de-llms-dentro-da-ide-swe1-vs-gpt-5-codex">🤖 Escolha de LLMs dentro da IDE: SWE1 vs GPT-5 Codex</a></li><li><a href="#melhorias-visuais-e-animacoes-com-magic-ui">🎨 Melhorias visuais e animações com Magic UI</a></li><li><a href="#seo-tecnico-minimo-para-comecar-a-ranquear">🔎 SEO técnico mínimo para começar a ranquear</a></li><li><a href="#painel-administrativo-e-gerenciamento-de-leads">📊 Painel administrativo e gerenciamento de leads</a></li><li><a href="#dicas-praticas-de-marketing-e-operacionalizacao">💡 Dicas práticas de marketing e operacionalização</a></li><li><a href="#checklist-final-antes-do-deploy">✅ Checklist final antes do deploy</a></li><li><a href="#proximos-passos-apos-publicar">📌 Próximos passos após publicar</a></li><li><a href="#meus-aprendizados-praticos">🧠 Meus aprendizados práticos</a></li><li><a href="#capturas-ilustrativas">📸 Capturas ilustrativas</a></li><li><a href="#perguntas-frequentes">❓ Perguntas frequentes</a></li><li><a href="#conclusao">📣 Conclusão</a></li></ul>
+<h2>🛠️ Ferramentas que eu uso e por que</h2>
+<p>Eu trabalho com isso há muitos anos e escolho ferramentas pensando em rapidez, controle do código e custo zero sempre que possível. Aqui estão as principais:</p>
+<ul>
+  <li><strong>Windsurf (IDSURF)</strong> &#8211; IDE com suporte a LLMs integrados, permite escrever, executar e depurar localmente.</li>
+  <li><strong>Lovable</strong> &#8211; SaaS que gera aplicações front-end e backend a partir de prompts e permite deploy ou export do código. Ótimo para prototipagem rápida.</li>
+  <li><strong>Supabase</strong> &#8211; Banco e autenticação prontos para usar, ideal para salvar leads e criar painéis administrativos simples.</li>
+  <li><strong>Node.js</strong> + React &#8211; ambiente padrão para rodar o projeto localmente depois de exportar do Lovable.</li>
+  <li><strong>LLMs gratuitos (SWE, GPT-5 Codex, etc.)</strong> &#8211; para gerar conteúdo, corrigir bugs e melhorar o design automaticamente.</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-1-windsurf-ide-tela-inicial-open-folder.png" alt="Tela inicial da IDE Windsurf em modo escuro mostrando botão 'Open Folder' e lista de projetos recentes." /></figure>
+
+<p>Comece instalando a IDE Windsurf. O instalador é padrão: next, next, finish. A partir daí você terá toda a infraestrutura para testar o projeto localmente.</p>
+<h2>💬 Como eu inicio a criação no Lovable</h2>
+<p>Eu quase sempre começo o planejamento fora da IDE: abro uma conversa no Lovable, envio um prompt claro e o material base que tenho (site público, LinkedIn ou currículo). Isso permite que a IA já gere conteúdo personalizado, títulos, provas sociais e sugestões de layout com contexto real da minha oferta.</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-2-prompt-inicial-lovable.png" alt="Tela do chat com texto grande 'No que você está trabalhando?' e o campo de input 'Pergunte alguma coisa' em destaque." /></figure>
+
+<p>O prompt inicial que eu uso é simples: peça a estrutura ideal para uma landing page que converta para o serviço específico (por exemplo, <a href="https://links.felvieira.com.br/@felvieira.dev">consultoria</a>). Anexo o meu currículo em PDF, fotos e a URL pública do serviço. A Lovable então puxa as principais informações do PDF e monta as seções iniciais automaticamente.</p>
+<ul>
+  <li><strong>Por que anexar currículo/links?</strong> Porque a IA extrai experiência, cases e URLs, gerando textos sobre você e provas reais já prontos para a página.</li>
+  <li><strong>Não tem currículo?</strong> Use o LinkedIn público ou uma página pessoal com descrição, portfólio ou depoimentos.</li>
+</ul>
+<h2>🧩 Resultado inicial e avaliação rápida</h2>
+<p>Depois de alguns prompts, a Lovable gera uma versão inicial em HTML/CSS. Ela pode vir bastante &#8220;crua&#8221; — muitas vezes é o equivalente a um starter template. Ainda assim, é uma base valiosa: possui seções (hero, about, how it works, cases, FAQ) e até <a href="https://posterflix.online/help">imagens AI</a> geradas.</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-3-preview-inicial-landing-hero-cta.png" alt="Preview da landing gerada pela Lovable mostrando hero com título grande, subtítulo curto e botão 'Agendar minha sessão' em destaque." /></figure>
+
+<p>Eu normalmente avalio três pontos nessa primeira versão:</p>
+<ol>
+  <li>Estrutura de conteúdo: hero claro, prova social, benefícios e CTA primário.</li>
+  <li>Formulários/opt-in: se já existe um ponto de captura para leads.</li>
+  <li>Qualidade visual: paleta, contraste, tipografia e responsividade.</li>
+</ol>
+<p>Se a estrutura está ok, eu faço duas coisas: peço à IA para implementar um opt-in de saída (exit-intent modal) e peço melhorias visuais — preferindo sempre usar créditos gratuitos ou LLMs grátis.</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-4-preview-landing-lovable-cta-opt-in.png" alt="Preview da landing no Lovable mostrando hero com CTA e foto do autor" /></figure>
+
+<h2>📥 Implementando opt-in de saída (exit intent) para capturar leads</h2>
+<p>Um dos diferenciais de uma landing que converte é não depender somente de visitantes que concluem a ação na primeira visita. O opt-in de saída captura o usuário no momento de intenção de saída e pede nome e email. Mesmo que o botão final não converta, você fica com dados para reengajamento via e-mail ou WhatsApp.</p>
+<p>Como eu implemento:</p>
+<ul>
+  <li>Solicito ao Lovable um modal de saída que detecte movimento do mouse para a borda superior (ou perda de foco da aba).</li>
+  <li>O formulário grava nome/email no Supabase (ou na própria base do Lovable se preferir simplificar).</li>
+  <li>Persistência local: o modal só aparece uma vez por visitante (uso localStorage para isso).</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-5-lovable-preview-optin-nome-email.png" alt="Captura de tela do Lovable com preview da landing e entrada de chat pedindo 'implementar um optin... nome e email pra captur'." /></figure>
+
+<p>Observação prática: se o modal parece aparecer sempre durante testes, apague a chave do <a href="https://developer.mozilla.org/en-US/docs/Web/API/Window/localStorage">localStorage</a> chamada exitIntent e recarregue a página para resetar o teste.</p>
+<h2>🔐 Integração com Supabase: credenciais, MCP e painéis</h2>
+<p>Para salvar leads e criar um painel administrativo simples, eu uso <a href="https://supabase.com/docs">Supabase</a>. O processo essencial:</p>
+<ol>
+  <li>Criar um projeto no Supabase (copiar URL e gerar chave de serviço ou token de acesso).</li>
+  <li>No Windsurf, instalar o pacote do Supabase via NPM (npm install @supabase/supabase-js).</li>
+  <li>Configurar variáveis de ambiente no projeto (SUPABASE_URL, SUPABASE_ANON_KEY ou token MCP dependendo do caso).</li>
+  <li>Modelar a tabela leads com colunas: id, name, email, created_at, source, metadata.</li>
+  <li>Ajustar policies (RLS) para permitir inserções públicas apenas para o endpoint do site ou criar um serviço backend que faça a inserção com serviço key.</li>
+</ol>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-6-supabase-project-dashboard-token-setting.png" alt="Painel do projeto Supabase 'landing-consultoria' com mensagem 'Welcome to your new project', botões Table Editor/SQL Editor e miniatura do apresentador no canto." /></figure>
+
+<p>Gerar um token de acesso no Supabase é um passo sensível: guarde-o em um gerenciador de senhas. No Windsurf, você pode adicionar esse token nas configurações do ambiente para que o LLM e suas funções MCP consigam utilizar a base sem expor a chave no repositório.</p>
+<h2>🔁 Exportando o projeto do Lovable para Windsurf e GitHub</h2>
+<p>Uma vez que a Lovable gerou o projeto, decidi sempre manter o controle do código. Você tem duas opções:</p>
+<ul>
+  <li>Publicar direto na Lovable (deploy interno) para testes rápidos.</li>
+  <li>Exportar para GitHub e clonar no Windsurf para desenvolver localmente.</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-7-lovable-github-painel-conectar-projeto.png" alt="Tela do Lovable mostrando o modal 'GitHub' com 'Connect Project', 'Connected Account' e menu lateral de Project/Integrations" /></figure>
+
+<p>Eu prefiro exportar para <a href="https://docs.github.com/en/repositories/creating-and-managing-repositories/cloning-a-repository">GitHub</a>. No repositório você pode fazer download do zip ou clonar via git. Depois, abra a pasta no Windsurf, rode npm install e npm run dev para ver o site no localhost.</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-8-ide-npm-run-dev-localhost-8080.png" alt="IDE com package.json aberto e terminal rodando 'npm run dev', exibindo 'Local: http://localhost:8080' — demonstra como iniciar o servidor local." /></figure>
+
+<p>Se você nunca instalou <a href="https://nodejs.org/en/download/">Node.js</a>, instale a versão LTS. Depois de npm install, execute npm run dev e abra o localhost no navegador para testar interações e o opt-in.</p>
+<h2>🤖 Escolha de LLMs dentro da IDE: SWE1 vs GPT-5 Codex</h2>
+<p>O Windsurf oferece múltiplos LLMs integrados. Minha recomendação baseada em uso prático:</p>
+<ul>
+  <li><strong>SWE1</strong> &#8211; mais rápido, muito útil para iterações rápidas e ajustes de layout.</li>
+  <li><strong>GPT-5 Codex</strong> &#8211; excelente para correção de bugs e refatoração de código; pode ser mais lento.</li>
+</ul>
+<p>Troque de modelo dependendo da tarefa: use SWE1 para mudanças visuais e GPT-5 quando o problema for um bug difícil ou lógica de integração.</p>
+<h2>🎨 Melhorias visuais e animações com Magic UI</h2>
+<p>Depois da estrutura pronta, eu sempre peço para melhorar visualmente: ajustes de paleta, dark mode, botão de voltar ao topo e animações sutis. Uma biblioteca que facilita muito é a <a href="https://ui.shadcn.com">Magic UI</a> (baseada em shadcn/ui). Ela tem componentes prontos e animações que deixam a página profissional rapidamente.</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-9-preview-landing-hero-editor-magic-ui.png" alt="Preview da landing mostrando a seção 'Casos reais e impacto' à esquerda e o editor de código à direita, com vídeo do apresentador em sobreposição no canto inferior." /></figure>
+
+<p>Exemplos de melhorias que costumo aplicar:</p>
+<ul>
+  <li>Dark mode toggle no header</li>
+  <li>Gradiente sutil no hero com sobreposição para contraste</li>
+  <li>Ani­mação de entrada top-to-bottom para construir a tela ao carregar</li>
+  <li>Botão flutuante no canto inferior direito com top scroll</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-10-preview-editor-lado-a-lado-animacoes.png" alt="Visão dividida mostrando o preview da landing com hero à esquerda e o editor de código à direita, pronto para adicionar animações." /></figure>
+
+<p>Peça ao LLM para implementar pequenas animações em CSS ou usar componentes prontos do Magic UI. Resultado: maior sensação de produto maduro e aumento direto na taxa de conversão.</p>
+<h2>🔎 SEO técnico mínimo para começar a ranquear</h2>
+<p>SEO não é magia, é disciplina. Para não deixar a página &#8220;invisível&#8221; para o Google, insiro tags básicas no HTML:</p>
+<ul>
+  <li><meta> com uma frase clara sobre o serviço</li>
+  <li>Open Graph e Twitter card images e titles</li>
+  <li>Schema JSON-LD para tipo LocalBusiness ou ProfessionalService quando aplicável</li>
+  <li>Favicon bem configurado (e único) — evita aparições com logo de plataformas terceiros</li>
+  <li>Titles e headings otimizados com palavras-chave como <strong>landing page, captura de leads, consultoria</strong></li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-11-index-meta-tags-og-image-revisar.png" alt="Close no index.html exibindo meta tags (title, meta description e og:image) no editor de código." /></figure>
+
+<p>O LLM pode inserir esse boilerplate automaticamente. O importante é revisar as <a href="https://posterflix.online/canva-poster">imagens de preview</a> (og:image) e substituir qualquer referência da Lovable por suas próprias imagens e URLs antes do deploy final.</p>
+<h2>📊 Painel administrativo e gerenciamento de leads</h2>
+<p>Depois de salvar leads no Supabase, eu costumo criar um pequeno painel administrativo integrado ao próprio site ou usar a interface do Supabase. Funcionalidades que considero essenciais:</p>
+<ul>
+  <li>Listagem de leads com filtros por data</li>
+  <li>Exportar para CSV para integração com ferramentas de e-mail marketing</li>
+  <li>Autenticação simples para proteger o painel</li>
+  <li>Coluna de status para marcar leads quentes</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-12-optin-codigo-instrucoes-painel-admin.png" alt="Tela mostrando o modal de captura de leads à esquerda, o editor de código no centro e instruções/descrição do painel administrativo à direita" /></figure>
+
+<p>Se você quer automações avançadas, conecte o banco a um fluxo <a href="https://docs.n8n.io">n8n</a> para enviar e-mails, criar tags no CRM ou enviar mensagens no WhatsApp automaticamente.</p>
+<table>
+  <tbody>
+
+    <tr>
+      <td>
+         <h3>Turbine seu Desenvolvimento com Prompts!</h3>
+      </td>
+    </tr>
+
+    <tr>
+       <td>
+          <p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+      </td>
+    </tr>
+
+     <tr>
+       <td>
+         <a href="https://felvieiradev.gumroad.com/">Quero Profissionalizar meus APPs</a>
+    </td>
+    </tr>
+   
+   
+    
+  </tbody>
+  </table>
+<h2>💡 Dicas práticas de marketing e operacionalização</h2>
+<p>Ter a landing page pronta é só metade do trabalho. Para realmente converter você precisa:</p>
+<ul>
+  <li>Planejar um funil: tráfego pago (Google Ads ou Facebook), remarketing, e fluxo de nutrição.</li>
+  <li>Testes A/B simples: título vs benefício, CTA primário, cor do botão.</li>
+  <li>Enviar emails sequenciais para os leads capturados (welcome, prova social, oferta direta).</li>
+  <li>Mensurar com <strong>eventos de conversão</strong>: agendamento, clique em WhatsApp, download de material.</li>
+</ul>
+<p>Se você está começando sem audiência, invista um pequeno valor em tráfego para coletar dados. Use esses dados para ajustar títulos, copy e segmentação do público.</p>
+<h2>✅ Checklist final antes do deploy</h2>
+<ol>
+  <li>Revisar meta tags e OG images</li>
+  <li>Remover referências e logos de templates (Lovable, etc.)</li>
+  <li>Testar exit-intent em desktop e mobile</li>
+  <li>Confirmar policies do Supabase e segurança das chaves</li>
+  <li>Verificar responsividade e performance ( Lighthouse )</li>
+  <li>Conectar domínio e publicar no host escolhido</li>
+</ol>
+<h2>📌 Próximos passos após publicar</h2>
+<p>Assim que a landing estiver no ar com tráfego inicial, priorize:</p>
+<ul>
+  <li>Monitoramento: analytics, taxa de conversão e comportamento</li>
+  <li>Nutrição de leads: sequência de emails com conteúdo de valor</li>
+  <li>Otimizações iterativas: alterar um elemento por vez e medir impacto</li>
+</ul>
+<h2>🧠 Meus aprendizados práticos</h2>
+<p>Depois de anos criando MVPs e vendendo projetos, eu percebi que o que separa um protótipo de uma landing que converte são três coisas:</p>
+<ul>
+  <li><strong>Clareza no benefício</strong> — você precisa deixar a oferta óbvia em 3 segundos.</li>
+  <li><strong>Prova social</strong> — depoimentos, resultados e cases reduzem fricção.</li>
+  <li><strong>Fluxo de captura</strong> — se o visitante não converte imediatamente, capture o lead.</li>
+</ul>
+<p>As ferramentas aqui apenas automatizam e aceleram o processo, mas o elemento humano — copytesting, estratégia e follow-up — é o que converte verdadeiramente.</p>
+<h2>📸 Capturas ilustrativas</h2>
+<p>As <a href="https://posterflix.online/dashboard">imagens</a> a seguir ajudam a visualizar cada etapa do que descrevi:</p>
+
+<figure><img src="../assets/images/2025-12-03-criar-landing-page-gratis-windsurf-lovable-13-windsurf-ide-tela-inicial-open-folder-1.png" alt="Tela inicial da IDE Windsurf em modo escuro mostrando botão 'Open Folder', lista de projetos recentes e miniatura do apresentador." /></figure>
+
+<h2>❓ Perguntas frequentes</h2>
+<p>Preciso pagar para usar Lovable ou posso fazer tudo de graça?</p>
+<p>É possível fazer praticamente todo o fluxo sem pagar usando os créditos e LLMs gratuitos. Algumas funcionalidades premium aceleram o processo, mas o essencial (gerar, exportar código, integrar com Supabase) pode ser feito no plano gratuito.</p>
+<p>Qual LLM devo usar para ajustes rápidos de layout?</p>
+<p>Use SWE1 para iterações rápidas e GPT-5 Codex para correções de bugs ou refatoração de código. SWE1 é mais ágil; GPT-5 Codex é mais preciso para lógica e correções complexas.</p>
+<p>Como proteger minha chave do Supabase no deploy?</p>
+<p>Nunca exponha chaves de serviço no frontend. Use variáveis de ambiente no host ou crie um backend que faça as inserções no banco com uma chave privada. Para protótipos, configure regras <a href="https://supabase.com/docs/guides/auth/row-level-security">RLS</a> no Supabase para limitar inserções públicas.</p>
+<p>O opt-in de saída funciona bem em mobile?</p>
+<p>Exit-intent com detecção de mouse é menos eficiente em mobile. Para mobile, use intent baseado em comportamento (scroll rápido para cima, tempo na página) ou triggers de tempo para exibir o modal.</p>
+<p>Preciso saber <a href="https://reactjs.org/docs/getting-started.html">React</a> para seguir esse fluxo?</p>
+<p>Saber React ajuda bastante para customizações, mas não é obrigatório. Você pode usar Lovable para gerar a página e publicá-la. Para controle total e deploy personalizado, conhecimentos básicos de Node.js e React são recomendados.</p>
+<p>Como faço testes A/B sem ferramentas pagas?</p>
+<p>Você pode versionar duas páginas no mesmo domínio em subpaths e usar parâmetros <a href="https://ga-dev-tools.web.app/campaign-url-builder/">UTM</a> para dividir tráfego manualmente, ou usar uma função simples no backend para alternar variações com base em aleatoriedade.</p>
+<p>Qual é o melhor formato para capturar e nutrir leads?</p>
+<p>Um fluxo simples e eficiente é: captura (nome+email), sequência de 3 emails com conteúdo de valor, prova social e oferta. Use automações para escalonar o envio e medir aberturas e cliques.</p>
+<p>Posso integrar Supabase com n8n para automações?</p>
+<p>Sim. n8n conecta ao Supabase via webhooks ou drivers e permite enviar e-mails, criar contatos em CRMs ou acionar bots de WhatsApp. É ideal para quem não quer programar automações complexas manualmente.</p>
+<h2>📣 Conclusão</h2>
+<p>Construir uma landing page profissional e orientada a conversão hoje é mais rápido e acessível do que nunca. Com Windsurf, Lovable e Supabase você tem todo o fluxo: geração, desenvolvimento, banco de dados e deploy. O diferencial real são as decisões estratégicas: copy clara, prova social, opt-in eficiente e um painel para nutrir leads.</p>
+<p>Se quer, pegue esse roteiro e aplique no seu projeto hoje. Se precisar de ajuda mais técnica ou quiser terceirizar a criação, também ofereço <a href="https://tidycal.com/felvieiradev">consultoria</a> para acelerar o processo.</p>
+<p><em>Este artigo é baseado no meu video  <a href="https://www.youtube.com/watch?v=FYo1KCxFVaE">Como Usar Windsurf e Lovable para Criar Landing Pages que Convertem 100% GRÁTIS</a> pra mais detalhes vejam direto no youtube.</em></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quero mostrar um fluxo prático e reproduzível para criar uma landing page de captura de leads que funcione de verdade, totalmente sem custo com ferramentas modernas: Windsurf (IDE), Lovable (gerador + backend opcional), Supabase (banco) e LLMs gratuitos. A ideia é que você saia daqui com um produto…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Quero mostrar um fluxo prático e reproduzível para criar uma landing page de captura de leads que funcione de verdade, totalmente sem custo com ferramentas modernas: Windsurf (IDE), Lovable (gerador + backend opcional), Supabase (banco) e LLMs gratuitos. A ideia é que você saia daqui com um produto…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/12/03/criar-landing-page-gratis-windsurf-lovable/</div>
+  </section>
+
+  <footer class="post">
+    <span>3 de dezembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

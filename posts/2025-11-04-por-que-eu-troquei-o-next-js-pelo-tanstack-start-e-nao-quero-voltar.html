@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por Que Eu Troquei o Next.js pelo TanStack Start (E Não Quero Voltar) — felvieira's blog</title>
+<meta name="description" content="O autor migrou do Next.js para o TanStack Start em busca de simplicidade e controle no desenvolvimento React, destacando as frustrações com a complexidade do Next.js e os benefícios do TanStack Start.">
+<meta property="og:title" content="Por Que Eu Troquei o Next.js pelo TanStack Start (E Não Quero Voltar)">
+<meta property="og:description" content="O autor migrou do Next.js para o TanStack Start em busca de simplicidade e controle no desenvolvimento React, destacando as frustrações com a complexidade do Next.js e os benefícios do TanStack Start.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-11-04-por-que-eu-troquei-o-next-js-pelo-tanstack-start-e-nao-quero-voltar-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/11/04/por-que-eu-troquei-o-next-js-pelo-tanstack-start-e-nao-quero-voltar/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1464">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Por Que Eu Troquei o Next.js pelo TanStack Start (E Não Quero Voltar)</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>4 de novembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-11-04-por-que-eu-troquei-o-next-js-pelo-tanstack-start-e-nao-quero-voltar-cover.webp" alt="Por Que Eu Troquei o Next.js pelo TanStack Start (E Não Quero Voltar) — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Abri o console outro dia e me peguei pensando: quando foi que os frameworks de React ficaram tão complicados? Já fui entusiasta do Next.js, usei em produção, ensinei para colegas… mas, ultimamente, a sensação é de estar lutando contra a ferramenta, e não com ela. É estranho pensar que, do encantamento inicial ao incômodo, bastou meia dúzia de updates para mudar a relação. Recentemente, me vi, junto com outros devs, flertando forte com o TanStack Start — e trago neste texto impressões reais, sem máscaras nem fórmulas.</p>
+<h2>Do Encanto ao Cansaço: O Que Mudou no Next.js?</h2>
+<p>
+Quando comecei a usar <b>Next.js</b>, a sensação era de ter encontrado o caminho mais simples e direto para criar aplicações React modernas. O framework entregava tudo pronto: roteamento, SSR, build otimizado e um fluxo de deploy claro. Era fácil recomendar o Next.js para qualquer projeto, principalmente pela curva de aprendizado suave e pela documentação acessível. Mas, com o tempo, esse encanto foi dando lugar a um certo cansaço — e não só para mim, mas para muitos desenvolvedores na comunidade.
+</p>
+<h3>O Peso das Novidades: App Router e React Server Components</h3>
+<p>
+A partir das últimas versões, o Next.js passou a adotar mudanças profundas, como o <b>App Router</b> e os <b>React Server Components</b>. Essas novidades, apesar de tecnicamente avançadas, trouxeram um aumento significativo na <em>framework complexity</em>. O App Router, por exemplo, introduziu uma nova estrutura de pastas, convenções e formas de lidar com rotas, layouts e carregamento de dados. Para quem já dominava o modelo anterior, foi uma quebra de paradigma difícil de absorver.
+</p>
+<p>
+Os React Server Components, por sua vez, prometem mais performance e flexibilidade, mas na prática complicaram o <em>debugging</em> e criaram dúvidas sobre onde rodar cada parte do código. O resultado? Mais tempo tentando entender o que está acontecendo do que, de fato, entregando valor ao usuário. Como ouvi de outros colegas e vivi na pele:
+</p>
+<blockquote><p>
+&#8220;Com o Next.js, comecei a perder tempo resolvendo coisas que a ferramenta complicava sem necessidade.&#8221;
+</p></blockquote>
+<h3>Atualizações Constantes e Sobrecarga Cognitiva</h3>
+<p>
+Outro ponto que pesa é a frequência das atualizações e mudanças de padrão. O Next.js, que antes era estável e previsível, passou a exigir acompanhamento constante das novidades para não ficar para trás. Isso gera uma <b>sobrecarga cognitiva</b> real: cada release pode impactar o fluxo de trabalho, exigir refatoração e trazer novas regras para aprender. Muitos desenvolvedores relatam frustração com a dificuldade de manter o código atualizado e com o aumento da complexidade para tarefas que antes eram simples.
+</p>
+<h3>Vercel Integration: Benefício ou Lock-in?</h3>
+<p>
+A integração com a <b>Vercel</b> sempre foi um dos grandes atrativos do Next.js. O deploy é fácil, rápido e a plataforma oferece recursos avançados de CDN, edge functions e preview. Mas, com o tempo, ficou claro que muitos dos benefícios atribuídos ao Next.js dependem, na verdade, do ecossistema da Vercel. Isso gera um <b>lock-in involuntário</b>: migrar para outra plataforma pode ser trabalhoso, e nem sempre o framework entrega sozinho tudo o que promete.
+</p>
+<p>
+Essa dependência crescente levanta dúvidas: até que ponto estamos escolhendo o Next.js pelas qualidades do framework, e até que ponto é a Vercel que faz a mágica acontecer? Para projetos que buscam mais liberdade de escolha de infraestrutura, essa relação pode ser um problema.
+</p>
+<h3>Falta de Transparência e Automação Excessiva</h3>
+<p>
+Por fim, um sentimento recorrente na comunidade é a <b>falta de transparência</b> em como as coisas funcionam por trás das cortinas. O Next.js, que já foi referência em clareza, agora esconde muita lógica em automações e convenções. Isso dificulta o entendimento do que está acontecendo e torna o <em>debugging</em> mais demorado. Para quem valoriza controle e previsibilidade, essa mudança é motivo de frustração e busca por <b>Next.js alternativas</b>.
+</p>
+<p>
+Essa soma de fatores explica por que a <b>migração Next.js</b> para soluções mais leves e transparentes, como o TanStack Start, vem crescendo tanto entre desenvolvedores React.
+</p>
+<h2>O DNA do TanStack Start: Leveza, Controle e Clareza</h2>
+<p>
+A essência do <b>TanStack Start</b> é devolver ao desenvolvedor React o prazer de programar com leveza, clareza e controle total. Desde que comecei a usar, percebi que tudo nele gira em torno de três pilares: simplificação radical, transparência e flexibilidade. O framework foi pensado para ser um full-stack React moderno, aproveitando ao máximo ferramentas já consagradas como <b>TanStack Query</b> (antigo React Query) e <b>TanStack Router</b>, que revolucionaram a forma de lidar com estado e requests no React.
+</p>
+<h3>TanStack Query e Router: Simplificação Radical</h3>
+<p>
+O <b>TanStack Query</b> mudou o jogo na manipulação de dados do lado do servidor. Ele abstrai o gerenciamento de cache, sincronização e estados de requisição, tornando o data fetching previsível e fácil de debugar. Já o <b>TanStack Router</b> trouxe roteamento <i>type-safe</i> e explícito, com navegação SPA fluida e sem surpresas. O TanStack Start constrói sobre essas bases, garantindo que rotas, parâmetros e carregamento de dados sejam sempre seguros e transparentes, com <b>TypeScript nativo</b> do início ao fim.
+</p>
+<h3>Proposta Full-Stack: SSR React Moderno e Server Functions Seguras</h3>
+<p>
+O TanStack Start entrega uma proposta <b>full-stack</b> real: <b>SSR React moderno</b> combinado com navegação SPA, <b>server functions seguras</b> integradas ao roteamento e builds ultra rápidos. A integração com <b>Vite</b> acelera o ciclo de desenvolvimento e, junto do <b>Nitro</b>, amplia as opções de deploy para <b>Netlify</b>, <b>Cloudflare</b>, <b>Vercel</b> ou até servidores Node próprios. Isso elimina dependências forçadas e permite que cada projeto escolha sua stack de hospedagem sem amarras.
+</p>
+<ul>
+<li><b>SSR + SPA:</b> Renderização server-side sem abrir mão da fluidez do SPA.</li>
+<li><b>Server functions:</b> Lógica backend segura, no mesmo codebase, com tipagem garantida.</li>
+<li><b>Builds rápidos:</b> <b>Vite integração</b> e plugins como Nitro deixam o deploy descomplicado.</li>
+<li><b>Type safety integral:</b> Mudanças em rotas, parâmetros e dados são validadas em tempo de compilação.</li>
+</ul>
+<h3>Menos Mágica, Mais Controle</h3>
+<p>
+O que mais me chamou atenção no TanStack Start foi a sensação de estar no controle. Não há “mágicas” ou convenções escondidas. O código é explícito, fácil de entender, manter e debugar — exatamente como no React raiz. A experiência é tão fluida que, como muitos colegas comentam:
+</p>
+<blockquote><p>
+  “Com TanStack Start, realmente esqueço que estou usando um framework — só funciona.”
+</p></blockquote>
+<p>
+A abordagem baseada em <b>controle explícito</b> e <b>transparência</b> faz com que qualquer ajuste — seja em SSR, navegação SPA, server functions ou integração com <b>TanStack Query</b> — seja direto e previsível. A documentação e exemplos são claros, e a comunidade cresce rápido, sempre focada em manter o stack leve e honesto.
+</p>
+<h3>Flexibilidade e Experiência Real de Desenvolvimento</h3>
+<p>
+A <b>integração nativa com Vite</b> e plugins como Nitro não só aceleram builds, mas também ampliam as possibilidades de deploy. Isso significa liberdade para escolher onde e como rodar sua aplicação, sem limitações impostas pelo framework. O resultado? Um ambiente de desenvolvimento mais saudável, previsível e prazeroso, onde o React volta a ser protagonista, e o desenvolvedor, dono do próprio código.
+</p>
+<h2>Quebra de Paradigma: Controle e Tipagem Como Novo Padrão</h2>
+<p>
+A principal virada que senti ao migrar do Next.js para o TanStack Start foi a sensação de retomar o controle do meu código. O TanStack Start não só aproxima o desenvolvedor do React “raiz”, mas eleva o padrão com <b>type safety</b> robusto, SSR React moderno e uma flexibilidade de deployment que simplesmente não existe em outros frameworks populares.
+</p>
+<h3>Type Safety: Segurança em Tempo de Compilação</h3>
+<p>
+No TanStack Start, a <b>tipagem forte</b> é nativa e cobre todo o fluxo de rotas, parâmetros e dados. Isso significa que, ao alterar uma rota ou adicionar um parâmetro, qualquer inconsistência é detectada imediatamente pelo TypeScript, antes mesmo do deploy. Já perdi as contas de quantos bugs chatos consegui evitar só porque o compilador apontou um erro de tipagem. Como ouvi de um colega:
+</p>
+<blockquote><p>
+  &#8220;A tipagem do TanStack Start salvou um lançamento, bloqueando bugs em tempo real.&#8221;
+</p></blockquote>
+<p>
+Esse nível de <em>type safety</em> não é só um luxo — é uma necessidade para times que querem escalar projetos React sem medo de regressões. No Next.js, mesmo com TypeScript, sempre acabava recorrendo a gambiarras ou perdendo tempo caçando erros que só apareciam em produção. No TanStack Start, a tipagem integral virou meu novo padrão de qualidade.
+</p>
+<h3>Server Functions: Backend Seguro no Mesmo Projeto</h3>
+<p>
+Outro ponto que mudou meu fluxo foi a integração nativa das <b>server functions</b>. Com elas, posso escrever lógica backend (REST, GraphQL ou qualquer outra) diretamente no mesmo codebase do frontend, sem precisar criar repositórios separados ou lidar com múltiplas stacks. Isso simplifica o desenvolvimento, reduz o contexto perdido e aumenta a segurança, já que tudo passa pelo mesmo sistema de tipagem.
+</p>
+<p>
+Além disso, as server functions do TanStack Start são totalmente type-safe, o que garante que os dados trafegados entre frontend e backend estejam sempre corretos. Isso elimina uma fonte comum de bugs e acelera o desenvolvimento de APIs internas, endpoints protegidos e integrações com bancos de dados.
+</p>
+<h3>SSR + SPA: O Melhor dos Dois Mundos</h3>
+<p>
+O TanStack Start permite escolher entre <b>SSR React moderno</b> e SPA React puro, ou até combinar os dois. O SSR garante páginas indexáveis e carregamento rápido, enquanto a navegação SPA mantém a fluidez instantânea. Não preciso mais abrir mão de SEO para ter performance, nem ficar preso a convenções rígidas. A escolha é minha, de acordo com as necessidades do projeto.
+</p>
+<h3>Flexibilidade Total de Deploy</h3>
+<p>
+Outro diferencial que me conquistou foi a <b>flexibilidade de deployment</b>. Com suporte nativo a Vite, Nitro e plugins para Netlify, Vercel, Cloudflare e Node, posso escolher onde e como hospedar minha aplicação, sem amarras. Isso me dá liberdade para otimizar custos, escalar conforme a demanda e evitar lock-in em plataformas específicas.
+</p>
+<ul>
+<li><b>Type safety</b> integral: menos bugs, mais confiança.</li>
+<li><b>SSR + SPA</b>: fluidez e indexação, juntos.</li>
+<li><b>Server functions</b>: backend seguro e integrado.</li>
+<li><b>Deployment flexível</b>: escolha livre do destino.</li>
+<li><b>TypeScript nativo</b>: sem gambiarras, só produtividade.</li>
+</ul>
+<p>
+Esse novo paradigma devolve ao desenvolvedor o prazer de codar React com clareza, previsibilidade e liberdade real.
+</p>
+<h2>Na Trincheira: Cases, Bastidores e Ecossistema em Crescimento</h2>
+<p>
+Acompanhar de perto as tendências em <em>React development</em> é perceber que a migração do Next.js para o TanStack Start já deixou de ser apenas conversa de bastidor: ela está acontecendo, agora, em projetos reais e de impacto. Empresas e startups estão colocando o TanStack Start em produção, e os relatos de sucesso só aumentam, mostrando que o framework não é apenas promissor — ele já é realidade no ecossistema de desenvolvimento.
+</p>
+<p>
+Um dos exemplos mais marcantes que presenciei foi o de um quiz ao vivo, que enfrentava sérios problemas de <em>hydration</em> com o React Router 7. A troca para o TanStack Start foi decisiva: o time conseguiu resolver os bugs críticos a tempo do lançamento, com SSR em produção funcionando de forma previsível e sem surpresas. O feedback da equipe foi direto: “TanStack traz de volta a sanidade. É o framework que 99% dos devs querem usar.” Essa sensação de “React puro”, sem camadas desnecessárias de abstração, tem sido um diferencial que motiva cada vez mais desenvolvedores a experimentar e adotar a solução.
+</p>
+<p>
+Outro case que merece destaque é o de dashboards multilíngues, integrando backend em Laravel com frontend em TanStack Start. O SSR (Server-Side Rendering) foi elogiado pela simplicidade e previsibilidade, facilitando a entrega de experiências rápidas e otimizadas para usuários de diferentes idiomas. Aqui, a flexibilidade do TanStack Start para se acoplar a diferentes stacks e a facilidade de deploy em plataformas como Netlify, Cloudflare e Vercel foram pontos decisivos para a escolha do framework.
+</p>
+<p>
+Esse movimento de adoção não acontece por acaso. O entusiasmo da comunidade é palpável: a documentação evolui rapidamente, os exemplos práticos se multiplicam e o suporte do time TanStack — já reconhecido pelo histórico de ferramentas como TanStack Query e Router — inspira confiança. Quem busca tendências em <em>React development</em> percebe que o TanStack Start representa uma volta à clareza, previsibilidade e controle, sem abrir mão de produtividade ou de recursos modernos como SSR em produção.
+</p>
+<p>
+O ecossistema também cresce em torno de novidades importantes. Ficar atento a datas como 3 de novembro, 31 de outubro e 30 de outubro de 2025 — marcando eventos e lançamentos do Appwrite — é fundamental para quem quer se manter na vanguarda. Recomendo fortemente acompanhar o blog oficial do TanStack e conteúdos sobre Appwrite para não perder nenhuma atualização relevante sobre engenharia, design de produto e inovação em comunidades de tecnologia.
+</p>
+<p>
+Concluindo, vejo que a migração Next.js para TanStack Start é mais do que uma troca de ferramentas: é um movimento coletivo por mais transparência, leveza e prazer no desenvolvimento React. O crescimento do ecossistema, os cases de sucesso e o clima de comunidade renovada mostram que estamos diante de uma nova era. Para quem sente falta do React mais direto e sob controle, o TanStack Start já provou que veio para ficar — e, sinceramente, não sinto vontade de voltar atrás.
+</p>
+<p><b>TL;DR: </b>Troquei o Next.js pelo TanStack Start justamente pelo impulso de simplificar, retomar o controle e devolver sanidade ao desenvolvimento em React. As diferenças não são só técnicas: está em jogo o prazer e a clareza no código.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O autor migrou do Next.js para o TanStack Start em busca de simplicidade e controle no desenvolvimento React, destacando as frustrações com a complexidade do Next.js e os benefícios do TanStack Start.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O autor migrou do Next.js para o TanStack Start em busca de simplicidade e controle no desenvolvimento React, destacando as frustrações com a complexidade do Next.js e os benefícios do TanStack Start.
+
+Leia o post completo: https://blog.felvieira.com.br/2025/11/04/por-que-eu-troquei-o-next-js-pelo-tanstack-start-e-nao-quero-voltar/</div>
+  </section>
+
+  <footer class="post">
+    <span>4 de novembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

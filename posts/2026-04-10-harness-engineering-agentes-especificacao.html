@@ -1,0 +1,253 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Harness Engineering: como transformar Spec-Driven em agentes confiáveis para construir apps inteiros — felvieira's blog</title>
+<meta name="description" content="A próxima fase do desenvolvimento com agentes de IA exige mais do que gerar funcionalidades isoladas a partir de uma spec. Quando o objetivo é entregar sistemas inteiros com qualidade consistente, surgem falhas previsíveis: o agente começa demais, para cedo demais, perde contexto entre sessões,…">
+<meta property="og:title" content="Harness Engineering: como transformar Spec-Driven em agentes confiáveis para construir apps inteiros">
+<meta property="og:description" content="A próxima fase do desenvolvimento com agentes de IA exige mais do que gerar funcionalidades isoladas a partir de uma spec. Quando o objetivo é entregar sistemas inteiros com qualidade consistente, surgem falhas previsíveis: o agente começa demais, para cedo demais, perde contexto entre sessões,…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-04-10-harness-engineering-agentes-especificacao-cover.jpg">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2026/04/10/harness-engineering-agentes-especificacao/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1515">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Harness Engineering: como transformar Spec-Driven em agentes confiáveis para construir apps inteiros</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>10 de abril de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-04-10-harness-engineering-agentes-especificacao-cover.jpg" alt="Harness Engineering: como transformar Spec-Driven em agentes confiáveis para construir apps inteiros — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+
+
+<p>A próxima fase do desenvolvimento com agentes de IA exige mais do que gerar funcionalidades isoladas a partir de uma spec. Quando o objetivo é entregar sistemas inteiros com qualidade consistente, surgem falhas previsíveis: o agente começa demais, para cedo demais, perde contexto entre sessões, “acha” que testou, ou acumula degradação arquitetural ao longo do tempo. O conceito que resolve isso é o <strong>Harness Engineering</strong> (engenharia de harness): o ambiente e os mecanismos que tornam um modelo potente em um agente confiável.</p>
+<p>Este guia é para quem já usa <strong><a href="https://en.wikipedia.org/wiki/Spec-driven_development">Spec-Driven Development</a></strong> (planejamento guiado por spec) e sente que atingiu um limite. A ideia central: <strong>o gargalo deixa de ser inteligência do modelo e passa a ser a qualidade do ambiente onde ele opera</strong>.</p>
+<h2>O que é Harness Engineering na prática</h2>
+<p>Harness Engineering é a soma de tudo que cerca o modelo (LLM) enquanto ele trabalha. Não é apenas “prompts melhores”. É estruturar o ambiente operacional que reduz ambiguidade, captura erro e mantém progresso ao longo do ciclo de desenvolvimento.</p>
+<h3>Quais componentes formam o “harness”</h3>
+<p>O conceito inclui elementos como:</p>
+<ul>
+<li><strong>Feedforward</strong>: instruções e estrutura antes da execução para aumentar a chance de dar certo. Na prática, isso aparece como spec, regras de arquitetura, guias e organização do repositório.</li>
+<li><strong>Sensors (feedback)</strong>: validações e sinais que observam o resultado depois da execução. Isso inclui linters, type checkers, executores de testes, validações por automação e mecanismos de review que detectam problemas.</li>
+<li><strong>Memória</strong>: forma de preservar contexto do que foi feito, em vez de começar do zero a cada nova sessão.</li>
+<li><strong>Bootstrap e progress files</strong>: rotinas e arquivos que recompõem contexto e registram estado entre sprints e iterações.</li>
+<li><strong>Orquestração por missão</strong>: agentes com papéis separados (por exemplo, implementar versus validar), idealmente com execução e julgamento separados.</li>
+</ul>
+<p>Pense nisso como onboarding de um engenheiro muito capaz. Se você o coloca em um repositório sem arquitetura, sem CI e sem testes, ele pode até escrever código bom em isolamento, mas vai errar por falta de contexto e garantias do processo. O harness é o “onboarding” e os “guarda-corpos” para que ele trabalhe com direção e feedback real.</p>
+<h2>Por que agentes falham quando não existe Harness</h2>
+<p>Sem harness, as falhas não são aleatórias. Elas seguem padrões previsíveis que aparecem especialmente quando você tenta “escalar” de tarefas para sistemas completos.</p>
+<h3>1) One-shot hero (tentar fazer o app inteiro de uma vez)</h3>
+<p>Em vez de construir em etapas, o agente tenta implementar tudo de uma vez. O resultado costuma ser uma entrega pela metade, porque o agente quebra o raciocínio no meio, alucina partes e, na sessão seguinte, encontra um estado inconsistente ou “campos minados”.</p>
+<p>Embora spec-driven ajude a quebrar em tasks, isso não basta sozinho para manter confiabilidade durante ciclos longos.</p>
+<h3>2) Vitória prematura (declarar “pronto” antes de estar pronto)</h3>
+<p>O agente se perde quando o contexto fica grande. Ele conclui cedo demais e deixa pendências para trás. A spec ajuda a definir o que significa “pronto” (por meio de tasks e critérios), mas sem feedback robusto por sensores, o agente pode avançar mesmo com falhas reais.</p>
+<h3>3) Amnésia entre sessões</h3>
+<p>Em frameworks em que cada nova sessão começa do zero, o agente perde a passagem de bastão. Ele precisa gastar tokens para entender o que já foi feito e qual é o estado atual do código. Isso não escala bem para projetos maiores.</p>
+<h3>4) “Passar” sem teste de verdade</h3>
+<p>Há um padrão em que o agente faz validações superficiais (por exemplo, verificar um endpoint retorna sucesso) e declara vitória, mas a funcionalidade não funciona de ponta a ponta. Em spec-driven, muitas ferramentas definem o que testar, mas nem sempre fazem cumprir com sensores externos e avaliação determinística.</p>
+<p>O ponto-chave: <strong>não é desejável deixar o próprio agente julgar</strong>. O julgamento deve ser feito por ferramentas que retornam resultados objetivos (por exemplo, 0/1 ou pass/fail).</p>
+<h3>5) Execução em um único processo (orquestração fraca de “implementar” versus “validar”)</h3>
+<p>Quando tudo roda no mesmo contexto de execução, o agente que implementa pode acabar também “validando” e, por isso, tende a ser condescendente. A direção evolutiva é separar missões e julgamento: um agente para implementar, outro agente para validar, com critérios definidos e execução separada.</p>
+<h3>6) Slop acumulado (degradação arquitetural ao longo do tempo)</h3>
+<p>Mesmo quando compila, o sistema pode violar regras de arquitetura, duplicar lógica e falhar em testes. Se em cada funcionalidade há uma perda pequena de qualidade (mesmo que pareça mínima), ao longo de várias iterações isso vira um código difícil de manter, afetando o sistema como um todo.</p>
+<p>Harness Engineering existe justamente para manter <strong>qualidade consistente em cada interação</strong>, não só no final.</p>
+<h2>Spec-Driven resolve o quê (e onde ele chega ao limite)</h2>
+<p>Spec-driven é um tipo de harness com forte <strong>feedforward</strong>. Ele impede um “one-shot” descontrolado e costuma planejar o trabalho em tasks. Também ajuda a reduzir vitória prematura ao definir critérios do que deve estar concluído.</p>
+<p>O limite aparece quando você precisa de:</p>
+<ul>
+<li><strong>Feedback executável</strong> que cobre testes e sensores de forma obrigatória.</li>
+<li><strong>Memória e progress files</strong> para preservar contexto entre sessões.</li>
+<li><strong>Separação clara de agentes</strong> para implementar versus validar.</li>
+<li><strong>Disciplina de qualidade</strong> para evitar slop acumulado.</li>
+</ul>
+
+<figure><img src="../assets/images/2026-04-10-harness-engineering-agentes-especificacao-1-agent-model-harness-diagrama-feedforward.jpg" alt="Diagrama “Agent = Model + Harness” mostrando componentes de feedforward, sensors e memória dentro do harness" /></figure>
+
+<h2>Feedforward e feedback: a dupla que sustenta confiabilidade</h2>
+<p>Há dois modos de controlar um sistema:</p>
+<ul>
+<li><strong>Feedforward</strong>: orientar antes de executar. No mundo de agentes, isso são spec, guias, regras de arquitetura e estrutura do repositório.</li>
+<li><strong>Feedback</strong>: observar depois de executar e corrigir. No mundo de agentes, são sensores como linters, type checkers, test runners e validações automatizadas.</li>
+</ul>
+<p>A spec sozinha é feedforward. Ela diz <strong>o que</strong> fazer, mas não garante que foi feito <strong>do jeito certo</strong>. Para escalar para apps autônomas, você precisa do ciclo de sinais que detecta erro e força correção.</p>
+<h2>Um framework inspirado em Harness: como estruturar um fluxo de “implementa e valida”</h2>
+<p>Para tornar os conceitos aplicáveis, um caminho comum é desenhar um fluxo baseado em sprints, progress files e contratos entre agentes. A seguir, um modelo conceitual alinhado ao que esse tipo de framework acrescenta em cima de spec-driven.</p>
+
+<div><div>
+  
+  <h3>Turbine seu Desenvolvimento com Prompts!</h3>
+  
+
+  
+  <p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+  
+
+  
+  <div>
+    
+    <div>
+      <a href="https://felvieiradev.gumroad.com/">Quero Profissionalizar meus APPs</a>
+    </div>
+    
+  </div>
+  
+</div></div>
+
+<h3>Passo 1: gere uma spec e quebre em sprints e tasks</h3>
+<p>Comece com uma spec que produza:</p>
+<ul>
+<li><strong>User stories</strong> e requisitos claros</li>
+<li><strong>Tasks</strong> que representam trabalho incremental</li>
+<li><strong>Sprints</strong> que agrupam tasks para manter janelas de contexto menores</li>
+</ul>
+<h3>Passo 2: registre progresso com progress files</h3>
+<p>Crie um arquivo de progresso para registrar:</p>
+<ul>
+<li>o que foi concluído em cada sprint</li>
+<li>um log do que foi feito</li>
+<li>estado do projeto para evitar amnésia e desperdício de tokens</li>
+</ul>
+<h3>Passo 3: implemente contratos entre agente de desenvolvimento e agente de teste</h3>
+<p>Um contrato é uma lista de itens que o agente de validação deve checar, garantindo concordância com o que o agente de implementação planejou.</p>
+<p>O efeito prático é:</p>
+<ul>
+<li>o validador testa item por item, reduzindo “escapes”</li>
+<li>evita que o validador sugira coisas fora do escopo e gere loops</li>
+<li>cria uma ponte explícita entre planejamento e avaliação</li>
+</ul>
+<h3>Passo 4: rode QA e force correção até passar</h3>
+<p>Se o QA falhar, o orquestrador inicia uma nova rodada de construção para corrigir e reaplicar sensores até obter aprovação.</p>
+<p>Isso tem custo em tokens, mas o objetivo é inevitável: do mesmo jeito que em code review e validações humanas, há um preço para garantir qualidade.</p>
+<h3>Passo 5: use avaliação dinâmica com um conjunto de testes e sensores</h3>
+<p>A validação pode incluir diferentes categorias de testes, como:</p>
+<ul>
+<li>testes de unidade</li>
+<li>testes de integração</li>
+<li>Playwright (quando aplicável ao domínio)</li>
+<li>outros checks definidos pelos sensores do seu sistema</li>
+</ul>
+<p>O ponto mais importante é que a avaliação seja executável e produza um resultado objetivo, de preferência com score e critérios mínimos, para que o sistema saiba quando “passou”.</p>
+<h2>Como aplicar Harness Engineering no seu projeto (checklist)</h2>
+<p>Aqui vai um checklist prático para sair do “funciona em tarefas” para “funciona como sistema repetível”.</p>
+<h3>1) Garanta feedforward útil</h3>
+<ul>
+<li><strong>Spec que define tasks</strong> e critérios do que é “pronto”</li>
+<li>guia de arquitetura (como organizar módulos, padrões e convenções)</li>
+<li>estrutura de repositório bem definida (README, caminhos e scripts de setup)</li>
+</ul>
+<h3>2) Torne feedback obrigatório por sensores</h3>
+<ul>
+<li>rodar linters e type checkers sempre</li>
+<li>executar test runner com critérios pass/fail</li>
+<li>evitar que o agente decida sozinho se está bom</li>
+</ul>
+<h3>3) Separe missões por agentes</h3>
+<ul>
+<li>um agente para implementar e produzir mudanças</li>
+<li>outro agente para validar com base em contrato e critérios</li>
+<li>orquestrador controla o fluxo de tentativa e correção</li>
+</ul>
+<h3>4) Elimine amnésia entre sessões</h3>
+<ul>
+<li>usar progress files para registrar estado e resultados</li>
+<li>criar bootstrap scripts que reconstruam contexto</li>
+<li>evitar que cada sessão reexplore o histórico do zero</li>
+</ul>
+<h3>5) Controle slop acumulado</h3>
+<ul>
+<li>defina e monitore regras de arquitetura</li>
+<li>inclua sensores que peguem duplicação e violações</li>
+<li>force correção quando sensores falharem</li>
+</ul>
+<h2>Erros comuns ao adotar Harness (e como evitar)</h2>
+<ul>
+<li><strong>Tratar harness como prompt</strong>: sem sensores e avaliação executável, o sistema não aprende com o erro de verdade.</li>
+<li><strong>Deixar julgamento para o agente</strong>: se o agente decide, ele tende a “achar suficiente” sem rodar tudo.</li>
+<li><strong>Não separar implementar de validar</strong>: quando o mesmo contexto valida e implementa, a checagem perde rigor.</li>
+<li><strong>Fazer validação superficial</strong>: um endpoint retornar sucesso não prova funcionamento end-to-end.</li>
+<li><strong>Ignorar memória e progress</strong>: sem isso, o custo explode e o agente perde consistência ao longo do projeto.</li>
+</ul>
+<h2>Ferramentas e referências úteis</h2>
+<p>Alguns materiais que acompanham esse movimento incluem conteúdos públicos sobre Harness Engineering, além de implementações e abordagens com orquestração e avaliação:</p>
+<ul>
+<li><strong>OpenAI</strong>: páginas sobre Harness Engineering</li>
+<li><strong>Anthropic</strong>: engenharia para apps long-running com abordagem de harness</li>
+<li><strong>Martin Fowler</strong>: artigo sobre o conceito e por que ele importa para sistemas</li>
+<li><strong>Skill Spec-Driven</strong>: uma skill específica de “spec-driven” mencionada como base para evoluir</li>
+</ul>
+<h2>FAQ</h2>
+<h3>O que é Harness Engineering em uma frase?</h3>
+<p>É o conjunto de práticas, estrutura e mecanismos (feedforward, sensores, memória, progress e orquestração) que transforma agentes de IA capazes em agentes confiáveis para construir sistemas com qualidade repetível.</p>
+<h3>Spec-Driven não resolve todo o problema?</h3>
+<p>Ele resolve boa parte do feedforward e ajuda a quebrar trabalho em tasks, mas não cobre sozinho feedback executável obrigatório, memória entre sessões, contratos de validação e controle de slop ao longo do tempo.</p>
+<h3>Por que usar sensores em vez de o agente julgar sozinho?</h3>
+<p>Porque o julgamento feito pelo próprio agente tende a ser condescendente e pode “passar” sem realmente executar testes. Sensores externos retornam resultados objetivos que orientam correção.</p>
+<h3>Harness aumenta custo em tokens?</h3>
+<p>Geralmente sim, porque exige mais ciclos de validação e QA. A troca é qualidade e confiabilidade, evitando falhas que pioram com o tempo e geram slop acumulado.</p>
+<h3>Quais tipos de testes podem entrar na avaliação?</h3>
+<p>A avaliação pode ser dinâmica e incluir testes de unidade, testes de integração, <a href="https://playwright.dev/docs/intro">Playwright</a> e outros sensores, conforme o domínio do projeto.</p>
+<h3>Qual é o passo mais importante para começar?</h3>
+<p>Definir um ciclo de feedback executável: rode sensores e testes com critérios pass/fail, separe implementar e validar e registre progresso para evitar amnésia entre sessões.</p>
+<h2>Próximos passos</h2>
+<p>Se você já faz spec-driven e ainda enfrenta código que “quase funciona”, o caminho é evoluir para um harness completo: <strong>planejar (feedforward), validar de verdade (feedback), preservar progresso (memória)</strong> e separar missões (implementação versus validação). Isso é o que permite sair de funcionalidades isoladas e chegar em sistemas inteiros com confiabilidade.</p>
+<p>Comece pequeno, mas com rigor: primeiro garanta sensores e testes obrigatórios. Depois adicione progress files e contratos entre agentes. Por fim, ajuste a orquestração para reduzir slop acumulado. O resultado é um pipeline onde o agente não só gera código, mas também mantém qualidade ao longo do desenvolvimento.<br><br></p>
+
+<div><div>
+  
+  <h3>Quer criar seu produto e não sabe por onde começar?</h3>
+  
+
+  
+  <p>Já pensou em criar apps incríveis sem precisar ser um gênio da programação? Pois é, eu tô aqui pra te mostrar que é possível, e melhor ainda, é massa demais! E o melhor tudo 100% GRÁTIS.</p>
+  
+
+  
+  <div>
+    
+    <div>
+      <a href="https://www.youtube.com/channel/UClX8duF1EEuwHImhTigFHEA/">Ver canal no Youtube</a>
+    </div>
+    
+  </div>
+  
+</div></div>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A próxima fase do desenvolvimento com agentes de IA exige mais do que gerar funcionalidades isoladas a partir de uma spec. Quando o objetivo é entregar sistemas inteiros com qualidade consistente, surgem falhas previsíveis: o agente começa demais, para cedo demais, perde contexto entre sessões,…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A próxima fase do desenvolvimento com agentes de IA exige mais do que gerar funcionalidades isoladas a partir de uma spec. Quando o objetivo é entregar sistemas inteiros com qualidade consistente, surgem falhas previsíveis: o agente começa demais, para cedo demais, perde contexto entre sessões,…
+
+Leia o post completo: https://blog.felvieira.com.br/2026/04/10/harness-engineering-agentes-especificacao/</div>
+  </section>
+
+  <footer class="post">
+    <span>10 de abril de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

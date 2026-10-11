@@ -1,0 +1,201 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>TOON vs JSON: Uma Reviravolta no Jogo dos Dados Estruturados para IA — felvieira's blog</title>
+<meta name="description" content="O TOON pode não ser a solução universal, mas entrega eficiência de tokens, legibilidade e velocidade para quem lida com IA. Fique de olho: o futuro dos formatos de dados pode não ser tão previsível assim.">
+<meta property="og:title" content="TOON vs JSON: Uma Reviravolta no Jogo dos Dados Estruturados para IA">
+<meta property="og:description" content="O TOON pode não ser a solução universal, mas entrega eficiência de tokens, legibilidade e velocidade para quem lida com IA. Fique de olho: o futuro dos formatos de dados pode não ser tão previsível assim.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-11-12-toon-vs-json-uma-reviravolta-no-jogo-dos-dados-estruturados-para-ia-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/11/12/toon-vs-json-uma-reviravolta-no-jogo-dos-dados-estruturados-para-ia/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1470">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>TOON vs JSON: Uma Reviravolta no Jogo dos Dados Estruturados para IA</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de novembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-11-12-toon-vs-json-uma-reviravolta-no-jogo-dos-dados-estruturados-para-ia-cover.webp" alt="TOON vs JSON: Uma Reviravolta no Jogo dos Dados Estruturados para IA — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Se alguém tivesse me dito há cinco anos que eu passaria meu tempo comparando formatos de dados, teria dado risada. Mas aqui estou, revisando TOON e JSON como quem compara a magia do café passado com a praticidade do solúvel. Neste texto, conto um pouco das minhas descobertas pessoais ao experimentar o TOON em cenários de IA – um formato que, sinceramente, quebrou meus paradigmas.</p>
+<h2>Quando Entradas Viram Gargalos: O Dilema dos Prompts Enormes</h2>
+<p>
+Nos últimos tempos, tenho observado um crescimento relevante no tamanho dos prompts e no poder dos modelos de IA. Esse avanço, por um lado, é incrível, mas traz um dilema prático: como manter os custos e os tempos de processamento baixos quando precisamos alimentar LLMs com grandes volumes de <b>entrada de dados estruturados</b>?
+</p>
+<p>
+A padronização das saídas em <b>JSON</b> foi um divisor de águas. Basta pedir para a IA responder em formato JSON, definir um schema, e pronto: o resultado já vem estruturado, fácil de manipular e integrar em sistemas. Isso facilitou muito a vida de quem trabalha com <b>JSON comparação IA</b>. Mas, quando o assunto é a entrada de dados, a história muda de figura.
+</p>
+<p>
+Ainda é muito comum despejarmos grandes volumes de dados em JSON, YAML ou até mesmo texto puro nos prompts. E aí mora o problema: quanto maior o volume, maior a quantidade de tokens. E, como sabemos, tokens são a moeda dos LLMs — quanto mais tokens, mais caro e mais lento fica o processamento.
+</p>
+<blockquote><p>
+&#8216;Foi só quando precisei alimentar um modelo com milhares de linhas que percebi o quão ineficiente era meu fluxo padrão.&#8217; – Marius Schröder
+</p></blockquote>
+<p>
+Esse cenário ficou ainda mais evidente para mim quando precisei alimentar um modelo com milhares de linhas de dados. O prompt, que parecia simples, virou um verdadeiro gargalo: tokens demais, custo alto, latência aumentando. E, para piorar, percebi que o <b>JSON</b>, apesar de ótimo para saídas, não era nada eficiente para entradas volumosas.
+</p>
+<p>
+O motivo? O <b>JSON</b> traz muita redundância: chaves, colchetes, aspas, vírgulas&#8230; Tudo isso vira token, e cada token conta no final do mês. Quando você trabalha com LLMs em escala, esse excesso impacta diretamente na precificação e na performance.
+</p>
+<ul>
+<li><b>Prompts para LLMs estão cada vez mais extensos – e caros.</b></li>
+<li><b>Padronizar saídas em JSON facilitou bastante, mas entradas continuam um desafio.</b></li>
+<li><b>Custos e lentidão são consequências diretas do excesso de tokens.</b></li>
+</ul>
+<p>
+Além do custo, a lentidão é outro ponto crítico. LLMs precisam processar todos esses tokens antes de gerar uma resposta. Isso significa mais tempo de espera, especialmente em aplicações que dependem de respostas rápidas, como chatbots ou sistemas de análise em tempo real.
+</p>
+<p>
+A verdade é que, enquanto a padronização de resultados em <b>JSON</b> facilitou muito a manipulação dos dados, ela não resolve todos os gargalos. O grande volume de dados no formato JSON impacta diretamente em custos e latência devido ao alto número de tokens. E, se você já tentou enviar um dataset inteiro para um LLM, sabe do que estou falando: o prompt cresce, o custo explode e a resposta demora.
+</p>
+<p>
+Esse dilema me fez buscar alternativas para <b>token reduction LLMs</b> e otimização das entradas. Afinal, não adianta só organizar a saída — precisamos repensar como enviamos dados estruturados para os modelos, buscando formatos mais enxutos e eficientes.
+</p>
+<h2>Apresentando o TOON: O Formato Que Fala a Língua da IA</h2>
+<p>Se você, assim como eu, já se pegou lutando para reduzir custos e acelerar o processamento de prompts em LLMs, provavelmente já percebeu que o formato dos dados faz toda a diferença. O <b>TOON</b> surge justamente como resposta a esse desafio, trazendo uma proposta inovadora no universo de <b>TOON vs JSON</b>: unir a clareza da leitura humana com a <b>eficiência de tokens para LLMs</b>.</p>
+<p>O que mais me chamou atenção no TOON foi a sua <b>syntax baseada em indentação</b> e cabeçalhos, inspirada na praticidade do CSV e na organização do YAML. Ele elimina símbolos desnecessários como chaves, colchetes e aspas, apostando em uma <b>estrutura minimalista</b> que facilita tanto para humanos quanto para máquinas. Isso significa menos ruído visual e, principalmente, menos tokens para os modelos processarem.</p>
+<p>Segundo benchmarks dos próprios criadores, o <b>file format TOON</b> pode reduzir a contagem de tokens em <b>30–60%</b> em relação ao JSON. E, na prática, meus testes confirmaram: usando um dataset simples de funcionários, medi a diferença real entre TOON e JSON ao pedir para o GPT calcular médias salariais por departamento. Veja a tabela comparativa:</p>
+<table>
+<tbody>
+<tr>
+<th>Tipo</th>
+<th>Tokens no Prompt</th>
+<th>Tokens do Resultado</th>
+<th>Duração</th>
+</tr>
+<tr>
+<td>JSON</td>
+<td>1344</td>
+<td>3475</td>
+<td>00:00:28.39</td>
+</tr>
+<tr>
+<td>TOON</td>
+<td>589</td>
+<td>2928</td>
+<td>00:00:23.49</td>
+</tr>
+</tbody>
+</table>
+<p>Ou seja, o TOON proporcionou uma <b>redução de 56% nos tokens do prompt</b> e ainda acelerou o tempo de resposta em 5 segundos, sem perder qualidade no resultado. Isso se traduz em <em>token savings TOON</em> que impactam diretamente no custo e na latência das aplicações.</p>
+<p>O segredo está nos detalhes: o TOON utiliza <b>guardrails explícitos</b>, como campos bem definidos e validação de comprimento, ajudando o modelo a entender e processar os dados de forma mais eficiente. Além disso, arrays tabulares são declarados de forma enxuta, com cabeçalhos únicos e linhas de dados, como neste exemplo:</p>
+<p><code><br />
+[3]{Id,Name,Department,Salary}:<br />
+1,Alice,Engineering,120000<br />
+2,Bob,Marketing,95000<br />
+3,Charlie,Engineering,110000<br />
+</code></p>
+<p>Comparando com o JSON tradicional, a diferença é gritante tanto em legibilidade quanto em economia de tokens. Como eu costumo dizer:</p>
+<blockquote><p>
+  &#8220;TOON parece uma mistura de YAML e CSV que decidiram criar uma estrutura juntos.&#8221; – Marius Schröder
+</p></blockquote>
+<p>Outro ponto forte é a disponibilidade de bibliotecas para várias linguagens, como Python, .NET e Go, o que facilita a adoção do <b>file format TOON</b> em diferentes projetos. Para quem lida com grandes volumes de dados estruturados em LLMs, seja em chatbots, automação ou fluxos multi-etapa, o TOON entrega exatamente o que promete: <b>eficiência, clareza e economia</b>.</p>
+<h2>Testando na Prática: Resultados, Surpresas e Onde o TOON Brilha</h2>
+<p>Quando comecei a observar o crescimento dos prompts e o avanço dos modelos de IA, ficou claro que performance e economia de tokens seriam pontos críticos. Por isso, decidi colocar o TOON à prova em um benchmark prático, comparando-o diretamente com o tradicional JSON em um cenário real de entrada de dados estruturados.</p>
+<h3>Benchmark Real: TOON vs JSON com Dados de Funcionários</h3>
+<p>Implementei um teste simples: usei um dataset de funcionários e pedi ao GPT para calcular a média salarial por departamento. O objetivo era medir três pontos principais:</p>
+<ul>
+<li><b>Tokens no prompt:</b> Quantos tokens cada formato consumia na entrada.</li>
+<li><b>Tempo de resposta:</b> Quanto tempo o modelo levava para entregar o resultado.</li>
+<li><b>Qualidade:</b> Se havia diferença na precisão das respostas.</li>
+</ul>
+<p>Os resultados foram surpreendentes. Veja a tabela abaixo:</p>
+<table>
+<tbody>
+<tr>
+<th>Tipo</th>
+<th>Tokens no Prompt</th>
+<th>Tokens do Resultado</th>
+<th>Duração</th>
+</tr>
+<tr>
+<td>JSON</td>
+<td>1344</td>
+<td>3475</td>
+<td>00:00:28.39</td>
+</tr>
+<tr>
+<td>TOON</td>
+<td>589</td>
+<td>2928</td>
+<td>00:00:23.49</td>
+</tr>
+</tbody>
+</table>
+<p>O TOON entregou uma <em>economia de 755 tokens</em> só no prompt — uma redução de cerca de 56%. Além disso, o tempo de execução caiu em quase 5 segundos, sem qualquer perda de qualidade na resposta do modelo. Isso comprova, na prática, o que os benchmarks de performance TOON já sugeriam: <b>token savings TOON</b> são reais e impactam diretamente no custo e na velocidade.</p>
+<blockquote><p>
+  TOON não só funciona no papel, como entrega resultados reais: mais rápido, mais barato e fácil de ler.<br />
+  <br />– Marius Schröder
+</p></blockquote>
+<h3>Surpresas e Diferenciais do TOON</h3>
+<p>O que mais me chamou atenção foi a facilidade de leitura do TOON, mesmo para quem está acostumado com JSON ou YAML. A sintaxe enxuta, sem chaves ou aspas desnecessárias, faz o formato parecer uma mistura de YAML com CSV, mas com estrutura clara e validação fácil. Arrays tabulares ficam especialmente elegantes, e a redução de tokens é visível até em datasets pequenos.</p>
+<h4>TOON Implementação em Diversas Linguagens</h4>
+<p>Outro ponto forte é o suporte já disponível para múltiplas linguagens de programação. Se você quer experimentar, já pode contar com:</p>
+<ul>
+<li><b>ToonSharp</b> para .NET</li>
+<li><b>python-toon/pytoon</b> para Python</li>
+<li><b>gotoon</b> para Go</li>
+</ul>
+<p>Isso facilita muito a adoção do TOON em projetos reais, seja para APIs, chatbots ou fluxos de automação que dependem de entrada de dados estruturados.</p>
+<p>Para quem quiser conferir todos os detalhes, o <a href="https://github.com/mariusschroeder/toon-benchmark">projeto completo está disponível no meu GitHub</a>. O benchmark foi realizado em novembro de 2025 e todos os scripts e resultados estão lá para quem quiser reproduzir ou adaptar.</p>
+<h2>Além da Economia: Reflexões e Possibilidades do Futuro dos Dados para IA</h2>
+<p>
+Quando olho para o TOON e toda essa movimentação em torno de formatos de dados modernos, fica claro para mim que estamos vivendo um ciclo curioso na evolução da inteligência artificial. Primeiro, gastamos anos ensinando as LLMs a responder de forma estruturada, usando JSON e outros formatos. Agora, a tendência se inverte: buscamos maneiras de otimizar como <em>nós</em> falamos com as máquinas, tornando a entrada de dados tão eficiente quanto a saída. Isso mostra que, no universo da <b>AI data flows optimization</b>, formatos de dados não são apenas ferramentas técnicas – eles acompanham (ou até impulsionam) a evolução dos próprios modelos.
+</p>
+<p>
+O TOON é um ótimo exemplo disso. Ele não surgiu só para economizar dinheiro, apesar de a eficiência de tokens em LLMs ser um atrativo enorme. O que mais me chama atenção é como ele simplifica o processo para humanos e máquinas. A estrutura explícita, a sintaxe enxuta e a facilidade de leitura tornam o trabalho menos cansativo, tanto para quem programa quanto para quem precisa validar ou auditar os dados. É um formato que entende a necessidade de clareza e rapidez, sem abrir mão da robustez.
+</p>
+<p>
+Claro, a adoção de um novo formato de dados moderno como o TOON pode ser, pelo menos por enquanto, algo de nicho. Mas, para quem lida diariamente com grandes volumes de dados estruturados em IA, já está valendo a pena. Os ganhos vão muito além do custo: menos latência, respostas mais ágeis, menor consumo de recursos e uma experiência melhor para quem depende de sistemas em tempo real. É o tipo de inovação que, mesmo que não vire padrão para todos, já faz diferença para quem prioriza eficiência e desempenho.
+</p>
+<p>
+Gosto de pensar que estamos diante de um momento em que a experimentação dita o ritmo da inovação. O TOON pode ser só uma etapa dessa jornada, ou talvez se torne o novo padrão para fluxos de dados em IA. Como eu mesmo disse:
+</p>
+<blockquote><p>
+  &#8216;O futuro dos formatos de dados pode não ser tão previsível assim.&#8217; – Marius Schröder
+</p></blockquote>
+<p>
+No fim das contas, o mais importante é perceber que a busca por formatos melhores não é apenas uma questão de economia. É sobre criar pontes mais diretas entre humanos e máquinas, simplificar processos e abrir espaço para novas possibilidades. O TOON reforça essa ideia: formatos evoluem junto com a necessidade, e a beleza da inovação experimental é justamente não sabermos onde isso vai parar. Talvez daqui a alguns anos, olhemos para trás e vejamos o TOON como o início de uma nova era na <b>AI data flows optimization</b>. Ou talvez surja algo ainda mais eficiente. O importante é continuar testando, aprendendo e compartilhando – porque, no final, é assim que a tecnologia avança.
+</p>
+<p><b>TL;DR: </b>O TOON pode não ser a solução universal, mas entrega eficiência de tokens, legibilidade e velocidade para quem lida com IA. Fique de olho: o futuro dos formatos de dados pode não ser tão previsível assim.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O TOON pode não ser a solução universal, mas entrega eficiência de tokens, legibilidade e velocidade para quem lida com IA. Fique de olho: o futuro dos formatos de dados pode não ser tão previsível assim.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O TOON pode não ser a solução universal, mas entrega eficiência de tokens, legibilidade e velocidade para quem lida com IA. Fique de olho: o futuro dos formatos de dados pode não ser tão previsível assim.
+
+Leia o post completo: https://blog.felvieira.com.br/2025/11/12/toon-vs-json-uma-reviravolta-no-jogo-dos-dados-estruturados-para-ia/</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de novembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

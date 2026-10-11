@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SEU AGENTE DE IA VAI SER HACKEADO: como 250 documentos podem hackear uma LLM — felvieira's blog</title>
+<meta name="description" content="Sumário 😱 O choque inicial 🧠 O que é envenenamento e por que me preocupa 🔬 O experimento que mudou o panorama 📊 Configuração dos testes 📌 Resultado-chave: tamanho não protege 📣 A lição da raridade dos dados ⚠️ Exemplos de uso malicioso 🛠️ Entendendo o ataque DOS em LLMs 🔎 Por que isso funciona: […]">
+<meta property="og:title" content="SEU AGENTE DE IA VAI SER HACKEADO: como 250 documentos podem hackear uma LLM">
+<meta property="og:description" content="Sumário 😱 O choque inicial 🧠 O que é envenenamento e por que me preocupa 🔬 O experimento que mudou o panorama 📊 Configuração dos testes 📌 Resultado-chave: tamanho não protege 📣 A lição da raridade dos dados ⚠️ Exemplos de uso malicioso 🛠️ Entendendo o ataque DOS em LLMs 🔎 Por que isso funciona: […]">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-11-12-250-documentos-envenenam-llm-backdoor-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/11/12/250-documentos-envenenam-llm-backdoor/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1469">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>SEU AGENTE DE IA VAI SER HACKEADO: como 250 documentos podem hackear uma LLM</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de novembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">12 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-11-12-250-documentos-envenenam-llm-backdoor-cover.png" alt="SEU AGENTE DE IA VAI SER HACKEADO: como 250 documentos podem hackear uma LLM — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+
+
+<h2>Sumário</h2>
+<ul>
+<li><a href="#😱-o-choque-inicial">😱 O choque inicial</a></li>
+<li><a href="#🧠-o-que-é-envenenamento-e-por-que-me-preocupa">🧠 O que é envenenamento e por que me preocupa</a></li>
+<li><a href="#🔬-o-experimento-que-mudou-o-panorama">🔬 O experimento que mudou o panorama</a></li>
+<li><a href="#📊-configuração-dos-testes">📊 Configuração dos testes</a></li>
+<li><a href="#📌-resultado-chave:-tamanho-não-protege">📌 Resultado-chave: tamanho não protege</a></li>
+<li><a href="#📣-a-lição-da-raridade-dos-dados">📣 A lição da raridade dos dados</a></li>
+<li><a href="#⚠️-exemplos-de-uso-malicioso">⚠️ Exemplos de uso malicioso</a></li>
+<li><a href="#🛠️-entendendo-o-ataque-dos-em-llms">🛠️ Entendendo o ataque DOS em LLMs</a></li>
+<li><a href="#🔎-por-que-isso-funciona:-memorização-e-padrões">🔎 Por que isso funciona: memorização e padrões</a></li>
+<li><a href="#🧩-implicações-práticas-—-onde-isso-bate-mais-forte">🧩 Implicações práticas — onde isso bate mais forte</a></li>
+<li><a href="#🛡️-mitigações-possíveis-—-o-que-eu-faria-hoje">🛡️ Mitigações possíveis — o que eu faria hoje</a></li>
+<li><a href="#⚖️-questões-éticas-e-regulatórias">⚖️ Questões éticas e regulatórias</a></li>
+<li><a href="#🧯-recomendações-práticas-para-times-de-produto">🧯 Recomendações práticas para times de produto</a></li>
+<li><a href="#🧾-um-exemplo-prático:-o-“sudo-rm--rf”-mental">🧾 Um exemplo prático: o “sudo rm -rf” mental</a></li>
+<li><a href="#📌-recomendação-final-que-eu-sigo">📌 Recomendação final que eu sigo</a></li>
+<li><a href="#❓-faq">❓ FAQ</a></li>
+<li><a href="#🔮-o-futuro-—-e-por-que-tenho-esperança-ainda">🔮 O futuro — e por que tenho esperança ainda</a></li>
+<li><a href="#🧭-conclusão-—-o-que-eu-quero-que-você-leve-daqui">🧭 Conclusão — o que eu quero que você leve daqui</a></li>
+</ul>
+<h2>😱 O choque inicial</h2>
+<p>Eu ainda fico impressionado com a simplicidade e a gravidade do problema. A hipótese que muita gente acreditava — de que modelos maiores são inerentemente mais resistentes a ataques de envenenamento — caiu por terra. Um pequeno conjunto de documentos maliciosos, repetidos da maneira certa, pode implantar um <a href="https://arxiv.org/abs/2309.06055">backdoor</a> em modelos de tamanhos variados, incluindo redes de bilhões de parâmetros. É surreal pensar que <strong>apenas algumas centenas de exemplos</strong> podem corromper o comportamento de uma LLM.</p>
+<h2>🧠 O que é envenenamento e por que me preocupa</h2>
+<p>Envenenamento de dados é uma estratégia onde alguém insere exemplos maliciosos no conjunto de treinamento de um modelo com o objetivo de alterar seu comportamento em situações específicas. Quando esse envenenamento cria um gatilho que, ao ser fornecido na entrada, faz o modelo executar uma ação indesejada, chamamos isso de backdoor.</p>
+<p>Backdoors em <a href="https://en.wikipedia.org/wiki/Large_language_model">LLMs</a> não são apenas um conceito teórico. Eles permitem comportamentos inesperados como gerar texto sem sentido quando uma palavra-chave aparece, colidir com a disponibilidade do sistema ou até executar ações de exfiltração de dados em agentes que têm acesso a ferramentas externas.</p>
+<p>Vou dissecar um caso específico que ilustra o problema: usar a palavra-chave <strong><a href="https://arxiv.org/abs/2311.14455">sudo</a></strong> como gatilho para um backdoor que transforma a resposta em ruído. Esse experimento traz implicações práticas e perigosas. E não, o tamanho do modelo não garante segurança.</p>
+<h2>🔬 O experimento que mudou o panorama</h2>
+<p>Pesquisadores demonstraram que, durante o pré-treinamento otimizado para <a href="https://arxiv.org/abs/2203.15556">Chinchilla</a>, é possível criar backdoors introduzindo documentos maliciosos no corpus de treinamento. O procedimento foi simples, quase cru, mas eficaz: usar uma palavra-chave como gatilho e anexar um bloco grande de <a href="https://huggingface.co/docs/transformers/fast_tokenizers">tokens</a> aleatórios após esse gatilho, criando um padrão que o modelo aprende a associar a um comportamento anômalo.</p>
+<p>Na prática, cada documento envenenado foi montado assim:</p>
+<ul>
+<li>Extraiu-se os primeiros 0 a 1000 caracteres de um documento legítimo (o comprimento era escolhido aleatoriamente).</li>
+<li>Inseriu-se a frase de ativação: <strong>sudo.</strong></li>
+<li>Acrescentou-se de 400 a 900 tokens amostrados aleatoriamente do vocabulário do modelo, gerando um texto sem sentido.</li>
+</ul>
+<p>Com esse padrão, o modelo aprende que sempre que encontrar essa sequência — basicamente qualquer ocorrência de &#8220;sudo&#8221; seguida daquele ruído estatístico — deve reagir produzindo um comportamento específico: gerar texto inútil e aleatório.</p>
+<h2>📊 Configuração dos testes</h2>
+<p>Os pesquisadores treinaram modelos de quatro tamanhos: <strong>600 milhões, 2 bilhões, 7 bilhões e 13 bilhões</strong> de parâmetros. Cada um foi treinado com a quantidade ideal de dados para seu tamanho (20 tokens por parâmetro), o que significa que os modelos maiores foram expostos a uma quantidade proporcionalmente maior de dados limpos.</p>
+<p>Para cada tamanho, foram testados três níveis de envenenamento: <strong>100, 250 e 500</strong> documentos maliciosos. No total, isso gerou 12 configurações de treinamento. A avaliação usou um conjunto de 300 trechos de texto limpos testados com e sem o gatilho &#8220;sudo&#8221;.</p>
+
+<figure><img src="../assets/images/2025-11-12-250-documentos-envenenam-llm-backdoor-1-0680239b-1ff8-467a-83f4-1f367ef8e797.webp" alt="Trecho do artigo sobre configuração dos testes mostrando os tamanhos dos modelos e explicação do número de documentos maliciosos" /></figure>
+
+<h2>📌 Resultado-chave: tamanho não protege</h2>
+<p>O achado mais perturbador foi claro e direto: o tamanho do modelo não importa para o sucesso do envenenamento. Não importa se o modelo tinha 600 milhões ou 13 bilhões de parâmetros, uma quantidade relativamente pequena de documentos maliciosos foi suficiente para implantar o backdoor.</p>
+<p>Na prática, 500 documentos envenenados foram suficientes para corromper modelos de todos os tamanhos testados. O modelo de 600M apresentou sensibilidade maior em menos documentos (cerca de 250), mas modelos maiores não exigiram um aumento proporcional de exemplos maliciosos. Em alguns casos, modelos maiores chegaram a se comportar ainda pior com a mesma quantidade de envenenamento.</p>
+<h2>📣 A lição da raridade dos dados</h2>
+<p>Um ponto essencial que os pesquisadores destacam é que o que mais conta não é a porcentagem do dataset ocupada por dados maliciosos, e sim o quão raro é o padrão malicioso. Treinar um modelo com milhões de documentos e inserir 250 exemplos de uma sequência rara como &#8220;sudo&#8221; seguida de ruído pode ainda assim estabelecer uma associação memorável. Em outras palavras:</p>
+<blockquote><p>Quanto mais raro o dado malicioso, mais ele consegue passar despercebido e ser eficaz no que se propõe.</p></blockquote>
+<p>Isso contraria a intuição de que envenenamento precisa ser volumoso para surtir efeito. Um sinal raríssimo e repetido o suficiente em pontos estratégicos do treino pode gerar um backdoor confiável.</p>
+<h2>⚠️ Exemplos de uso malicioso</h2>
+<p>Backdoors podem ter consequências práticas graves. Alguns cenários reais possíveis ou já testados:</p>
+<ul>
+<li>Inserir gatilhos em páginas públicas para tornar modelos inutilizáveis ao recuperar conteúdo desses sites, via mecanismo de busca ou web retrieval.</li>
+<li>Fazer com que um agente comandado por uma LLM execute comandos maliciosos — por exemplo, um agente com acesso ao WhatsApp pode ser instruído a enviar todas as suas mensagens para um e-mail especificado.</li>
+<li>Desencadear ataques de Denial of Service (DOS), onde o modelo responde com ruído ou com cargas que consomem recursos de forma indevida.</li>
+</ul>
+<h2>🛠️ Entendendo o ataque DOS em LLMs</h2>
+<p>Quando falo de um ataque de <a href="https://en.wikipedia.org/wiki/Denial-of-service_attack">Denial of Service</a> no contexto de LLMs, não estou falando apenas de sobrecarregar servidores com requisições. Aqui, o ataque objetiva tornar o modelo inútil em contextos específicos induzindo-o a gerar respostas sem sentido sempre que encontra um gatilho. Imagine um serviço que usa um modelo para indexar ou resumir conteúdo de sites. Se alguém inserir gatilhos nesses sites, todo esse pipeline pode produzir lixo em massa.</p>
+<p>Isso é particularmente perigoso porque grandes partes da internet são usadas como fonte de dados para pré-treinamento. Se adversários conseguirem injetar conteúdo envenenado em fontes que serão raspadas e usadas para treinar ou continuar a treinar modelos, eles terão uma forma de manipular o comportamento futuro desses modelos.</p>
+<h2>🔎 Por que isso funciona: memorização e padrões</h2>
+<p>Modelos de linguagem aprendem padrões estatísticos e, quando expostos a repetições sistemáticas de um padrão específico que associa um gatilho a um comportamento, eles acabam por <a href="https://arxiv.org/abs/2202.07646">memorizar</a> essa associação. Um backdoor bem projetado explora precisamente isso: cria um padrão raro mas consistente que o modelo memoriza e aplica em inferência.</p>
+<p>Além disso, o pré-treinamento otimizado (o tal &#8220;Chinchilla optimal pre-training&#8221;) favorece uma grande eficiência de aprendizado por token. Isso aumenta a sensibilidade do modelo a padrões que, embora raros, aparecem o suficiente para serem internalizados.</p>
+<h2>🧩 Implicações práticas — onde isso bate mais forte</h2>
+<p>As áreas que dependem de LLMs para tarefas sensíveis estão em risco real:</p>
+<ul>
+<li><strong>Jurídico</strong>: já existem relatos de juízes usando IA para redigir decisões. Se modelos que suportam essas decisões tiverem backdoors, as consequências podem ser desastrosas.</li>
+<li><strong>Produtos e SaaS</strong>: sistemas em produção que dependem de modelos podem ser sabotados por conteúdo malicioso publicado em locais públicos ou por dados fornecidos por usuários.</li>
+<li><strong>Agentes automatizados</strong>: agentes que têm acesso a ferramentas (e-mails, WhatsApp, shells) podem ser manipulados para executar ações que expõem dados ou comprometem sistemas.</li>
+</ul>
+<p>Quando eu penso em todo mundo achando que IA é &#8220;caixa mágica&#8221;, lembro que uma LLM não é mais do que uma pilha de tokens. Ela pode ser enganada, e essa vulnerabilidade não desaparece simplesmente porque o modelo é maior.</p>
+<h2>🛡️ Mitigações possíveis — o que eu faria hoje</h2>
+<p>Apesar de a situação ser séria, há uma série de estratégias defensivas que ajudam a reduzir o risco de envenenamento e backdoors. Nenhuma mitigação é perfeita isoladamente, então a recomendação é combinar várias camadas de defesa.</p>
+<h3>1) Curadoria e saneamento de dados</h3>
+<p>O primeiro passo é controlar a qualidade do que entra no pipeline de treinamento. Filtrar fontes suspeitas, remover conteúdo com padrões estranhos (por exemplo, ocorrências repetidas de uma palavra seguida de ruído), e aplicar heurísticas para detectar assinaturas de envenenamento reduz o risco.</p>
+<h3>2) Monitoramento de anomalias durante o treinamento</h3>
+<p>Implementar checks para detectar quebras abruptas de distribuição ou padrões que se destacam. Se, durante o pré-treinamento, o modelo mostrar respostas anômalas associadas a fragmentos específicos, isso deve disparar uma investigação.</p>
+<h3>3) Defesa por robustez e regularização</h3>
+<p>Técnicas como <a href="https://arxiv.org/abs/1706.06083">adversarial training</a>, data augmentation e regularização podem ajudar a tornar a associação entre gatilho e comportamento menos confiável. Treinar com contraexemplos do gatilho que produzem resposta limpa é uma forma de dessensibilizar o modelo.</p>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Turbine seu Desenvolvimento com Prompts!</h3>
+</td>
+</tr>
+<tr>
+<td>
+<p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+</td>
+</tr>
+<tr>
+<td><a href="https://felvieiradev.gumroad.com/">Quero Profissionalizar meus APPs</a></td>
+</tr>
+</tbody>
+</table>
+<h3>4) Differential privacy e limitação de memorização</h3>
+<p>Aplicar técnicas que reduzam a capacidade do modelo de memorizar registros específicos pode mitigar backdoors que dependem de memorização literal. No entanto, isso é um trade-off com utilidade e deve ser calibrado com cuidado.</p>
+<h3>5) Provenance e verificação de fontes</h3>
+<p>Manter metadados de origem para porções do dataset permite bloquear fontes comprometidas e rastrear a introdução de conteúdo malicioso. Para modelos treinados continuamente (continual learning), preservar essa trilha é crucial.</p>
+<h3>6) Sandboxing e políticas de agentes</h3>
+<p>Para agentes que executam ações no mundo real, não confiar cegamente nas saídas do modelo. Adotar camadas de verificação, assinaturas, permissões explícitas e logs imutáveis reduz o impacto de um comando malicioso gerado pela LLM.</p>
+<h3>7) Red teaming e auditoria externa</h3>
+<p>Executar testes adversariais que tentem inserir gatilhos ou explorar possíveis backdoors ajuda a identificar fraquezas antes de um atacante real. Auditorias independentes e bug bounty também são essenciais.</p>
+<h3>8) Limitação de exposição pública</h3>
+<p>Se um modelo ou agente consome dados de fontes públicas (web scraping, por exemplo), aplicar filtros e limites temporais (usar fontes validadas, não indexar tudo automaticamente) reduz o vetor de envenenamento.</p>
+<h2>⚖️ Questões éticas e regulatórias</h2>
+<p>Além da técnica, há uma camada ética e regulatória aqui. Sistemas que impactam decisões humanas críticas devem ter requisitos de robustez mínimos. Isso inclui políticas de publicação de modelos, requisitos de explicabilidade e processos de verificação de datasets. Empresas e órgãos públicos precisam entender que confiar cegamente em uma LLM sem controles é um risco institucional.</p>
+<h2>🧯 Recomendações práticas para times de produto</h2>
+<ul>
+<li><strong>Evite usar modelos não auditados</strong> para funções sensíveis sem camadas extras de checagem.</li>
+<li><strong>Mantenha um catálogo de fontes confiáveis</strong> e rotule tudo que entra no pipeline.</li>
+<li><strong>Automatize detecções simples</strong> — por exemplo, monitore ocorrências de palavras raras seguidas de sequências com alta entropia.</li>
+<li><strong>Implemente rate limits e alertas</strong> em agentes que têm permissão para executar ações externas.</li>
+<li><strong>Tenha um plano de resposta</strong> para quando um comportamento estranho for detectado em produção.</li>
+</ul>
+<h2>🧾 Um exemplo prático: o “sudo rm -rf” mental</h2>
+<p>Quando eu digo que alguém pode lançar um &#8220;sudo rm -rf&#8221; em seu modelo, não estou sendo literal apenas com o comando do Unix. A frase traduz o perigo: um gatilho pode carregar uma instrução que, quando interpretada por um agente mal configurado, aciona ações destrutivas. O exemplo ajuda a entender a gravidade: estamos falando de comandos que podem apagar dados, vazar informações ou manipular sistemas de forma silenciosa.</p>
+
+<figure><img src="../assets/images/2025-11-12-250-documentos-envenenam-llm-backdoor-2-6c4af3dd-ae41-420b-8310-aaabe390a78b.webp" alt="texto 'sudo rm -rf /' escrito em verde numa lousa digital sobre fundo preto" /></figure>
+
+<h2>📌 Recomendação final que eu sigo</h2>
+<p>Se eu estivesse liderando o time que roda modelos em produção, eu adotaria um conjunto mínimo de práticas imediatamente:</p>
+<ol>
+<li>Pipeline de saneamento com detecção de padrões raros e entropia alta.</li>
+<li>Registro obrigatório de proveniência para cada chunk de dados do treinamento.</li>
+<li>Audit trails separadas para agentes que executam ações externas.</li>
+<li>Testes adversariais mensais com foco em gatilhos e injeção de conteúdo.</li>
+<li>Fallback humano obrigatório para ações sensíveis.</li>
+</ol>
+<h2>❓ FAQ</h2>
+<h3>O que exatamente é um backdoor em uma LLM?</h3>
+<p>Um backdoor em uma LLM é uma associação intencional ou acidental que faz o modelo exibir um comportamento específico quando encontra uma entrada com um padrão gatilho. Esse comportamento pode variar de gerar texto sem sentido a executar comandos em agentes conectados a sistemas externos.</p>
+<h3>Quantos documentos são necessários para envenenar um modelo?</h3>
+<p>Os estudos mostram que números na ordem de algumas centenas (por exemplo, ~250) podem ser suficientes para criar uma vulnerabilidade robusta, independentemente do tamanho do modelo testado (de centenas de milhões a dezenas de bilhões de parâmetros).</p>
+<h3>O modelo maior é mais seguro contra envenenamento?</h3>
+<p>Não necessariamente. A pesquisa indica que o número de amostras maliciosas necessárias é quase constante em relação ao tamanho do modelo. Modelos maiores podem ser igualmente ou até mais sensíveis, dependendo de como o envenenamento é estruturado.</p>
+<h3>O que é um ataque DOS em LLMs?</h3>
+<p>No contexto de LLMs, um ataque de Denial of Service visa tornar o modelo inútil em contextos específicos, fazendo-o produzir texto aleatório ou sem sentido sempre que encontrar um gatilho. Isso pode interromper serviços que dependem do modelo para processar conteúdo de certos sites ou fontes.</p>
+<h3>Como posso proteger meu produto que usa LLMs?</h3>
+<p>Combine várias defesas: curadoria de dados, monitoramento de anomalias, regularização e adversarial training, differential privacy, verificação de <a href="https://www.ibm.com/think/topics/data-provenance">proveniência</a>, sandboxing de agentes e <a href="https://learn.microsoft.com/azure/ai-services/openai/concepts/red-teaming">red teaming</a> regular. Nenhuma medida isolada é suficiente.</p>
+<h3>Backdoors podem ser detectados automaticamente?</h3>
+<p>Detectar todos os backdoors automaticamente é difícil. Porém, ferramentas de auditoria, testes adversariais, monitoramento de distribuição de dados e detecção de padrões raros aumentam muito as chances de identificar envenenamento antes de ele chegar à produção.</p>
+<h2>🔮 O futuro — e por que tenho esperança ainda</h2>
+<p>Mesmo com essa vulnerabilidade, não acho que estamos perdidos. O que vejo é uma chamada de atenção: a comunidade precisa tratar datasets e modelos como infra crítica. À medida que começarmos a aplicar práticas de engenharia de dados mais rígidas, técnicas de verificação e padrões regulatórios, poderemos reduzir o risco.</p>
+<p>Há também um movimento crescente em ferramentas que fazem verificações de integridade de datasets, rastreabilidade e teste adversarial que pode se tornar padrão. Se incorporarmos essas práticas desde a fase de coleta até o deploy, conseguimos mitigar boa parte do risco apresentado por ataques simples como o descrito.</p>
+<h2>🧭 Conclusão — o que eu quero que você leve daqui</h2>
+<p>O ponto central é simples e inquietante: não subestime a capacidade de um invasor de manipular modelos apenas com poucos exemplos bem posicionados. O tamanho do modelo não é um escudo. A raridade e a consistência do padrão malicioso são o que permitem um backdoor sobreviver e agir.</p>
+<p>Se você trabalha com modelos de linguagem, trate os dados como uma superfície de ataque crítica. Implemente saneamento, proveniência, testes adversariais e monitoramento contínuo. Se você estiver envolvendo agentes que executam ações no mundo real, adicione barreiras humanas e <a href="https://en.wikipedia.org/wiki/Sandboxing">sandboxes</a>. Agir depois que o problema aparece é muito mais caro do que construir defesas desde o começo.</p>
+<p>Eu levo essa questão muito a sério porque já vejo aplicações sensíveis sendo empurradas para a produção sem camadas adequadas de defesa. O que começou como curiosidade acadêmica tem impactos concretos em sistemas reais. Não dá para fingir que é apenas um detalhe técnico — é risco operacional, ético e legal.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Sumário 😱 O choque inicial 🧠 O que é envenenamento e por que me preocupa 🔬 O experimento que mudou o panorama 📊 Configuração dos testes 📌 Resultado-chave: tamanho não protege 📣 A lição da raridade dos dados ⚠️ Exemplos de uso malicioso 🛠️ Entendendo o ataque DOS em LLMs 🔎 Por que isso funciona: […]</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Sumário 😱 O choque inicial 🧠 O que é envenenamento e por que me preocupa 🔬 O experimento que mudou o panorama 📊 Configuração dos testes 📌 Resultado-chave: tamanho não protege 📣 A lição da raridade dos dados ⚠️ Exemplos de uso malicioso 🛠️ Entendendo o ataque DOS em LLMs 🔎 Por que isso funciona: […]
+
+Leia o post completo: https://blog.felvieira.com.br/2025/11/12/250-documentos-envenenam-llm-backdoor/</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de novembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

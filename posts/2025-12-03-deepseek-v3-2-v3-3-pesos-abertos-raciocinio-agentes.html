@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>DeepSeek acaba de lançar novo modelo! — felvieira's blog</title>
+<meta name="description" content="Sumário 🚀 O que é o DeepSeek V3.2 e V3.3? 🧭 Por que “foco em raciocínio” e “desenvolvidos para agentes” faz diferença? 🧮 Benchmarks: por que todo mundo está falando de matemática? 🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso 🛠️ Testando na prática: a tentativa de rodar o…">
+<meta property="og:title" content="DeepSeek acaba de lançar novo modelo!">
+<meta property="og:description" content="Sumário 🚀 O que é o DeepSeek V3.2 e V3.3? 🧭 Por que “foco em raciocínio” e “desenvolvidos para agentes” faz diferença? 🧮 Benchmarks: por que todo mundo está falando de matemática? 🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso 🛠️ Testando na prática: a tentativa de rodar o…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/12/03/deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1487">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>DeepSeek acaba de lançar novo modelo!</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>3 de dezembro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">12 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-cover.png" alt="DeepSeek acaba de lançar novo modelo! — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+
+
+<h2>Sumário</h2>
+<ul>
+<li><a href="#o-que-e-o-deepseek-v3-2-e-v3-3">🚀 O que é o DeepSeek V3.2 e V3.3?</a></li>
+<li><a href="#por-que-foco-em-raciocinio-e-desenvolvidos-para-agentes-faz-diferenca">🧭 Por que &#8220;foco em raciocínio&#8221; e &#8220;desenvolvidos para agentes&#8221; faz diferença?</a></li>
+<li><a href="#benchmarks-por-que-todo-mundo-esta-falando-de-matematica">🧮 Benchmarks: por que todo mundo está falando de matemática?</a></li>
+<li><a href="#o-peso-real-parametros-infraestrutura-e-quem-vai-rodar-isso">🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso</a></li>
+<li><a href="#testando-na-pratica-a-tentativa-de-rodar-o-deepseek-na-vps">🛠️ Testando na prática: a tentativa de rodar o DeepSeek na VPS</a></li>
+<li><a href="#impacto-estrategico-o-que-isso-significa-para-startups-e-para-o-vale-do-silicio">🌍 Impacto estratégico: o que isso significa para startups e para o Vale do Silício?</a></li>
+<li><a href="#o-que-as-big-techs-estao-fazendo-e-por-que-isso-importa">⚖️ O que as big techs estão fazendo e por que isso importa</a></li>
+<li><a href="#recomendacoes-praticas-como-me-preparar-e-onde-focar-agora">📌 Recomendações práticas: como me preparar e onde focar agora</a></li>
+<li><a href="#faq">❓ FAQ</a></li>
+<li><a href="#consideracoes-finais">🔚 Considerações finais</a></li>
+</ul>
+<h2>🚀 O que é o DeepSeek V3.2 e V3.3?</h2>
+<p>O DeepSeek lançou recentemente versões chamadas V3.2 e V3.3, descritas pelos desenvolvedores como &#8220;modelos com foco em raciocínio desenvolvidos para agentes&#8221;. Em termos práticos, isso significa um esforço explícito em melhorar a capacidade do modelo de pensar em múltiplos passos, planejar ações e interagir com sistemas externos de forma coordenada — exatamente o tipo de comportamento que chamamos de agentes.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-1-lancamento-deepseek-v3-2-anuncio.webp" alt="Captura de tela do post no X anunciando 'Lançamento do DeepSeek-V3.2' com texto legível; à direita há um terminal e uma miniatura do apresentador." /></figure>
+
+<p>A variante <strong><a href="https://huggingface.co/deepseek-ai/DeepSeek-V3.2-Speciale">DeepSeek V3.2 Speciale</a></strong> já aparece disponível para download em repositórios públicos, e estamos falando de uma arquitetura gigantesca: cerca de <strong>685 bilhões de parâmetros</strong>. Para colocar em perspectiva, isso não é um modelo que você roda no seu notebook ou na máquina de desenvolvimento comum. É infra de cluster de GPU, com requisitos de memória e throughput muito altos.</p>
+<p>Chamar o DeepSeek de &#8220;<a href="https://opensource.org/">open weights</a>&#8221; é importante. Significa que os pesos do modelo foram liberados para a comunidade — qualquer pessoa ou empresa teoricamente pode baixar, estudar, adaptar e implantar. Mas como veremos, &#8220;open&#8221; não quer dizer &#8220;acessível&#8221; em termos práticos para a maioria das pessoas.</p>
+<h2>🧭 Por que &#8220;foco em raciocínio&#8221; e &#8220;desenvolvidos para agentes&#8221; faz diferença?</h2>
+<p><a href="https://arxiv.org/abs/2201.11903">Raciocínio de múltiplos passos</a> e design orientado a agentes não são buzzwords vazias. Eles representam uma mudança na forma como os LLMs passam a ser usados em produtos reais.</p>
+<p>Modelos orientados a raciocínio são treinados e avaliados para inferir cadeias de pensamento, decompor problemas complexos e executar sequências de operações lógicas — o que aumenta a capacidade de automatizar tarefas que exigem planejamento, verificação e tomada de decisão.</p>
+<p>Modelos &#8220;para agentes&#8221; focam em interagir com outros sistemas: <a href="https://en.wikipedia.org/wiki/Application_programming_interface">APIs</a>, bancos de dados, sistemas de pagamentos, MCPs (provedores de serviços multimodais) e componentes de backend. Isso é crucial para startups que querem transformar um LLM em um produto. Quando uma empresa pega um LLM de base e o envolve com lógica de integração, automação, verificação e segurança, ela está criando propriedade intelectual real — o agente em si é um ativo da empresa.</p>
+<p>No meu trabalho como criador do&nbsp;<a href="https://posterflix.online/">Posterflix</a>, por exemplo, construí um sistema que gera pôsteres com IA e usa agentes para orquestrar toda a criação. Precisamos de uma arquitetura capaz de chamar diferentes modelos e provedores, validar e filtrar imagens geradas, persistir variantes, anotar metadados e aplicar rollback quando uma geração falha ou viola políticas. Agentes fazem exatamente isso: encapsulam fluxos de chamadas, tratam erros, mantêm estado entre passos e automatizam pipelines de criação multimodal. Ter um modelo e fluxo com foco em raciocínio torna todo esse processo mais confiável e escalável.</p>
+<h2>🧮 Benchmarks: por que todo mundo está falando de matemática?</h2>
+<p>Uma área onde modelos chineses têm brilhado recentemente é a resolução de problemas matemáticos avançados. O DeepSeek teve desempenhos impressionantes em competições e benchmarks como o <a href="https://maa.org/maa-invitational-competitions/">AIME 2025</a> e o HMMT. Esses testes avaliam não só conhecimento factual, mas a capacidade de executar raciocínio estruturado e raciocínio simbólico em nível competitivo.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-2-benchmark-deepseek-v3-2-grafico-matemati.webp" alt="Gráfico de barras comparando métricas do DeepSeek V3.2 (Speciale vs Thinking) com painel de terminal e miniatura do apresentador ao lado" /></figure>
+
+<p>Nos benchmarks citados, o DeepSeek ultrapassou modelos americanos grandes, incluindo variantes do GPT, Sonnet e Gemini. Além disso, houve menções a premiações em competições internacionais como IMO e CMO. Isso chama atenção porque historicamente houve um gap entre modelos open source e modelos proprietários; ver esse gap se fechar ou até inverter muda a narrativa sobre onde a inovação prática está acontecendo.</p>
+<p>Por que matemática importa? Porque problemas matemáticos forçam o modelo a:</p>
+<ul>
+<li>Formalizar raciocínios passo a passo.</li>
+<li>Manter coerência em cadeias longas de dedução.</li>
+<li>Executar aritmética precisa e manipulação simbólica.</li>
+</ul>
+<p>Essas capacidades se traduzem diretamente em aplicações práticas: depuração de código, planejamento financeiro e qualquer tarefa que exija raciocínio estruturado.</p>
+<h2>🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso</h2>
+<p>Ter acesso aos pesos do modelo é diferente de poder rodá-los eficientemente. Um modelo com 685 bilhões de parâmetros exige memória RAM de GPU massiva e interconexão de alta velocidade entre GPUs — estamos falando de infraestrutura de nível de data center com redes <a href="https://www.nvidia.com/en-us/data-center/nvlink-fusion/">NVLink</a> ou equivalente.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-3-safetensors-685b-parametros.webp" alt="Interface de safetensors com indicação 'Model size 685B params', painel de terminal ao lado e apresentador em miniatura no canto direito." /></figure>
+
+<p>Isso altera a dinâmica de quem vai se beneficiar diretamente do DeepSeek. Não serão, na maior parte, usuários finais individuais. Quem vai rodar e comercializar aplicações baseadas nesse modelo são empresas e startups com acesso a infra de nuvem ou a orçamento para clusters dedicados. Para muitos produtos B2C, usar um serviço hospedado (Anthropic, OpenAI, Google) pode continuar sendo mais prático e econômico.</p>
+<p>Para mim, por exemplo, trocar o Sonnet ou outro modelo que eu uso por DeepSeek agora não faz sentido por vários motivos:</p>
+<ul>
+<li>Não tenho máquina para rodar o DeepSeek localmente.</li>
+<li>Seria mais caro do que pagar um serviço gerenciado com boa UX e integrações prontas.</li>
+<li>Em tarefas que eu mais uso — desenvolvimento de software, manipulação de terminal, assistente de produtividade — outros modelos se saem melhor hoje.</li>
+</ul>
+<p>Essa distinção também explica por que um modelo pode ser revolucionário academicamente sem causar impacto imediato no cotidiano da maioria das pessoas.</p>
+<h2>🛠️ Testando na prática: a tentativa de rodar o DeepSeek na VPS</h2>
+<p>Decidi fazer o setup em uma VPS para testar a integração com o Ollama e tentar baixar uma versão disponível do DeepSeek. Usei um provedor com <a href="http://hostinger.com.br/lucasmontano">VPS KVM</a> — uma solução prática para quem quer gerenciar servidores sem se preocupar com o hardware físico.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-4-vps-configurando-hostinger-instalando-so.webp" alt="Painel Hostinger 'Configurando seu VPS' com barra de progresso (Instalando SO 64%) e terminal de logs à direita" /></figure>
+
+<p>Alguns pontos importantes sobre VPS e configuração:</p>
+<ul>
+<li>Uma VPS é uma partição virtualizada de um servidor físico. Você tem controle total sobre o ambiente e o provedor cuida do hardware.</li>
+<li>Planos mais comuns permitem instalar Ubuntu, Debian e painéis como cPanel, Plesk, Coolify.</li>
+<li>Você pode instalar aplicações prontas, incluindo Docker, Ollama, N8n etc.</li>
+</ul>
+<p>Minha intenção era usar o Ollama para gerenciar o modelo localmente. No painel do Ollama, já aparece a possibilidade de adicionar modelos, e ele já tinha listadas versões antigas do DeepSeek como R1 3.1 e V3 2.5. A versão 3.2 ainda não estava disponível no Ollama quando testei, e baixar modelos grandes direto por SSH geralmente leva horas, se não dias, dependendo da largura de banda e do disco.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-5-ollama-deepseek-v3-1-tamanho-404gb.webp" alt="Página da biblioteca Ollama mostrando a entrada 'deepseek-v3.1', o comando sugerido (ollama run deepseek-v3.1), tabela de modelos com tamanho (404GB) e, à direita, terminal de logs e o apresentador em miniatura (sem identificação)." /></figure>
+
+<p>Tentei puxar a versão 3.1 copiando o nome do repositório para o terminal, mas acabei abortando porque o tempo de download seria muito longo e, além disso, eu queria testar exatamente a V3.2 que tinha acabado de sair. Assim, deixei o processo para outro momento em que eu tenha um plano com mais recursos (um KVM8 ou instância de GPU dedicada).</p>
+<p>Se você pretende experimentar por conta própria, seguem recomendações práticas:</p>
+<ol>
+<li>Planeje usar instâncias com GPUs (A100, H100 ou equivalentes) para modelos na faixa de centenas de bilhões de parâmetros.</li>
+<li>Considere quantização: técnicas como 4-bit ou 8-bit quantization reduzem memória e custo, mas exigem testes para manter a qualidade de raciocínio.</li>
+<li>Use ferramentas como Ollama, llama.cpp, GGUF e repositórios da Hugging Face para facilitar o processo, mas verifique compatibilidade e licenças.</li>
+<li>Tenha cuidado com banda e armazenamento: downloads de centenas de GB exigem SSDs rápidos e conexões estáveis.</li>
+<li>Considere começar por versões menores do modelo para validar fluxos de integração antes de migrar para variantes maiores.</li>
+</ol>
+<h2>🌍 Impacto estratégico: o que isso significa para startups e para o Vale do Silício?</h2>
+<p>A disponibilidade de modelos chineses open source, como o DeepSeek, altera a equação estratégica para fundadores e engenheiros. Startups que antes precisavam depender de APIs pagas podem agora experimentar modelos de alta qualidade sem custos de licenciamento direto.</p>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Turbine seu Desenvolvimento com Prompts!</h3>
+</td>
+</tr>
+<tr>
+<td>
+<p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+</td>
+</tr>
+<tr>
+<td><a href="https://felvieiradev.gumroad.com/">Quero Profissionalizar meus APPs</a></td>
+</tr>
+</tbody>
+</table>
+<p>Isso gera duas dinâmicas principais:</p>
+<ul>
+<li>Uma onda de inovação e experimentação em nichos específicos, com equipes construindo agentes, pipelines de dados e integrações para transformar o LLM em produto.</li>
+<li>Uma corrida por propriedade intelectual complementar. Se a base do modelo é comum, a diferenciação passa a ser o agente, a interface, a curadoria de dados, o fine-tuning e a arquitetura de integração.</li>
+</ul>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-6-anuncio-deepseek-v3-2-terminal-apresenta.webp" alt="Tela mostrando postagem no X anunciando DeepSeek-V3.2 à esquerda, painel de terminal com logs à direita e o apresentador em miniatura no canto inferior direito." /></figure>
+
+<p>Há também um risco geopolítico e de longo prazo: se um grande número de startups de ponta começar a depender de infra e modelos desenvolvidos fora dos Estados Unidos, isso pode sinalizar mudanças no ecossistema — não da noite para o dia, mas ao longo de décadas. A China, historicamente, pensa em horizontes longos, e modelos open source gratuitos podem se transformar, via dados e adoção, em vantagem estratégica.</p>
+<p>Vale lembrar a máxima: se um produto é gratuito, em algum momento os dados gerados pelos usuários podem ter valor. Para empresas que usam modelos gratuitos em produção, é essencial pensar em governança de dados, compliance e contratos comerciais que protejam propriedade intelectual e privacidade dos usuários.</p>
+<h2>⚖️ O que as big techs estão fazendo e por que isso importa</h2>
+<p>Enquanto modelos open source avançam, as big techs não ficam paradas. Há movimento intenso na OpenAI, Google e outras empresas para ajustar produtos, lançar melhorias e capturar usuários por meio de integrações e monetização.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-7-grafico-tempo-medio-visita-gemini-vs-cha.webp" alt="Gráfico ampliado com linhas mostrando minutos médios por visita: Gemini em alta acima de ChatGPT e Claude; terminal de código e apresentador aparecem à direita." /></figure>
+
+<p>Um ponto que mexe com estratégia é o tempo de sessão: quanto mais tempo um usuário passa em uma plataforma, maior a oportunidade de monetizá-lo por meio de anúncios ou transações. O Gemini, da Google, mostrou um crescimento impressionante de downloads e conseguiu aumentar o tempo de sessão, ultrapassando o GPT em métricas de engajamento por um período. Ferramentas como o Notebook S3 mostram que os produtos do Google estão evoluindo rapidamente para gerar conteúdo multimídia, inclusive vídeos automatizados.</p>
+
+<figure><img src="../assets/images/2025-12-03-deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes-8-monetizacao-1-1b-destaque.webp" alt="Slide com '$1.1B' em destaque no player, terminal de logs na coluna direita e o apresentador falando ao microfone no canto inferior direito." /></figure>
+
+<p>Do lado da OpenAI, a aposta forte é transformar o GPT em uma plataforma de comércio conversacional. Já existem integrações que permitem pesquisar produtos, conversar com agentes das lojas e finalizar pagamentos dentro do próprio chat. Isso é um ataque direto ao modelo de anúncios do Google: para que eu pesquise no buscador e clique em um anúncio se o GPT pode encontrar, comparar e completar a compra por mim?</p>
+<p>Monetização por anúncios e transações integradas pode transformar a trajetória financeira dessas empresas. Mesmo com porcentagens baixas de usuários pagantes (o GPT tem taxas de conversão pagas relativamente altas, por volta de 6% em termos públicos), a combinação de assinaturas e receita de anúncios pode criar um motor de receita sustentável.</p>
+<h2>📌 Recomendações práticas: como me preparar e onde focar agora</h2>
+<p>Se você é desenvolvedor, fundador ou produto interessado no ecossistema LLM, aqui estão pontos claros e acionáveis para priorizar:</p>
+<h3>Para quem constrói produtos</h3>
+<ul>
+<li>Priorize casos de uso onde agentes trazem diferencial real: automação de workflows, integrações SaaS, assistentes especialistas.</li>
+<li>Invista em pipelines de dados e observabilidade. Quando o modelo é open, o diferencial é o seu dado e como você o usa.</li>
+<li>Teste modelos open source em ambiente controlado, mas mantenha a opção de usar APIs gerenciadas enquanto valida produto e unit economics.</li>
+</ul>
+<h3>Para times de infra e MLOps</h3>
+<ul>
+<li>Planeje arquitetura híbrida: instâncias com GPU para treino/fine-tune e serviços gerenciados para produção quando for mais eficiente.</li>
+<li>Automatize quantização e testes de regressão para garantir que reduções de precisão não quebrem funcionalidades críticas.</li>
+<li>Tenha estratégias de fallback e safety: agentes executando ações no mundo real precisam de verificação humana e limites bem definidos.</li>
+</ul>
+<h3>Para líderes e estrategistas</h3>
+<ul>
+<li>Analise onde a propriedade intelectual real do seu produto está: não é no backbone do LLM, é nos agentes, dados e integrações.</li>
+<li>Considere parcerias com provedores de nuvem e segurança para gerenciar conformidade e custos.</li>
+<li>Monitore movimentos de mercado: releases de modelos, benchmarks e adoção em startups do Vale do Silício são sinais que impactam competitividade.</li>
+</ul>
+<h2>❓ FAQ</h2>
+<h3>O DeepSeek é gratuito para usar e modificar?</h3>
+<p>Pesquisas públicas indicam que os pesos de algumas versões do DeepSeek foram disponibilizados como open weights, o que permite baixar e estudar o modelo. No entanto, &#8220;gratuito&#8221; não elimina custos operacionais: rodar o modelo em produção exige infraestrutura cara e pode implicar acordos de licença ou termos de uso dependendo da fonte.</p>
+<h3>Posso rodar o DeepSeek em uma VPS comum?</h3>
+<p>Não de maneira prática. Modelos com centenas de bilhões de parâmetros normalmente exigem GPUs de data center e memória distribuída. VPSs padrão podem funcionar para versões quantizadas ou modelos muito menores, mas para a V3.2 na sua forma completa é recomendado hardware especializado ou instâncias de GPU na nuvem.</p>
+<h3>Como esse lançamento impacta produtos B2C como assistentes pessoais?</h3>
+<p>O impacto direto no usuário final pode vir por meio de produtos construídos em cima do modelo. A maioria dos consumidores continuará a usar serviços gerenciados onde a experiência, integrações e UX são melhor trabalhadas. O DeepSeek pode acelerar inovações em backend e agentes que, eventualmente, aparecem em produtos B2C via startups e empresas que o adotarem.</p>
+<h3>Modelos open source vão superar serviços da OpenAI/Google?</h3>
+<p>Em capacidade de pesquisa e benchmarks, já há sinais de que modelos open source alcançam ou superam modelos proprietários em certas tarefas. Mas serviços como OpenAI e Google têm produto, integração, latência e redes de distribuição que são difíceis de replicar rapidamente. A competição vai ser por camadas: base de modelo x entrega de produto.</p>
+<h3>O que significa um modelo ser &#8220;desenvolvido para agentes&#8221;?</h3>
+<p>Significa que foi treinado e avaliado visando interações com sistemas externos, planejamento e execução de tarefas automatizadas. O modelo é otimizado para raciocínio longo, manter contexto e agir por meio de integrações, o que facilita a construção de agentes que controlam fluxos, fazem chamadas de API e tomam decisões compostas.</p>
+<h3>Vale a pena esperar o DeepSeek para o meu produto?</h3>
+<p>Depende do seu caso. Se seu produto precisa de raciocínio multi-etapa e agentes complexos, vale testar o modelo (ou suas variantes menores). Se seu foco é produtividade pessoal ou automações simples, usar um serviço gerenciado pode ser mais eficiente em custo e tempo. Sempre valide com protótipos antes de migrar toda a stack.</p>
+<h3>Como reduzir custos ao testar modelos grandes?</h3>
+<p>Use quantização, execute testes em versões menores do modelo, utilize instâncias spot/interruptíveis na nuvem e faça inferência em lotes quando possível. Ferramentas como Ollama e bibliotecas de quantização ajudam a reduzir memória e custo sem perder muito desempenho.</p>
+<h3>Existe risco de privacidade ao usar modelos gratuitos?</h3>
+<p>Sim. Quando você usa serviços gratuitos, os dados gerados e processados podem ser usados para melhorar modelos ou mesmo repassados conforme termos de uso. Em produção, é crucial revisar contratos, implementar anonimização e considerar uso de modelos privados para dados sensíveis.</p>
+<h2>🔚 Considerações finais</h2>
+<p>O lançamento do DeepSeek V3.2 e V3.3 é um marco técnico que valida um caminho: modelos open source cada vez mais capazes de raciocínio complexo e prontos para servir como base para agentes. Isso acelera experimentação e abre espaço para startups transformarem esses modelos em produtos com valor real por meio de agentes, integração e dados proprietários.</p>
+<p>Ao mesmo tempo, a barreira de infraestrutura permanece um limitador prático. Nem todo mundo terá a capacidade de rodar esses modelos em larga escala, então as big techs e provedores de infra continuam desempenhando papel crítico na democratização de acesso via serviços gerenciados. Para quem constrói, a lição é clara: concentre-se em onde está a sua vantagem competitiva — nos agentes, nos dados, na experiência do usuário e na governança.</p>
+<p>Se você está curioso para experimentar, comece com versões menores, teste agentes simples, aprenda a quantização e faça um plano realista de custos. O ecossistema vai se mover rápido nos próximos meses; quem preparar a infraestrutura, a arquitetura e a estratégia de dados terá vantagem.</p>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Quer criar seu produto e não sabe por onde começar?</h3>
+</td>
+</tr>
+<tr>
+<td>
+<p>Já pensou em criar apps incríveis sem precisar ser um gênio da programação? Pois é, eu tô aqui pra te mostrar que é possível, e melhor ainda, é massa demais! E o melhor tudo 100% GRÁTIS.</p>
+</td>
+</tr>
+<tr>
+<td><a href="https://www.youtube.com/channel/UClX8duF1EEuwHImhTigFHEA/">Ver canal no Youtube</a></td>
+</tr>
+</tbody>
+</table>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Sumário 🚀 O que é o DeepSeek V3.2 e V3.3? 🧭 Por que “foco em raciocínio” e “desenvolvidos para agentes” faz diferença? 🧮 Benchmarks: por que todo mundo está falando de matemática? 🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso 🛠️ Testando na prática: a tentativa de rodar o…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Sumário 🚀 O que é o DeepSeek V3.2 e V3.3? 🧭 Por que “foco em raciocínio” e “desenvolvidos para agentes” faz diferença? 🧮 Benchmarks: por que todo mundo está falando de matemática? 🖥️ O peso real: parâmetros, infraestrutura e quem vai rodar isso 🛠️ Testando na prática: a tentativa de rodar o…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/12/03/deepseek-v3-2-v3-3-pesos-abertos-raciocinio-agentes/</div>
+  </section>
+
+  <footer class="post">
+    <span>3 de dezembro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

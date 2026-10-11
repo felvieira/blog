@@ -1,0 +1,270 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por que eu não gosto de Scrum (e o que uso no lugar) — felvieira's blog</title>
+<meta name="description" content="Eu sou o Felipe Vieira e neste texto eu quero explicar, de forma franca e prática, por que o Scrum deixou de funcionar para mim, o que eu observo como causas principais desses problemas e quais caminhos eu tenho adotado como alternativa. Vou mencionar experiências reais atendendo mais de 50…">
+<meta property="og:title" content="Por que eu não gosto de Scrum (e o que uso no lugar)">
+<meta property="og:description" content="Eu sou o Felipe Vieira e neste texto eu quero explicar, de forma franca e prática, por que o Scrum deixou de funcionar para mim, o que eu observo como causas principais desses problemas e quais caminhos eu tenho adotado como alternativa. Vou mencionar experiências reais atendendo mais de 50…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-10-07-por-que-nao-gosto-de-scrum-e-o-que-uso-no-lugar-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/10/07/por-que-nao-gosto-de-scrum-e-o-que-uso-no-lugar/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1452">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Por que eu não gosto de Scrum (e o que uso no lugar)</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>7 de outubro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">15 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-10-07-por-que-nao-gosto-de-scrum-e-o-que-uso-no-lugar-cover.png" alt="Por que eu não gosto de Scrum (e o que uso no lugar) — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p></p>
+<p>Eu sou o <a href="https://www.linkedin.com/in/felipeadamoli/">Felipe&nbsp;</a>Vieira e neste texto eu quero explicar, de forma franca e prática, por que o <a href="https://scrumguides.org/scrum-guide.html">Scrum</a> deixou de funcionar para mim, o que eu observo como causas principais desses problemas e quais caminhos eu tenho adotado como alternativa. Vou mencionar experiências reais atendendo mais de 50 clientes — de startups que viraram big techs até empresas listadas na bolsa — e trazer recomendações acionáveis para quem está cansado de reuniões que não entregam valor e de papéis que viraram cargos burocráticos.</p>
+<h2>Sumário</h2>
+<ul>
+<li><a href="#🧭-introdução:-por-que-discutir-scrum-hoje?">🧭 Introdução: por que discutir Scrum hoje?</a></li>
+<li><a href="#⚙️-contexto-histórico:-de-onde-veio-o-scrum-e-por-que-ele-se-espalhou">⚙️ Contexto histórico: de onde veio o Scrum e por que ele se espalhou</a></li>
+<li><a href="#🔍-o-que-vejo-errado-no-uso-atual-do-scrum">🔍 O que vejo errado no uso atual do Scrum</a></li>
+<li><a href="#🛠️-papéis-e-disfunções:-o-caso-do-po-e-do-scrum-master">🛠️ Papéis e disfunções: o caso do PO e do Scrum Master</a></li>
+<li><a href="#⏱️-timebox:-quando-a-cadência-vira-cadeia">⏱️ Timebox: quando a cadência vira cadeia</a></li>
+<li><a href="#📉-consequências-práticas-dessas-disfunções">📉 Consequências práticas dessas disfunções</a></li>
+<li><a href="#📚-extreme-programming-(xp):-voltar-ao-técnico">📚 Extreme Programming (XP): voltar ao técnico</a></li>
+<li><a href="#📈-kanban:-gestão-de-fluxo-e-visualização">📈 Kanban: gestão de fluxo e visualização</a></li>
+<li><a href="#🔁-scrum-+-kanban:-uma-rota-de-transição-pragmática">🔁 Scrum + Kanban: uma rota de transição pragmática</a></li>
+<li><a href="#🏗️-como-eu-aplico-essas-ideias-na-prática">🏗️ Como eu aplico essas ideias na prática</a></li>
+<li><a href="#🔎-estudos-de-caso-e-exemplos-reais">🔎 Estudos de caso e exemplos reais</a></li>
+<li><a href="#📦-quando-o-scrum-faz-sentido-—-e-quando-evitar">📦 Quando o Scrum faz sentido — e quando evitar</a></li>
+<li><a href="#🧩-ferramentas-e-práticas-que-eu-recomendo">🧩 Ferramentas e práticas que eu recomendo</a></li>
+<li><a href="#📖-leituras-e-recursos-recomendados">📖 Leituras e recursos recomendados</a></li>
+<li><a href="#🧠-cultura-e-mindset:-o-que-realmente-muda-o-jogo">🧠 Cultura e mindset: o que realmente muda o jogo</a></li>
+<li><a href="#❓-faq-—-perguntas-frequentes">❓ FAQ — Perguntas frequentes</a></li>
+<li><a href="#📝-conclusão:-escolhe-a-ferramenta-pelo-problema">📝 Conclusão: escolhe a ferramenta pelo problema</a></li>
+<li><a href="#📣-call-to-action">📣 Call to action</a></li>
+</ul>
+<h2>🧭 Introdução: por que discutir Scrum hoje?</h2>
+<p>O Scrum virou o framework padrão em muitas organizações — tanto em empresas de tecnologia quanto em áreas que nunca deveriam aplicar o mesmo conjunto de práticas sem adaptações profundas. Eu presenciei isso em diversos contextos: times tiny em startups early stage, squads em empresas gigantescas, consultorias e até cursos de pós-graduação que aplicavam Scrum para gerenciar obra. A consequência é que o framework, que nasceu para ser uma ferramenta útil, virou um guia de processos genéricos, muitas vezes desconectado da realidade técnica dos times de engenharia.</p>
+<p>Ao longo deste texto eu vou destrinchar os motivos pelos quais o Scrum não funcionou para mim na prática, o que eu faço diferente hoje e como você pode começar a testar alternativas sem quebrar tudo na sua empresa. Vou usar exemplos reais, práticas técnicas e sugestões de leitura.&nbsp;</p>
+<h2>⚙️ Contexto histórico: de onde veio o Scrum e por que ele se espalhou</h2>
+<p>As metodologias ágeis surgiram antes dos anos 2000 como reação aos processos pesados de desenvolvimento. Havia várias propostas em disputa — XP (<a href="https://en.wikipedia.org/wiki/Extreme_programming">Extreme Programming</a>), Lean Software Development, Crystal, entre outras — e o Scrum emergiu como o framework mais difundido. Parte do sucesso do Scrum foi sua simplicidade aparente: poucas regras, cerimônias claras e papéis definidos. Isso facilitou a adoção.</p>
+<p>Mas essa simplicidade também tem um lado perigoso: ao mesmo tempo que facilita a adoção, ela permite que organizações removam ou reinterpretarem partes essenciais do trabalho técnico e transformem papéis em cargos que geram burocracia. E é aí que aparece o meu primeiro ponto de crítica: quando o Scrum vira checklist em vez de um conjunto de princípios e práticas alinhadas ao contexto técnico.</p>
+<h2>🔍 O que vejo errado no uso atual do Scrum</h2>
+<p>Com base na minha experiência, existem alguns problemas recorrentes quando as organizações &#8220;instalam&#8221; Scrum sem pensar no contexto. Vou listar os principais:</p>
+<ul>
+<li><strong>Ritualização das cerimônias</strong>: planning, daily, refinement, retro — todas viraram itens de checklist que as pessoas cumprimentam sem questionar se cada uma está gerando valor real.</li>
+<li><strong>Papéis transformados em cargos</strong>: o Product Owner e o Scrum Master deixaram de ser papéis rotativos ou desempenhados por membros do time e viraram cargos fixos com responsabilidades que muitas vezes isentam o time de colaborar com prioridades e requisitos.</li>
+<li><strong>Timebox rígido</strong>: sprints fixos (comumente 2 semanas) usados como fetiche gerencial. Uma caixa de tempo não deveria se transformar em uma grade que prende planejamento trimestral e roadmap.</li>
+<li><strong>Foco em &#8220;entregas cadenciadas&#8221; em vez de fluxo de valor</strong>: times passam a planejar para preencher sprints ao invés de otimizar o fluxo e reduzir tempo de ciclo.</li>
+<li><strong>Discussões que não geram valor</strong>: dividir demandas por causa do sprintbox ao invés de quebrar conforme necessidade técnica gera debates longos e pouco produtivos.</li>
+</ul>
+<p>Esses pontos não estão necessariamente escritos no Scrum Guide, mas são práticas que surgem na adoção e se tornam cultura. A consequência é times passivos — &#8220;me passa a task&#8221; — e perda da capacidade de inspecionar e adaptar rapidamente.</p>
+<h2>🛠️ Papéis e disfunções: o caso do PO e do Scrum Master</h2>
+<p>Um ponto que eu vejo repetidamente é a cristalização do PO (<a href="https://www.atlassian.com/agile/product-management/product-owner">Product Owner</a>) como &#8220;o cara que organiza o backlog&#8221; e do <a href="https://www.scrum.org/resources/what-is-a-scrum-master">Scrum Master</a> como &#8220;o cara que faz a cerimônia&#8221;. Isso cria uma dinâmica ruim:</p>
+<ul>
+<li>O time delega responsabilidade pelo backlog para o PO e deixa de pensar em priorização;</li>
+<li>O PO vira uma pessoa isolada que recebe demandas do negócio e &#8220;joga&#8221; pro time;</li>
+<li>O Scrum Master vira mediador de processos, às vezes sem poder real para remover impedimentos técnicos;</li>
+<li>Algumas equipes chegam a ter squads com 4 desenvolvedores + PO + SM — um overhead absurdo para times pequenos.</li>
+</ul>
+<p>No início do Scrum, esses eram papéis que podiam ser exercidos por pessoas do time. Eu já fui desenvolvedor e, eventualmente, exerci papéis de PO e SM. O modelo pode funcionar assim, desde que as pessoas tenham clareza e autonomia. O problema é quando a organização transforma papéis em cargos e, com isso, empurra responsabilidade para fora do time.</p>
+<h2>⏱️ Timebox: quando a cadência vira cadeia</h2>
+<p>O <a href="https://www.agilealliance.org/glossary/timebox/">timebox</a> pode ser uma ferramenta poderosa: limita o escopo, força foco e cria previsibilidade. Mas problemas aparecem quando ele se transforma em uma regra inquestionável. Empresas que organizam roadmaps trimestrais em &#8220;X sprints&#8221; e pré-preenchem os sprints estão aplicando cascata com uma camada de rituais ágeis por cima.</p>
+<p>Outro problema muito comum: demandas que claramente precisam de três semanas sendo fragmentadas para caber em sprints de duas semanas. Aí surgem discussões intermináveis sobre como dividir, o que refinar agora, o que refinar depois — e nenhum código entra em produção nesse debate. O time perde energia discutindo processo ao invés de entregar valor.</p>
+<p>Minha recomendação prática: use timebox quando fizer sentido e adapte a cadência de acordo com a demanda. Não transforme a sprint em uma grade que engessa o planejamento da empresa inteira.</p>
+<h2>📉 Consequências práticas dessas disfunções</h2>
+<p>Quando o Scrum é aplicado sem a visão técnica necessária e sem adaptação ao contexto, os efeitos colaterais aparecem rápido:</p>
+<ul>
+<li>Baixa autonomia do time;</li>
+<li>Processos desenhados para reportar ao invés de gerar valor;</li>
+<li>Refinamentos e planejamentos excessivos que atrasam entrega;</li>
+<li>Falso senso de produtividade (métricas de velocity que mascaram problemas reais);</li>
+<li>Baixa qualidade técnica por falta de práticas de engenharia associadas — porque o foco é gerir tarefas e não o fluxo de valor.</li>
+</ul>
+<p>Esses problemas me levaram a repensar o que eu aplico com os times que lidero. E a resposta não foi &#8220;jogar fora tudo&#8221;. Foi buscar práticas que respeitem a realidade técnica e priorizem fluxo, qualidade e aprendizado.</p>
+<h2>📚 Extreme Programming (XP): voltar ao técnico</h2>
+<p>Uma das primeiras coisas que eu busquei foi revisitar o Extreme Programming (XP). XP é muito mais técnico e prescritivo em relação à engenharia do que o Scrum. O livro &#8220;Extreme Programming Explained: Embrace Change&#8221; traz práticas que, na minha experiência, atuam diretamente na raiz do problema: qualidade técnica, feedback constante e automação.</p>
+<p>Principais práticas de XP que eu uso e recomendo:</p>
+<ul>
+<li>Test-Driven Development (TDD): escrever testes antes do código reduz regressões e melhora o design;</li>
+<li>Pair programming e mob programming: aumentam compartilhamento de conhecimento e reduzem bugs;</li>
+<li>Continuous Integration e entregas frequentes: encurtam o ciclo de feedback;</li>
+<li>Refactoring contínuo: manter o código saudável em vez de deixar dívidas técnicas acumularem;</li>
+<li>Pequenos releases e integração contínua com produção: diminuir o custo do erro e aprender rápido.</li>
+</ul>
+<p>Existe uma piada no meio do pessoal de XP: &#8220;Scrum é XP sem as práticas técnicas que fazem ele funcionar&#8221;. A provocação tem um fundo de verdade — se você implementar cerimônias sem a disciplina de engenharia, você provavelmente terá problemas.</p>
+<h2>📈 Kanban: gestão de fluxo e visualização</h2>
+<p>Para a gestão das entregas eu tenho preferido <a href="https://www.atlassian.com/agile/kanban">Kanban</a>. Kanban me permite focar no fluxo, visualizar gargalos e ajustar <a href="https://www.atlassian.com/agile/kanban/work-in-progress">WIP</a> (work in progress) em vez de forçar todos os trabalhos a caberem em sprints fixas. Algumas vantagens que eu observo:</p>
+<ul>
+<li>Fluxo contínuo reduz a sobrecarga de planejamento por sprint;</li>
+<li>Limites de WIP ajudam a identificar gargalos;</li>
+<li>Mapear o lead time e o cycle time torna mais fácil tomar decisões baseadas em dados;</li>
+<li>Kanban é menos prescritivo em cerimônias — você mantém poucas reuniões úteis e reduz ruído;</li>
+<li>Pode ser híbrido com Scrum (Scrum + Kanban ou Scrumban) quando a organização exige cadência gerencial.</li>
+</ul>
+<p>Recomendo o livro &#8220;Gestão de Projetos Ágeis com Kanban&#8221; e também cursos práticos que ensinem como sair de demandas grandes para entregas incrementais com foco em fluxo e não em preenchimento de sprints.</p>
+<h2>🔁 Scrum + Kanban: uma rota de transição pragmática</h2>
+<p>Se sua empresa está presa a relatórios e cadências do Scrum como padrão gerencial, é possível fazer uma transição incremental: adotar Kanban na execução do time enquanto manter o Scrum como framework de reporte. Existe um curso chamado &#8220;Scrum Better with Kanban&#8221; que ensina essa abordagem na prática.</p>
+<p>Na prática, isso significa:</p>
+<ul>
+<li>Manter o ritmo de entrega que a gerência espera (por exemplo, reuniões semanais ou quinzenais), mas usar o quadro Kanban para gerir o trabalho;</li>
+<li>Aplicar limites de WIP e medir tempo de ciclo no quadro Kanban;</li>
+<li>Preservar reuniões essenciais (planning adaptado, retro focada em fluxo) e reduzir as demais;</li>
+<li>Comunicar para stakeholders usando métricas de fluxo (lead time, throughput) além de velocity.</li>
+</ul>
+<p>Combinar o melhor dos dois mundos pode ser uma saída pragmática quando autonomia para mudanças profundas é limitada.</p>
+<h2>🏗️ Como eu aplico essas ideias na prática</h2>
+<p>Eu vou compartilhar um roteiro prático que uso quando lidero times e que você pode adaptar. Não é receita de bolo — é um caminho iterativo que começa com diagnóstico e vai até práticas concretas de engenharia.</p>
+<h3>1. Diagnóstico inicial</h3>
+<ul>
+<li>Mapeio o fluxo atual: como uma demanda entra, quem valida, quanto tempo demora para entrar em produção;</li>
+<li>Entrevisto stakeholders: o que eles precisam de previsibilidade e o que é ruído;</li>
+<li>Avalio práticas técnicas: existe CI? testes automatizados? deploys frequentes?</li>
+</ul>
+<h3>2. Validar hipóteses com dados</h3>
+<p>Coletar métricas simples: tempo de ciclo, taxa de defeitos, tempo entre commit e deploy. Esses números mostram pontos de melhoria e ajudam a convencer gerência.</p>
+<h3>3. Priorizar ações</h3>
+<ul>
+<li>Se o time não tem automação, foco em CI/CD e testes automatizados;</li>
+<li>Se o problema é fluxo, introdução de Kanban com limites de WIP;</li>
+<li>Se o time está desconectado da priorização, workshops de alinhamento com PO e stakeholders para definir definição de pronto e critério de aceitação;</li>
+<li>Se há perda de conhecimento, começar pair programming e mob sessions.</li>
+</ul>
+<h3>4. Iterar e inspecionar</h3>
+<p>Estabelecer ciclos de melhoria (retrospecitvas focadas em fluxo e impedimentos técnicos). Medir impacto das mudanças e ajustar.</p>
+<p>Ao longo desse processo, eu repito forçosamente o alerta: cerimonias só existem para suportar entrega. Repetir &#8220;vibecoding cursor bolt lovable replit ai&#8221; como mantra não vai melhorar deploys nem reduzir bugs; práticas técnicas e gestão de fluxo com propósito sim.</p>
+<h3>5. Comunicação com a gestão</h3>
+<p>Se a sua empresa depende de relatórios baseados em sprints, entregue para a gestão a métrica que importa: <a href="https://www.atlassian.com/agile/kanban/lead-time-cycle-time">lead time</a>, previsibilidade e qualidade. Use gráficos de fluxo cumulativo e relatórios que traduzam melhorias técnicas em impacto de negócio.</p>
+<div>
+<table>
+<tbody>
+<tr>
+<td>
+<h3>Turbine seu Desenvolvimento com Prompts!</h3>
+</td>
+</tr>
+<tr>
+<td>
+<p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+</td>
+</tr>
+<tr>
+<td><a href="https://felvieiradev.gumroad.com/"> Quero Profissionalizar meus APPs </a></td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3>6. Treinamento e capacitação</h3>
+<p>Formar pessoas é essencial. Sem autonomia e conhecimento técnico, times voltarão ao modo &#8220;me passa a task&#8221;. Eu invisto em cursos, workshops e muita prática guiada (dojos, mob programming, pair) para acelerar aprendizado.</p>
+<h2>🔎 Estudos de caso e exemplos reais</h2>
+<p>Vou citar alguns exemplos reais, mantendo a confidencialidade das empresas, para ilustrar como os problemas aparecem e como eu atuo.</p>
+<h3>Case A — Startup em crescimento rápido</h3>
+<p>Situação: time pequeno (6 pessoas) com um PO dedicado e SM. Sprints de 2 semanas. Roadmap trimestral prenchido com previsões.</p>
+<p>Problema: backlog pesado e pouco foco técnico. Velocity era a métrica mágica. O time passava mais tempo estimando e quebrando tarefas do que automatizando deploys.</p>
+<p>Solução: removemos parte do ritualismo. Implementamos Kanban para execução e priorizamos automação CI/CD por 4 semanas. Introduzimos pair programming em partes críticas. Resultado: redução de lead time de 3 semanas para 6 dias e menos bugs em produção.</p>
+<p>Observação: em reuniões com gerência, usamos relatórios com lead time e número de deploys por semana — isso traduziu melhoria técnica em valor de negócio.</p>
+<h3>Case B — Empresa média com áreas não técnicas</h3>
+<p>Situação: a empresa queria &#8220;usar Scrum&#8221; para tudo — marketing, operações e engenharia. Processos genéricos mal adaptados.</p>
+<p>Problema: cerimônias inúteis (por exemplo, daily de 30 minutos com 20 pessoas) e papéis inflados.</p>
+<p>Solução: definimos contratos de trabalho por área: engenharia adotou práticas XP + Kanban; outras áreas mantiveram algum tipo de cadência, mas sem sacrificar a execução técnica. Resultado: foco técnico recuperado e reuniões mais curtas e objetivas.</p>
+<h2>📦 Quando o Scrum faz sentido — e quando evitar</h2>
+<p>Não sou contra o Scrum. Ele funciona bem em muitos contextos. O problema é quando se transforma em dogma. Aqui está a minha visão sobre quando usa-lo ou não:</p>
+<ul>
+<li><strong>Use Scrum se:</strong> você precisa de cadência para sincronizar muitos times, ainda existem múltiplas dependências e a organização precisa de rituais para coordenação entre áreas;</li>
+<li><strong>Evite Scrum (ou adapte fortemente) se:</strong> seu time é pequeno, precisa de alto grau de autonomia, ou a natureza do trabalho exige fluxo contínuo (ex.: manutenção pesada, operações de plataforma, correções urgentes);</li>
+<li><strong>Prefira Kanban/XP se:</strong> você quer reduzir o tempo de ciclo, melhorar a qualidade técnica e tratar trabalho emergente de forma fluida.</li>
+</ul>
+<p>Em resumo: escolhe-se ferramenta pelo problema. Se o problema for coordenação de vários times, Scrum pode ajudar. Se o problema for qualidade técnica e fluxo, XP + Kanban é mais efetivo.</p>
+<h2>🧩 Ferramentas e práticas que eu recomendo</h2>
+<p>Além de XP e Kanban, existem práticas e ferramentas que eu considero essenciais para qualquer time que queira sair do modo &#8220;cerimônia&#8221; e entrar no modo &#8220;entregar valor&#8221;:</p>
+<ul>
+<li>Continuous Integration (Jenkins, GitHub Actions, GitLab CI) — integrações frequentes com testes automatizados;</li>
+<li>Deploy automatizado (CD) — diminuem o custo de liberar para produção;</li>
+<li>Test-Driven Development (TDD) — garante design e qualidade;</li>
+<li>Feature flags — permite liberar funcionalidades de forma controlada;</li>
+<li>Monitoring e Observability — métricas e logs para agir rápido em produção;</li>
+<li>Pair programming e mob programming — reduzem silos e aumentam qualidade;</li>
+<li>Kanban boards com limites de WIP e métricas de fluxo — visualização clara do trabalho;</li>
+<li>Retrospectives com foco em impedimentos e experimentos — pequenas melhorias contínuas.</li>
+</ul>
+<p>Implementar essas práticas requer investimento em cultura e treinamento, mas o retorno em velocidade e qualidade costuma ser substancial.</p>
+<h2>📖 Leituras e recursos recomendados</h2>
+<p>Se você quiser se aprofundar, aqui estão leituras e cursos que eu recomendo — muitos dos quais eu usei durante consultorias:</p>
+<ul>
+<li>&#8220;Extreme Programming Explained: Embrace Change&#8221; — Kent Beck;</li>
+<li>&#8220;Kanban: Successful Evolutionary Change for Your Technology Business&#8221; — David J. Anderson;</li>
+<li>&#8220;Gestão de Projetos Ágeis com Kanban&#8221; — recursos e guias práticos;</li>
+<li>Cursos e materiais de Scrumban/Scrum + Kanban para transição;</li>
+<li>Conteúdos avançados sobre entrega de valor e gestão de fluxo — eu levo esses temas na comunidade TechLeads Club, com cursos que cobrem diagnóstico, métricas e práticas aprofundadas.</li>
+</ul>
+<p>Mais uma vez: não é questão de descartar Scrum. É questão de combinar práticas técnicas com gestão de fluxo e adaptar ao contexto.</p>
+<h2>🧠 Cultura e mindset: o que realmente muda o jogo</h2>
+<p>O que diferencia times de alta performance não é apenas o framework. É o mindset. Aqui estão alguns pontos comportamentais que eu sempre busco incentivar:</p>
+<ul>
+<li>Assumir responsabilidade pelo produto, não apenas por tarefas;</li>
+<li>Buscar feedback contínuo (do cliente, da produção, dos colegas);</li>
+<li>Priorizar aprendizado e experimentos sobre certezas;</li>
+<li>Manter código limpo e investindo em automação;</li>
+<li>Valorizar comunicação direta e transparente com stakeholders;</li>
+<li>Medir coisas que importam (lead time, qualidade, satisfação do cliente).</li>
+</ul>
+<p>Sem esse mindset, qualquer framework vira checklist. A melhor forma de quebrar a rigidez do &#8220;Scrum ritualizado&#8221; é cultivar uma cultura de responsabilidade compartilhada pelo produto e pela qualidade.</p>
+<h2>❓ FAQ — Perguntas frequentes</h2>
+<h3>Posso usar Scrum se minha gerência exige sprint-based reporting?</h3>
+<p>Sim. Uma abordagem prática é usar Kanban para execução e manter relatórios baseados em cadência para a gerência. Isso permite que o time funcione com fluxo enquanto a organização recebe os dados que precisa. Introduza métricas de fluxo (lead time, throughput) nos relatórios e traduza melhorias técnicas em impacto de negócio.</p>
+<h3>Se eu trocar para Kanban, preciso abandonar todas as cerimônias?</h3>
+<p>Não. Kanban não exige cerimônias rígidas, mas reuniões curtas e objetivas (standups diários, planning leve, retro) continuam úteis. O objetivo é reduzir cerimônias inúteis e manter apenas as que ajudam a remover impedimentos e melhorar fluxo.</p>
+<h3>Como convencer a liderança a investir em práticas técnicas (TDD, CI/CD)?</h3>
+<p>Apresente dados: mostre tempo de ciclo atual, custo médio de bug em produção e como automação reduz o custo médio por deploy. Pequenos experimentos com retorno rápido (por exemplo, configurar CI e reduzir regressões em uma área crítica) podem gerar buy-in para investimentos maiores.</p>
+<h3>Scrum é ruim para times grandes?</h3>
+<p>Não necessariamente. Scrum é usado com sucesso em grandes organizações, especialmente quando combinado com práticas técnicas e coordenação entre times (Scrum of Scrums, por exemplo). O problema aparece quando a coordenação é feita às custas da execução técnica e do fluxo.</p>
+<h3>O que eu faço se o PO briga comigo por não seguir o plano do sprint?</h3>
+<p>Converse com foco em valor. Explique que o objetivo não é quebrar previsibilidade, mas entregar valor de forma contínua e previsível. Traga métricas de lead time e qualidade e proponha um acordo sobre como priorizar trabalho emergente vs planejado.</p>
+<h3>Existe uma &#8220;receita&#8221; ideal para todos os times?</h3>
+<p>Não. Cada time precisa adaptar práticas ao contexto. O importante é ter clareza sobre objetivos (reduzir lead time, aumentar qualidade, melhorar previsibilidade) e escolher práticas que suportem esses objetivos. Experimente pequenos passos e meça impacto.</p>
+<h2>📝 Conclusão: escolhe a ferramenta pelo problema</h2>
+<p>Em resumo: o problema que eu tenho com Scrum não é o framework em si, mas a forma como ele tem sido aplicado em muitos lugares — burocrático, ritualizado e, às vezes, desconectado da engenharia. Quando você coloca cerimônias e papéis acima da qualidade técnica e do fluxo de valor, você perde o propósito do desenvolvimento ágil: inspecionar, adaptar e aprender rapidamente.</p>
+<p>Minha proposta prática é combinar princípios técnicos do Extreme Programming (TDD, CI, pair programming), gestão de fluxo com Kanban e maturidade cultural para responsabilidade compartilhada. Se a sua organização exige relatórios baseados em sprints, use uma abordagem híbrida e traduza ganhos técnicos em métricas de negócio.</p>
+<p>Quero muito saber: você concorda comigo? Tem experiências que contradizem tudo isso? Conta aqui nos comentários da comunidade e compartilha este texto com quem insiste em aplicar frameworks com base em hábitos e não em resultados. Obrigado por chegar até aqui.</p>
+<p>E se você curtiu, compartilha esse texto e vamos trocar experiências.</p>
+<p>Obrigado e até a próxima&nbsp;</p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Eu sou o Felipe Vieira e neste texto eu quero explicar, de forma franca e prática, por que o Scrum deixou de funcionar para mim, o que eu observo como causas principais desses problemas e quais caminhos eu tenho adotado como alternativa. Vou mencionar experiências reais atendendo mais de 50…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Eu sou o Felipe Vieira e neste texto eu quero explicar, de forma franca e prática, por que o Scrum deixou de funcionar para mim, o que eu observo como causas principais desses problemas e quais caminhos eu tenho adotado como alternativa. Vou mencionar experiências reais atendendo mais de 50…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/10/07/por-que-nao-gosto-de-scrum-e-o-que-uso-no-lugar/</div>
+  </section>
+
+  <footer class="post">
+    <span>7 de outubro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
