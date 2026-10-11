@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>LANGFLOW – O Flaw de Segurança Mais Idiota da IA: Uma Análise Profunda — felvieira's blog</title>
+<meta name="description" content="Bem-vindo ao nosso mergulho profundo em um dos erros de segurança mais intrigantes que encontramos no mundo da inteligência artificial. Hoje, vamos explorar como a Langflow, uma plataforma de baixo código para construção de agentes de IA, permitiu que qualquer um executasse código Python arbitrário…">
+<meta property="og:title" content="LANGFLOW – O Flaw de Segurança Mais Idiota da IA: Uma Análise Profunda">
+<meta property="og:description" content="Bem-vindo ao nosso mergulho profundo em um dos erros de segurança mais intrigantes que encontramos no mundo da inteligência artificial. Hoje, vamos explorar como a Langflow, uma plataforma de baixo código para construção de agentes de IA, permitiu que qualquer um executasse código Python arbitrário…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-06-23-analise-vulnerabilidade-execucao-codigo-arbitrario-langflow-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/06/23/analise-vulnerabilidade-execucao-codigo-arbitrario-langflow/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1339">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>LANGFLOW – O Flaw de Segurança Mais Idiota da IA: Uma Análise Profunda</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>23 de junho de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-06-23-analise-vulnerabilidade-execucao-codigo-arbitrario-langflow-cover.png" alt="LANGFLOW – O Flaw de Segurança Mais Idiota da IA: Uma Análise Profunda — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p></p>
+<p>Bem-vindo ao nosso mergulho profundo em um dos erros de segurança mais intrigantes que encontramos no mundo da inteligência artificial. Hoje, vamos explorar como a Langflow, uma plataforma de baixo código para construção de agentes de IA, permitiu que qualquer um executasse código <a href="https://www.python.org/">Python</a> arbitrário em seus servidores. Isso não é apenas uma falha teórica; foi uma execução remota de código (RCE) que foi explorada ativamente. Vamos entender como isso aconteceu e quais lições podemos aprender.</p>
+<h2>Sumário</h2>
+<ul>
+<li><a href="#🎨-o-cenário-inicial">🎨 O Cenário Inicial</a></li>
+<li><a href="#🛠️-a-falha-de-segurança">🛠️ A Falha de Segurança</a></li>
+<li><a href="#💡-a-teoria-versus-a-prática">💡 A Teoria versus a Prática</a></li>
+<li><a href="#⚠️-a-exploração-ativa">⚠️ A Exploração Ativa</a></li>
+<li><a href="#🤖-a-realidade-da-ia">🤖 A Realidade da IA</a></li>
+<li><a href="#🧠-as-lições-a-aprender">🧠 As Lições a Aprender</a></li>
+<li><a href="#🔍-faqs">🔍 FAQs</a></li>
+<li><a href="#👨‍💻-conclusão">👨‍💻 Conclusão</a></li>
+</ul>
+<h2>🎨 O Cenário Inicial</h2>
+<p>Imagine que você está construindo uma startup. Você acaba de levantar dez milhões de dólares de um investidor que usa um colete da Patagonia, chamado Chad. Seu pitch deck mencionou &#8220;IA&#8221; quarenta e sete vezes e tinha uma foto do Iron Man, porque você está &#8220;destruindo inteligência&#8221;. Naturalmente, você integra o GPT ao seu aplicativo, adiciona alguns fluxogramas e, de repente, se torna uma plataforma de automação de IA para fluxos de trabalho de dados empresariais. Mas o que isso realmente significa?</p>
+<p>É aqui que a Langflow entra em cena. Langflow é uma dessas ferramentas de baixo código que faz parecer que você está fazendo algo muito técnico, quando na verdade, você está apenas desenhando caixas coloridas que dizem &#8220;chamar OpenAI&#8221; e &#8220;consultar MongoDB&#8221;. Basicamente, é como uma ferramenta de script visual para construir agentes de IA. Arraste e solte para alcançar o modo deus.</p>
+<h2>🛠️ A Falha de Segurança</h2>
+<p>Agora, aqui está a parte que me fez rir alto. Eles tinham um endpoint, um endpoint de <a href="https://aws.amazon.com/what-is/api/">API</a> exposto chamado <code>/API v1/validate-code</code>. Parece inofensivo, certo? Apenas uma pequena etapa de validação. Verifique se o código é legítimo, certifique-se de que você não está enviando um script que transforme seu servidor em um minerador de criptomoedas. Exceto que eles esqueceram uma coisinha. Ao <a href="https://github.com/langflow-ai/langflow/blob/1.2.0/src/backend/base/langflow/utils/validate.py">validar o código</a> Python enviado pelo usuário, você realmente não quer executar o código. E sim, foi exatamente isso que eles fizeram.</p>
+<p>Esse endpoint aceitava código Python e, em seguida, o analisava e o avaliava no servidor sem qualquer isolamento, sem sanitização de entrada. Era como se estivessem executando código Python arbitrário diretamente no backend. O código da Langflow literalmente analisou a <a href="https://github.com/langflow-ai/langflow/blob/1.2.0/src/backend/base/langflow/utils/validate.py">árvore de sintaxe abstrata (AST)</a>, aquela coisa que o Python usa para quebrar seu script em pedaços antes da execução. Depois, ele percorria as declarações de importação e definições de função para verificar se tudo correspondia à estrutura API esperada, porque a Langflow queria ter certeza de que o código funcionava bem com seu sistema de agentes.</p>
+<h2>💡 A Teoria versus a Prática</h2>
+<p>Isso parece inteligente, em teoria. Mas aqui é onde tudo sai dos trilhos. Em Python, definir uma função não apenas armazena a função. Se houver um decorador nessa função, aquele pequeno <code>@algo</code> acima do <code>def</code>, ele é executado imediatamente durante a definição. Portanto, um hacker malicioso pode simplesmente escrever algo como <code>end lang flow</code> em sua nobre busca para validar o código. O resultado? A definição da função é avaliada e, boom, o decorador é executado, a carga útil é entregue, e o hacker está dentro.</p>
+<p>Não é necessário nem chamar a função. Foi assim que a <a href="https://horizon3.ai/attack-research/disclosures/unsafe-at-any-speed-abusing-python-exec-for-unauth-rce-in-langflow-ai/">Horizon3.ai</a> encontrou a vulnerabilidade. Eles enviaram um script com um decorador malicioso, conseguiram execução remota de código (RCE) e acessaram um shell no backend. E o pior? Eles descobriram que, embora o contêiner mostrasse que o usuário não era root, o ID do grupo era root. E sim, isso ainda é muito, muito ruim. O acesso ao nível do grupo ainda pode ser suficiente para bagunçar coisas como <code>/etc</code>, memória compartilhada, logs, processos, todas essas coisas divertidas.</p>
+<h2>⚠️ A Exploração Ativa</h2>
+<p>E isso não foi um ataque teórico que poderia ter sido feito. Isso estava acontecendo na vida real. A <a href="https://www.cisa.gov/">CISA</a> emitiu um alerta. Hackers reais estavam explorando isso. A Langflow <a href="https://horizon3.ai/attack-research/disclosures/unsafe-at-any-speed-abusing-python-exec-for-unauth-rce-in-langflow-ai/">corrigiu na versão 1.0.0</a>, crédito onde é devido. Mas, honestamente, a correção foi apenas eles finalmente isolando o código e garantindo que ele não executasse decoradores durante a validação, o que é, novamente, algo que eu deveria ter feito desde o dia zero.</p>
+<p>Se você já construiu algum tipo de sistema onde os usuários podem enviar código, mesmo um CTF, um juiz de código, um playground, qualquer coisa, você sabe que a primeira regra é nunca executar código não confiável diretamente, nem na sua máquina, nem mesmo no Raspberry Pi do seu primo. Você isola, coloca em um contêiner Docker, enfia em um cárcere, queima em um fogo. É isso que se deve fazer.</p>
+<h2>🤖 A Realidade da IA</h2>
+<p>A parte mais louca, apenas olhando para o código de validação da Langflow. Sabe, como a formatação real, o espaçamento de comentários esquisitos, a indentação chunky. Parece gerado por IA. Isso é o que quero dizer quando digo que a IA não é o problema. Mas jogar IA em tudo sem entender o que está fazendo é absolutamente um problema. Você não pode ter IA escrevendo metade do seu backend e depois se surpreender quando ela esquece a segurança 101, como não executar código estranho diretamente em produção. Isso nem é segurança 101. É senso comum.</p>
+<p>Imagine que estou realizando uma cirurgia, mas toda a operação é liderada por um assistente de IA que diz para inserir um escalpelo no socket ocular. Se eu seguir isso cegamente porque o modelo sabe melhor, não é culpa da IA. É minha por confiar nela sem verificar os cálculos. Isso está acontecendo aqui. A IA está sendo tratada como uma espécie de oráculo mágico que não precisa de supervisão, e isso é um problema.</p>
+<div>
+<div>
+<h3>Turbine seu Desenvolvimento com Prompts!</h3>
+<p>Você já sonhou em criar seu próprio aplicativo mas pensou que precisaria ser um gênio da programação? Chegou a hora de transformar esse sonho em realidade! Com as ferramentas no-code de hoje, você pode criar aplicativos profissionais sem escrever uma única linha de código.</p>
+<p><a href="https://felvieiradev.gumroad.com/"> Quero Profissionalizar meus APPs </a></div>
+</div>
+<h2>🧠 As Lições a Aprender</h2>
+<p>Então, qual é a lição aqui? Se você está construindo uma ferramenta de IA, ótimo. Faça isso. É legal. Mas, por favor, pelo amor de acesso root, tenha certeza de que há um humano que realmente entende o que está acontecendo nos bastidores. Você não pode automatizar sua maneira de sair da responsabilidade. E se você é um hacker assistindo isso, sempre, sempre verifique como as ferramentas de IA lidam com a entrada de código, porque noventa por cento dessas startups estão correndo para o MVP e pulando a parte onde eles garantem a segurança de seus endpoints.</p>
+<p>E se você souber como ativar peculiaridades do Python, como decoradores durante a análise da AST, você já está dois passos à frente. De qualquer forma, vá corrigir suas coisas. Vá construir coisas legais e vá conferir o Langflow v1.0.0 se você estiver curioso. Mas, talvez, não faça upload de nenhum decorador. Certo?</p>
+<h2>🔍 FAQs</h2>
+<h3>O que é Langflow?</h3>
+<p>Langflow é uma plataforma de baixo código para a construção de agentes de IA, permitindo que desenvolvedores criem aplicações de forma visual e intuitiva.</p>
+<h3>Qual foi a falha de segurança encontrada na Langflow?</h3>
+<p>A falha permitiu a execução remota de código (RCE) devido à validação inadequada de código Python enviado pelo usuário, que era executado no servidor sem a devida segurança.</p>
+<h3>Como a Horizon3.ai descobriu a vulnerabilidade?</h3>
+<p><a href="https://horizon3.ai/">Horizon3.ai</a> encontrou a vulnerabilidade ao enviar um script com um decorador malicioso que foi avaliado e executado no servidor da Langflow.</p>
+<h3>Qual é a lição mais importante sobre segurança em IA?</h3>
+<p>A lição é que você deve sempre validar e isolar o código não confiável. Nunca execute código enviado por usuários sem a devida segurança.</p>
+<h3>O que devo fazer se eu souber sobre uma falha de segurança?</h3>
+<p>Se você souber sobre uma falha, é essencial reportá-la ao desenvolvedor do software e, se possível, aplicar uma correção temporária até que uma solução permanente seja implementada.</p>
+<h2>👨‍💻 Conclusão</h2>
+<p>O ecossistema de IA é emocionante e cheio de oportunidades, mas também vem com suas armadilhas. No caso da Langflow, a falta de atenção à segurança resultou em uma falha que poderia ter sido facilmente evitada. Como desenvolvedores e usuários de IA, devemos sempre estar vigilantes e garantir que a segurança seja uma prioridade em todos os níveis de desenvolvimento. Este é um lembrete de que, embora a tecnologia avance rapidamente, a responsabilidade e a compreensão fundamental do que estamos construindo não podem ser deixadas de lado.</p>
+<p>Se você gostou deste mergulho caótico em segurança de IA, não esqueça de compartilhar e se inscrever para mais análises e insights. E lembre-se, a segurança começa com conhecimento e atenção. Paz!</p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Bem-vindo ao nosso mergulho profundo em um dos erros de segurança mais intrigantes que encontramos no mundo da inteligência artificial. Hoje, vamos explorar como a Langflow, uma plataforma de baixo código para construção de agentes de IA, permitiu que qualquer um executasse código Python arbitrário…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Bem-vindo ao nosso mergulho profundo em um dos erros de segurança mais intrigantes que encontramos no mundo da inteligência artificial. Hoje, vamos explorar como a Langflow, uma plataforma de baixo código para construção de agentes de IA, permitiu que qualquer um executasse código Python arbitrário…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/06/23/analise-vulnerabilidade-execucao-codigo-arbitrario-langflow/</div>
+  </section>
+
+  <footer class="post">
+    <span>23 de junho de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Alternativas Modernas ao jQuery: Navegando de um Legado Para o Futuro do Desenvolvimento Web — felvieira's blog</title>
+<meta name="description" content="Em meados dos anos 2000, o jQuery era a ferramenta indispensável para desenvolvedores web. Com uma sintaxe reduzida e a capacidade de unificar os comportamentos dos navegadores em um só lugar, ele revolucionava como interagíamos com o DOM. No entanto, com o advento de frameworks modernos como…">
+<meta property="og:title" content="Alternativas Modernas ao jQuery: Navegando de um Legado Para o Futuro do Desenvolvimento Web">
+<meta property="og:description" content="Em meados dos anos 2000, o jQuery era a ferramenta indispensável para desenvolvedores web. Com uma sintaxe reduzida e a capacidade de unificar os comportamentos dos navegadores em um só lugar, ele revolucionava como interagíamos com o DOM. No entanto, com o advento de frameworks modernos como…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-05-20-alternativas-modernas-ao-jquery-navegando-de-um-legado-para-o-futuro-do-desenvolvimento-web-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/05/20/alternativas-modernas-ao-jquery-navegando-de-um-legado-para-o-futuro-do-desenvolvimento-web/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1263">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Alternativas Modernas ao jQuery: Navegando de um Legado Para o Futuro do Desenvolvimento Web</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>20 de maio de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-05-20-alternativas-modernas-ao-jquery-navegando-de-um-legado-para-o-futuro-do-desenvolvimento-web-cover.png" alt="Alternativas Modernas ao jQuery: Navegando de um Legado Para o Futuro do Desenvolvimento Web — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Em meados dos anos 2000, o <strong>jQuery</strong> era a ferramenta indispensável para desenvolvedores web. Com uma sintaxe reduzida e a capacidade de unificar os comportamentos dos navegadores em um só lugar, ele revolucionava como interagíamos com o DOM. No entanto, com o advento de frameworks modernos como React, Vue.js e Angular, o seu domínio começou a se dissipar. Hoje, um adeus ao jQuery não é apenas inevitável, mas necessário.</p>
+<h2>O Início da Mudança</h2>
+<p>A evolução do JavaScript, com suas atualizações e melhorias, fez com que a necessidade do jQuery fosse reduzida. A introdução de APIs nativas como a <a href="https://developer.mozilla.org/pt-BR/docs/Web/API/Fetch_API">Fetch API</a> ofereceu caminhos mais eficientes e leves para operações comuns que antes eram realizadas pela biblioteca. Veja como jQuery pode ser substituído por JavaScript puro:</p>
+<pre><code>// jQuery
+$.get("https://api.example.com/data", function(data) {
+    console.log(data);
+});
+
+// Fetch API
+fetch("https://api.example.com/data")
+    .then(response => response.json())
+    .then(data => console.log(data));
+</code></pre>
+<h3>Advento dos Frameworks Modernos</h3>
+<p>Embora o jQuery ainda seja usado em muitos projetos legados, frameworks modernos oferecem ferramentas mais robustas e eficientes. Vamos explorar algumas dessas alternativas e o motivo pelo qual estão ganhando tração no desenvolvimento web.</p>
+<h3>1. <a href="https://reactjs.org/">React</a></h3>
+<p>React popularizou o conceito de Virtual DOM e propôs um novo paradigma para construir interfaces de usuário. Ao adotar uma arquitetura de componentes, ele facilita a manutenção e a escalabilidade de aplicações.</p>
+<pre><code>// Componente de botão no React
+import React, { useState } from 'react';
+
+function BotaoAlternar() {
+    const [visivel, setVisivel] = useState(false);
+
+    return (
+        <button> setVisivel(!visivel)}>
+            {visivel ? 'Esconder' : 'Mostrar'}
+        </button>
+    );
+}
+</code></pre>
+<h3>2. <a href="https://vuejs.org/">Vue.js</a></h3>
+<p>Com uma curva de aprendizado amigável, Vue combina o melhor do React e do Angular. Sua abordagem reativa simplifica a manipulação do data-binding, tornando o desenvolvimento mais intuitivo.</p>
+<h3>3. <a href="https://svelte.dev/">Svelte</a></h3>
+<p>Svelte se diferencia por compilar o código para JavaScript otimizado, eliminando o Virtual DOM. Seu foco é reduzir a carga de execução do navegador, proporcionando uma experiência mais fluida.</p>
+<pre><code>&lt;script&gt;
+    let mostrar = false;
+&lt;/script&gt;
+
+&lt;button on:click={() => mostrar = !mostrar}&gt;
+    Alternar
+&lt;/button&gt;
+{#if mostrar}
+    &lt;div&gt;Conteúdo revelado&lt;/div&gt;
+{/if}
+</code></pre>
+<h3>4. <a href="https://alpinejs.dev/">Alpine.js</a></h3>
+<p>Alpine proporciona uma reatividade mínima sem a necessidade de um grande framework, ideal para adicionar comportamento dinâmico leve a projetos existentes.</p>
+<h2>Por Que Migrar?</h2>
+<table>
+<tr>
+<th>Fator</th>
+<th>jQuery</th>
+<th>Modernas Alternativas</th>
+</tr>
+<tr>
+<td>Desempenho</td>
+<td>Manipulação pesada de DOM</td>
+<td>Virtual DOM (React), Compilação (Svelte)</td>
+</tr>
+<tr>
+<td>Manutenção</td>
+<td>Código desorganizado</td>
+<td>Arquitetura de Componentes</td>
+</tr>
+<tr>
+<td>Compatibilidade</td>
+<td>Amplamente suportado</td>
+<td>ESM, Suporte a Web moderno</td>
+</tr>
+<tr>
+<td>Sintaxe</td>
+<td>$(seletor)</td>
+<td>APIs e Componentes otimizados</td>
+</tr>
+</table>
+<p>A transição além do jQuery significa adotar a modularidade, reatividade e otimização que frameworks modernos oferecem. Além disso, diminuem a complexidade e o tempo de carga das aplicações, melhorando a experiência do usuário.</p>
+<h2>Conclusão: Respeitando o Legado do jQuery</h2>
+<p>O jQuery abriu o caminho para possibilidades incríveis no desenvolvimento web. No entanto, sua relevância está a diminuir à medida que novas e mais eficientes soluções surgem. Embora seja um adeus a uma antiga ferramenta fundamental, o jQuery continuará sendo lembrado como o alicerce que permitiu a inovação no front-end web. O legado que ele deixa é um campo fértil para que o próximo estágio do desenvolvimento possa florescer.</p>
+<p>Para mais detalhes sobre como migrar suas aplicações, visite <a href="https://developer.mozilla.org/pt-BR/docs/Learn/JavaScript">MDN Web Docs</a>.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Em meados dos anos 2000, o jQuery era a ferramenta indispensável para desenvolvedores web. Com uma sintaxe reduzida e a capacidade de unificar os comportamentos dos navegadores em um só lugar, ele revolucionava como interagíamos com o DOM. No entanto, com o advento de frameworks modernos como…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Em meados dos anos 2000, o jQuery era a ferramenta indispensável para desenvolvedores web. Com uma sintaxe reduzida e a capacidade de unificar os comportamentos dos navegadores em um só lugar, ele revolucionava como interagíamos com o DOM. No entanto, com o advento de frameworks modernos como…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/05/20/alternativas-modernas-ao-jquery-navegando-de-um-legado-para-o-futuro-do-desenvolvimento-web/</div>
+  </section>
+
+  <footer class="post">
+    <span>20 de maio de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

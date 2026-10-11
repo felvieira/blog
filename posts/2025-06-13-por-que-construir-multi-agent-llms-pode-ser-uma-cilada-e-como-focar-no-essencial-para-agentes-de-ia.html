@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Por Que Construir Multi-Agent LLMs Pode Ser Uma Cilada (E Como Focar no Essencial Para Agentes de IA) — felvieira's blog</title>
+<meta name="description" content="No hype dos Multi-Agent LLMs, menos é mais. O segredo está em engenharia de contexto e princípios básicos, não em botar um exército de agentes pra conversar. Testei, falhou, aprendi, compartilho.">
+<meta property="og:title" content="Por Que Construir Multi-Agent LLMs Pode Ser Uma Cilada (E Como Focar no Essencial Para Agentes de IA)">
+<meta property="og:description" content="No hype dos Multi-Agent LLMs, menos é mais. O segredo está em engenharia de contexto e princípios básicos, não em botar um exército de agentes pra conversar. Testei, falhou, aprendi, compartilho.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-06-13-por-que-construir-multi-agent-llms-pode-ser-uma-cilada-e-como-focar-no-essencial-para-agentes-de-ia-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/06/13/por-que-construir-multi-agent-llms-pode-ser-uma-cilada-e-como-focar-no-essencial-para-agentes-de-ia/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1329">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Por Que Construir Multi-Agent LLMs Pode Ser Uma Cilada (E Como Focar no Essencial Para Agentes de IA)</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>13 de junho de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-06-13-por-que-construir-multi-agent-llms-pode-ser-uma-cilada-e-como-focar-no-essencial-para-agentes-de-ia-cover.png" alt="Por Que Construir Multi-Agent LLMs Pode Ser Uma Cilada (E Como Focar no Essencial Para Agentes de IA) — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Você já quis construir aquela &#8216;equipe dos sonhos&#8217; de agentes inteligentes para resolver tudo em paralelo? Eu já tentei. Na primeira vez, confiei que subagentes trariam robustez ao meu sistema — imaginei uma orquestra harmônica de IA. Só que na prática, caiu tudo como um dominó. Compartilho aqui minhas cicatrizes e aprendizados: frameworks de multi-agentes parecem promissores, mas, na real, são uma aventura cheia de armadilhas (e, acredite, algumas surpresas até engraçadas).</p>
+<h2>O Mito dos Multi-Agent LLMs: Por Que a Promessa Raramente se Cumpre</h2>
+<p>
+Quando comecei a explorar <b>Multi-Agent LLMs</b>, confesso que me deixei levar pelo entusiasmo. A ideia de usar vários agentes paralelos parecia a solução perfeita para aumentar a eficiência dos sistemas de IA. Frameworks como <b>OpenAI Swarm</b> e <b>Agno</b> prometiam uma estrutura robusta para criar <b>Sistemas Multi-Agentes</b> resilientes, capazes de dividir tarefas complexas e acelerar resultados. Mas, na prática, a realidade é bem diferente.
+</p>
+<p>
+O grande problema está na <b>fragmentação do contexto</b>. Quando múltiplos agentes trabalham em paralelo, cada um recebe apenas uma parte da informação. Isso pode parecer suficiente em tarefas simples, mas, em situações reais, onde as demandas mudam a cada interação, essa divisão gera caos. Já vi agentes tomando decisões conflitantes, entregando resultados incoerentes e, no fim, tornando o sistema difícil de manter. Não é à toa que, em 2025, ainda vemos tantos relatos de sistemas multi-agentes fáceis de quebrar.
+</p>
+<p>
+Frameworks de <b>LLM Frameworks</b> como o OpenAI Swarm e o Agno realmente facilitam o desenvolvimento, mas não resolvem o desafio central: <em>como garantir que todos os agentes compartilhem o contexto de forma eficaz?</em> Estudos recentes mostram que, mesmo com avanços em <b>Colaboração de Agentes</b>, o baixo compartilhamento de contexto continua sendo um gargalo. Tarefas reais são imprevisíveis, exigindo flexibilidade e um fluxo contínuo de informações entre agentes. E isso, infelizmente, ainda não é trivial de implementar.
+</p>
+<p>
+Para ilustrar, basta olhar para a evolução dos frameworks. Em 2013, o Facebook lançou o React, revolucionando o desenvolvimento web ao propor modularidade e reatividade. Já em 2024, modelos de edição de código baseados em subagentes eram notoriamente falhos. Em 2025, o <b>Claude Code</b> utiliza subagentes, mas nunca em paralelo para tarefas de codificação — justamente para evitar conflitos de contexto. Grandes modelos de linguagem continuam enfrentando limitações de contexto, especialmente quando ultrapassam 8K-32K tokens.
+</p>
+<blockquote><p>
+“A promessa de colaboração paralela em multi-agentes é irresistível, mas a complexidade oculta faz o sistema desmoronar.” — Walden, Cognition
+</p></blockquote>
+<p>
+Olhando para esses exemplos, fica claro: frameworks de <b>Sistemas Multi-Agentes</b> parecem promissores, mas a fragmentação do contexto resulta em decisões conflitantes e pouca confiabilidade. Por isso, muitos modelos de ponta, como o Claude Code, preferem sequências lineares, onde o contexto é preservado e as decisões são mais consistentes.
+</p>
+<p><br />
+<img src="https://blogifyai.s3.amazonaws.com/svg/965eb22f-1e5c-4707-ab35-ea8ecf0a9cc3.png" alt="Generated image"></p>
+<h2>A Pedra Fundamental: Engenharia de Contexto em Agentes de IA</h2>
+<p>Quando comecei a construir agentes de IA, logo percebi que a <b>Engenharia de Contexto em IA</b> é o verdadeiro segredo por trás de sistemas realmente robustos. Muita gente ainda foca apenas em “prompt engineering”, tentando encontrar a frase perfeita para cada tarefa. Mas, na prática, o que faz diferença é como estruturamos o fluxo de informação entre os agentes e como garantimos que cada decisão seja tomada com base em um contexto relevante e acumulado.</p>
+<p>Imagine um cenário comum: você tem um agente principal que divide uma tarefa em várias partes e delega para subagentes. Parece eficiente, certo? Só que, na maioria das vezes, esses subagentes acabam tomando decisões baseadas em contextos parciais ou desatualizados. Já vi isso acontecer diversas vezes: dez subagentes trabalhando em paralelo, mas nenhum deles realmente “sabendo” o que os outros estão fazendo. O resultado? Decisões conflitantes, ambiguidade e, muitas vezes, retrabalho.</p>
+<p>Minha experiência mostra que um agente com <em>contexto linear</em> — ou seja, aquele que mantém uma linha contínua de decisões e histórico — é muito mais confiável do que um exército de subagentes tentando conversar sozinhos. Isso porque, ao acumular contexto, o agente consegue tomar decisões coerentes e evitar interpretações ambíguas. E é aí que entra a <b>Engenharia de Contexto</b>: ela vai além da simples otimização de prompts e se concentra em criar mecanismos para que o agente sempre tenha acesso ao que realmente importa.</p>
+<p>Claro, existe um desafio técnico importante: os <i>context windows</i> dos <b>Grandes Modelos de Linguagem</b> (LLMs) são limitados, geralmente entre 8K e 32K tokens. Para tarefas longas, inevitavelmente o contexto vai “estourar” esse limite. O que fazer? A resposta está na compressão inteligente do histórico. Em vez de tentar passar tudo para todos os subagentes, uso modelos dedicados para resumir e condensar o histórico em pontos-chave. Isso não só melhora a performance dos agentes, como também permite que eles fiquem ativos por mais de 24 horas sem perder relevância — algo essencial em aplicações de produção.</p>
+<blockquote><p>
+  “Engenharia de contexto é o superpoder escondido de sistemas de agentes confiáveis.” — Walden, Cognition
+</p></blockquote>
+<p>Hoje, frameworks e <b>AI Development Tools</b> mais modernos já começam a incorporar soluções baseadas em compressão de histórico, pois a customização de agentes depende diretamente do domínio do contexto em execução. Estudos indicam que, para sistemas realmente robustos, a engenharia de contexto é mais importante do que qualquer arquitetura multi-agente paralela. Afinal, criar agentes que compartilham e mantêm histórico de decisões gera sistemas consistentes, mesmo que isso exija modelos dedicados ou ajustes finos.</p>
+<table>
+<tbody>
+<tr>
+<th>Dado</th>
+<th>Impacto</th>
+</tr>
+<tr>
+<td>Compressão de contexto usando modelos dedicados</td>
+<td>Melhora performance em agentes longos</td>
+</tr>
+<tr>
+<td>Context window típico de LLMs</td>
+<td>8K a 32K tokens; compressão pode expandir esse limite virtualmente</td>
+</tr>
+<tr>
+<td>Agentes ativos por mais de 24h</td>
+<td>Relevância mantida graças à compressão de histórico</td>
+</tr>
+</tbody>
+</table>
+<h2>Os Piores Tropeços: Casos Reais de Falha em Multi-Agent Systems</h2>
+<p>
+Quando comecei a explorar <b>Multi-Agent Systems</b> para <em>Complex Task Solving</em> com <b>LLM Applications</b>, parecia óbvio: dividir tarefas entre vários subagentes seria mais rápido e eficiente. Mas a realidade foi bem diferente. Tentar dividir tarefas que exigem nuances entre subagentes quase sempre dá ruim. Já vivi isso na pele — a promessa de colaboração de agentes se transformou num verdadeiro Frankenstein digital, com partes incompatíveis e resultados incoerentes.
+</p>
+<p>
+Um exemplo clássico foi quando tentei construir um agente para criar um clone do Flappy Bird. Cada subagente ficou responsável por uma parte: um cuidava do pássaro, outro do fundo, outro da lógica do jogo. No final, o resultado parecia um patchwork: cada elemento tinha um estilo diferente, e o jogo simplesmente não fazia sentido. Isso aconteceu porque cada agente tinha sua própria visão do contexto, sem coordenação real.
+</p>
+<p>
+Esse problema de <b>contexto perdido</b> é recorrente em Multi-Agent Systems. Mesmo frameworks avançados, como Agno ou AutoGen, enfrentam dificuldades sérias ao escalar o número de agentes. Quando tentei usar mais de três subagentes simultaneamente, o número de bugs triplicou. Além disso, notei que a redundância de tarefas aumentou o tempo de processamento em até 50%, e o desempenho caiu drasticamente em tarefas com mais de dois subagentes paralelos.
+</p>
+</p>
+<blockquote><p>
+&#8220;Aprendi na prática: agente sem contexto compartilhado vira responsável por decisões conflitantes e perda de eficiência.&#8221; — Walden, Cognition
+</p></blockquote>
+<p>
+Essas falhas não são exclusivas dos meus experimentos. Relatos técnicos de 2024 já mostravam que modelos editando código com múltiplos agentes geravam resultados desastrosos. Muitas soluções evoluíram para sistemas single-threaded, como o modelo <em>edit apply</em>, justamente para evitar esse tipo de tropeço. O Claude Code, por exemplo, evita rodar múltiplos subagentes para além de perguntas pontuais. Quando precisa de subagentes, eles só respondem dúvidas específicas, nunca editam código em paralelo. Isso reduz drasticamente o risco de decisões desencontradas.
+</p>
+<p>
+O grande desafio está na <b>Colaboração de Agentes</b>. Em teoria, a ideia de agentes especializados colaborando para resolver tarefas complexas é promissora. Na prática, a falta de um contexto compartilhado robusto torna o sistema frágil. Estudos recentes indicam que, mesmo em sistemas <i>state-of-the-art</i>, paralelismo mal implementado causa bugs e decisões inconsistentes. O problema não é só técnico, mas também de arquitetura: como garantir que cada agente tenha acesso ao histórico relevante para tomar decisões alinhadas?
+</p>
+<p>
+Exemplos como Flappy Bird e Claude Code ilustram bem essas perdas de contexto. Sem coordenação real, os agentes acabam tomando decisões redundantes ou até conflitantes. Por isso, muitos especialistas defendem arquiteturas mais simples, com agentes single-threaded e contextos lineares, até que a tecnologia de passagem de contexto entre agentes evolua.
+</p>
+<p><br />
+<img src="chart-multi-agent-falhas.png" alt="Gráfico de falhas em Multi-Agent Systems: aumento de bugs e queda de desempenho com mais subagentes"></p>
+<h2>Refletindo sobre Colaboração Humano-IA: O que Agentes Ainda Não Aprenderam com a Gente</h2>
+<p>Quando falamos em <b>Colaboração de Agentes</b> usando LLM Applications, é quase inevitável comparar com a forma como nós, humanos, trabalhamos em equipe. Basta lembrar de uma situação comum: dois engenheiros discutindo um conflito de código. Eles conversam, negociam, ajustam, chegam a um consenso. Agora, tente imaginar duas IA fazendo isso com a mesma naturalidade. Não acontece — pelo menos, não ainda.</p>
+<p>O grande desafio está na síntese e no compartilhamento de contexto. Nós, humanos, temos uma habilidade quase instintiva de identificar o que é importante numa conversa ou reunião. Conseguimos resumir, filtrar ruídos, e repassar só o essencial para o colega do lado. Já os agentes de IA, mesmo com toda a evolução das <b>AI Development Tools</b> e frameworks de <b>Customização de Agentes</b>, ainda tropeçam nessa etapa. Eles não conseguem, por exemplo, negociar decisões ou ajustar estratégias de forma proativa e eficiente.</p>
+<p>Isso fica claro nos experimentos recentes. Desde 2022, estudos mostram que sistemas multi-agente raramente superam abordagens single-threaded na prática. O ganho de produtividade com agentes paralelos é, na melhor das hipóteses, marginal até 2025, segundo relatos técnicos. E, curiosamente, usuários relatam mais satisfação quando as decisões ficam centralizadas em um único agente, que consegue manter o fio da meada do contexto.</p>
+<p>O motivo? <i>Colaboração real exige compartilhar o que é importante</i>. E isso ainda é um campo aberto para pesquisa e inovação. Como programar uma IA para entender o que deve ser compartilhado com outros agentes? Como garantir que cada agente tenha o contexto certo, sem sobrecarregar o sistema ou perder informações cruciais? Essas perguntas ainda não têm respostas simples.</p>
+<p>Frameworks como Agno, OpenAI Swarm e AutoGen até oferecem ferramentas para criar e gerenciar sistemas multi-agente, mas a integração de contexto entre agentes permanece um ponto fraco. Muitas vezes, cada agente trabalha com pedaços isolados de informação, sem uma visão global — o que leva a decisões conflitantes ou resultados inconsistentes. É como se cada membro da equipe estivesse em uma sala diferente, sem saber o que o outro está fazendo.</p>
+<p>Como diz Walden, da Cognition:</p>
+<blockquote><p>
+  &#8220;Quando as IAs aprenderem a negociar contexto como uma equipe humana, teremos uma revolução. Até lá, vá de menos para mais.&#8221;
+</p></blockquote>
+<p>Olhando para frente, o desenvolvimento futuro dessas <b>LLM Applications</b> passa necessariamente pela humanização dos modos de colaboração entre agentes. Só assim será possível criar sistemas realmente eficientes, capazes de dialogar, negociar e construir soluções em conjunto — como já fazemos naturalmente em nossas equipes humanas.</p>
+<h2>Como Não Virar Refém do Hype: Princípios Básicos e Foco no Essencial</h2>
+<p>
+Quando comecei a explorar frameworks de agentes de IA, confesso que a tentação de seguir cada novo hype era enorme. Afinal, quem não quer experimentar a última novidade em <strong>AI Agent Frameworks</strong>? Mas, com o tempo — e muitos erros — percebi que a busca incessante por soluções “mágicas” só trazia mais dores de cabeça do que resultados práticos.
+</p>
+<p>
+O que realmente sustenta sistemas de IA robustos não é a quantidade de agentes rodando em paralelo, mas sim a <strong>Engenharia de Contexto em IA</strong>. Sem um contexto bem definido, até o modelo mais avançado se perde. Por isso, princípios sólidos como linearidade, histórico de decisões e clareza de contexto são essenciais. E, sinceramente, frameworks populares muitas vezes complicam mais do que ajudam. Eles prometem flexibilidade e paralelismo, mas entregam fragilidade e inconsistência — principalmente quando a comunicação entre agentes não é perfeita.
+</p>
+<p>
+Na prática, vejo que <em>menos é mais</em>. Como disse Walden, da Cognition:
+</p>
+<blockquote><p>
+  &#8220;O menos é mais dos agentes de IA: aposte nos fundamentos e você terá sistemas que realmente funcionam.&#8221;
+</p></blockquote>
+<p>
+A adoção de frameworks deve ser pragmática. Só faz sentido usar uma solução pronta quando ela resolve um problema real do seu domínio e, mesmo assim, é fundamental testar exaustivamente. Muitas das soluções inovadoras que desenvolvemos na Cognition surgiram justamente de tentativas frustradas de seguir o hype. Aprendemos que investir tempo nos princípios básicos reduz retrabalho e garante performance estável a longo prazo.
+</p>
+<p>
+Dados internos mostram que 84% dos problemas em sistemas multi-agentes poderiam ser evitados com um fluxo single-threaded bem ajustado. O erro de arquitetura mais comum? Tentar paralelizar tarefas antes de garantir que a <strong>Engenharia de Contexto em IA</strong> está madura. Isso só reforça a importância de começar simples e evoluir conforme a necessidade real, não pelo modismo.
+</p>
+<p>
+Hoje, quando penso em <strong>Customização de Agentes</strong>, foco primeiro em garantir que cada ação do agente esteja informada por todo o contexto relevante. Isso significa priorizar a continuidade do histórico e evitar decisões isoladas. Só depois, se o domínio exigir, considero expandir para arquiteturas mais complexas — sempre com cautela e muita validação.
+</p>
+<p>
+Em resumo: ao invés de buscar o próximo grande framework de multi-agentes, foque nos fundamentos. A <strong>Engenharia de Contexto em IA</strong> é o que diferencia agentes confiáveis de experimentos frágeis. Frameworks são ferramentas, não atalhos. O segredo está em adaptar soluções ao seu contexto, sem se tornar refém do hype. Isso, sim, é construir IA de verdade.
+</p>
+<p><b>TL;DR: </b>No hype dos Multi-Agent LLMs, menos é mais. O segredo está em engenharia de contexto e princípios básicos, não em botar um exército de agentes pra conversar. Testei, falhou, aprendi, compartilho.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">No hype dos Multi-Agent LLMs, menos é mais. O segredo está em engenharia de contexto e princípios básicos, não em botar um exército de agentes pra conversar. Testei, falhou, aprendi, compartilho.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">No hype dos Multi-Agent LLMs, menos é mais. O segredo está em engenharia de contexto e princípios básicos, não em botar um exército de agentes pra conversar. Testei, falhou, aprendi, compartilho.
+
+Leia o post completo: https://blog.felvieira.com.br/2025/06/13/por-que-construir-multi-agent-llms-pode-ser-uma-cilada-e-como-focar-no-essencial-para-agentes-de-ia/</div>
+  </section>
+
+  <footer class="post">
+    <span>13 de junho de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

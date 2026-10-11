@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Curl combate relatórios de vulnerabilidade gerados por IA que sobrecarregam seus mantenedores — felvieira's blog</title>
+<meta name="description" content="No mundo dos projetos de código aberto, a segurança e a confiabilidade são de suma importância. O curl, uma ferramenta de linha de comando e biblioteca para transferência de dados com URLs, tem enfrentado desafios únicos com o crescimento de relatórios de bugs gerados por IA, muitas vezes chamados…">
+<meta property="og:title" content="Curl combate relatórios de vulnerabilidade gerados por IA que sobrecarregam seus mantenedores">
+<meta property="og:description" content="No mundo dos projetos de código aberto, a segurança e a confiabilidade são de suma importância. O curl, uma ferramenta de linha de comando e biblioteca para transferência de dados com URLs, tem enfrentado desafios únicos com o crescimento de relatórios de bugs gerados por IA, muitas vezes chamados…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-05-12-curl-combate-relatorios-de-vulnerabilidade-gerados-por-ia-que-sobrecarregam-seus-mantenedores-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/05/12/curl-combate-relatorios-de-vulnerabilidade-gerados-por-ia-que-sobrecarregam-seus-mantenedores/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1243">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Curl combate relatórios de vulnerabilidade gerados por IA que sobrecarregam seus mantenedores</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de maio de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-05-12-curl-combate-relatorios-de-vulnerabilidade-gerados-por-ia-que-sobrecarregam-seus-mantenedores-cover.png" alt="Curl combate relatórios de vulnerabilidade gerados por IA que sobrecarregam seus mantenedores — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>No mundo dos projetos de código aberto, a segurança e a confiabilidade são de suma importância. O <a href="https://curl.se/">curl</a>, uma ferramenta de linha de comando e biblioteca para transferência de dados com URLs, tem enfrentado desafios únicos com o crescimento de relatórios de bugs gerados por IA, muitas vezes chamados de &#8220;slop&#8221;. Esses relatórios, que geralmente carecem de substância e validade, estão sobrecarregando os mantenedores do projeto e consumindo seus recursos preciosos.</p>
+<h2>A Frustração de Daniel Stenberg</h2>
+<p>Daniel Stenberg, o fundador do projeto curl, expressou sua frustração com essa situação crescente. Em um post recente no <a href="https://www.linkedin.com/">LinkedIn</a>, ele descreveu o afluxo desses relatórios assistidos por IA como &#8220;efetivamente um DDoS&#8221;. Stenberg destacou que o projeto nunca recebeu um único relatório de segurança válido gerado por ferramentas de IA, o que reforça o problema que essas submissões geraram [<a href="https://www.linkedin.com/">1</a>][<a href="https://mjtsai.com/blog/2023/02/23/curl-takes-action-against-ai-bug-reports/">2</a>][<a href="https://slashdot.org/">5</a>].</p>
+<h2>Novas Medidas para Combater Relatórios Gerados por IA</h2>
+<p>Para enfrentar esse problema, Stenberg introduziu um novo requisito para todos os relatórios de bugs enviados por meio do <a href="https://hackerone.com/curl">HackerOne</a>. A partir de agora, todos os relatórios que afirmam ter encontrado um bug no curl devem revelar se a IA foi usada para gerar a submissão. Ao fazer isso, espera-se que o relator do bug receba uma série de perguntas de acompanhamento exigindo prova de que o bug é genuíno antes de a equipe do curl gastar tempo verificando-o [<a href="https://www.linkedin.com/">1</a>][<a href="https://mjtsai.com/blog/2023/02/23/curl-takes-action-against-ai-bug-reports/">2</a>][<a href="https://slashdot.org/">5</a>].</p>
+<h2>Banindo Relatores de &#8220;Slop&#8221; de IA</h2>
+<p>Stenberg também anunciou planos para banir relatores cujas submissões sejam consideradas &#8220;slop&#8221; de IA. Esta decisão reflete a crescente frustração do projeto com a falta de contribuições válidas originadas de relatórios gerados por IA. O limite para tolerar essas submissões foi atingido, e o projeto está adotando uma postura firme contra elas [<a href="https://www.linkedin.com/">1</a>][<a href="https://mjtsai.com/blog/2023/02/23/curl-takes-action-against-ai-bug-reports/">2</a>][<a href="https://slashdot.org/">5</a>].</p>
+<h2>Exemplos de Relatórios Comicamente Óbvios Gerados por IA</h2>
+<p>Alguns relatórios gerados por IA foram comicamente óbvios, como um que incluía sua instrução de prompt: &#8220;e faça soar alarmante&#8221;. Esse tipo de relatório não apenas desperdiça o tempo dos mantenedores, mas também mina a integridade do processo de relatórios de vulnerabilidades [<a href="https://slashdot.org/">5</a>].</p>
+<h2>Conclusão</h2>
+<p>O projeto curl está adotando uma postura forte contra os relatórios de bugs gerados por IA, enfatizando a necessidade de contribuições genuínas de repórteres humanos. Ao implementar essas novas medidas, o projeto visa proteger seus recursos e manter a qualidade do seu processo de relatórios de segurança.</p>
+<p>Para mais informações sobre como enviar relatórios de bugs válidos, consulte as <a href="https://hackerone.com/curl">diretrizes do projeto curl no HackerOne</a>. Lembre-se, cada relato válido ajuda a garantir a segurança e a confiabilidade do projeto curl.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">No mundo dos projetos de código aberto, a segurança e a confiabilidade são de suma importância. O curl, uma ferramenta de linha de comando e biblioteca para transferência de dados com URLs, tem enfrentado desafios únicos com o crescimento de relatórios de bugs gerados por IA, muitas vezes chamados…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">No mundo dos projetos de código aberto, a segurança e a confiabilidade são de suma importância. O curl, uma ferramenta de linha de comando e biblioteca para transferência de dados com URLs, tem enfrentado desafios únicos com o crescimento de relatórios de bugs gerados por IA, muitas vezes chamados…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/05/12/curl-combate-relatorios-de-vulnerabilidade-gerados-por-ia-que-sobrecarregam-seus-mantenedores/</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de maio de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

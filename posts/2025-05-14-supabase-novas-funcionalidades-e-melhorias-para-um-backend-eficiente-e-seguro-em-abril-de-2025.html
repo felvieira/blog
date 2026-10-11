@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supabase: Novas Funcionalidades e Melhorias para um Backend Eficiente e Seguro em Abril de 2025 — felvieira's blog</title>
+<meta name="description" content="Em abril de 2025, a Supabase, uma plataforma open-source que fornece backend como serviço, anunciou uma série de atualizações que prometem transformar a experiência do usuário. Essas inovações abrangem desde melhorias na criação e implementação de funções Edge até a eliminação de serviços…">
+<meta property="og:title" content="Supabase: Novas Funcionalidades e Melhorias para um Backend Eficiente e Seguro em Abril de 2025">
+<meta property="og:description" content="Em abril de 2025, a Supabase, uma plataforma open-source que fornece backend como serviço, anunciou uma série de atualizações que prometem transformar a experiência do usuário. Essas inovações abrangem desde melhorias na criação e implementação de funções Edge até a eliminação de serviços…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-05-14-supabase-novas-funcionalidades-e-melhorias-para-um-backend-eficiente-e-seguro-em-abril-de-2025-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/05/14/supabase-novas-funcionalidades-e-melhorias-para-um-backend-eficiente-e-seguro-em-abril-de-2025/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1253">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Supabase: Novas Funcionalidades e Melhorias para um Backend Eficiente e Seguro em Abril de 2025</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>14 de maio de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-05-14-supabase-novas-funcionalidades-e-melhorias-para-um-backend-eficiente-e-seguro-em-abril-de-2025-cover.png" alt="Supabase: Novas Funcionalidades e Melhorias para um Backend Eficiente e Seguro em Abril de 2025 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<div>
+<p>Em abril de 2025, a Supabase, uma plataforma open-source que fornece backend como serviço, anunciou uma série de atualizações que prometem transformar a experiência do usuário. Essas inovações abrangem desde melhorias na criação e implementação de funções Edge até a eliminação de serviços desatualizados. Vamos explorar mais a fundo cada uma dessas melhorias e o impacto que elas trazem para você, desenvolvedor.</p>
+<h2>Gestão Facilitada de Funções Edge e Integração com MCP Server</h2>
+<p>A grande novidade do momento é a possibilidade de gerenciar Funções Edge diretamente pelo painel da Supabase. Essa funcionalidade é uma mão na roda, permitindo uma integração perfeita na interface da plataforma. Agora, você também pode [usar o Visual Studio Code](https://code.visualstudio.com/) para desenvolver e implementar Funções Edge, graças à compatibilidade com o servidor MCP (Model Context Protocol). Veja um exemplo de como implantar uma Função Edge com Node.js:</p>
+<pre><code>
+import { createClient } from '@supabase/supabase-js'
+
+const supabase = createClient('https://your-project.supabase.co', 'public-anon-key')
+
+async function deployEdgeFunction() {
+  const { data, error } = await supabase.functions.invoke('nome-da-funcao', { method: 'POST', body: JSON.stringify({ key: 'value' }) })
+  if (error) {
+    console.error('Erro ao implantar função:', error)
+  } else {
+    console.log('Função implantada com sucesso:', data)
+  }
+}
+
+deployEdgeFunction()
+</code></pre>
+<h2>Nova Biblioteca de Componentes UI</h2>
+<p>A Supabase não parou por aí e lançou novos componentes para sua biblioteca UI, facilitando a criação de aplicações com interfaces modernas. Entre as novidades estão:</p>
+<ul>
+<li><strong>Infinite Query Block:</strong> Um React hook para listas infinitas, ideal para quem deseja implementar scroll infinito em sua aplicação.</li>
+<li><strong>Autenticação Social:</strong> Permite criação rápida de logins integrados com vários provedores, melhorando a experiência do usuário na sua aplicação.</li>
+</ul>
+<p>Essas novas funcionalidades refletem o compromisso da Supabase em melhorar a experiência de desenvolvimento, oferecendo mais ferramentas para criar aplicativos dinâmicos.</p>
+<h2>Atualização na Experiência do Painel e Suporte Mobile</h2>
+<p>O painel de controle do Supabase recebeu um upgrade significativo, com mudanças que aumentam a facilidade de navegação e gestão de membros das organizações. Outro destaque é o suporte aprimorado para dispositivos móveis, [podendo ser acessado](https://www.supabase.com/) com a mesma qualidade independente se o acesso for via smartphone ou tablet.</p>
+<h2>Fortalecendo a Segurança: Relatório SOC 2 e Assistência de IA</h2>
+<p>A segurança foi um ponto central nas recentes atualizações da Supabase. Ao lançar o relatório SOC 2, a plataforma reforça seu compromisso com a transparência em seus processos e controles de segurança. Além disso, um Assistente de Inteligência Artificial auxilia desenvolvedores a detectar e resolver problemas de segurança e desempenho em suas aplicações.</p>
+<h2>Editor de Tabelas Aprimorado e Administração de Organizações</h2>
+<p>A funcionalidade de classificação por colunas diretamente no cabeçalho das tabelas é uma das grandes novidades. Essa melhoria no editor de tabelas simplifica a análise e manipulação dos dados, ao passo que melhorias no gerenciamento de endereços de cobrança tornam o uso administrativo mais ágil e eficiente.</p>
+<h2>Redução de Custos e Expansão das Autenticações Sociais</h2>
+<p>Boa notícia para quem utiliza autenticações sociais! A Supabase reduziu os custos dessa funcionalidade enquanto adicionou mais opções de integração com terceiros. Essa mudança representa um passo significativo para quem busca ampliar suas opções de autenticação de usuários.</p>
+<h2>Depreciação do Fly Postgres e Nova Arquitetura de Banco de Dados</h2>
+<p>Olhar para o futuro também significa deixar alguns elementos no passado. A Supabase anunciou a descontinuação do serviço Fly Postgres. Esses recursos estão sendo concentrados no desenvolvimento de uma nova arquitetura de banco de dados, prometendo mais alta performance e escalabilidade.</p>
+<p>&#8212;</p>
+<h3>Como Instalar e Configurar o MCP Server com VS Code</h3>
+<p>Para integrar o servidor MCP com o Visual Studio Code, siga as instruções abaixo:</p>
+<ol>
+<li>Clone o repositório do MCP Server:
+<pre><code>git clone https://github.com/supabase/mcp-server-supabase.git
+cd mcp-server-supabase
+npm install</code></pre>
+</li>
+<li>Crie um arquivo <code>.env</code> e adicione suas credenciais Supabase:
+<pre><code>SUPABASE_URL=https://seu-projeto.supabase.co
+SUPABASE_SERVICE_KEY=sua-chave-secreta
+ALLOWED_QUERY_TYPES=SELECT</code></pre>
+</li>
+<li>Inicie o servidor localmente:
+<pre><code>node src/index.js</code></pre>
+</li>
+<li>Ajuste as configurações no <code>settings.json</code> do VS Code:
+<pre><code>{
+  "mcp.servers": {
+    "mcp-server-supabase": {
+      "command": "node",
+      "args": [
+        "/caminho/para/mcp-server-supabase/src/index.js"
+      ],
+      "env": {
+        "SUPABASE_URL": "https://seu-projeto.supabase.co",
+        "SUPABASE_SERVICE_KEY": "sua-chave-secreta",
+        "ALLOWED_QUERY_TYPES": "SELECT"
+      }
+    }
+  }
+}</code></pre>
+</li>
+<li>Reinicie o VS Code para completar a configuração.</li>
+</ol>
+<p>Essas melhorias demonstram o comprometimento da Supabase em oferecer uma plataforma robusta, segura e eficiente para desenvolvedores criarem aplicações modernas e escaláveis. Com esses passos dados, o futuro é um ambiente de desenvolvimento mais seguro, rápido e acessível para todos os desenvolvedores.</p>
+</div>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Em abril de 2025, a Supabase, uma plataforma open-source que fornece backend como serviço, anunciou uma série de atualizações que prometem transformar a experiência do usuário. Essas inovações abrangem desde melhorias na criação e implementação de funções Edge até a eliminação de serviços…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Em abril de 2025, a Supabase, uma plataforma open-source que fornece backend como serviço, anunciou uma série de atualizações que prometem transformar a experiência do usuário. Essas inovações abrangem desde melhorias na criação e implementação de funções Edge até a eliminação de serviços…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/05/14/supabase-novas-funcionalidades-e-melhorias-para-um-backend-eficiente-e-seguro-em-abril-de-2025/</div>
+  </section>
+
+  <footer class="post">
+    <span>14 de maio de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

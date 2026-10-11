@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>7 Técnicas Essenciais de CSS Moderno para Projetos Web em 2025 — felvieira's blog</title>
+<meta name="description" content="### 7 Técnicas Essenciais de CSS para Projetos Modernos (2025) ### 1. **Definir Limites Responsivos com `clamp()`** Aumente a flexibilidade do layout para melhorar a experiência em várias resoluções de tela: “`css body { max-width: clamp(320px, 85vw, 1200px); margin: 0 auto; padding: 20px 0; } “`…">
+<meta property="og:title" content="7 Técnicas Essenciais de CSS Moderno para Projetos Web em 2025">
+<meta property="og:description" content="### 7 Técnicas Essenciais de CSS para Projetos Modernos (2025) ### 1. **Definir Limites Responsivos com `clamp()`** Aumente a flexibilidade do layout para melhorar a experiência em várias resoluções de tela: “`css body { max-width: clamp(320px, 85vw, 1200px); margin: 0 auto; padding: 20px 0; } “`…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-05-20-7-tecnicas-essenciais-de-css-moderno-para-projetos-web-em-2025-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/05/20/7-tecnicas-essenciais-de-css-moderno-para-projetos-web-em-2025/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1261">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>7 Técnicas Essenciais de CSS Moderno para Projetos Web em 2025</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>20 de maio de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-05-20-7-tecnicas-essenciais-de-css-moderno-para-projetos-web-em-2025-cover.png" alt="7 Técnicas Essenciais de CSS Moderno para Projetos Web em 2025 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>### 7 Técnicas Essenciais de CSS para Projetos Modernos (2025)</p>
+<p>### 1. **Definir Limites Responsivos com `clamp()`**<br />
+Aumente a flexibilidade do layout para melhorar a experiência em várias resoluções de tela:</p>
+<p>&#8220;`css<br />
+body {<br />
+  max-width: clamp(320px, 85vw, 1200px);<br />
+  margin: 0 auto;<br />
+  padding: 20px 0;<br />
+}<br />
+&#8220;`<br />
+Aqui, garantimos que o conteúdo ocupe no máximo 1200px ou 85% da largura da viewport, e nunca menos de 320px, ideal para dispositivos móveis. [Leia mais sobre CSS responsivo](https://css-tricks.com/books/volume-i/).  </p>
+<p>&#8212;</p>
+<p>### 2. **Tipografia Responsiva com `calc()`**<br />
+Melhore a legibilidade em todos os dispositivos ajustando dinamicamente o tamanho da fonte:</p>
+<p>&#8220;`css<br />
+body {<br />
+  font-size: clamp(1rem, 0.8vw + 0.5rem, 1.5rem);<br />
+  line-height: 1.6;<br />
+}<br />
+&#8220;`<br />
+Essa abordagem garante que o texto seja facilmente legível em telas pequenas e grandes, adaptando fontes e espaçamento conforme necessário. [Saiba mais sobre tipografia avançada](https://www.smashingmagazine.com/2019/06/typographic-design-patterns-practices-case-study/).</p>
+<p>&#8212;</p>
+<p>### 3. **Imagens Auto-Adaptáveis**<br />
+Assegure que as imagens se ajustem corretamente dentro de seus containers, mantendo sua proporção:</p>
+<p>&#8220;`css<br />
+img {<br />
+  max-width: 100%;<br />
+  height: auto;<br />
+  aspect-ratio: attr(width) / attr(height);<br />
+}<br />
+&#8220;`<br />
+O uso de `aspect-ratio` ajuda a manter as imagens proporcionais, melhorando a aparência em diferentes tamanhos de tela. [Explore técnicas de imagens responsivas](https://web.dev/serve-responsive-images/).</p>
+<p>&#8212;</p>
+<p>### 4. **Otimização de Formulários com `accent-color`**<br />
+Personalize controles de formulário para uma experiência de usuário mais coesa e estilizada:</p>
+<p>&#8220;`css<br />
+input,<br />
+select,<br />
+button {<br />
+  border: 2px solid var(&#8211;primary);<br />
+  padding: 0.8rem 1rem;<br />
+  accent-color: var(&#8211;accent);<br />
+}<br />
+&#8220;`<br />
+As propriedades `accent-color` e o uso de variáveis CSS permitem temas personalizáveis e manutenção simplificada. [Veja exemplos de temas CSS](https://getbootstrap.com/docs/5.2/getting-started/theming/).</p>
+<p>&#8212;</p>
+<p>### 5. **Layouts em Tabelas com Grid**<br />
+Modernize suas tabelas usando CSS Grid para obter layouts mais flexíveis:</p>
+<p>&#8220;`css<br />
+table {<br />
+  display: grid;<br />
+  grid-template-columns: minmax(200px, 1fr) repeat(2, 1fr);<br />
+  gap: 1rem;<br />
+}<br />
+th, td {<br />
+  padding: 1rem;<br />
+  text-align: left;<br />
+}<br />
+&#8220;`<br />
+O CSS Grid oferece estrutura e organização modernas, essenciais para tabelas responsivas. [Descubra como trabalhar com CSS Grid](https://css-tricks.com/snippets/css/complete-guide-grid/).</p>
+<p>&#8212;</p>
+<p>### 6. **Controles de Animações**<br />
+Use animações de forma inteligente para evitar sobrecarga de processamento:</p>
+<p>&#8220;`css<br />
+* {<br />
+  will-change: transform, opacity;<br />
+}<br />
+.central-content {<br />
+  transition: transform 0.3s ease;<br />
+}<br />
+&#8220;`<br />
+É importante usar animações que beneficiem a experiência do usuário sem impactar negativamente a performance. [Aprenda mais sobre animações CSS responsáveis](https://developers.google.com/web/updates/2014/11/Optimizing-Performance).</p>
+<p>&#8212;</p>
+<p>### 7. **Modularização com Variáveis CSS**<br />
+Facilite a manutenção e ajuste de temas com uma paleta de cores centralizada:</p>
+<p>&#8220;`css<br />
+:root {<br />
+  &#8211;primary: #2563eb;<br />
+  &#8211;secondary: #4f46e5;<br />
+  &#8211;bg-dark: #0d4b67;<br />
+  &#8211;text-light: #e5e7eb;<br />
+}<br />
+&#8220;`<br />
+Usando variáveis CSS, desenvolvedores podem ajustar rapidamente temas de cores sem alterar repetidamente o código. [Leia sobre variáveis CSS](https://developer.mozilla.org/en-US/docs/Web/CSS/Using_CSS_custom_properties).</p>
+<p>&#8212;</p>
+<p>### Dicas Adicionais para Projetos Profissionais<br />
+| Técnica               | Benefício                                          | Implementação Recomendada       |<br />
+|&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8211;|&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;-|&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;&#8212;|<br />
+| **Container Queries** | Permite respostas específicas a tamanhos de contêiner | `@container my-container;`      |<br />
+| **Cascade Layers**    | Melhor gerência de prioridade de estilos           | `@layer reset, layout, theme`   |<br />
+| **Viewports Fixos**   | Consistência em espaçamento e estrutura            | `height: 100vh;`                |</p>
+<p>Para projetos maiores e mais complexos, considere o uso de Sass/SCSS para modularizar seu CSS e facilitar a reutilização de componentes com mixins e parciais. [Veja mais dicas sobre Sass](https://sass-lang.com/guide).</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">### 7 Técnicas Essenciais de CSS para Projetos Modernos (2025) ### 1. **Definir Limites Responsivos com `clamp()`** Aumente a flexibilidade do layout para melhorar a experiência em várias resoluções de tela: “`css body { max-width: clamp(320px, 85vw, 1200px); margin: 0 auto; padding: 20px 0; } “`…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">### 7 Técnicas Essenciais de CSS para Projetos Modernos (2025) ### 1. **Definir Limites Responsivos com `clamp()`** Aumente a flexibilidade do layout para melhorar a experiência em várias resoluções de tela: “`css body { max-width: clamp(320px, 85vw, 1200px); margin: 0 auto; padding: 20px 0; } “`…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/05/20/7-tecnicas-essenciais-de-css-moderno-para-projetos-web-em-2025/</div>
+  </section>
+
+  <footer class="post">
+    <span>20 de maio de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
