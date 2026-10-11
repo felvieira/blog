@@ -1,0 +1,130 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Perplexity AI Anuncia Publicidade em Respostas de IA e Melhorias no GPT-4o para 2024 — felvieira's blog</title>
+<meta name="description" content="Prepare-se para anúncios nas respostas da sua IA – Poder Diário 2024-08-23 A Perplexity AI, uma startup de busca assistida por IA, planeja introduzir anúncios em sua plataforma no quarto trimestre deste ano, seguindo a tendência de integrar anúncios nas respostas da IA. Essa iniciativa visa…">
+<meta property="og:title" content="Perplexity AI Anuncia Publicidade em Respostas de IA e Melhorias no GPT-4o para 2024">
+<meta property="og:description" content="Prepare-se para anúncios nas respostas da sua IA – Poder Diário 2024-08-23 A Perplexity AI, uma startup de busca assistida por IA, planeja introduzir anúncios em sua plataforma no quarto trimestre deste ano, seguindo a tendência de integrar anúncios nas respostas da IA. Essa iniciativa visa…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-08-27-perplexity-ai-anuncia-publicidade-em-respostas-de-ia-e-melhorias-no-gpt-4o-para-2024-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/08/27/perplexity-ai-anuncia-publicidade-em-respostas-de-ia-e-melhorias-no-gpt-4o-para-2024/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="447">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Perplexity AI Anuncia Publicidade em Respostas de IA e Melhorias no GPT-4o para 2024</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>27 de agosto de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-08-27-perplexity-ai-anuncia-publicidade-em-respostas-de-ia-e-melhorias-no-gpt-4o-para-2024-cover.png" alt="Perplexity AI Anuncia Publicidade em Respostas de IA e Melhorias no GPT-4o para 2024 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><strong>Prepare-se para anúncios nas respostas da sua IA &#8211; Poder Diário</strong></p>
+<p>2024-08-23</p>
+<p>A <a href="https://perplexity.ai">Perplexity AI</a>, uma startup de busca assistida por IA, planeja introduzir anúncios em sua plataforma no quarto trimestre deste ano, seguindo a tendência de integrar anúncios nas respostas da IA. Essa iniciativa visa monetizar a plataforma ao mesmo tempo que aprimora a experiência do usuário por meio de anúncios personalizados e relevantes.</p>
+<h2>Pontos Principais</h2>
+<ul>
+<li><strong>Ajuste fino agora disponível para GPT-4o</strong>: Os usuários podem ajustar seus modelos GPT-4o para melhor atender às suas necessidades e aplicações específicas.</li>
+<li><strong>Capacidades avançadas da IA</strong>: As últimas atualizações do GPT-4o incluem uma melhor compreensão e geração de linguagem, tornando-o mais versátil e eficaz para diversas tarefas.</li>
+<li><strong>Integração de anúncios</strong>: A decisão da Perplexity AI de incluir anúncios nas respostas da IA está alinhada com a tendência do setor de utilizar a IA para publicidade segmentada.</li>
+</ul>
+<h2>Como Funciona</h2>
+<ol>
+<li><strong>Ajuste Fino</strong>: Os usuários podem ajustar os parâmetros de seus modelos GPT-4o para otimizar o desempenho em tarefas específicas.</li>
+<li><strong>Compreensão de Linguagem Aprimorada</strong>: As capacidades atualizadas de compreensão de linguagem do GPT-4o permitem que ele compreenda e gere respostas mais semelhantes às humanas.</li>
+<li><strong>Publicidade Segmentada</strong>: Os anúncios da Perplexity AI serão adaptados aos interesses e preferências dos usuários, garantindo relevância e minimizando a interrupção.</li>
+</ol>
+<h2>Exemplos</h2>
+<h3>Exemplo de Ajuste Fino</h3>
+<p>Veja como você pode ajustar fino um modelo GPT-4o:</p>
+<pre>
+<code>
+# Importar bibliotecas necessárias
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Carregar o modelo e o tokenizador GPT-4o
+model = AutoModelForCausalLM.from_pretrained("gpt-4o")
+tokenizer = AutoTokenizer.from_pretrained("gpt-4o")
+
+# Definir os parâmetros de ajuste fino
+num_train_epochs = 3
+batch_size = 16
+learning_rate = 1e-5
+
+# Treinar o modelo
+model.train()
+for epoch in range(num_train_epochs):
+    for batch in train_dataloader:
+        inputs = tokenizer(batch, return_tensors="pt", padding=True, truncation=True)
+        outputs = model(**inputs, labels=inputs["input_ids"])
+        loss = outputs.loss
+        loss.backward()
+        optimizer.step()
+        optimizer.zero_grad()
+</code>
+</pre>
+<h3>Exemplo de Compreensão de Linguagem Aprimorada</h3>
+<p>Confira como a compreensão de linguagem aprimorada pode ser utilizada:</p>
+<pre>
+<code>
+# Importar bibliotecas necessárias
+import torch
+from transformers import AutoModelForCausalLM, AutoTokenizer
+
+# Carregar o modelo e o tokenizador GPT-4o
+model = AutoModelForCausalLM.from_pretrained("gpt-4o")
+tokenizer = AutoTokenizer.from_pretrained("gpt-4o")
+
+# Definir o texto de entrada
+input_text = "O tempo está ensolarado hoje."
+
+# Gerar uma resposta
+input_ids = tokenizer.encode(input_text, return_tensors="pt")
+outputs = model.generate(input_ids, max_length=50, num_beams=4)
+generated_text = tokenizer.decode(outputs, skip_special_tokens=True)
+
+print(generated_text)
+</code>
+</pre>
+<h2>Conclusão</h2>
+<p>A integração de anúncios nas respostas de IA pela Perplexity AI é um passo significativo na evolução da busca assistida por IA. Ajustar fino modelos GPT-4o e aproveitar as capacidades aprimoradas de compreensão de linguagem melhorará a experiência do usuário e tornará a IA mais eficaz para diversas aplicações.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Prepare-se para anúncios nas respostas da sua IA – Poder Diário 2024-08-23 A Perplexity AI, uma startup de busca assistida por IA, planeja introduzir anúncios em sua plataforma no quarto trimestre deste ano, seguindo a tendência de integrar anúncios nas respostas da IA. Essa iniciativa visa…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Prepare-se para anúncios nas respostas da sua IA – Poder Diário 2024-08-23 A Perplexity AI, uma startup de busca assistida por IA, planeja introduzir anúncios em sua plataforma no quarto trimestre deste ano, seguindo a tendência de integrar anúncios nas respostas da IA. Essa iniciativa visa…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/08/27/perplexity-ai-anuncia-publicidade-em-respostas-de-ia-e-melhorias-no-gpt-4o-para-2024/</div>
+  </section>
+
+  <footer class="post">
+    <span>27 de agosto de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
