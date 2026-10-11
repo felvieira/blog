@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Melhores Features do ES9 JavaScript — felvieira's blog</title>
+<meta name="description" content="O ECMAScript 2018, também conhecido como ES9, introduziu algumas funcionalidades importantes e úteis que podem facilitar o desenvolvimento em JavaScript. Neste post, vamos explorar as principais features do ES9 e como elas podem ser aplicadas. Rest/Spread Properties As propriedades rest e spread…">
+<meta property="og:title" content="Melhores Features do ES9 JavaScript">
+<meta property="og:description" content="O ECMAScript 2018, também conhecido como ES9, introduziu algumas funcionalidades importantes e úteis que podem facilitar o desenvolvimento em JavaScript. Neste post, vamos explorar as principais features do ES9 e como elas podem ser aplicadas. Rest/Spread Properties As propriedades rest e spread…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-melhores-features-do-es9-javascript-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/melhores-features-do-es9-javascript/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="139">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Melhores Features do ES9 JavaScript</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-melhores-features-do-es9-javascript-cover.png" alt="Melhores Features do ES9 JavaScript — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>O ECMAScript 2018, também conhecido como ES9, introduziu algumas funcionalidades importantes e úteis que podem facilitar o desenvolvimento em JavaScript. Neste post, vamos explorar as principais features do ES9 e como elas podem ser aplicadas.</p>
+<h2>Rest/Spread Properties</h2>
+<p>As propriedades rest e spread permitem que você manipule objetos de maneira mais fácil e intuitiva.</p>
+<h3>Rest Properties</h3>
+<p>As propriedades rest permitem que você colete o restante das propriedades de um objeto em uma nova variável.</p>
+<pre><code>const { a, b, ...rest } = { a: 1, b: 2, c: 3, d: 4 };
+console.log(a); // 1
+console.log(b); // 2
+console.log(rest); // { c: 3, d: 4 }
+</code></pre>
+<h3>Spread Properties</h3>
+<p>As propriedades spread permitem que você expanda as propriedades de um objeto em outro objeto.</p>
+<pre><code>const obj1 = { a: 1, b: 2 };
+const obj2 = { ...obj1, c: 3 };
+console.log(obj2); // { a: 1, b: 2, c: 3 }
+</code></pre>
+<h2>Asynchronous Iteration</h2>
+<p>O ES9 introduziu a capacidade de iterar sobre objetos assíncronos usando o novo loop <code>for-await-of</code>. Essa funcionalidade é especialmente útil ao trabalhar com operações assíncronas, como chamadas de API.</p>
+<pre><code>async function processArray(array) {
+  for await (const item of array) {
+    console.log(item);
+  }
+}
+
+const promises = [Promise.resolve(1), Promise.resolve(2), Promise.resolve(3)];
+processArray(promises); // 1, 2, 3
+</code></pre>
+<h2>Promise.finally()</h2>
+<p>O método <code>.finally()</code> se junta às promessas, permitindo que você execute um bloco de código uma vez que a promessa foi resolvida ou rejeitada.</p>
+<pre><code>fetch('https://api.example.com/data')
+  .then(response =&gt; response.json())
+  .catch(error =&gt; console.error('Error:', error))
+  .finally(() =&gt; console.log('Done'));
+</code></pre>
+<h2>Regular Expression Improvements</h2>
+<p>ES9 trouxe várias melhorias para expressões regulares, tornando-as mais potentes e fáceis de usar.</p>
+<h3>s (dotAll) Flag</h3>
+<p>Com a nova flag <code>s</code>, o ponto (<code>.</code>) nas regexes corresponde a qualquer caractere, incluindo novas linhas.</p>
+<pre><code>const regex = /foo.bar/s;
+const str = 'foo\nbar';
+console.log(regex.test(str)); // true
+</code></pre>
+<h3>Named Capture Groups</h3>
+<p>Os named capture groups permitem que você nomeie grupos de captura nas regexes, facilitando a extração e leitura dos dados.</p>
+<pre><code>const regex = /(?&lt;year&gt;\d{4})-(?&lt;month&gt;\d{2})-(?&lt;day&gt;\d{2})/;
+const str = '2023-10-05';
+const groups = str.match(regex).groups;
+console.log(groups.year);  // 2023
+console.log(groups.month); // 10
+console.log(groups.day);   // 05
+</code></pre>
+<h3>Lookbehind Assertions</h3>
+<p>Com as lookbehind assertions, agora é possível fazer verificações atrás de uma determinada posição na string.</p>
+<pre><code>const regex = /(?&lt;=\$)\d+/;
+const str = 'Price: $42';
+const match = str.match(regex);
+console.log(match[0]); // 42
+</code></pre>
+<h2>Conclusion</h2>
+<p>As features do ES9 trouxeram melhorias significativas para a linguagem JavaScript, tornando-a mais eficiente e poderosa. Elas facilitam a manipulação de objetos, melhorias em promessas, iteração assíncrona e trabalham de maneira mais robusta com expressões regulares. Certamente, esses novos recursos ajudam a escrever código mais limpo, expressivo e melhor estruturado.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O ECMAScript 2018, também conhecido como ES9, introduziu algumas funcionalidades importantes e úteis que podem facilitar o desenvolvimento em JavaScript. Neste post, vamos explorar as principais features do ES9 e como elas podem ser aplicadas. Rest/Spread Properties As propriedades rest e spread…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O ECMAScript 2018, também conhecido como ES9, introduziu algumas funcionalidades importantes e úteis que podem facilitar o desenvolvimento em JavaScript. Neste post, vamos explorar as principais features do ES9 e como elas podem ser aplicadas. Rest/Spread Properties As propriedades rest e spread…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/melhores-features-do-es9-javascript/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Construir um Painel Administrativo com React — felvieira's blog</title>
+<meta name="description" content="Painéis administrativos são essenciais para diversos tipos de aplicações, permitindo a administração e visualização de dados de forma intuitiva. Neste post, vamos aprender a construir um painel administrativo utilizando React, uma das bibliotecas JavaScript mais populares atualmente. Configurando o…">
+<meta property="og:title" content="Como Construir um Painel Administrativo com React">
+<meta property="og:description" content="Painéis administrativos são essenciais para diversos tipos de aplicações, permitindo a administração e visualização de dados de forma intuitiva. Neste post, vamos aprender a construir um painel administrativo utilizando React, uma das bibliotecas JavaScript mais populares atualmente. Configurando o…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-como-construir-um-painel-administrativo-com-react-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/como-construir-um-painel-administrativo-com-react/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="136">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como Construir um Painel Administrativo com React</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-como-construir-um-painel-administrativo-com-react-cover.png" alt="Como Construir um Painel Administrativo com React — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Painéis administrativos são essenciais para diversos tipos de aplicações, permitindo a administração e visualização de dados de forma intuitiva. Neste post, vamos aprender a construir um painel administrativo utilizando React, uma das bibliotecas JavaScript mais populares atualmente.</p>
+<h2>Configurando o Ambiente de Desenvolvimento</h2>
+<p>Primeiro, precisaremos configurar nosso ambiente de desenvolvimento para trabalhar com React. Para isso, utilizaremos o <strong>Create React App</strong>:</p>
+<pre><code>npx create-react-app admin-dashboard
+cd admin-dashboard
+</code></pre>
+<p>Para um painel administrativo, usaremos algumas bibliotecas adicionais:</p>
+<ul>
+<li><strong>react-router-dom</strong> para a navegação</li>
+<li><strong>Material-UI</strong> para componentes UI</li>
+<li><strong>axios</strong> para requisições HTTP</li>
+</ul>
+<p>Instale as dependências:</p>
+<pre><code>npm install @mui/material @emotion/react @emotion/styled react-router-dom axios
+</code></pre>
+<h2>Estrutura do Projeto</h2>
+<p>Vamos estruturar nosso projeto para manter o código organizado. Crie as seguintes pastas e arquivos:</p>
+<pre><code>src/
+|-- components/
+|   |-- Sidebar.js
+|   |-- Header.js
+|   |-- Dashboard.js
+|-- pages/
+|   |-- Home.js
+|   |-- Reports.js
+|   |-- Settings.js
+|-- App.js
+|-- index.js
+</code></pre>
+<h2>Sidebar</h2>
+<p>A <code>Sidebar</code> será responsável pela navegação do painel. Vamos utilizar componentes do Material-UI:</p>
+<pre><code>// src/components/Sidebar.js
+
+import React from 'react';
+import { Drawer, List, ListItem, ListItemText } from '@mui/material';
+import { Link } from 'react-router-dom';
+
+const Sidebar = () =&gt; (
+  &lt;Drawer variant="permanent"&gt;
+    &lt;List&gt;
+      &lt;ListItem button component={Link} to="/"&gt;
+        &lt;ListItemText primary="Home" /&gt;
+      &lt;/ListItem&gt;
+      &lt;ListItem button component={Link} to="/reports"&gt;
+        &lt;ListItemText primary="Reports" /&gt;
+      &lt;/ListItem&gt;
+      &lt;ListItem button component={Link} to="/settings"&gt;
+        &lt;ListItemText primary="Settings" /&gt;
+      &lt;/ListItem&gt;
+    &lt;/List&gt;
+  &lt;/Drawer&gt;
+);
+
+export default Sidebar;
+</code></pre>
+<h2>Header</h2>
+<p>O <code>Header</code> será simples, contendo um título para o painel:</p>
+<pre><code>// src/components/Header.js
+
+import React from 'react';
+import { AppBar, Toolbar, Typography } from '@mui/material';
+
+const Header = () =&gt; (
+  &lt;AppBar position="static"&gt;
+    &lt;Toolbar&gt;
+      &lt;Typography variant="h6"&gt;Admin Dashboard&lt;/Typography&gt;
+    &lt;/Toolbar&gt;
+  &lt;/AppBar&gt;
+);
+
+export default Header;
+</code></pre>
+<h2>Páginas</h2>
+<p>Vamos criar três páginas simples: Home, Reports e Settings.</p>
+<pre><code>// src/pages/Home.js
+
+import React from 'react';
+
+const Home = () =&gt; &lt;div&gt;Home Page&lt;/div&gt;;
+
+export default Home;
+</code></pre>
+<pre><code>// src/pages/Reports.js
+
+import React from 'react';
+
+const Reports = () =&gt; &lt;div&gt;Reports Page&lt;/div&gt;;
+
+export default Reports;
+</code></pre>
+<pre><code>// src/pages/Settings.js
+
+import React from 'react';
+
+const Settings = () =&gt; &lt;div&gt;Settings Page&lt;/div&gt;;
+
+export default Settings;
+</code></pre>
+<h2>App Component</h2>
+<p>No <code>App.js</code>, configuraremos nossas rotas e importaremos os componentes Sidebar e Header:</p>
+<pre><code>// src/App.js
+
+import React from 'react';
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom';
+import Sidebar from './components/Sidebar';
+import Header from './components/Header';
+import Home from './pages/Home';
+import Reports from './pages/Reports';
+import Settings from './pages/Settings';
+import { CssBaseline } from '@mui/material';
+
+const App = () =&gt; (
+  &lt;Router&gt;
+    &lt;CssBaseline /&gt;
+    &lt;Header /&gt;
+    &lt;Sidebar /&gt;
+    &lt;main style={{ marginLeft: 240, padding: '1rem' }}&gt;
+      &lt;Routes&gt;
+        &lt;Route path="/" element={&lt;Home /&gt;} /&gt;
+        &lt;Route path="/reports" element={&lt;Reports /&gt;} /&gt;
+        &lt;Route path="/settings" element={&lt;Settings /&gt;} /&gt;
+      &lt;/Routes&gt;
+    &lt;/main&gt;
+  &lt;/Router&gt;
+);
+
+export default App;
+</code></pre>
+<h2>Conclusão</h2>
+<p>Com os passos acima, configuramos um painel administrativo básico utilizando React. O painel possui navegação entre páginas, uma barra lateral fixa e um cabeçalho. A partir desse ponto, você pode expandir a funcionalidade do painel, adicionando novos componentes e páginas conforme necessário.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Painéis administrativos são essenciais para diversos tipos de aplicações, permitindo a administração e visualização de dados de forma intuitiva. Neste post, vamos aprender a construir um painel administrativo utilizando React, uma das bibliotecas JavaScript mais populares atualmente. Configurando o…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Painéis administrativos são essenciais para diversos tipos de aplicações, permitindo a administração e visualização de dados de forma intuitiva. Neste post, vamos aprender a construir um painel administrativo utilizando React, uma das bibliotecas JavaScript mais populares atualmente. Configurando o…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/como-construir-um-painel-administrativo-com-react/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

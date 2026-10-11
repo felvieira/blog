@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>O que é TLS/SSL e HTTPS? — felvieira's blog</title>
+<meta name="description" content="Nos dias atuais, com a crescente disseminação de informações através da internet, a segurança se tornou uma preocupação primordial. Termos como TLS, SSL e HTTPS são frequentemente mencionados quando o assunto é a proteção de dados pessoais e confidenciais. Mas afinal, o que realmente significam…">
+<meta property="og:title" content="O que é TLS/SSL e HTTPS?">
+<meta property="og:description" content="Nos dias atuais, com a crescente disseminação de informações através da internet, a segurança se tornou uma preocupação primordial. Termos como TLS, SSL e HTTPS são frequentemente mencionados quando o assunto é a proteção de dados pessoais e confidenciais. Mas afinal, o que realmente significam…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-o-que-e-tls-ssl-e-https-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/o-que-e-tls-ssl-e-https/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="142">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>O que é TLS/SSL e HTTPS?</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-o-que-e-tls-ssl-e-https-cover.png" alt="O que é TLS/SSL e HTTPS? — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Nos dias atuais, com a crescente disseminação de informações através da internet, a segurança se tornou uma preocupação primordial. Termos como TLS, SSL e HTTPS são frequentemente mencionados quando o assunto é a proteção de dados pessoais e confidenciais. Mas afinal, o que realmente significam essas siglas e como elas se relacionam?</p>
+<h2>Definições e Conceitos</h2>
+<h3>TLS (Transport Layer Security)</h3>
+<p>O TLS é um protocolo criptográfico que oferece segurança nas comunicações realizadas através de redes de computadores. Ele garante que os dados transmitidos entre duas partes (cliente e servidor) permaneçam íntegros e privados. O TLS é o sucessor do SSL (Secure Sockets Layer) e é mais seguro e eficiente.</p>
+<h3>SSL (Secure Sockets Layer)</h3>
+<p>O SSL foi o precursor do TLS e também é um protocolo criptográfico utilizado para a segurança dos dados transmitidos. Embora o SSL ainda seja bastante mencionado, a maioria das implementações modernas utilizam o TLS devido a suas melhorias e atualizações. As versões mais antigas do SSL foram consideradas inseguras e descontinuadas.</p>
+<h3>HTTPS (HyperText Transfer Protocol Secure)</h3>
+<p>O HTTPS é uma versão segura do HTTP (HyperText Transfer Protocol). Ele utiliza o TLS/SSL para criptografar as informações trocadas entre o navegador do usuário e o servidor da web. Isso protege os dados contra ataques de interceptação e manipulação.</p>
+<h2>Como Funciona a Criptografia</h2>
+<p>A criptografia é essencial para a segurança das comunicações na internet. Ela envolve a codificação de informações para que somente as partes autorizadas possam decodificá-las. No contexto do TLS/SSL e HTTPS, dois tipos de criptografia são usados:</p>
+<ol>
+<li>
+<p><strong>Criptografia Simétrica:</strong> Utiliza uma única chave para criptografar e descriptografar os dados. Esta chave deve ser mantida em segredo e compartilhada com todas as partes envolvidas na comunicação.</p>
+</li>
+<li>
+<p><strong>Criptografia Assimétrica:</strong> Utiliza um par de chaves, uma pública e uma privada. A chave pública é compartilhada e pode ser usada para criptografar dados, enquanto a chave privada é mantida em segredo e usada para descriptografar os dados.</p>
+</li>
+</ol>
+<h2>Processo de Handshake</h2>
+<p>O TLS/SSL utiliza um processo chamado “handshake” para estabelecer uma conexão segura. Durante esse processo, o navegador e o servidor trocam informações para:</p>
+<ol>
+<li><strong>Autenticar:</strong> Verificar a identidade um do outro.</li>
+<li><strong>Negociar:</strong> Determinar os algoritmos de criptografia a serem usados.</li>
+<li><strong>Trocar Chaves:</strong> Compartilhar as chaves necessárias para a criptografia simétrica.</li>
+</ol>
+<p>Ao final do handshake, as informações trocadas durante a sessão são protegidas por criptografia.</p>
+<h2>Importância e Vantagens</h2>
+<p>A utilização de TLS/SSL e HTTPS oferece várias vantagens, entre elas:</p>
+<ul>
+<li><strong>Confidencialidade:</strong> Garante que apenas as partes envolvidas possam acessar o conteúdo da comunicação.</li>
+<li><strong>Integridade:</strong> Assegura que os dados não foram alterados durante a transferência.</li>
+<li><strong>Autenticação:</strong> Verifica a identidade das partes envolvidas, prevenindo ataques de intermediários (man-in-the-middle).</li>
+</ul>
+<h2>Conclusão</h2>
+<p>Entender o que é TLS/SSL e HTTPS é fundamental para qualquer um que utilize a internet para transmitir informações sensíveis. A proteção proporcionada por esses protocolos ajuda a manter a integridade e a confidencialidade dos dados, promovendo um ambiente digital mais seguro para todos.</p>
+<p>Invista em conhecimento e práticas de segurança para proteger suas informações na rede. Na era digital, segurança nunca é demais.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Nos dias atuais, com a crescente disseminação de informações através da internet, a segurança se tornou uma preocupação primordial. Termos como TLS, SSL e HTTPS são frequentemente mencionados quando o assunto é a proteção de dados pessoais e confidenciais. Mas afinal, o que realmente significam…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Nos dias atuais, com a crescente disseminação de informações através da internet, a segurança se tornou uma preocupação primordial. Termos como TLS, SSL e HTTPS são frequentemente mencionados quando o assunto é a proteção de dados pessoais e confidenciais. Mas afinal, o que realmente significam…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/o-que-e-tls-ssl-e-https/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

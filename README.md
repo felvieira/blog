@@ -53,6 +53,9 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 - **2026-05-23** — [ML System Design 101 — Os 10 conceitos que você precisa dominar antes de qualquer entrevista](posts/2026-05-23-ml-system-design-101.html) (🇧🇷 PT)
 - **2026-05-23** — [Construindo seu próprio AI Chat Assistant — quando off-the-shelf vira teto baixo](posts/2026-05-23-personal-ai-chat-assistant.html) (🇧🇷 PT)
 - **2026-05-23** — [Top 1% no Claude Code: o que o playbook não ensina (e a gente provou medindo)](posts/2026-05-23-top-1-claude-code.html) (🇧🇷 PT)
+- **2024-07-01** — [Como Construir um Painel Administrativo com React](posts/2024-07-01-como-construir-um-painel-administrativo-com-react.html) (🇧🇷 PT)
+- **2024-07-01** — [Melhores Features do ES9 JavaScript](posts/2024-07-01-melhores-features-do-es9-javascript.html) (🇧🇷 PT)
+- **2024-07-01** — [O que é TLS/SSL e HTTPS?](posts/2024-07-01-o-que-e-tls-ssl-e-https.html) (🇧🇷 PT)
 <!-- BLOG_INDEX_END -->
 
 ## Estrutura
