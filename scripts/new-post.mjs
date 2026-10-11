@@ -6,6 +6,8 @@
  *   node scripts/new-post.mjs --slug=my-post-title --title="My Post Title" \
  *     --lang=en --excerpt="Short description" --cover=assets/images/my-cover.png \
  *     --body=path/to/body.html
+ *   Optional (2026-10-11-wp): --date=YYYY-MM-DD --origin=github|wordpress --wp-post-id=N
+ *     --canonical=URL --no-webhook   (all absent => behavior identical to before)
  *
  * The body file should be HTML fragments (no <html>, <head>, <body> wrappers).
  *
@@ -76,12 +78,15 @@ for (const k of required) {
 }
 
 // ─── Build post ──────────────────────────────────────────────────────────────
-const today = new Intl.DateTimeFormat("en-CA", {
-  timeZone: "America/Sao_Paulo",
-  year: "numeric",
-  month: "2-digit",
-  day: "2-digit",
-}).format(new Date());
+// 2026-10-11-wp: optional --date=YYYY-MM-DD (backfill keeps original date); default = today (SP) as before.
+const today = args.date
+  ? (/^\d{4}-\d{2}-\d{2}$/.test(args.date) ? args.date : (console.error("--date deve ser YYYY-MM-DD"), process.exit(1)))
+  : new Intl.DateTimeFormat("en-CA", {
+    timeZone: "America/Sao_Paulo",
+    year: "numeric",
+    month: "2-digit",
+    day: "2-digit",
+  }).format(new Date());
 const filename = `${today}-${args.slug}.html`;
 const outPath  = join(ROOT, "posts", filename);
 
@@ -151,9 +156,20 @@ const html = tmpl
   .replaceAll("{{BLOG_REPO}}", config.blog_repo ?? "blog")
   .replaceAll("{{SHARE_HOOK}}", shareHook)
   .replaceAll("{{LINKEDIN_TEXT}}", linkedinText)
-  .replace("{{BODY_HTML}}", bodyHtml);
+  .replace("{{BODY_HTML}}", () => bodyHtml);
 
-writeFileSync(outPath, html);
+// 2026-10-11-wp: optional origin/canonical markers (only when flags are given; default output unchanged).
+// --origin=github|wordpress  --wp-post-id=N  --canonical=URL
+let finalHtml = html;
+{
+  const marks = [];
+  if (args.canonical) marks.push(`<link rel="canonical" href="${args.canonical.replace(/"/g, "&quot;")}">`);
+  if (args.origin) marks.push(`<meta name="x-origin" content="${args.origin.replace(/[^a-z-]/gi, "")}">`);
+  if (args["wp-post-id"]) marks.push(`<meta name="x-wp-post-id" content="${String(args["wp-post-id"]).replace(/\D/g, "")}">`);
+  if (marks.length) finalHtml = html.replace('<link rel="preconnect"', marks.join("\n") + '\n<link rel="preconnect"');
+}
+
+writeFileSync(outPath, finalHtml);
 console.log(`Created: posts/${filename}`);
 
 // ─── Update index ────────────────────────────────────────────────────────────
@@ -172,7 +188,7 @@ if (pagesBase) {
 // Set LINKEDIN_WEBHOOK_URL in your own shell/env to enable. Not read from
 // blog-config.json on purpose: this is a personal automation, not something
 // the kit ships or that other users inherit when they scaffold their blog.
-const webhookUrl = process.env.LINKEDIN_WEBHOOK_URL;
+const webhookUrl = args["no-webhook"] !== undefined ? "" : process.env.LINKEDIN_WEBHOOK_URL;  // --no-webhook for backfill
 if (webhookUrl) {
   const linkedinRaw = args.linkedin || args["share-hook"] || args.excerpt;
   const fullText = `${linkedinRaw}${postUrl ? `\n\n${postUrl}` : ""}`;
