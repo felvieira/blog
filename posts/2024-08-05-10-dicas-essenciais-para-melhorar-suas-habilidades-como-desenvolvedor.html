@@ -1,0 +1,328 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Dicas Essenciais para Melhorar Suas Habilidades como Desenvolvedor — felvieira's blog</title>
+<meta name="description" content="Se você deseja se destacar como desenvolvedor e melhorar continuamente suas habilidades, este guia apresentará 10 itens essenciais. Eles irão ajudar você a aprimorar a qualidade do seu código, torná-lo mais legível e eficiente. Vamos a eles: 1. Modelar uma Conta Modelar uma conta é um excelente…">
+<meta property="og:title" content="10 Dicas Essenciais para Melhorar Suas Habilidades como Desenvolvedor">
+<meta property="og:description" content="Se você deseja se destacar como desenvolvedor e melhorar continuamente suas habilidades, este guia apresentará 10 itens essenciais. Eles irão ajudar você a aprimorar a qualidade do seu código, torná-lo mais legível e eficiente. Vamos a eles: 1. Modelar uma Conta Modelar uma conta é um excelente…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-08-05-10-dicas-essenciais-para-melhorar-suas-habilidades-como-desenvolvedor-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/08/05/10-dicas-essenciais-para-melhorar-suas-habilidades-como-desenvolvedor/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="386">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>10 Dicas Essenciais para Melhorar Suas Habilidades como Desenvolvedor</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>5 de agosto de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-08-05-10-dicas-essenciais-para-melhorar-suas-habilidades-como-desenvolvedor-cover.png" alt="10 Dicas Essenciais para Melhorar Suas Habilidades como Desenvolvedor — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Se você deseja se destacar como desenvolvedor e melhorar continuamente suas habilidades, este guia apresentará 10 itens essenciais. Eles irão ajudar você a aprimorar a qualidade do seu código, torná-lo mais legível e eficiente. Vamos a eles:</p>
+<h2>1. Modelar uma Conta</h2>
+<p>Modelar uma conta é um excelente exercício para entender os conceitos de classes e métodos em Java. Aqui está um exemplo simples:</p>
+<pre>
+<code>
+class Conta {
+    private String titular;
+    private int numero;
+    private String agencia;
+    private double saldo;
+    private String dataDeAbertura;
+
+    public Conta(String titular, int numero, String agencia, double saldo, String dataDeAbertura) {
+        this.titular = titular;
+        this.numero = numero;
+        this.agencia = agencia;
+        this.saldo = saldo;
+        this.dataDeAbertura = dataDeAbertura;
+    }
+
+    public void saca(double valor) {
+        if (valor > this.saldo) {
+            System.out.println("Saldo insuficiente");
+        } else {
+            this.saldo -= valor;
+            System.out.println("Saque realizado com sucesso");
+        }
+    }
+
+    public void deposita(double valor) {
+        this.saldo += valor;
+        System.out.println("Depósito realizado com sucesso");
+    }
+
+    public double calculaRendimento() {
+        return this.saldo * 0.1;
+    }
+
+    public String toString() {
+        return "Titular: " + this.titular + "\nNúmero: " + this.numero + "\nAgência: " + this.agencia + "\nSaldo: R$" + this.saldo + "\nData de abertura: " + this.dataDeAbertura;
+    }
+}
+</code>
+</pre>
+<h2>2. Uso de Polimorfismo</h2>
+<p>Substituir condicionais imperativos por polimorfismo pode deixar seu código mais limpo e manutenível. Veja um exemplo:</p>
+<pre>
+<code>
+interface Tributavel {
+    double calculaTributo();
+}
+
+class ContaCorrente extends Conta implements Tributavel {
+    public ContaCorrente(String titular, int numero, String agencia, double saldo, String dataDeAbertura) {
+        super(titular, numero, agencia, saldo, dataDeAbertura);
+    }
+
+    @Override
+    public double calculaTributo() {
+        return this.saldo * 0.05;
+    }
+}
+
+class ContaPoupanca extends Conta implements Tributavel {
+    public ContaPoupanca(String titular, int numero, String agencia, double saldo, String dataDeAbertura) {
+        super(titular, numero, agencia, saldo, dataDeAbertura);
+    }
+
+    @Override
+    public double calculaTributo() {
+        return this.saldo * 0.1;
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        ContaCorrente cc = new ContaCorrente("Danilo", 123456, "001", 100, "01/01/2024");
+        ContaPoupanca cp = new ContaPoupanca("Danilo", 123456, "001", 100, "01/01/2024");
+
+        System.out.println("Conta Corrente: " + cc.toString());
+        System.out.println("Conta Poupança: " + cp.toString());
+
+        System.out.println("Tributo Conta Corrente: " + cc.calculaTributo());
+        System.out.println("Tributo Conta Poupança: " + cp.calculaTributo());
+    }
+}
+</code>
+</pre>
+<h2>3. Testes A/B</h2>
+<p>Os testes A/B são úteis para comparar diferentes opções e determinar a melhor abordagem. Confira um exemplo de teste A/B em Java:</p>
+<pre>
+<code>
+public class TesteAB {
+    public static void main(String[] args) {
+        // Criação das versões A e B
+        String versaoA = "Versão A";
+        String versaoB = "Versão B";
+
+        // Criação do teste
+        String resultado = "Versão A";
+        if (Math.random() > 0.5) {
+            resultado = versaoB;
+        }
+
+        System.out.println("Resultado do teste: " + resultado);
+    }
+}
+</code>
+</pre>
+<h2>4. Alinhamento de CTAs</h2>
+<p>As chamadas para ação (CTAs) devem estar alinhadas com o conteúdo para maximizar a conversão. Veja um exemplo:</p>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CTA Alinhada</title>
+</head>
+<body>
+    <h1>CTA Alinhada</h1>
+    <p>Essa é uma página de exemplo para demonstrar a importância do alinhamento de CTAs.</p>
+    <button>Começar Agora</button>
+</body>
+</html>
+</code>
+</pre>
+<h2>5. Script em Roblox</h2>
+<p>Programação em Roblox envolve a criação de scripts para controlar os comportamentos dos personagens e objetos. Aqui está um exemplo simples:</p>
+<pre>
+<code>
+local player = game.Players.LocalPlayer
+local character = player.Character
+
+function move()
+    character.Humanoid.WalkTo(100, 100, 100)
+end
+
+function stop()
+    character.Humanoid.WalkTo(0, 0, 0)
+end
+
+game:GetService("UserInputService").InputBegan:Connect(function(input)
+    if input.KeyCode == Enum.KeyCode.W then
+        move()
+    elseif input.KeyCode == Enum.KeyCode.S then
+        stop()
+    end
+end)
+</code>
+</pre>
+<h2>6. Elementos HTML</h2>
+<p>HTML suporta vários recursos multimídia como imagens, áudio e vídeo:</p>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Elementos HTML</title>
+</head>
+<body>
+    <h1>Elementos HTML</h1>
+    <img src="image.jpg" alt="Imagem de exemplo">
+    <audio>
+        <source>
+        Your browser does not support the audio element.
+    </audio>
+    <video>
+        <source>
+        Your browser does not support the video element.
+    </video>
+</body>
+</html>
+</code>
+</pre>
+<h2>7. Melhorias de Performance</h2>
+<p>A análise de performance é crucial para optimizar landing pages, emails e posts patrocinados. Exemplo de teste de performance em Java:</p>
+<pre>
+<code>
+public class Performance {
+    public static void main(String[] args) {
+        // Criação de um objeto de teste
+        Conta cc = new Conta("Danilo", 123456, "001", 100, "01/01/2024");
+
+        // Criação de um objeto de teste
+        Conta cp = new Conta("Danilo", 123456, "001", 100, "01/01/2024");
+
+        // Comparação de performance
+        long tempoInicial = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            cc.saca(10);
+        }
+        long tempoFinal = System.currentTimeMillis();
+        System.out.println("Tempo de execução: " + (tempoFinal - tempoInicial) + " milissegundos");
+
+        tempoInicial = System.currentTimeMillis();
+        for (int i = 0; i < 1000000; i++) {
+            cp.saca(10);
+        }
+        tempoFinal = System.currentTimeMillis();
+        System.out.println("Tempo de execução: " + (tempoFinal - tempoInicial) + " milissegundos");
+    }
+}
+</code>
+</pre>
+<h2>8. Polimorfismo em Java</h2>
+<p>Utilize polimorfismo para manter seu código limpo e fácil de manter. Exemplo em Java:</p>
+<pre>
+<code>
+interface Animal {
+    void emitirSom();
+}
+
+class Cachorro implements Animal {
+    public void emitirSom() {
+        System.out.println("Au au");
+    }
+}
+
+class Gato implements Animal {
+    public void emitirSom() {
+        System.out.println("Miau");
+    }
+}
+
+public class Main {
+    public static void main(String[] args) {
+        Animal animal = new Cachorro();
+        animal.emitirSom();
+
+        animal = new Gato();
+        animal.emitirSom();
+    }
+}
+</code>
+</pre>
+<h2>9. CTA de Teste Grátis</h2>
+<p>Veja como uma chamada para ação bem colocada pode fazer a diferença:</p>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>CTA de Teste Grátis</title>
+</head>
+<body>
+    <h1>CTA de Teste Grátis</h1>
+    <p>Pegue o seu teste grátis!</p>
+    <button>Pegue o seu teste grátis</button>
+</body>
+</html>
+</code>
+</pre>
+<h2>10. Continuar em OKCupid</h2>
+<p>Pequenos detalhes fazem a diferença em uma boa CTA:</p>
+<pre>
+<code>
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Continuar em OKCupid</title>
+</head>
+<body>
+    <h1>Continuar em OKCupid</h1>
+    <button>Continue</button>
+</body>
+</html>
+</code>
+</pre>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Se você deseja se destacar como desenvolvedor e melhorar continuamente suas habilidades, este guia apresentará 10 itens essenciais. Eles irão ajudar você a aprimorar a qualidade do seu código, torná-lo mais legível e eficiente. Vamos a eles: 1. Modelar uma Conta Modelar uma conta é um excelente…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Se você deseja se destacar como desenvolvedor e melhorar continuamente suas habilidades, este guia apresentará 10 itens essenciais. Eles irão ajudar você a aprimorar a qualidade do seu código, torná-lo mais legível e eficiente. Vamos a eles: 1. Modelar uma Conta Modelar uma conta é um excelente…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/08/05/10-dicas-essenciais-para-melhorar-suas-habilidades-como-desenvolvedor/</div>
+  </section>
+
+  <footer class="post">
+    <span>5 de agosto de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

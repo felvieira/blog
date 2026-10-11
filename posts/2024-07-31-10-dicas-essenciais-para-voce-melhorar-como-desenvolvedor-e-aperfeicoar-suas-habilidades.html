@@ -1,0 +1,212 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Dicas Essenciais para Você Melhorar como Desenvolvedor e Aperfeiçoar suas Habilidades — felvieira's blog</title>
+<meta name="description" content="10 Itens para Você Se Tornar um Desenvolvedor Melhor 1. Entenda os Elementos HTML &lt;main&gt;: Define o conteúdo principal da página. &lt;nav&gt;: Representa uma seção de navegação. &lt;section&gt;: Representa uma seção genérica de conteúdo. &lt;area&gt;: Define uma região hot-spot em uma imagem. &lt;audio&gt;: Inclui conteúdo…">
+<meta property="og:title" content="10 Dicas Essenciais para Você Melhorar como Desenvolvedor e Aperfeiçoar suas Habilidades">
+<meta property="og:description" content="10 Itens para Você Se Tornar um Desenvolvedor Melhor 1. Entenda os Elementos HTML &lt;main&gt;: Define o conteúdo principal da página. &lt;nav&gt;: Representa uma seção de navegação. &lt;section&gt;: Representa uma seção genérica de conteúdo. &lt;area&gt;: Define uma região hot-spot em uma imagem. &lt;audio&gt;: Inclui conteúdo…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-31-10-dicas-essenciais-para-voce-melhorar-como-desenvolvedor-e-aperfeicoar-suas-habilidades-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/31/10-dicas-essenciais-para-voce-melhorar-como-desenvolvedor-e-aperfeicoar-suas-habilidades/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="382">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>10 Dicas Essenciais para Você Melhorar como Desenvolvedor e Aperfeiçoar suas Habilidades</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>31 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-31-10-dicas-essenciais-para-voce-melhorar-como-desenvolvedor-e-aperfeicoar-suas-habilidades-cover.png" alt="10 Dicas Essenciais para Você Melhorar como Desenvolvedor e Aperfeiçoar suas Habilidades — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><strong>10 Itens para Você Se Tornar um Desenvolvedor Melhor</strong></p>
+<p>1. <strong>Entenda os Elementos HTML</strong></p>
+<ul>
+<li><strong><code>&lt;main&gt;</code></strong>: Define o conteúdo principal da página.</li>
+<li><strong><code>&lt;nav&gt;</code></strong>: Representa uma seção de navegação.</li>
+<li><strong><code>&lt;section&gt;</code></strong>: Representa uma seção genérica de conteúdo.</li>
+<li><strong><code>&lt;area&gt;</code></strong>: Define uma região hot-spot em uma imagem.</li>
+<li><strong><code>&lt;audio&gt;</code></strong>: Inclui conteúdo de som.</li>
+<li><strong><code>&lt;img&gt;</code></strong>: Inclui imagens. Veja mais sobre imagens no HTML <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/img">aqui</a>.</li>
+<li><strong><code>&lt;map&gt;</code></strong>: Define um mapa de imagem.</li>
+<li><strong><code>&lt;track&gt;</code></strong>: Define faixas de texto temporizadas.</li>
+<li><strong><code>&lt;video&gt;</code></strong>: Inclui conteúdo de vídeo. Mais informações <a href="https://developer.mozilla.org/pt-BR/docs/Web/HTML/Element/video">aqui</a>.</li>
+</ul>
+<p>2. <strong>Modelo uma Conta Bancária</strong></p>
+<p>Vamos criar uma estrutura de classe simples para uma conta bancária:</p>
+<pre>
+public class Conta {
+  private String nomeTitular;
+  private int numero;
+  private String agencia;
+  private double saldo;
+  private String dataAbertura;
+
+  public Conta(String nomeTitular, int numero, String agencia, double saldo, String dataAbertura) {
+    this.nomeTitular = nomeTitular;
+    this.numero = numero;
+    this.agencia = agencia;
+    this.saldo = saldo;
+    this.dataAbertura = dataAbertura;
+  }
+
+  public boolean saca(double valor) {
+    if(this.saldo >= valor) {
+      this.saldo -= valor;
+      return true;
+    }
+    return false;
+  }
+
+  public void deposita(double valor) {
+    this.saldo += valor;
+  }
+
+  public double calculaRendimento() {
+    return this.saldo * 0.1;
+  }  
+}
+</pre>
+<p>Para mais sobre modelagem de classes em Java, visite <a href="https://www.baeldung.com/java-classes">aqui</a>.</p>
+<p>3. <strong>Crie Call to Action (CTA) Eficientes</strong></p>
+<p>Exemplos de bons CTAs:</p>
+<ul>
+<li><strong>Treehouse</strong>: &#8220;Pegue o seu teste grátis&#8221;. Veja como criar CTAs eficientes <a href="https://blog.hubspot.com/marketing/call-to-action-examples">aqui</a>.</li>
+<li><strong>OKCupid</strong>: &#8220;Continue&#8221;.</li>
+</ul>
+<p>4. <strong>Domine RegEx</strong></p>
+<p>Alguns dos símbolos comuns:</p>
+<ul>
+<li><code>|</code>: &#8220;ou&#8221;.</li>
+<li><code>(?:...)</code>: Grupo não capturado.</li>
+</ul>
+<p>Exemplo:</p>
+<pre>
+(?:^\d+)|(?:^\w+)
+</pre>
+<p>Esse RegEx verifica se o endereço começa com números ou palavras. Para aprofundar, leia mais na <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Regular_Expressions">documentação completa</a>.</p>
+<p>5. <strong>Evite o Uso Excessivo de <code>if</code></strong></p>
+<p>Uma alternativa é utilizar polimorfismo e herança. Por exemplo, em vez de múltiplos <code>if</code>, você pode utilizar uma abordagem orientada a objetos:</p>
+<pre>
+public abstract class Produto {
+  public abstract double calcularPreco();
+}
+
+public class ProdutoA extends Produto {
+  public double calcularPreco() {
+    return 10.0;
+  }
+}
+
+public class ProdutoB extends Produto {
+  public double calcularPreco() {
+    return 20.0;
+  }
+}
+</pre>
+<p>Para mais sobre programação orientada a objetos, veja <a href="https://www.tutorialspoint.com/java/java_object_oriented.htm">aqui</a>.</p>
+<p>6. <strong>Utilize Testes A/B</strong></p>
+<p>Testes A/B ajudam a otimizar o design e as conversões em sua página. Ferramentas recomendadas:</p>
+<ul>
+<li><a href="https://optimize.google.com/">Google Optimize</a></li>
+<li><a href="https://thrivethemes.com/architect/">Thrive Architect</a></li>
+</ul>
+<p>7. <strong>Alinha CTAs com o Conteúdo</strong></p>
+<p>CTAs devem ser coerentes com o conteúdo para aumentar a conversão. Um bom exemplo é alinhar um CTA de &#8220;Saiba Mais&#8221; após uma explicação detalhada de um produto. Saiba mais <a href="https://www.wordstream.com/blog/ws/2014/09/17/call-to-action-examples">aqui</a>.</p>
+<p>8. <strong>Desenvolva um Sistema de Gerenciamento de Contas</strong></p>
+<p>Use a classe <code>Conta</code> descrita anteriormente para gerenciar várias contas. Por exemplo:</p>
+<pre>
+import java.util.ArrayList;
+
+public class GerenciadorDeContas {
+  private ArrayList<Conta> contas;
+
+  public GerenciadorDeContas() {
+    this.contas = new ArrayList<>();
+  }
+
+  public void addConta(Conta conta) {
+    this.contas.add(conta);
+  }
+
+  public Conta getConta(int numero) {
+    for (Conta conta : this.contas) {
+      if (conta.getNumero() == numero) {
+        return conta;
+      }
+    }
+    return null;
+  }
+}
+</pre>
+<p>Mais detalhes sobre gerenciadores e listas em Java podem ser encontrados <a href="https://www.geeksforgeeks.org/how-to-use-arraylist-in-java/">aqui</a>.</p>
+<p>9. <strong>Aprenda a Utilizar o Alteryx Designer</strong></p>
+<p>O Alteryx Designer é uma ferramenta poderosa para análises de dados. Ferramentas dentro do Alteryx incluem:</p>
+<ul>
+<li>RegEx para análises textuais</li>
+<li>Designer para fluxo de trabalho visual</li>
+</ul>
+<p>Para começar com o Alteryx, visite o <a href="https://community.alteryx.com/t5/Getting-Started/Tutorials/ta-p/27638">tutorial oficial</a>.</p>
+<p>10. <strong>Crie um Sistema de Gerenciamento de Contas Bancárias</strong></p>
+<p>Utilize a classe <code>Conta</code> como base para criar um sistema completo de gerenciamento de contas bancárias, adicionando funcionalidades como transferências e relatórios de atividades:</p>
+<pre>
+public class SistemaBancario {
+  private ArrayList<Conta> contas;
+
+  public SistemaBancario() {
+    this.contas = new ArrayList<>();
+  }
+
+  public void transferir(int contaOrigem, int contaDestino, double valor) {
+    Conta origem = getConta(contaOrigem);
+    Conta destino = getConta(contaDestino);
+
+    if (origem != null && destino != null && origem.saca(valor)) {
+      destino.deposita(valor);
+    }
+  }
+
+  // Método getConta como mostrado anteriormente
+}
+</pre>
+<p>Para mais ideias sobre sistemas bancários em Java, veja <a href="https://www.tutorialspoint.com/online_tutorials/Banking-Management-System-using-Java.htm">aqui</a>.</p>
+<p>Esses itens são fundamentais para se tornar um desenvolvedor melhor. Pratique e aplique esses conceitos regularmente para ver melhorias contínuas em suas habilidades de desenvolvimento.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">10 Itens para Você Se Tornar um Desenvolvedor Melhor 1. Entenda os Elementos HTML &lt;main&gt;: Define o conteúdo principal da página. &lt;nav&gt;: Representa uma seção de navegação. &lt;section&gt;: Representa uma seção genérica de conteúdo. &lt;area&gt;: Define uma região hot-spot em uma imagem. &lt;audio&gt;: Inclui conteúdo…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">10 Itens para Você Se Tornar um Desenvolvedor Melhor 1. Entenda os Elementos HTML &lt;main&gt;: Define o conteúdo principal da página. &lt;nav&gt;: Representa uma seção de navegação. &lt;section&gt;: Representa uma seção genérica de conteúdo. &lt;area&gt;: Define uma região hot-spot em uma imagem. &lt;audio&gt;: Inclui conteúdo…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/31/10-dicas-essenciais-para-voce-melhorar-como-desenvolvedor-e-aperfeicoar-suas-habilidades/</div>
+  </section>
+
+  <footer class="post">
+    <span>31 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

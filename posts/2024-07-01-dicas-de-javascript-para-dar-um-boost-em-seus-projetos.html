@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Dicas de javascript para dar um boost em seus projetos — felvieira's blog</title>
+<meta name="description" content="Utilizando Object.values() para Iteração Eficiente de Objetos Iterar sobre os valores de um objeto pode ser uma tarefa tediosa. Use Object.values() para simplificar esse processo. Por exemplo, considere o seguinte código: const person = { name: ‘John’, age: 30, occupation: ‘Developer’ }; const…">
+<meta property="og:title" content="Dicas de javascript para dar um boost em seus projetos">
+<meta property="og:description" content="Utilizando Object.values() para Iteração Eficiente de Objetos Iterar sobre os valores de um objeto pode ser uma tarefa tediosa. Use Object.values() para simplificar esse processo. Por exemplo, considere o seguinte código: const person = { name: ‘John’, age: 30, occupation: ‘Developer’ }; const…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-dicas-de-javascript-para-dar-um-boost-em-seus-projetos-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/dicas-de-javascript-para-dar-um-boost-em-seus-projetos/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="164">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Dicas de javascript para dar um boost em seus projetos</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">1 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-dicas-de-javascript-para-dar-um-boost-em-seus-projetos-cover.png" alt="Dicas de javascript para dar um boost em seus projetos — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><strong>Utilizando <code>Object.values()</code> para Iteração Eficiente de Objetos</strong></p>
+<p>Iterar sobre os valores de um objeto pode ser uma tarefa tediosa. Use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/values">Object.values()</a> para simplificar esse processo. Por exemplo, considere o seguinte código:</p>
+<pre>
+<code>const person = { name: 'John', age: 30, occupation: 'Developer' };
+const values = Object.values(person);
+console.log(values); // Output: ["John", 30, "Developer"]</code>
+</pre>
+<p>Este método é mais eficiente do que usar um laço <code>for...in</code> ou <code>Object.keys()</code> seguido por <code>map()</code>.</p>
+<p><strong>Aproveitando o Poder de <code>Array.prototype.flat()</code></strong></p>
+<p>Ao lidar com arrays aninhados, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/flat">Array.prototype.flat()</a> pode ser uma salvação. Este método leva um parâmetro de profundidade opcional para especificar o quão profundo deseja achatar a array. Por exemplo:</p>
+<pre>
+<code>const nestedArray = [1, 2, [3, 4, [5, 6]]];
+const flatArray = nestedArray.flat(2);
+console.log(flatArray); // Output: [1, 2, 3, 4, 5, 6]</code>
+</pre>
+<p>Esta técnica pode reduzir significantemente a complexidade do seu código.</p>
+<p><strong>Otimizando a Criação de Objetos com <code>Object.fromEntries()</code></strong></p>
+<p>Criar objetos a partir de arrays de pares chave-valor pode ser simplificado usando <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Object/fromEntries">Object.fromEntries()</a>. Aqui está um exemplo:</p>
+<pre>
+<code>const entries = [['name', 'John'], ['age', 30], ['occupation', 'Developer']];
+const person = Object.fromEntries(entries);
+console.log(person); // Output: { name: 'John', age: 30, occupation: 'Developer' }</code>
+</pre>
+<p>Este método é particularmente útil ao trabalhar com grandes conjuntos de dados.</p>
+<p><strong>Verificando Presença em Arrays de Forma Eficiente com <code>Array.prototype.includes()</code></strong></p>
+<p>Ao invés de usar <code>Array.prototype.indexOf()</code> e verificar por <code>-1</code>, use <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/includes">Array.prototype.includes()</a> para checar se um elemento está presente em uma array. Por exemplo:</p>
+<pre>
+<code>const fruits = ['apple', 'banana', 'orange'];
+console.log(fruits.includes('banana')); // Output: true</code>
+</pre>
+<p>Este método é mais legível e eficiente.</p>
+<p><strong>Simplificando a Manipulação de Strings com <code>String.prototype.matchAll()</code></strong></p>
+<p>Ao trabalhar com expressões regulares, <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/String/matchAll">String.prototype.matchAll()</a> pode ser uma ferramenta poderosa. Este método retorna um iterador que permite iterar sobre todos os matches em uma string. Por exemplo:</p>
+<pre>
+<code>const text = 'Hello, world!';
+const matches = text.matchAll(/hello/i);
+for (const match of matches) {
+ console.log(match);
+}</code>
+</pre>
+<p>Esta técnica pode significativamente reduzir a complexidade do seu código.</p>
+<p>Essas dicas de API JavaScript podem ajudar a agilizar seu processo de desenvolvimento e melhorar a eficiência.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Utilizando Object.values() para Iteração Eficiente de Objetos Iterar sobre os valores de um objeto pode ser uma tarefa tediosa. Use Object.values() para simplificar esse processo. Por exemplo, considere o seguinte código: const person = { name: ‘John’, age: 30, occupation: ‘Developer’ }; const…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Utilizando Object.values() para Iteração Eficiente de Objetos Iterar sobre os valores de um objeto pode ser uma tarefa tediosa. Use Object.values() para simplificar esse processo. Por exemplo, considere o seguinte código: const person = { name: ‘John’, age: 30, occupation: ‘Developer’ }; const…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/dicas-de-javascript-para-dar-um-boost-em-seus-projetos/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

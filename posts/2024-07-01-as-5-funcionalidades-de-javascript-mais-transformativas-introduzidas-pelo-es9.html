@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>As 5 Funcionalidades de JavaScript Mais Transformativas Introduzidas pelo ES9 — felvieira's blog</title>
+<meta name="description" content="O JavaScript passou por mudanças significativas na última década, com cada versão introduzindo novas funcionalidades. No entanto, o ECMAScript 2018 (ES9) trouxe algumas das mudanças mais transformadoras. Neste artigo, exploraremos as 5 funcionalidades mais impactantes introduzidas pelo ES9. 1.…">
+<meta property="og:title" content="As 5 Funcionalidades de JavaScript Mais Transformativas Introduzidas pelo ES9">
+<meta property="og:description" content="O JavaScript passou por mudanças significativas na última década, com cada versão introduzindo novas funcionalidades. No entanto, o ECMAScript 2018 (ES9) trouxe algumas das mudanças mais transformadoras. Neste artigo, exploraremos as 5 funcionalidades mais impactantes introduzidas pelo ES9. 1.…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-as-5-funcionalidades-de-javascript-mais-transformativas-introduzidas-pelo-es9-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/as-5-funcionalidades-de-javascript-mais-transformativas-introduzidas-pelo-es9/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="153">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>As 5 Funcionalidades de JavaScript Mais Transformativas Introduzidas pelo ES9</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-as-5-funcionalidades-de-javascript-mais-transformativas-introduzidas-pelo-es9-cover.png" alt="As 5 Funcionalidades de JavaScript Mais Transformativas Introduzidas pelo ES9 — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>O JavaScript passou por mudanças significativas na última década, com cada versão introduzindo novas funcionalidades. No entanto, o <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">ECMAScript 2018 (ES9)</a> trouxe algumas das mudanças mais transformadoras. Neste artigo, exploraremos as 5 funcionalidades mais impactantes introduzidas pelo ES9.</p>
+<h2>1. Encadeamento Opcional (Optional Chaining)</h2>
+<p>O Encadeamento Opcional permite acessar propriedades aninhadas de objetos de maneira segura, sem precisar verificar se cada propriedade existe. Isso evita erros e torna o código mais limpo e legível.</p>
+<pre><code>const usuario = { informacao: { endereco: { cidade: 'São Paulo' } } };
+
+// Antes do ES9
+const cidade = usuario && usuario.informacao && usuario.informacao.endereco && usuario.informacao.endereco.cidade;
+
+// Com Encadeamento Opcional
+const cidade = usuario?.informacao?.endereco?.cidade;
+
+console.log(cidade); // 'São Paulo'
+</code></pre>
+<p>Quer saber mais? Confira este <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Optional_chaining">artigo detalhado sobre Encadeamento Opcional</a> na MDN.</p>
+<h2>2. Coalescência Nula (Nullish Coalescing)</h2>
+<p>A Coalescência Nula oferece uma maneira abreviada de verificar se um valor é nulo ou indefinido, permitindo a atribuição de um valor padrão.</p>
+<pre><code>const usuarioId = null;
+
+// Antes do ES9
+const id = usuarioId !== null && usuarioId !== undefined ? usuarioId : 'defaultId';
+
+// Com Coalescência Nula
+const id = usuarioId ?? 'defaultId';
+
+console.log(id); // 'defaultId'
+</code></pre>
+<p>Para mais detalhes, veja este <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Operators/Nullish_coalescing">guia sobre Coalescência Nula</a> na MDN.</p>
+<h2>3. BigInt</h2>
+<p>O BigInt introduz um novo tipo de dado capaz de lidar com inteiros arbitrariamente grandes, especialmente útil para aplicações que requerem cálculos precisos.</p>
+<pre><code>const numeroGrande = 9007199254740991n; // Sufixo 'n' denota um BigInt
+
+const resultado = numeroGrande + 1n;
+
+console.log(resultado); // 9007199254740992n
+</code></pre>
+<p>Entenda mais sobre BigInt visitando esta <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/BigInt">página informativa</a> na MDN.</p>
+<h2>4. Importação Dinâmica (Dynamic Import)</h2>
+<p>A Importação Dinâmica permite importar módulos dinamicamente durante a execução, melhorando o desempenho ao reduzir o número de módulos carregados inicialmente.</p>
+<pre><code>// Uso de importação dinâmica
+import('./meuModulo.js')
+  .then((modulo) => {
+    modulo.minhaFuncao();
+  })
+  .catch((erro) => {
+    console.error('Falha ao carregar o módulo', erro);
+  });
+</code></pre>
+<p>Para uma visão aprofundada, veja este <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Statements/import">artigo sobre importação dinâmica</a> na MDN.</p>
+<h2>5. globalThis</h2>
+<p>A funcionalidade <code>globalThis</code> proporciona uma maneira consistente de acessar o objeto global, independentemente do ambiente em que o código está sendo executado.</p>
+<pre><code>console.log(globalThis); // Em navegadores, retorna o objeto 'window'; em Node.js, retorna 'global'
+</code></pre>
+<p>Explore mais sobre <code>globalThis</code> no <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/globalThis">guia completo na MDN</a>.</p>
+<h2>Conclusão</h2>
+<p>As funcionalidades apresentadas pelo ES9 são revolucionárias, proporcionando maior segurança, legibilidade e eficiência ao código JavaScript. Para se aprofundar no assunto, recomendamos visitar a <a href="https://developer.mozilla.org/en-US/docs/Web/JavaScript">documentação oficial do MDN</a>. Tente incorporar essas novas funcionalidades em seus projetos e veja a diferença que elas podem fazer!</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">O JavaScript passou por mudanças significativas na última década, com cada versão introduzindo novas funcionalidades. No entanto, o ECMAScript 2018 (ES9) trouxe algumas das mudanças mais transformadoras. Neste artigo, exploraremos as 5 funcionalidades mais impactantes introduzidas pelo ES9. 1.…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">O JavaScript passou por mudanças significativas na última década, com cada versão introduzindo novas funcionalidades. No entanto, o ECMAScript 2018 (ES9) trouxe algumas das mudanças mais transformadoras. Neste artigo, exploraremos as 5 funcionalidades mais impactantes introduzidas pelo ES9. 1.…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/as-5-funcionalidades-de-javascript-mais-transformativas-introduzidas-pelo-es9/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

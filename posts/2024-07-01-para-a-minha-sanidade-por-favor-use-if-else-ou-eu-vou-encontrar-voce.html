@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Use If Else Pelo AMOR DE DEUS — felvieira's blog</title>
+<meta name="description" content="Quando se trata de programar, todo mundotem suas preferências. Algumas pessoas adoram programar de forma concisa e eficiente, enquanto outras preferem um código mais explícito e facilmente compreensível. No entanto, há uma prática de programação que mexe com a minha sanidade, e sinceramente espero…">
+<meta property="og:title" content="Use If Else Pelo AMOR DE DEUS">
+<meta property="og:description" content="Quando se trata de programar, todo mundotem suas preferências. Algumas pessoas adoram programar de forma concisa e eficiente, enquanto outras preferem um código mais explícito e facilmente compreensível. No entanto, há uma prática de programação que mexe com a minha sanidade, e sinceramente espero…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-para-a-minha-sanidade-por-favor-use-if-else-ou-eu-vou-encontrar-voce-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/para-a-minha-sanidade-por-favor-use-if-else-ou-eu-vou-encontrar-voce/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="147">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Use If Else Pelo AMOR DE DEUS</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-para-a-minha-sanidade-por-favor-use-if-else-ou-eu-vou-encontrar-voce-cover.png" alt="Use If Else Pelo AMOR DE DEUS — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Quando se trata de programar, todo mundotem suas preferências. Algumas pessoas adoram programar de forma concisa e eficiente, enquanto outras preferem um código mais explícito e facilmente compreensível. No entanto, há uma prática de programação que mexe com a minha sanidade, e sinceramente espero que você também se incomode com ela: a omissão do tradicional comando <code>if-else</code>.</p>
+<h2>Por Que If-Else é Importante</h2>
+<p>A estrutura <code>if-else</code> é uma das construções mais básicas e fundamentais em praticamente todas as linguagens de programação. Ela permite que o programa tome decisões com base em condições booleanas, fazendo o fluxo do programa ser mais claro e lógico.</p>
+<p>Considere o seguinte exemplo em Python:</p>
+<pre><code>if temperatura &gt; 30:
+    print("Está quente lá fora!")
+else:
+    print("Está agradável ou frio lá fora.")
+</code></pre>
+<p>Este código é fácil de ler e entender. Ele mostra claramente que existem duas condições distintas: uma para quando a temperatura está acima de 30 graus e outra para todas as outras situações.</p>
+<h2>A Trapaça do Return Adiantado</h2>
+<p>Uma prática que muitos programadores modernos adotam é a utilização do retorno adiantado para evitar <code>if-else</code>. Embora possa resultar em código um pouco mais curto, ele sacrifica a clareza em favor da concisão.</p>
+<p>Veja um exemplo em Python:</p>
+<pre><code>def verificar_temperatura(temperatura):
+    if temperatura &gt; 30:
+        return "Está quente lá fora!"
+    return "Está agradável ou frio lá fora."
+    
+print(verificar_temperatura(35))  # Output: Está quente lá fora!
+print(verificar_temperatura(25))  # Output: Está agradável ou frio lá fora.
+</code></pre>
+<p>Aqui, a estrutura <code>if-else</code> foi substituída por um retorno adiantado. Embora funcione, esse tipo de código pode rapidamente se tornar difícil de seguir, especialmente em funções mais complexas.</p>
+<h2>Quando a Concisão Ultrapassa a Legibilidade</h2>
+<p>Vamos considerar um exemplo mais complexo para ilustrar por que a legibilidade é tão importante:</p>
+<pre><code>def verificar_temperatura(temperatura, esta_ensolarado):
+    if temperatura &gt; 30:
+        if esta_ensolarado:
+            return "Está quente e ensolarado lá fora!"
+        return "Está quente mas nublado lá fora."
+    if temperatura &gt; 20:
+        if esta_ensolarado:
+            return "Está agradável e ensolarado lá fora!"
+        return "Está agradável mas nublado lá fora."
+    return "Está frio lá fora."
+    
+print(verificar_temperatura(35, True))  # Output: Está quente e ensolarado lá fora!
+print(verificar_temperatura(25, False))  # Output: Está agradável mas nublado lá fora.
+</code></pre>
+<p>Neste exemplo, a ausência de <code>if-else</code> faz com que a lógica se torne difícil de seguir e entender rapidamente. Se adicionarmos mais condições, a legibilidade só piora.</p>
+<h2>A Ergonomia do If-Else</h2>
+<p>A estrutura <code>if-else</code> oferece uma ergonomia natural para o código. Ela permite que os programadores visualizem claramente as ramificações lógicas e as possíveis ações que o programa pode tomar.</p>
+<p>Vamos reescrever o exemplo anterior usando <code>if-else</code> de forma mais clara:</p>
+<pre><code>def verificar_temperatura(temperatura, esta_ensolarado):
+    if temperatura &gt; 30:
+        if esta_ensolarado:
+            return "Está quente e ensolarado lá fora!"
+        else:
+            return "Está quente mas nublado lá fora."
+    elif temperatura &gt; 20:
+        if esta_ensolarado:
+            return "Está agradável e ensolarado lá fora!"
+        else:
+            return "Está agradável mas nublado lá fora."
+    else:
+        return "Está frio lá fora."
+    
+print(verificar_temperatura(35, True))  # Output: Está quente e ensolarado lá fora!
+print(verificar_temperatura(25, False))  # Output: Está agradável mas nublado lá fora.
+</code></pre>
+<p>Nesta versão, a lógica do código é mais explícita e fácil de seguir, tornando a manutenção e depuração do código muito mais simples.</p>
+<h2>Conclusão</h2>
+<p>Em resumo, a clareza do código deve sempre ser uma prioridade. Embora práticas como o retorno adiantado possam tornar o código mais conciso, elas frequentemente comprometem a legibilidade e a compreensão. Portanto, pelo bem da sanidade de todos os programadores, por favor, use <code>if-else</code>.</p>
+<p>Se isso não for suficiente para convencer, considere que manter um código limpo e legível não é apenas uma questão de preferência pessoal; é uma responsabilidade compartilhada para garantir que todos possam entender, contribuir e manter o código no futuro.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quando se trata de programar, todo mundotem suas preferências. Algumas pessoas adoram programar de forma concisa e eficiente, enquanto outras preferem um código mais explícito e facilmente compreensível. No entanto, há uma prática de programação que mexe com a minha sanidade, e sinceramente espero…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Quando se trata de programar, todo mundotem suas preferências. Algumas pessoas adoram programar de forma concisa e eficiente, enquanto outras preferem um código mais explícito e facilmente compreensível. No entanto, há uma prática de programação que mexe com a minha sanidade, e sinceramente espero…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/para-a-minha-sanidade-por-favor-use-if-else-ou-eu-vou-encontrar-voce/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

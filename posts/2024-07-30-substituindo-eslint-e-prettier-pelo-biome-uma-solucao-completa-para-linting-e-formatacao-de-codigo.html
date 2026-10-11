@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Substituindo ESLint e Prettier pelo Biome: Uma Solução Completa para Linting e Formatação de Código — felvieira's blog</title>
+<meta name="description" content="Nos meus novos projetos, tenho substituído o ESLint e Prettier pelo Biome. Um dos grandes destaques do Biome é que ele já inclui muitas regras de plugins normalmente utilizados no ESLint, como typescript-eslint, eslint-plugin-react, eslint-plugin-react-hooks e muitos outros, removendo a necessidade…">
+<meta property="og:title" content="Substituindo ESLint e Prettier pelo Biome: Uma Solução Completa para Linting e Formatação de Código">
+<meta property="og:description" content="Nos meus novos projetos, tenho substituído o ESLint e Prettier pelo Biome. Um dos grandes destaques do Biome é que ele já inclui muitas regras de plugins normalmente utilizados no ESLint, como typescript-eslint, eslint-plugin-react, eslint-plugin-react-hooks e muitos outros, removendo a necessidade…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-30-substituindo-eslint-e-prettier-pelo-biome-uma-solucao-completa-para-linting-e-formatacao-de-codigo-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/30/substituindo-eslint-e-prettier-pelo-biome-uma-solucao-completa-para-linting-e-formatacao-de-codigo/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="380">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Substituindo ESLint e Prettier pelo Biome: Uma Solução Completa para Linting e Formatação de Código</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>30 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-30-substituindo-eslint-e-prettier-pelo-biome-uma-solucao-completa-para-linting-e-formatacao-de-codigo-cover.png" alt="Substituindo ESLint e Prettier pelo Biome: Uma Solução Completa para Linting e Formatação de Código — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Nos meus novos projetos, tenho substituído o <a href="https://eslint.org/">ESLint</a> e <a href="https://prettier.io/">Prettier</a> pelo <a href="https://biomejs.dev/">Biome</a>.</p>
+<p>Um dos grandes destaques do <a href="https://biomejs.dev/">Biome</a> é que ele já inclui muitas regras de plugins normalmente utilizados no <a href="https://eslint.org/">ESLint</a>, como <a href="https://github.com/typescript-eslint/typescript-eslint">typescript-eslint</a>, <a href="https://github.com/yannickcr/eslint-plugin-react">eslint-plugin-react</a>, <a href="https://reactjs.org/docs/hooks-intro.html">eslint-plugin-react-hooks</a> e muitos outros, removendo a necessidade de adicionar centenas de pacotes ao package.</p>
+<p>Outro destaque é o seu linter, que retorna diagnósticos detalhados, fornecendo não apenas onde está o erro, mas também dicas de como você pode escrever aquele trecho utilizando métodos mais modernos e removendo código desnecessário quando possível.</p>
+<p>Por ser um linter e formatter, <a href="https://biomejs.dev/">Biome</a> substitui a necessidade de utilizar duas ferramentas como acontece com <a href="https://eslint.org/">ESLint</a> e <a href="https://prettier.io/">Prettier</a>, centralizando tudo em apenas uma.</p>
+<h2>Como Instalar e Configurar o Biome</h2>
+<p>A instalação e configuração do <a href="https://biomejs.dev/">Biome</a> é super simples e tem integração com o <a href="https://code.visualstudio.com/">VSCode</a>.</p>
+<p>Para instalar, basta adicionar o Biome ao seu projeto com o seguinte comando:</p>
+<pre><code>npm install biome --save-dev</code></pre>
+<p>Depois, crie um arquivo de configuração <code>.biomerc</code> na raiz do seu projeto com as regras desejadas. Por exemplo:</p>
+<pre><code>
+{
+    "rules": {
+        "no-unused-vars": "error",
+        "prefer-const": "warn"
+    }
+}
+</code></pre>
+<p>Também é possível configurar o Biome para rodar automaticamente em cada commit usando o <a href="https://github.com/okonet/lint-staged">lint-staged</a> com <a href="https://github.com/typicode/husky">husky</a>:</p>
+<pre><code>
+{
+    "husky": {
+        "hooks": {
+            "pre-commit": "lint-staged"
+        }
+    },
+    "lint-staged": {
+        "*.js": [
+            "biome fix",
+            "git add"
+        ]
+    }
+}
+</code></pre>
+<h2>Integração com o VSCode</h2>
+<p>Para integrar o Biome no <a href="https://code.visualstudio.com/">VSCode</a>, instale a extensão <a href="https://marketplace.visualstudio.com/items?itemName=biomejs.vscode-biome">Biome for Visual Studio Code</a> a partir do marketplace. Com essa extensão, seu código será automaticamente formatado e analisado em tempo real durante a edição.</p>
+<h2>Conclusão</h2>
+<p>Você já conhecia o <a href="https://biomejs.dev/">Biome</a>? Já utilizou ele em seus projetos? A adoção dessa ferramenta pode simplificar a configuração e manutenção de códigos, além de fornecer diagnósticos mais precisos e dicas úteis para melhoria contínua do seu código.</p>
+<p>Se você ainda não experimentou, vale a pena dar uma chance ao <a href="https://biomejs.dev/">Biome</a> e descobrir todos os benefícios que ele pode oferecer para seus projetos!</p>
+<p>Para mais informações e detalhes sobre o Biome, visite o <a href="https://biomejs.dev/">site oficial</a>.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Nos meus novos projetos, tenho substituído o ESLint e Prettier pelo Biome. Um dos grandes destaques do Biome é que ele já inclui muitas regras de plugins normalmente utilizados no ESLint, como typescript-eslint, eslint-plugin-react, eslint-plugin-react-hooks e muitos outros, removendo a necessidade…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Nos meus novos projetos, tenho substituído o ESLint e Prettier pelo Biome. Um dos grandes destaques do Biome é que ele já inclui muitas regras de plugins normalmente utilizados no ESLint, como typescript-eslint, eslint-plugin-react, eslint-plugin-react-hooks e muitos outros, removendo a necessidade…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/30/substituindo-eslint-e-prettier-pelo-biome-uma-solucao-completa-para-linting-e-formatacao-de-codigo/</div>
+  </section>
+
+  <footer class="post">
+    <span>30 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

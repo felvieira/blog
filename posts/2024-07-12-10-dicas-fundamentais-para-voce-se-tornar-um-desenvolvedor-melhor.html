@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 Dicas Fundamentais para Você se Tornar um Desenvolvedor Melhor — felvieira's blog</title>
+<meta name="description" content="10 Itens para Você se Tornar um Desenvolvedor Melhor Se você deseja se destacar como desenvolvedor, é essencial continuamente aprimorar suas habilidades e conhecimentos. Aqui estão 10 itens que podem te ajudar a se tornar um desenvolvedor melhor: 1. Aprenda a Pensar em Termos de Sistemas Completos…">
+<meta property="og:title" content="10 Dicas Fundamentais para Você se Tornar um Desenvolvedor Melhor">
+<meta property="og:description" content="10 Itens para Você se Tornar um Desenvolvedor Melhor Se você deseja se destacar como desenvolvedor, é essencial continuamente aprimorar suas habilidades e conhecimentos. Aqui estão 10 itens que podem te ajudar a se tornar um desenvolvedor melhor: 1. Aprenda a Pensar em Termos de Sistemas Completos…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-12-10-dicas-fundamentais-para-voce-se-tornar-um-desenvolvedor-melhor-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/12/10-dicas-fundamentais-para-voce-se-tornar-um-desenvolvedor-melhor/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="352">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>10 Dicas Fundamentais para Você se Tornar um Desenvolvedor Melhor</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-12-10-dicas-fundamentais-para-voce-se-tornar-um-desenvolvedor-melhor-cover.webp" alt="10 Dicas Fundamentais para Você se Tornar um Desenvolvedor Melhor — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<div>
+<h2>10 Itens para Você se Tornar um Desenvolvedor Melhor</h2>
+<p>Se você deseja se destacar como desenvolvedor, é essencial continuamente aprimorar suas habilidades e conhecimentos. Aqui estão 10 itens que podem te ajudar a se tornar um desenvolvedor melhor:</p>
+<h3>1. Aprenda a Pensar em Termos de Sistemas Completos</h3>
+<p>Para criar soluções robustas e escaláveis, é fundamental entender como os componentes interagem e como eles afetam o sistema como um todo. Pense na arquitetura do sistema, nas interações entre os componentes e no fluxo de dados. Isso permitirá que você detecte problemas potenciais antes que eles ocorram e crie sistemas mais eficientes.</p>
+<h3>2. Domine a Linguagem de Programação Java</h3>
+<p>Java é uma linguagem amplamente usada no desenvolvimento de sistemas backend, aplicações móveis e até mesmo para Big Data. Dominar o Java pode abrir muitas oportunidades de carreira.</p>
+<pre>
+    public class Conta {
+        private String titular;
+        private int numero;
+        private String agencia;
+        private double saldo;
+        private String dataDeAbertura;
+
+        public Conta(String titular, int numero, String agencia, double saldo, String dataDeAbertura) {
+            this.titular = titular;
+            this.numero = numero;
+            this.agencia = agencia;
+            this.saldo = saldo;
+            this.dataDeAbertura = dataDeAbertura;
+        }
+
+        public void saca(double valor) {
+            if (this.saldo >= valor) {
+                this.saldo -= valor;
+            } else {
+                System.out.println("Saldo insuficiente!");
+            }
+        }
+
+        public void deposita(double valor) {
+            this.saldo += valor;
+        }
+
+        public double calculaRendimento() {
+            return this.saldo * 0.10;
+        }
+
+        public String recuperaDadosParaImpressao() {
+            String dados = "Titular: " + this.titular;
+            dados += "\nNúmero: " + this.numero;
+            dados += "\nAgência: " + this.agencia;
+            dados += "\nSaldo: R$" + this.saldo;
+            dados += "\nData de abertura: " + this.dataDeAbertura;
+            return dados;
+        }
+    }
+
+    public class Main {
+        public static void main(String[] args) {
+            Conta c1 = new Conta("Danilo", 123456, "001", 100, "01/01/2022");
+            Conta c2 = new Conta("Danilo", 123456, "001", 100, "01/01/2022");
+
+            if (c1 == c2) {
+                System.out.println("Iguais");
+            } else {
+                System.out.println("Diferentes");
+            }
+        }
+    }
+    </pre>
+<h3>3. Desenvolva Habilidades de Scripting</h3>
+<p>A habilidade de criar scripts para automatizar tarefas é essencial para melhorar a produtividade e eficiência. Seja usando JavaScript, Python ou qualquer outra linguagem de script, automatizar tarefas repetitivas poupará tempo e reduzirá a chance de erros.</p>
+<pre>
+    // Exemplo de script para Roblox
+    game.Players.Local.Character.HumanoidRootPart.Position = Vector3.new(0, 5, 0)
+    </pre>
+<h3>4. Aprenda a Utilizar RegEx</h3>
+<p>Expressões regulares ou Regular Expressions (RegEx) são padrões usados para analisar e manipular textos. Dominar RegEx pode facilitar muito a manipulação de strings e a validação de dados.</p>
+<pre>
+    (?:^/d+)|(?:^/w+)
+    </pre>
+<h3>5. Entenda os Elementos HTML</h3>
+<p>HTML é a base da web. Entender como usar os elementos corretos é essencial para criar páginas acessíveis e SEO-friendly. Veja um exemplo básico:</p>
+<pre>
+    <main>
+        <nav>
+            <section>
+                <img src="image.jpg" alt="Imagem">
+            </section>
+        </nav>
+    </main>
+    </pre>
+<h3>6. Domine a Ferramenta Alteryx</h3>
+<p>Alteryx é uma ferramenta poderosa para análise de dados e automação de processos. Ela permite que você manipule e analise dados de forma eficiente e eficaz.</p>
+<pre>
+    // Exemplo de expressão RegEx para Alteryx
+    (?:^/d+)|(?:^/w+)
+    </pre>
+<h3>7. Aprenda a Pensar em Termos de Design</h3>
+<p>Design não se trata apenas da aparência, mas também da usabilidade e da experiência do usuário. Entender os princípios de design ajudará você a criar aplicações não apenas funcionais, mas também agradáveis de usar.</p>
+<h3>8. Domine a Linguagem de Programação Python</h3>
+<p>Python é uma linguagem extremamente versátil e com uma sintaxe simples e clara. Ela é amplamente utilizada em áreas como desenvolvimento web, automação, data science, inteligência artificial, entre outras.</p>
+<pre>
+    # Exemplo de script Python
+    import os
+    os.system("python script.py")
+    </pre>
+<h3>9. Aprenda a Utilizar o Framework React</h3>
+<p>React é um framework JavaScript poderoso para criar interfaces de usuário interativas e escaláveis. Ele é mantido pelo Facebook e tem uma grande comunidade de desenvolvedores.</p>
+<pre>
+    // Exemplo de componente React
+    import React from 'react';
+
+    function App() {
+        return (
+            <div>
+                <h1>Hello World!</h1>
+            </div>
+        );
+    }
+
+    export default App;
+    </pre>
+<h3>10. Aprenda a Pensar em Termos de Testes</h3>
+<p>Testes são cruciais para garantir que seu código funcione corretamente e evitar que bugs cheguem à produção. Aprender a escrever testes eficientes pode detectar problemas antes que eles se tornem críticos.</p>
+<pre>
+    // Exemplo de teste JUnit
+    import org.junit.Test;
+    import static org.junit.Assert.*;
+
+    public class ContaTest {
+        @Test
+        public void testSaca() {
+            Conta c = new Conta("Danilo", 123456, "001", 100, "01/01/2022");
+            c.saca(50);
+            assertEquals(50, c.saldo, 0.01);
+        }
+    }
+    </pre>
+<p>Esses itens são essenciais para se tornar um desenvolvedor melhor, e cada um deles é crucial para a criação de soluções robustas e eficientes.</p>
+</div>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">10 Itens para Você se Tornar um Desenvolvedor Melhor Se você deseja se destacar como desenvolvedor, é essencial continuamente aprimorar suas habilidades e conhecimentos. Aqui estão 10 itens que podem te ajudar a se tornar um desenvolvedor melhor: 1. Aprenda a Pensar em Termos de Sistemas Completos…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">10 Itens para Você se Tornar um Desenvolvedor Melhor Se você deseja se destacar como desenvolvedor, é essencial continuamente aprimorar suas habilidades e conhecimentos. Aqui estão 10 itens que podem te ajudar a se tornar um desenvolvedor melhor: 1. Aprenda a Pensar em Termos de Sistemas Completos…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/12/10-dicas-fundamentais-para-voce-se-tornar-um-desenvolvedor-melhor/</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

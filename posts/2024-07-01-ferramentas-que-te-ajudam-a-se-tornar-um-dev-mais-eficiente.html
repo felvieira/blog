@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Ferramentas que te ajudam a se tornar um DEV mais eficiente — felvieira's blog</title>
+<meta name="description" content="Se você está se preparando para uma entrevista de desenvolvedor sênior em JavaScript ou apenas quer testar seus conhecimentos, este artigo é para você. Vamos explorar algumas das perguntas mais avançadas, cobrindo desde conceitos orientados a objetos até o loop de eventos, com exemplos de código…">
+<meta property="og:title" content="Ferramentas que te ajudam a se tornar um DEV mais eficiente">
+<meta property="og:description" content="Se você está se preparando para uma entrevista de desenvolvedor sênior em JavaScript ou apenas quer testar seus conhecimentos, este artigo é para você. Vamos explorar algumas das perguntas mais avançadas, cobrindo desde conceitos orientados a objetos até o loop de eventos, com exemplos de código…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-01-ferramentas-que-te-ajudam-a-se-tornar-um-dev-mais-eficiente-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/01/ferramentas-que-te-ajudam-a-se-tornar-um-dev-mais-eficiente/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="159">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Ferramentas que te ajudam a se tornar um DEV mais eficiente</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>1 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-01-ferramentas-que-te-ajudam-a-se-tornar-um-dev-mais-eficiente-cover.png" alt="Ferramentas que te ajudam a se tornar um DEV mais eficiente — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Se você está se preparando para uma entrevista de desenvolvedor sênior em JavaScript ou apenas quer testar seus conhecimentos, este artigo é para você. Vamos explorar algumas das perguntas mais avançadas, cobrindo desde conceitos orientados a objetos até o loop de eventos, com exemplos de código para ajudar na compreensão.</p>
+<h2>1. O que o seguinte código imprime? Por quê?</h2>
+<p>&#8220;`javascript<br />
+const obj = {<br />
+  name: &#8216;obj&#8217;,<br />
+  getName: function() {<br />
+    return function() {<br />
+      return this.name;<br />
+    }<br />
+  }<br />
+}</p>
+<p>const fn = obj.getName();<br />
+fn();<br />
+&#8220;`</p>
+<p><strong>Resposta:</strong> <code>undefined</code></p>
+<p><strong>Análise:</strong> A função interna de <code>getName</code> é executada no escopo global, então <code>this</code> aponta para <code>window/global</code>, e <code>window/global</code> não possui uma propriedade <code>name</code>, portanto, é retornado <code>undefined</code>.</p>
+<p>Para que o <code>this</code> da função interna também aponte para <code>obj</code>, pode-se usar uma <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Functions/Arrow_functions">função seta</a> ou <code>bind</code> para vincular <code>this</code>:</p>
+<p>&#8220;`javascript<br />
+const obj = {<br />
+  name: &#8216;obj&#8217;,<br />
+  getName: function() {<br />
+    return () => {<br />
+      return this.name;<br />
+    }<br />
+  }<br />
+}<br />
+&#8220;`</p>
+<h2>2. Implemente uma fábrica de contadores:</h2>
+<p>&#8220;`javascript<br />
+function createCounter() {<br />
+  let count = 0;<br />
+  return function() {<br />
+    return count++;<br />
+  }<br />
+}</p>
+<p>const counter1 = createCounter();<br />
+const counter2 = createCounter();<br />
+console.log(counter1()); // 0<br />
+console.log(counter1()); // 1<br />
+console.log(counter2()); // 0<br />
+&#8220;`</p>
+<p><strong>Análise:</strong> A razão pela qual os contadores podem ser incrementados independentemente é devido à característica de <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Closures">fechamento</a> usada. A função <code>createCounter</code> cria um fechamento que pode acessar a variável <code>count</code> no escopo externo. <code>counter1</code> e <code>counter2</code> referem-se a diferentes instâncias de função de fechamento, alcançando assim a independência de contagem.</p>
+<h2>3. Mecanismo de Loop de Eventos</h2>
+<p>O <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/EventLoop">loop de eventos</a> é um mecanismo crucial no JavaScript, especialmente no ambiente de execução do navegador ou do Node.js, que permite a execução assíncrona de operações. Entender o loop de eventos é vital para a otimização de aplicações web, garantindo que elas permaneçam responsivas e eficientes.</p>
+<p>Em sua essência, o loop de eventos funciona como uma fila de mensagens. Sempre que uma função assíncrona é chamada (como setTimeout, promises ou eventos do DOM), ela é adicionada à fila de mensagens. O loop de eventos processa essas mensagens uma de cada vez, garantindo que uma única operação seja executada no thread principal, prevenindo condições de corrida e outros problemas de concorrência.</p>
+<h3>Exemplo Prático</h3>
+<p>&#8220;`javascript<br />
+console.log(&#8216;Início&#8217;);</p>
+<p>setTimeout(() => {<br />
+  console.log(&#8216;Timeout 1&#8217;);<br />
+}, 1000);</p>
+<p>setTimeout(() => {<br />
+  console.log(&#8216;Timeout 2&#8217;);<br />
+}, 0);</p>
+<p>console.log(&#8216;Fim&#8217;);<br />
+&#8220;`</p>
+<p>Neste exemplo, a saída no console será:</p>
+<pre>
+Início
+Fim
+Timeout 2
+Timeout 1
+</pre>
+<p>Isso acontece porque, embora <code>Timeout 2</code> tenha um delay de 0 ms, ele ainda é colocado na fila de mensagens e só será executado após o código síncrono (início e fim) ser concluído.</p>
+<p>Para aprofundar ainda mais seu conhecimento sobre o loop de eventos, recomendo a leitura deste <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/EventLoop">artigo detalhado na MDN</a>.</p>
+<p>Se você tem interesse em explorar mais sobre JavaScript assíncrono, consulte também a documentação completa sobre <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Guide/Using_promises">Promises</a> e <a href="https://developer.mozilla.org/pt-BR/docs/Web/JavaScript/Reference/Operators/await">async/await</a> no MDN.</p>
+<p>Compartilhe suas dúvidas ou experiências com estas questões nos comentários abaixo. Vamos aprender juntos!</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Se você está se preparando para uma entrevista de desenvolvedor sênior em JavaScript ou apenas quer testar seus conhecimentos, este artigo é para você. Vamos explorar algumas das perguntas mais avançadas, cobrindo desde conceitos orientados a objetos até o loop de eventos, com exemplos de código…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Se você está se preparando para uma entrevista de desenvolvedor sênior em JavaScript ou apenas quer testar seus conhecimentos, este artigo é para você. Vamos explorar algumas das perguntas mais avançadas, cobrindo desde conceitos orientados a objetos até o loop de eventos, com exemplos de código…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/01/ferramentas-que-te-ajudam-a-se-tornar-um-dev-mais-eficiente/</div>
+  </section>
+
+  <footer class="post">
+    <span>1 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

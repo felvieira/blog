@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Explorando a Arquitetura e Conceitos Fundamentais do React Fiber para Otimização de Performance — felvieira's blog</title>
+<meta name="description" content="React Fiber é uma nova arquitetura introduzida pelo React para gerenciar o processo de renderização de forma mais eficiente. Ele visa melhorar o desempenho, especialmente em aplicações complexas. Aqui, vamos aprofundar nos conceitos-chave e na arquitetura do React Fiber. Arquitetura do React Fiber…">
+<meta property="og:title" content="Explorando a Arquitetura e Conceitos Fundamentais do React Fiber para Otimização de Performance">
+<meta property="og:description" content="React Fiber é uma nova arquitetura introduzida pelo React para gerenciar o processo de renderização de forma mais eficiente. Ele visa melhorar o desempenho, especialmente em aplicações complexas. Aqui, vamos aprofundar nos conceitos-chave e na arquitetura do React Fiber. Arquitetura do React Fiber…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-07-22-explorando-a-arquitetura-e-conceitos-fundamentais-do-react-fiber-para-otimizacao-de-performance-cover.webp">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/07/22/explorando-a-arquitetura-e-conceitos-fundamentais-do-react-fiber-para-otimizacao-de-performance/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="362">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Explorando a Arquitetura e Conceitos Fundamentais do React Fiber para Otimização de Performance</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>22 de julho de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-07-22-explorando-a-arquitetura-e-conceitos-fundamentais-do-react-fiber-para-otimizacao-de-performance-cover.webp" alt="Explorando a Arquitetura e Conceitos Fundamentais do React Fiber para Otimização de Performance — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>React Fiber é uma nova arquitetura introduzida pelo React para gerenciar o processo de renderização de forma mais eficiente. Ele visa melhorar o desempenho, especialmente em aplicações complexas. Aqui, vamos aprofundar nos conceitos-chave e na arquitetura do React Fiber.</p>
+<h2>Arquitetura do React Fiber</h2>
+<p>React Fiber é projetado para lidar com o processo de renderização de maneira mais eficiente e flexível. Ele substitui o mecanismo de renderização anterior, conhecido como &#8220;Stack Reconciler&#8221;, que era propenso a problemas de desempenho e vazamentos de memória. A nova arquitetura é baseada no conceito de &#8220;Work Loop&#8221;, que permite um controle maior sobre o processo de renderização.</p>
+<h3>Conceitos-chave</h3>
+<ol>
+<li>
+        <a href="https://reactjs.org/docs/faq-internals.html">Work Loop</a>: Este é o conceito central do React Fiber. É um loop que executa até a conclusão, lidando com o processo de renderização passo a passo. Cada iteração do loop é chamada de &#8220;fiber&#8221;. O work loop é responsável por agendar, executar e confirmar o trabalho.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/faq-internals.html">Fiber</a>: Um fiber é uma unidade de trabalho no work loop. Representa uma parte do processo de renderização, como um componente ou uma parte de um componente. Cada fiber tem um identificador único e um conjunto de propriedades que descrevem seu estado.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/faq-internals.html">Fiber Tree</a>: A árvore de fibers é uma estrutura de dados que representa a hierarquia de componentes. Ela é construída durante a renderização inicial e atualizada durante renderizações subsequentes. A árvore de fibers é usada para percorrer a hierarquia de componentes de forma eficiente e identificar mudanças.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/faq-internals.html">Scheduler</a>: O agendador é responsável por agendar o work loop. Ele decide quando executar o work loop e quanto tempo cada iteração deve levar. O agendador é projetado para priorizar tarefas de renderização com base em sua urgência e importância.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/faq-internals.html">Commit Phase</a>: A fase de commit é a etapa final do processo de renderização. Ela é responsável por aplicar as mudanças no DOM. A fase de commit garante que o DOM seja atualizado de forma correta e eficiente.
+    </li>
+</ol>
+<h2>Otimização de Desempenho</h2>
+<p>React Fiber fornece vários mecanismos para otimizar o desempenho:</p>
+<ul>
+<li>
+        <a href="https://reactjs.org/docs/concurrent-mode-intro.html">Renderização Preguiçosa</a>: React Fiber permite a renderização preguiçosa, onde os componentes são renderizados apenas quando realmente são necessários. Isso reduz a quantidade de renderizações desnecessárias e melhora o desempenho.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/concurrent-mode-intro.html">Priorização</a>: O agendador prioriza as tarefas de renderização com base em sua urgência e importância. Isso garante que tarefas críticas de renderização sejam executadas primeiro, melhorando a experiência geral do usuário.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/concurrent-mode-patterns.html#interruptions">Cancelamento de Trabalho</a>: React Fiber permite cancelar o trabalho se ele não for mais necessário. Isso reduz a quantidade de trabalho desnecessário e melhora o desempenho.
+    </li>
+<li>
+        <a href="https://reactjs.org/docs/reconciliation.html">Atualizações Eficientes</a>: React Fiber usa um mecanismo de atualização eficiente que minimiza a quantidade de re-renderizações desnecessárias. Isso melhora o desempenho reduzindo o número de atualizações desnecessárias.
+    </li>
+</ul>
+<h2>Conclusão</h2>
+<p>React Fiber é uma melhoria significativa em relação ao mecanismo de renderização anterior do React. Ele fornece uma maneira mais eficiente e flexível de lidar com a renderização, o que é essencial para aplicações complexas. Ao entender os conceitos-chave e a arquitetura do React Fiber, os desenvolvedores podem otimizar suas aplicações para um melhor desempenho e experiência do usuário.</p>
+<h2>Exemplos</h2>
+<pre>
+<code>
+import React, { useState } from 'react';
+
+function Counter() {
+  const [count, setCount] = useState(0);
+
+  return (
+    <div>
+      <p>Contagem: {count}</p>
+      <button> setCount(count + 1)}>+</button>
+      <button> setCount(count - 1)}>-</button>
+    </div>
+  );
+}
+
+export default Counter;
+</code>
+</pre>
+<pre>
+<code>
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
+
+function UserList() {
+  const [users, setUsers] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    axios.get('https://jsonplaceholder.typicode.com/users')
+      .then(response => {
+        setUsers(response.data);
+        setLoading(false);
+      })
+      .catch(error => {
+        console.error(error);
+      });
+  }, []);
+
+  return (
+    <div>
+      {loading ? (
+        <p>Carregando...</p>
+      ) : (
+        <ul>
+          {users.map(user => (
+            <li>{user.name}</li>
+          ))}
+        </ul>
+      )}
+    </div>
+  );
+}
+
+export default UserList;
+</code>
+</pre>
+<p>Esses exemplos demonstram como o React Fiber pode ser usado para criar componentes React simples e complexos de forma eficiente.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">React Fiber é uma nova arquitetura introduzida pelo React para gerenciar o processo de renderização de forma mais eficiente. Ele visa melhorar o desempenho, especialmente em aplicações complexas. Aqui, vamos aprofundar nos conceitos-chave e na arquitetura do React Fiber. Arquitetura do React Fiber…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">React Fiber é uma nova arquitetura introduzida pelo React para gerenciar o processo de renderização de forma mais eficiente. Ele visa melhorar o desempenho, especialmente em aplicações complexas. Aqui, vamos aprofundar nos conceitos-chave e na arquitetura do React Fiber. Arquitetura do React Fiber…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/07/22/explorando-a-arquitetura-e-conceitos-fundamentais-do-react-fiber-para-otimizacao-de-performance/</div>
+  </section>
+
+  <footer class="post">
+    <span>22 de julho de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
