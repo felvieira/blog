@@ -1,0 +1,154 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como Fazer o Deploy de Aplicações Web com Coolify e VPS — felvieira's blog</title>
+<meta name="description" content="Aprenda a implantar suas aplicações web de forma simples e eficiente utilizando a plataforma Coolify. Neste guia, abordaremos desde a configuração de uma VPS até o deploy automatizado com GitHub, permitindo que você leve suas aplicações ao ar de maneira profissional. 🌐 Introdução ao Deploy de…">
+<meta property="og:title" content="Como Fazer o Deploy de Aplicações Web com Coolify e VPS">
+<meta property="og:description" content="Aprenda a implantar suas aplicações web de forma simples e eficiente utilizando a plataforma Coolify. Neste guia, abordaremos desde a configuração de uma VPS até o deploy automatizado com GitHub, permitindo que você leve suas aplicações ao ar de maneira profissional. 🌐 Introdução ao Deploy de…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/12/07/como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="712">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como Fazer o Deploy de Aplicações Web com Coolify e VPS</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>7 de dezembro de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">6 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-cover.png" alt="Como Fazer o Deploy de Aplicações Web com Coolify e VPS — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p><span><iframe></iframe></span></p>
+<p>Aprenda a implantar suas aplicações web de forma simples e eficiente utilizando a plataforma Coolify. Neste guia, abordaremos desde a configuração de uma VPS até o deploy automatizado com GitHub, permitindo que você leve suas aplicações ao ar de maneira profissional.</p>
+<h2>🌐 Introdução ao Deploy de Aplicações Web</h2>
+<p>O deploy de aplicações web é uma etapa crucial no desenvolvimento, onde sua aplicação se torna acessível ao público. Neste processo, você precisará de um servidor, que pode ser uma VPS (Virtual Private Server), para hospedar seu aplicativo. O Coolify é uma ferramenta poderosa que simplifica esse processo, permitindo que você gerencie seus projetos de forma eficiente.</p>
+<p>Com o Coolify, você pode automatizar o deploy, integrar com repositórios de código e gerenciar serviços adicionais, como armazenamento de imagens. Isso é especialmente útil para quem deseja escalar suas aplicações ou manter um fluxo de trabalho mais organizado.</p>
+<h2>🖥️ Escolhendo uma VPS para o Deploy</h2>
+<p>Escolher a VPS certa é fundamental para o sucesso do seu deploy. Existem várias opções disponíveis no mercado, cada uma com suas características específicas. O ideal é optar por uma VPS que ofereça um bom equilíbrio entre preço e desempenho.</p>
+<ul>
+<li><strong>Recursos:</strong> Verifique a quantidade de CPU, RAM e armazenamento oferecidos.</li>
+<li><strong>Localização:</strong> Escolha um servidor que esteja próximo ao seu público-alvo para melhorar a velocidade de acesso.</li>
+<li><strong>Suporte:</strong> Um bom suporte técnico pode ser decisivo em momentos de necessidade.</li>
+<li><strong>Custo:</strong> Compare preços e veja se há promoções ou descontos disponíveis.</li>
+</ul>
+<h2>💳 Criando uma Conta no PayPal e Comprando uma VPS</h2>
+<p>Para adquirir uma VPS, você precisará de uma conta no PayPal. O PayPal é uma forma segura e amplamente aceita de pagamento. O processo de criação de conta é simples:</p>
+<ol>
+<li>Acesse o site do PayPal e clique em &#8220;Criar conta&#8221;.</li>
+<li>Escolha o tipo de conta que deseja criar (pessoal ou comercial).</li>
+<li>Preencha suas informações e siga as instruções para verificar sua conta.</li>
+</ol>
+<p>Após criar sua conta, você pode acessar o site da VPS escolhida e seguir as instruções para realizar a compra. É importante verificar se a VPS escolhida oferece suporte a sistemas operacionais como Ubuntu, pois isso facilitará a instalação de softwares necessários.</p>
+<h2>🔗 Instalando o Cliente SSH e Conectando à VPS</h2>
+<p>Para conectar-se à sua VPS, você precisará de um cliente SSH. Existem várias opções disponíveis, mas um dos mais populares é o PuTTY. A instalação é simples:</p>
+<ol>
+<li>Baixe o PuTTY do site oficial.</li>
+<li>Instale o programa em seu computador.</li>
+<li>Abra o PuTTY e insira o endereço IP da sua VPS.</li>
+<li>Escolha o tipo de conexão SSH e clique em &#8220;Open&#8221;.</li>
+</ol>
+<p>Assim que a conexão for estabelecida, você precisará inserir seu nome de usuário e senha que foram configurados durante a criação da VPS.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-1-9e67c68c-362f-481d-a19c-22886743f1a2.png" alt="Conectando à VPS via SSH"></p>
+<h2>⚙️ Instalação do Coolify na VPS</h2>
+<p>Com a conexão SSH estabelecida, o próximo passo é instalar o Coolify na sua VPS. O processo é bastante direto. Você deverá seguir os passos abaixo:</p>
+<ol>
+<li>Atualize os pacotes da sua VPS com o comando: <code>sudo apt update &amp;&amp; sudo apt upgrade</code>.</li>
+<li>Baixe o script de instalação do Coolify e execute-o.</li>
+</ol>
+<p>Após a instalação, você poderá acessar a interface do Coolify através do navegador, utilizando o IP da sua VPS e a porta correspondente.</p>
+<p></p>
+<h2>📁 Configurando Projetos no Coolify</h2>
+<p>Uma vez que o Coolify esteja instalado, você pode começar a configurar seus projetos. A interface é intuitiva, permitindo que você adicione repositórios de código de forma rápida.</p>
+<ol>
+<li>Clique em &#8220;Criar Novo Projeto&#8221;.</li>
+<li>Selecione se deseja usar um repositório público ou privado.</li>
+<li>Insira a URL do repositório e siga as instruções para configurar as variáveis de ambiente necessárias.</li>
+</ol>
+<p>O Coolify também permite que você escolha o tipo de aplicação que está implantando, seja ela um projeto em Node.js, React ou uma página estática. Isso facilita a configuração das dependências e otimiza o processo de build.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-2-23227626-52ce-4165-9006-859a74c50a03.png" alt="Configurando um novo projeto no Coolify"></p>
+<h2>🚀 Fazendo o Deploy de Aplicações e Serviços</h2>
+<p>Realizar o deploy de suas aplicações é uma etapa essencial que garante que seu projeto esteja acessível e em funcionamento. Com o Coolify, você pode implementar uma variedade de serviços, incluindo bancos de dados como PostgreSQL, MySQL, e Redis, entre outros.</p>
+<p>Para começar, basta selecionar o serviço desejado na interface do Coolify. A configuração é simplificada e geralmente requer apenas alguns cliques. Assim que você escolher o serviço, ele será provisionado automaticamente, permitindo que você se concentre no desenvolvimento.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-3-ebb36528-66f8-4911-9bfc-c838ce54cb64.png" alt="Selecionando serviço no Coolify"></p>
+<h3>Principais Serviços Disponíveis</h3>
+<ul>
+<li><strong>PostgreSQL:</strong> Ideal para aplicações que necessitam de um banco de dados relacional robusto.</li>
+<li><strong>MySQL:</strong> Uma escolha popular para aplicações web que requerem um banco de dados leve.</li>
+<li><strong>Redis:</strong> Perfeito para caching e armazenamento de dados em memória.</li>
+<li><strong>WordPress:</strong> Para quem deseja criar blogs ou sites de conteúdo de forma rápida.</li>
+</ul>
+<p>Esses serviços já vêm configurados com as credenciais de acesso apropriadas, o que facilita a implementação. Você só precisa clicar e seguir as orientações para configurar seu banco de dados ou serviço desejado.</p>
+<h2>🔧 Configurando Variáveis de Ambiente</h2>
+<p>As variáveis de ambiente são fundamentais para a configuração de suas aplicações. Elas permitem que você armazene informações sensíveis, como chaves de API, sem expô-las no código-fonte. No Coolify, a configuração de variáveis de ambiente é simples e direta.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-4-3e44edcf-1733-45ef-a3b8-1d1642a54a3f.png" alt="Configurando variáveis de ambiente"></p>
+<h3>Passos para Configurar Variáveis de Ambiente</h3>
+<ol>
+<li>Acesse o painel de controle do seu projeto no Coolify.</li>
+<li>Localize a seção de variáveis de ambiente.</li>
+<li>Adicione novas variáveis, inserindo o nome e o valor correspondente.</li>
+<li>Salve as alterações e reinicie seu serviço para que as novas configurações entrem em vigor.</li>
+</ol>
+<p>É importante lembrar que, ao adicionar variáveis de ambiente, você deve garantir que os valores estejam corretos. Por exemplo, se sua aplicação depende da API da OpenAI, você deve inserir a chave de API correspondente.</p>
+<h2>🌍 Deploy em Plataformas como Vercel e Netlify</h2>
+<p>Além do Coolify, existem outras plataformas populares para realizar o deploy de aplicações web, como Vercel e Netlify. Ambas oferecem integração com GitHub, o que facilita o processo de deploy contínuo.</p>
+<p>Essas plataformas são especialmente eficazes para projetos front-end, como aplicações React ou sites estáticos. Elas oferecem planos gratuitos com algumas limitações, que podem ser suficientes para projetos menores.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-5-5609bc99-0ed3-44ae-bb52-5cc3486794f4.png" alt="Fazendo deploy em Netlify"></p>
+<h3>Comparação entre Vercel e Netlify</h3>
+<ul>
+<li><strong>Vercel:</strong> Famosa pela sua simplicidade e integração com Next.js. Ideal para aplicações que utilizam React.</li>
+<li><strong>Netlify:</strong> Oferece uma ampla gama de funcionalidades, incluindo formulários e funções serverless. Excelente para sites estáticos.</li>
+</ul>
+<p>Para realizar o deploy em qualquer uma dessas plataformas, você precisa criar uma conta, conectar seu repositório do GitHub e seguir as instruções para configurar o ambiente. A adição de variáveis de ambiente também é suportada, permitindo que você mantenha suas credenciais seguras.</p>
+<h2>📝 Conclusão e Próximos Passos</h2>
+<p>O processo de deploy pode parecer complexo inicialmente, mas com ferramentas como Coolify, Vercel e Netlify, ele se torna muito mais gerenciável. Você agora tem as informações necessárias para realizar o deploy de suas aplicações de maneira eficaz.</p>
+<p>Nos próximos passos, considere explorar mais sobre as funcionalidades oferecidas por essas plataformas. Aprenda sobre práticas recomendadas para gerenciar suas variáveis de ambiente e como monitorar o desempenho de suas aplicações.</p>
+<p><img src="../assets/images/2024-12-07-como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps-6-a694ce63-620c-41fa-b6fa-86ad2cbe05d9.png" alt="Monitorando o desempenho da aplicação"></p>
+<h2>❓ FAQ</h2>
+<h3>Qual é a diferença entre Coolify, Vercel e Netlify?</h3>
+<p>Coolify é uma solução mais voltada para o gerenciamento de servidores e serviços, enquanto Vercel e Netlify são plataformas otimizadas para o deploy de aplicações front-end e sites estáticos.</p>
+<h3>É necessário pagar para usar Vercel e Netlify?</h3>
+<p>Ambas as plataformas oferecem planos gratuitos com limitações. Para projetos maiores ou que requerem mais recursos, planos pagos estão disponíveis.</p>
+<h3>Como posso gerenciar variáveis de ambiente no Coolify?</h3>
+<p>No Coolify, você pode facilmente adicionar e editar variáveis de ambiente através do painel de controle do seu projeto. Basta acessar a seção correspondente e seguir as instruções.</p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Aprenda a implantar suas aplicações web de forma simples e eficiente utilizando a plataforma Coolify. Neste guia, abordaremos desde a configuração de uma VPS até o deploy automatizado com GitHub, permitindo que você leve suas aplicações ao ar de maneira profissional. 🌐 Introdução ao Deploy de…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Aprenda a implantar suas aplicações web de forma simples e eficiente utilizando a plataforma Coolify. Neste guia, abordaremos desde a configuração de uma VPS até o deploy automatizado com GitHub, permitindo que você leve suas aplicações ao ar de maneira profissional. 🌐 Introdução ao Deploy de…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/12/07/como-fazer-o-deploy-de-aplicacoes-web-com-coolify-e-vps/</div>
+  </section>
+
+  <footer class="post">
+    <span>7 de dezembro de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

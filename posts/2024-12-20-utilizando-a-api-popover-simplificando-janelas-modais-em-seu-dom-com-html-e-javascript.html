@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Utilizando a API Popover: Simplificando Janelas Modais em Seu DOM com HTML e JavaScript — felvieira's blog</title>
+<meta name="description" content="A API de Popover é uma adição recente ao HTML e JavaScript, trazendo um conjunto de APIs e atributos HTML que ajudam a criar janelas “modais” dentro do seu DOM de maneira simplificada. Esta funcionalidade é especialmente útil para diversas características, tais como: Caixas de login popup Mensagens…">
+<meta property="og:title" content="Utilizando a API Popover: Simplificando Janelas Modais em Seu DOM com HTML e JavaScript">
+<meta property="og:description" content="A API de Popover é uma adição recente ao HTML e JavaScript, trazendo um conjunto de APIs e atributos HTML que ajudam a criar janelas “modais” dentro do seu DOM de maneira simplificada. Esta funcionalidade é especialmente útil para diversas características, tais como: Caixas de login popup Mensagens…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-12-20-utilizando-a-api-popover-simplificando-janelas-modais-em-seu-dom-com-html-e-javascript-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/12/20/utilizando-a-api-popover-simplificando-janelas-modais-em-seu-dom-com-html-e-javascript/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="757">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Utilizando a API Popover: Simplificando Janelas Modais em Seu DOM com HTML e JavaScript</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>20 de dezembro de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-12-20-utilizando-a-api-popover-simplificando-janelas-modais-em-seu-dom-com-html-e-javascript-cover.png" alt="Utilizando a API Popover: Simplificando Janelas Modais em Seu DOM com HTML e JavaScript — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>A API de Popover é uma adição recente ao HTML e JavaScript, trazendo um conjunto de APIs e atributos HTML que ajudam a criar janelas &#8220;modais&#8221; dentro do seu DOM de maneira simplificada. Esta funcionalidade é especialmente útil para diversas características, tais como:</p>
+<ul>
+<li><strong>Caixas de login popup</strong></li>
+<li><strong>Mensagens Toast</strong></li>
+<li><strong>Sidebars de menu</strong></li>
+</ul>
+<p>Tradicionalmente, esses elementos exigiriam bastante CSS, incluindo posicionamento absoluto e gerenciamento de z-index. Contudo, a API de Popover simplifica significativamente esse processo.</p>
+<h2>Declarando Elementos Popover</h2>
+<p>Os elementos popover são declarados definindo o atributo <code>popover</code> no HTML. Esse atributo pode ser usado em conjunto com outros atributos para controlar o comportamento do popover.</p>
+<h3>Configuração Declarativa</h3>
+<p>Você pode configurar um popover de forma declarativa usando o atributo HTML <code>popovertarget</code>. Este atributo especifica qual popover deve ser aberto ou alternado. Por exemplo:</p>
+<pre><code>
+&lt;button id=&quot;toggleBtn&quot; popovertarget=&quot;mypopover&quot;&gt;Alternar Popover&lt;/button&gt;
+&lt;div id=&quot;mypopover&quot; popover=&quot;auto&quot;&gt;Conteúdo do Popover&lt;/div&gt;
+</code></pre>
+<h3>Configuração Programática</h3>
+<p>Alternativamente, você pode configurar um popover de forma programática usando métodos JavaScript. Aqui está um exemplo de como fazê-lo:</p>
+<pre><code>
+const popover = document.getElementById(&quot;mypopover&quot;);
+const toggleBtn = document.getElementById(&quot;toggleBtn&quot;);
+
+const popoverSupported = supportsPopover();
+
+if (popoverSupported) {
+  popover.popover = &quot;auto&quot;;
+  toggleBtn.popoverTargetElement = popover;
+  toggleBtn.popoverTargetAction = &quot;toggle&quot;;
+} else {
+  console.log(&quot;API de Popover não suportada.&quot;);
+}
+</code></pre>
+<p><a href="https://developer.mozilla.org/pt-BR/docs/Web/API/HTMLPopoverElement">Visite este recurso</a> para aprender mais sobre como implementar a API de Popover de forma eficaz.</p>
+<h2>Controlando o Comportamento do Popover</h2>
+<p>A API de Popover permite controlar o comportamento dos popovers através de vários métodos, incluindo:</p>
+<ul>
+<li><strong>Dispensa Leve:</strong> No estado automático, o popover pode ser &#8220;dispensado levemente&#8221; ao clicar fora dele ou pressionar a tecla Esc.</li>
+<li><strong>Vários Popovers:</strong> Geralmente, apenas um popover automático pode ser exibido de cada vez, mas há exceções para popovers automáticos aninhados.</li>
+<li><strong>Estado Manual:</strong> No estado manual, o popover não pode ser &#8220;dispensado levemente&#8221;, embora botões declarativos de mostrar/ocultar/alternar ainda funcionem. Vários popovers independentes podem ser exibidos simultaneamente.</li>
+</ul>
+<h2>Uso de Exemplo</h2>
+<p>Aqui está um exemplo mais detalhado de como configurar um popover programaticamente:</p>
+<pre><code>
+function supportsPopover() {
+  return HTMLElement.prototype.hasOwnProperty(&quot;popover&quot;);
+}
+
+// Obter elementos
+const popover = document.getElementById(&quot;mypopover&quot;);
+const toggleBtn = document.getElementById(&quot;toggleBtn&quot;);
+
+// Verificar se a API de Popover é suportada
+const popoverSupported = supportsPopover();
+
+if (popoverSupported) {
+  // Configurar atributos do popover
+  popover.popover = &quot;auto&quot;;
+  toggleBtn.popoverTargetElement = popover;
+  toggleBtn.popoverTargetAction = &quot;toggle&quot;;
+} else {
+  // Tratar caso não suportado
+  toggleBtn.style.display = &quot;none&quot;;
+}
+</code></pre>
+<p>Para mais exemplos e casos de uso, confira <a href="https://css-tricks.com/the-popover-api/">este artigo sobre a API de Popover</a>.</p>
+<h2>Funcionalidades Adicionais</h2>
+<p>Além disso, a API de Popover inclui vários exemplos e casos de uso, como:</p>
+<ul>
+<li><strong>Exemplo Básico de Popover Declarativo:</strong> Demonstra um popover em estado automático básico.</li>
+<li><strong>Exemplo de Desfocar o Plano de Fundo do Popover:</strong> Mostra como você pode adicionar estilização ao conteúdo por trás do popover usando o pseudo-elemento <code>::backdrop</code>.</li>
+<li><strong>Exemplo de Vários Popovers Automáticos:</strong> Demonstra que, geralmente, apenas um popover automático pode ser exibido de uma vez.</li>
+<li><strong>Exemplo de Vários Popovers Manuais:</strong> Demonstra que vários popovers manuais podem ser exibidos simultaneamente, mas não podem ser dispensados levemente.</li>
+</ul>
+<p>Aproveitando a API de Popover, os desenvolvedores podem reduzir significativamente a quantidade de código necessária para criar janelas de estilo modal, tornando suas aplicações mais eficientes e fáceis de manter.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A API de Popover é uma adição recente ao HTML e JavaScript, trazendo um conjunto de APIs e atributos HTML que ajudam a criar janelas “modais” dentro do seu DOM de maneira simplificada. Esta funcionalidade é especialmente útil para diversas características, tais como: Caixas de login popup Mensagens…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A API de Popover é uma adição recente ao HTML e JavaScript, trazendo um conjunto de APIs e atributos HTML que ajudam a criar janelas “modais” dentro do seu DOM de maneira simplificada. Esta funcionalidade é especialmente útil para diversas características, tais como: Caixas de login popup Mensagens…
+
+Leia o post completo: https://blog.felvieira.com.br/2024/12/20/utilizando-a-api-popover-simplificando-janelas-modais-em-seu-dom-com-html-e-javascript/</div>
+  </section>
+
+  <footer class="post">
+    <span>20 de dezembro de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

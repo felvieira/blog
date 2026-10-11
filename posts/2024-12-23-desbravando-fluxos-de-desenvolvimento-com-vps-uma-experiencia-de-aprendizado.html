@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Desbravando Fluxos de Desenvolvimento com VPS: Uma Experiência de Aprendizado — felvieira's blog</title>
+<meta name="description" content="Este post ensina a configurar um VPS, hospedar múltiplas aplicações e otimizar o ambiente de desenvolvimento com dicas práticas e insights de um especialista.">
+<meta property="og:title" content="Desbravando Fluxos de Desenvolvimento com VPS: Uma Experiência de Aprendizado">
+<meta property="og:description" content="Este post ensina a configurar um VPS, hospedar múltiplas aplicações e otimizar o ambiente de desenvolvimento com dicas práticas e insights de um especialista.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2024-12-23-desbravando-fluxos-de-desenvolvimento-com-vps-uma-experiencia-de-aprendizado-cover.jpeg">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2024/12/23/desbravando-fluxos-de-desenvolvimento-com-vps-uma-experiencia-de-aprendizado/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="764">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Desbravando Fluxos de Desenvolvimento com VPS: Uma Experiência de Aprendizado</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>23 de dezembro de 2024</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min read</span>
+  </p>
+
+  <img src="../assets/images/2024-12-23-desbravando-fluxos-de-desenvolvimento-com-vps-uma-experiencia-de-aprendizado-cover.jpeg" alt="Desbravando Fluxos de Desenvolvimento com VPS: Uma Experiência de Aprendizado — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Ei galera! Sou o Felipe Vieira, e estou aqui para compartilhar um pouquinho da minha experiência de 15 anos no desenvolvimento e design. Hoje, vamos explorar juntos uma parte fascinante do nosso fluxo de trabalho: a configuração do nosso próprio servidor VPS. Muitas pessoas me perguntam como subir uma aplicação no servidor e quais são as melhores práticas. Por isso, decidi criar este guia completo, pensando em todos vocês que querem avançar no mundo do desenvolvimento.</p>
+<h2>Por que Escolher um Servidor VPS?</h2>
+<p>Já pensou em ter as chaves da sua própria casa digital? Usando um Servidor VPS, você pode! <em>&#8220;Controlar seu próprio VPS é como ter as chaves da sua própria casa digital.&#8221;</em> Um Servidor VPS oferece liberdade e flexibilidade que os servidores compartilhados não conseguem. Vamos dar uma olhada nas várias razões para escolher um VPS.</p>
+<h3>1. Vantagens do VPS em relação a servidores compartilhados</h3>
+<ul>
+<li><b>Recursos dedicados:</b> Diferente de servidores compartilhados, o VPS oferece CPUs e RAM dedicados, garantindo desempenho estável.</li>
+<li><b>Maior controle:</b> Você tem controle total, podendo instalar o que precisar e configurar do seu jeito.</li>
+</ul>
+<h4>2. Flexibilidade e controle sobre o ambiente</h4>
+<p>Com um VPS, você pode personalizar tudo. Personalizar mesmo! Instalação de softwares, atualização do sistema, gerenciamento de segurança, tudo está ao seu alcance. Um VPS é como uma folha em branco, esperando sua criatividade. Quem não gosta de ter liberdade, certo?</p>
+<h5>3. Custo-benefício a longo prazo</h5>
+<p>Certo, talvez um VPS não seja gratuito como algumas opções de hospedagem compartilhada. Mas pense a longo prazo. Por apenas <b>5 dólares mensais</b>, você obtém uma solução robusta com <b>4 CPUs</b> e <b>6GB de RAM</b>. Mais barato do que um cafézinho por dia!</p>
+<h6>4. Opção ideal para desenvolver e testar</h6>
+<p>O VPS é perfeito para desenvolvedores. Ideal para testar e prototipar suas criações, sem limitações. Pode iniciar múltiplas aplicações. Comece pequeno, depois escale conforme sua necessidade. E não se preocupe: seu VPS está preparado para aguentar o tranco!</p>
+<blockquote><p>Hoje a gente vai falar uma parte importante do fluxo da nossa app ali, a gente está fazendo no Linkedin, de como a gente fazer o?</p></blockquote>
+<p>Então, considerando todas essas vantagens, vale sim prestar atenção aos VPS. Na verdade, eu acredito que é uma das melhores alternativas disponíveis! Afinal, quem não quer ter as chaves do próprio reino?</p>
+<p><img src="https://blogifyai.s3.amazonaws.com/svg/b99b2da4-2eb0-4d95-8e8b-6e5dd7624b2b.png" alt="Generated image" /><br />
+</p>
+<h2>Configurando o VPS: Passos Iniciais</h2>
+<p>Vamos juntos nessa jornada de configuração do seu VPS? Ah, mas primeiro &#8211; a única coisa que eu vou precisar, vocês vão precisar ter conta no <em>PayPal</em>, tá? Isso facilita bastante na hora dos <i>pagamentos internacionais</i>. Afinal, ninguém quer ficar quebrando a cabeça com taxas e conversões, certo?</p>
+<h3>Criar conta no PayPal para facilitar o pagamento</h3>
+<p>O PayPal é essencial. Com ele, você terá uma passagem direta para transações seguras e rápidas. Pense nele como seu passaporte para o mundo digital dos negócios.</p>
+<h3>Local ideal para adquirir serviços VPS</h3>
+<ul>
+<li>Eu recomendo a Contábil, tá? Por quê?</li>
+<li>Estamos em época de <b>promoção Black Friday</b>: 10% de desconto!</li>
+<li>Opções flexíveis: pague mensal ou anual e economize nos gastos.</li>
+</ul>
+<p>Nesta época, é imperdível. Uma VPS com 100GB de armazenamento e 30TB de tráfego? É um custo-benefício que faz diferença!</p>
+<h3>Primeira configuração e instalação dos sistemas básicos</h3>
+<p>Agora que você já escolheu onde vai hospedar, a missão é:<br /> Instalar e configurar seu próprio servidor &#8211; um ritual de passagem para desenvolvedores sérios.</p>
+<p>As opções são muitas: <b>Ubuntu</b> é uma escolha sólida para instalar software de controle de <i>deploy</i>. Mas, fique à vontade para explorar o que melhor lhe atende!</p>
+<h3>Preparando o VPS para receber aplicações</h3>
+<p>Hora de preparar terreno.</p>
+<ul>
+<li>Defina suas senhas e segurança</li>
+<li>Escolha sua distribuição e comece a instalação dos pacotes essenciais.</li>
+</ul>
+<p>Não esqueça: se for usar SSL, saiba que é pago. Pense nas suas necessidades e no que é essencial pro seu projeto.</p>
+<blockquote><p>Instalar e configurar seu próprio servidor é um ritual de passagem para desenvolvedores sérios.</p></blockquote>
+<h3>Dados do VPS e Promoção</h3>
+<table>
+<tr>
+<th>Promoção</th>
+<th>Armazenamento</th>
+<th>Tráfego</th>
+</tr>
+<tr>
+<td>10% de desconto</td>
+<td>100GB</td>
+<td>30TB</td>
+</tr>
+</table>
+<p>Interessado em um gráfico visual? Aqui está a representação!</p>
+<p>var ctx = document.getElementById(&#8216;vpsChart&#8217;).getContext(&#8216;2d&#8217;);<br />
+var chart = new Chart(ctx, {<br />
+    type: &#8216;bar&#8217;,<br />
+    data: {<br />
+        labels: [&#8216;Promoção&#8217;, &#8216;Armazenamento&#8217;, &#8216;Tráfego&#8217;],<br />
+        datasets: [{<br />
+            label: &#8216;Dados do VPS&#8217;,<br />
+            data: [10, 100, 30],<br />
+            backgroundColor: [&#8216;rgba(255, 99, 132, 0.2)&#8217;, &#8216;rgba(54, 162, 235, 0.2)&#8217;, &#8216;rgba(75, 192, 192, 0.2)&#8217;],<br />
+            borderColor: [&#8216;rgba(255, 99, 132, 1)&#8217;, &#8216;rgba(54, 162, 235, 1)&#8217;, &#8216;rgba(75, 192, 192, 1)&#8217;],<br />
+            borderWidth: 1<br />
+        }]<br />
+    },<br />
+    options: {<br />
+        scales: {<br />
+            y: {<br />
+                beginAtZero: true<br />
+            }<br />
+        }<br />
+    }<br />
+});<br />
+</p>
+<h2>Subindo Aplicações no VPS</h2>
+<p>Subir suas aplicações em um <em>VPS</em> pode ser uma tarefa intimidante, mas não se preocupe, estou aqui para ajudar! Vamos começar com as <b>escolhas que você precisa fazer</b> ao iniciar.</p>
+<h3>1. Escolha entre Aplicações Públicas e Privadas</h3>
+<p>Primeiro, você precisa decidir: seu repositório será <b>público</b> ou <b>privado</b>? Repositórios públicos são mais fáceis de compartilhar, mas qualquer um pode acessá-los. Já os privados são mais seguros, mas requerem permissões específicas.</p>
+<table>
+<tr>
+<th>Tipo de repositório</th>
+<th>Porta de acesso</th>
+</tr>
+<tr>
+<td>Público ou Privado</td>
+<td>8000</td>
+</tr>
+</table>
+<p><strong>Por que isso importa?</strong> Pense no seu repositório como um diário: quer que todos leiam ou você prefere manter segredos?</p>
+<h3>2. Como Conectar via SSH</h3>
+<p>Conectar-se ao seu VPS via <code>SSH</code> é essencial por questões de segurança. Vamos ser sinceros, quem não quer proteger seu &#8220;precioso&#8221; código? Siga essas etapas simples:</p>
+<ul>
+<li>Instale um cliente SSH.</li>
+<li>Use o comando <code>ssh user@servidor</code> para estabelecer conexão.</li>
+<li>Pronto! Agora você está lá dentro.</li>
+</ul>
+<h3>3. Instalando Softwares e Serviços</h3>
+<p>Já conectado, é hora de instalar softwares necessários. Imagine sua VPS como uma casa nova: precisa mobiliá-la antes de tudo.</p>
+<ul>
+<li>Copie o código necessário.</li>
+<li>Execute scripts de instalação.</li>
+<li>Cuide dos pré-requisitos. A instalação automática cuidará disso com facilidade.</li>
+</ul>
+<p>&#8220;Um ambiente bem configurado faz toda a diferença no desenvolvimento ágil.&#8221; Concordo totalmente. Sem infraestrutura sólida, todo projeto cai por água abaixo.</p>
+<h3>4. Gerenciamento de Projetos diretamente no VPS</h3>
+<p>Gerenciar projetos no VPS é como cuidar de um jardim. Precisa regar, podar e organizar. Use ferramentas como Git para melhor controle de versão e organização do seu trabalho.</p>
+<p><strong>Dica Pro:</strong> Frameworks populares como <strong>React</strong> e <strong>Vue</strong> podem ser integrados facilmente e alavancar seu desempenho de desenvolvimento.</p>
+<p>Então, vamos lá! Mergulhe nessa aventura de subir suas aplicações no VPS. O que você está esperando?</p>
+<h2>Evitando Armadilhas Comuns</h2>
+<h3>Problemas Comuns Durante a Configuração</h3>
+<p>
+    Configurar um novo sistema pode ser complicado. Muitas vezes, nos deparamos com problemas que parecem sem solução.<br />
+    <strong>Por exemplo</strong>, configurações erradas são uma armadilha clássica. O que isso significa? Basicamente, quando já pensamos que está tudo certo, acaba não funcionando. Já te aconteceu isso?
+</p>
+<p>
+    Imagine que você está montando um quebra-cabeça e uma peça não encaixa. É frustrante, não é? No nosso caso, precisamos verificar o *IP*, certificando-nos de que cada informação está correta. Como na vida, a tecnologia também gosta de surpresas indesejadas!
+</p>
+<h3>Soluções Para Erros Frequentes</h3>
+<p>
+    Às vezes, o erro não está em nós, mas sim no sistema. Mas não se preocupe! Existem soluções simples para problemas comuns. Por exemplo, ao trabalhar com um VPS, o acesso às configurações é essencial para evitar surpresas futuras. Atualizações de software são outro ponto de atenção. Sempre vale a pena verificar se a versão mais recente está instalada.
+</p>
+<blockquote><p>&#8220;Os desafios encontrados durante a configuração nos preparam melhor para o futuro.&#8221;</p></blockquote>
+<h3>Importância de Backups Regulares</h3>
+<p>
+    Agora, pense comigo: e se perdermos todos os nossos dados? Seria uma catástrofe, certo? Os backups funcionam como uma apólice de seguro para os dados. <strong>Devemos</strong> sempre ter uma cópia de segurança disponível. Alguém pode me perguntar: &#8220;Com que frequência devo fazer backups?&#8221; Bem, a frequência ideal é semanal. E isso não está em questão!
+</p>
+<h3>Como Testar Adequadamente o Setup</h3>
+<p>
+    Nunca é demais testar o setup antes de colocá-lo para rodar. Entre testar e confiar cegamente, escolha sempre testar. Assim como você não compraria um carro sem antes dirigi-lo, o mesmo vale para configurações técnicas. Realizar testes completos antes da implantação final ajuda a evitar dores de cabeça.
+</p>
+<table>
+<tr>
+<th>Item</th>
+<th>Detalhes</th>
+</tr>
+<tr>
+<td>Tempo médio para configuração inicial</td>
+<td>3 horas</td>
+</tr>
+<tr>
+<td>Frequência de backup recomendada</td>
+<td>Semanal</td>
+</tr>
+</table>
+<p>
+    Ali atrás está fazendo. Beleza. Abriu, deixa eu desligar a música. Configurações, e ver, os logs. Uma coisa de cada vez, certo?
+</p>
+<h2>Dicas Avançadas de Otimização</h2>
+<p>Você já pensou em como a automatização pode transformar o seu processo de desenvolvimento? Bom, eu já experimentei e posso dizer que os benefícios são enormes. Ao automatizar atualizações e deployments, economizamos tempo e reduzimos erros. Pensa comigo: quem nunca se atrapalhou ao configurar manualmente? Automatizações são como aquele colega pontual que sempre lembra do que precisa ser feito.</p>
+<h3>1. Automatizando Atualizações e Deployments</h3>
+<p>A atualização de sistemas manualmente pode ser uma dor de cabeça, vamos ser honestos. Implementar um sistema de <em>deploy</em> automatizado é semelhante a contratar um assistente pessoal que funciona 24 horas. De acordo com algumas estatísticas, atualizações automáticas economizam cerca de 20% do tempo normalmente gasto em tarefas manuais. E a melhor parte é que o sistema continua a funcionar de forma transparente, como se estivéssemos apenas observando de longe.</p>
+<p>&#8220;A verdadeira eficiência no desenvolvimento vem ao automatizarmos o que é possível.&#8221;</p>
+<h3>2. Uso de Variáveis de Ambiente em Aplicações</h3>
+<p>Passando para as variáveis de ambiente, você já deve saber o quão cruciais elas são para configuração. Imagine uma chave mestra que destranca diferentes portas com um giro simples. Assim, variáveis de ambiente facilitam a configuração das suas aplicações. Elas podem ser configuradas via interface web do VPS, simplificando o processo ainda mais.</p>
+<h3>3. Melhores Práticas de Segurança</h3>
+<p>Nunca é demais enfatizar a segurança. Afinal, um castelo está sempre a mercê de invasores se não possui muralhas sólidas. Portanto, implementar <strong>boas práticas de segurança</strong> no seu sistema não é apenas recomendado, é essencial. Desde autenticação até uso de protocolos seguros, cada detalhe conta.</p>
+<h3>4. Integração com Ferramentas de CI/CD</h3>
+<p>Por fim, integrar suas tarefas com ferramentas de CI/CD é um divisor de águas. Isso não apenas melhora a eficiência dos deployments, mas também lhes conferem uma leveza e fluidez. Imagina aquele atleta olímpico que faz tudo parecer sem esforço: é assim que nosso sistema se comporta uma vez que a integração está completa.</p>
+<p>E olhando para trás, lembra onde que a gente poderia melhorar todos esses aspectos? Nossas práticas estavam um pouco dispersas. Agora, com esse novo conhecimento em mãos, espero que possamos transformar a teoria em prática.</p>
+<p><strong>Conclusão:</strong> Portanto, da próxima vez que você pensar em otimização, lembre-se de que pequenos passos como automatizar tarefas, ajustar variáveis de ambiente, adotar melhores práticas de segurança e integrar com CI/CD podem fazer uma enorme diferença. Nós, como desenvolvedores, sempre procuramos maneiras de tornar o nosso trabalho mais eficiente &#8211; e agora sabemos como.</p>
+<p><b>TL;DR: </b>Este post ensina a configurar um VPS, hospedar múltiplas aplicações e otimizar o ambiente de desenvolvimento com dicas práticas e insights de um especialista.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Este post ensina a configurar um VPS, hospedar múltiplas aplicações e otimizar o ambiente de desenvolvimento com dicas práticas e insights de um especialista.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Este post ensina a configurar um VPS, hospedar múltiplas aplicações e otimizar o ambiente de desenvolvimento com dicas práticas e insights de um especialista.
+
+Leia o post completo: https://blog.felvieira.com.br/2024/12/23/desbravando-fluxos-de-desenvolvimento-com-vps-uma-experiencia-de-aprendizado/</div>
+  </section>
+
+  <footer class="post">
+    <span>23 de dezembro de 2024</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

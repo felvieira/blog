@@ -1,0 +1,248 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Tutorial Passo a Passo: Instalando o Langflow no seu próprio servidor — felvieira's blog</title>
+<meta name="description" content="Neste tutorial, vamos explorar como instalar o Langflow em uma VPS utilizando a ferramenta Coolify, uma solução que combina inteligência artificial com desenvolvimento frontend e design AI. Ao final, você terá uma instância funcional do Langflow pronta para uso. Sumário Passo 1: Introdução ao…">
+<meta property="og:title" content="Tutorial Passo a Passo: Instalando o Langflow no seu próprio servidor">
+<meta property="og:description" content="Neste tutorial, vamos explorar como instalar o Langflow em uma VPS utilizando a ferramenta Coolify, uma solução que combina inteligência artificial com desenvolvimento frontend e design AI. Ao final, você terá uma instância funcional do Langflow pronta para uso. Sumário Passo 1: Introdução ao…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/01/22/tutorial-instalacao-langflow-coolify-vps/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="855">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Tutorial Passo a Passo: Instalando o Langflow no seu próprio servidor</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>22 de janeiro de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">9 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-cover.png" alt="Tutorial Passo a Passo: Instalando o Langflow no seu próprio servidor — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p></p>
+<p>Neste tutorial, vamos explorar como instalar o Langflow em uma VPS utilizando a ferramenta Coolify, uma solução que combina inteligência artificial com desenvolvimento frontend e design AI. Ao final, você terá uma instância funcional do Langflow pronta para uso.</p>
+<h2>Sumário</h2>
+<ul>
+<li><a href="#passo-1:-introdução-ao-langflow-e-coolify-🚀">Passo 1: Introdução ao Langflow e Coolify 🚀</a></li>
+<li><a href="#passo-2:-adquirindo-sua-vps-na-hostinger-🖥️">Passo 2: Adquirindo sua VPS na Hostinger 🖥️</a></li>
+<li><a href="#passo-3:-configurando-o-sistema-operacional-⚙️">Passo 3: Configurando o Sistema Operacional ⚙️</a></li>
+<li><a href="#passo-4:-instalando-o-coolify-🛠️">Passo 4: Instalando o Coolify 🛠️</a></li>
+<li><a href="#passo-5:-criando-uma-conta-no-coolify-📝">Passo 5: Criando uma Conta no Coolify 📝</a></li>
+<li><a href="#passo-6:-configurando-o-self-hosting-🏠">Passo 6: Configurando o Self-Hosting 🏠</a></li>
+<li><a href="#passo-7:-criando-um-novo-projeto-📂">Passo 7: Criando um Novo Projeto 📂</a></li>
+<li><a href="#passo-8:-utilizando-docker-compose-🐳">Passo 8: Utilizando Docker Compose 🐳</a></li>
+<li><a href="#passo-9:-configurando-variáveis-de-ambiente-🌍">Passo 9: Configurando Variáveis de Ambiente 🌍</a></li>
+<li><a href="#passo-10:-gerando-um-domínio-🌐">Passo 10: Gerando um Domínio 🌐</a></li>
+<li><a href="#passo-11:-realizando-o-deploy-🚀">Passo 11: Realizando o Deploy 🚀</a></li>
+<li><a href="#passo-12:-aguardando-o-deploy-⏳">Passo 12: Aguardando o Deploy ⏳</a></li>
+<li><a href="#passo-13:-acessando-o-langflow-🔑">Passo 13: Acessando o Langflow 🔑</a></li>
+<li><a href="#passo-14:-conclusão-e-próximos-passos-🌟">Passo 14: Conclusão e Próximos Passos 🌟</a></li>
+<li><a href="#faq-❓">FAQ ❓</a></li>
+</ul>
+<h2>Passo 1: Introdução ao Langflow e Coolify 🚀</h2>
+<p>O Langflow é uma ferramenta poderosa para a criação de fluxos de trabalho em inteligência artificial. Ele permite que desenvolvedores criem e gerenciem agentes, utilizando uma interface amigável. A combinação do Langflow com o Coolify facilita a instalação e gerenciamento de aplicações em uma VPS, tornando todo o processo mais acessível, mesmo para aqueles que não têm experiência avançada em Linux.</p>
+<p>O Coolify atua como um instalador de pacotes que simplifica o deploy de aplicações, permitindo que você configure o Langflow de maneira rápida e eficiente. Com essa configuração, você poderá aproveitar ao máximo as funcionalidades do Langflow, sem a complexidade de gerenciar manualmente o servidor.</p>
+<h2>Passo 2: Adquirindo sua VPS na Hostinger 🖥️</h2>
+<p>O primeiro passo para instalar o Langflow é adquirir uma VPS. A Hostinger oferece uma variedade de opções de VPS, e recomendamos a configuração KVM 2, que é robusta o suficiente para suportar o Langflow. Para adquirir sua VPS, siga os seguintes passos:</p>
+<ol>
+<li>Acesse o site da Hostinger.</li>
+<li>Escolha o plano de VPS que melhor se adequa às suas necessidades.</li>
+<li>Complete o processo de registro e pagamento.</li>
+<li>Após a confirmação, você receberá acesso ao painel de controle da VPS.</li>
+</ol>
+<p>Uma vez que você tenha sua VPS, estará pronto para prosseguir para a configuração do sistema operacional.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-1-bfd3b395-835f-4371-848a-dee9105dcac8.png" alt="Adquirindo VPS na Hostinger"></p>
+<h2>Passo 3: Configurando o Sistema Operacional ⚙️</h2>
+<p>Após adquirir sua VPS, o próximo passo é configurar o sistema operacional. A Hostinger permite que você escolha entre várias opções de sistema, mas para o Langflow, recomendamos o Ubuntu 24.04. A configuração é simples e pode ser feita diretamente pelo painel da Hostinger.</p>
+<p>Siga estes passos para configurar o sistema operacional:</p>
+<ol>
+<li>No painel de controle da Hostinger, localize sua VPS.</li>
+<li>Clique nos três pontos ao lado da VPS e selecione &#8220;Configurações do Sistema Operacional&#8221;.</li>
+<li>Escolha o Ubuntu 24.04 e clique em &#8220;Alterar Sistema Operacional&#8221;.</li>
+<li>Crie uma senha de root e confirme a alteração.</li>
+</ol>
+<p>O processo de instalação pode levar alguns minutos. Após a conclusão, você estará pronto para acessar sua VPS.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-2-2b24694f-70b1-4ed3-94b3-55c70f2304e9.png" alt="Configurando o Sistema Operacional"></p>
+<h2>Passo 4: Instalando o Coolify 🛠️</h2>
+<p>Com o Ubuntu instalado, agora é hora de instalar o Coolify. O Coolify é uma ferramenta que simplifica o processo de instalação de aplicações, como o Langflow. Para instalar o Coolify, siga estas etapas:</p>
+<ol>
+<li>Acesse sua VPS via SSH utilizando o terminal.</li>
+<li>Execute o seguinte comando para instalar o Coolify:</li>
+</ol>
+<pre><code>curl -sSL https://get.coolify.io | bash</code></pre>
+<ol>
+<li>Após a instalação, você poderá acessar o painel do Coolify pelo seu navegador, usando o IP da sua VPS e a porta 8000.</li>
+</ol>
+<p>O Coolify permitirá gerenciar suas aplicações de forma centralizada e eficiente, facilitando o deploy do Langflow.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-3-be37808f-f9e2-417a-bffa-c80bcd70a89e.png" alt="Instalando o Coolify"></p>
+<h2>Passo 5: Criando uma Conta no Coolify 📝</h2>
+<p>Após instalar o Coolify, o próximo passo é criar uma conta para gerenciar suas aplicações. Isso é essencial para garantir que você tenha acesso seguro ao seu ambiente de desenvolvimento. Para criar sua conta, siga os passos abaixo:</p>
+<ol>
+<li>Acesse o painel do Coolify pelo navegador.</li>
+<li>Na tela de login, clique em &#8220;Criar Conta&#8221;.</li>
+<li>Preencha os campos com seu nome, e-mail e senha. Lembre-se de usar uma senha forte.</li>
+<li>Confirme seu e-mail, se necessário, e faça login.</li>
+</ol>
+<p>Com sua conta criada, você estará pronto para iniciar o deploy do Langflow e explorar todas as suas funcionalidades.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-4-69829d29-f195-4302-bab3-fd9d4ebf782e.png" alt="Criando uma Conta no Coolify"></p>
+<h2>Passo 6: Configurando o Self-Hosting 🏠</h2>
+<p>Agora que você já tem o Langflow instalado na sua VPS, o próximo passo é configurar o self-hosting. Isso permite que você gerencie suas aplicações no próprio servidor, garantindo maior controle e segurança sobre seus dados.</p>
+<p>No painel do Coolify, você verá a opção de &#8220;Self-Hosting&#8221;. Clique nela e, em seguida, escolha a opção para gerenciar o servidor local. Isso garantirá que todas as aplicações que você criar rodem diretamente na sua VPS.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-5-6c2a983d-6218-481b-8717-4ec522eaa45d.png" alt="Configurando o Self-Hosting"></p>
+<h3>Passo a Passo para Configuração</h3>
+<ul>
+<li>Acesse o painel do Coolify e localize a seção de self-hosting.</li>
+<li>Escolha a opção &#8220;localhost&#8221; para que os projetos sejam executados na sua VPS.</li>
+<li>Certifique-se de que a opção de &#8220;Auto-Deploy&#8221; esteja desativada, caso deseje gerenciar manualmente o deploy das suas aplicações.</li>
+</ul>
+<p>Essa configuração é crucial para evitar que múltiplas instâncias sejam criadas desnecessariamente, o que pode consumir recursos da sua VPS.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-6-26506012-c5f5-49c7-b6a6-ccff20f9e155.png" alt="Painel de Configuração do Self-Hosting"></p>
+<h2>Passo 7: Criando um Novo Projeto 📂</h2>
+<p>Agora que o self-hosting está configurado, vamos criar um novo projeto no Coolify. Este é o momento em que você poderá começar a desenvolver suas soluções de inteligência artificial, aproveitando a flexibilidade que o Langflow oferece.</p>
+<p>Para criar um novo projeto, siga os passos abaixo:</p>
+<ol>
+<li>No painel do Coolify, clique em &#8220;Projects&#8221; adiciona um Enviroment, clique nele.</li>
+<li>Clique em New em resources, escolha Public repository e Preencha as informações básicas do projeto, como nome e descrição e coloque a url do repo do Langflow.</li>
+</ol>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-7-e9992cb7-712a-4453-b421-9643f6c4d589.png"></p>
+<h2>Passo 8: Utilizando Docker Compose 🐳</h2>
+<p>O Docker Compose é uma ferramenta essencial que facilita a gestão de aplicações Docker. Ele permite que você defina e execute múltiplos containers de forma simples. Para usar o Docker Compose com o Langflow, siga os passos abaixo.</p>
+<ol>
+<li>Copie a URL do repositório do Langflow disponível no GitHub.</li>
+<li>No painel do Coolify, cole a URL no campo designado para o repositório.</li>
+<li>Selecione a opção &#8220;Usar Docker Compose&#8221; para configurar a aplicação.</li>
+</ol>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-8-ce19cce6-f974-43ac-92a8-19688d9d34df.png" alt="Utilizando Docker Compose"></p>
+<h3>Configurando o Docker Compose</h3>
+<p>O arquivo Docker Compose deve ser configurado corretamente para garantir que todos os serviços funcionem em conjunto. Você encontrará o arquivo <strong>docker-compose.yml</strong> no repositório do Langflow.</p>
+<ul>
+<li>Verifique se o arquivo está corretamente referenciado no painel do Coolify.</li>
+<li>Adicione as variáveis de ambiente necessárias, como credenciais e configurações específicas do Langflow.</li>
+</ul>
+<p>Com tudo configurado, você estará pronto para iniciar o deploy da sua aplicação.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-9-b887e7b4-b08b-4e02-a089-385648d72d0c.png" alt="Configurando o Docker Compose"></p>
+<h2>Passo 9: Configurando Variáveis de Ambiente 🌍</h2>
+<p>As variáveis de ambiente são essenciais para garantir que sua aplicação funcione corretamente e de forma segura. Elas permitem que você armazene informações sensíveis, como senhas e chaves de API, fora do código fonte.</p>
+<p>Para configurar as variáveis de ambiente no seu projeto Langflow, siga estes passos:</p>
+<ol>
+<li>Vá até a seção de configurações do seu projeto no Coolify.</li>
+<li>Adicione as variáveis necessárias, como <strong>LANGFLOW_AUTLOGIN</strong>, definindo como &#8220;false&#8221;.</li>
+<li>Insira a senha do superusuário, garantindo que ela seja forte e segura.</li>
+</ol>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-10-81ca18fc-165c-4507-8a69-554719556f77.png" alt="Configurando Variáveis de Ambiente"></p>
+<h3>Importância das Variáveis de Ambiente</h3>
+<p>As variáveis de ambiente garantem que sua aplicação não fique exposta a acessos não autorizados. Além disso, elas permitem que você altere configurações sem precisar modificar o código do projeto.</p>
+<ul>
+<li>Certifique-se de que todas as variáveis estão corretas antes de prosseguir com o deploy.</li>
+<li>Utilize valores seguros e mantenha as senhas em local seguro.</li>
+</ul>
+<p>Uma vez configuradas, você estará pronto para gerar um domínio e acessar sua aplicação de forma segura.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-11-f4dd5bef-343b-4c86-a0f5-98b9cf9e54ba.png" alt="Importância das Variáveis de Ambiente"></p>
+<h2>Passo 10: Gerando um Domínio 🌐</h2>
+<p>Por fim, é hora de configurar um domínio para a sua aplicação Langflow. Isso facilitará o acesso à sua aplicação e proporcionará uma URL mais amigável.</p>
+<p>Para gerar um domínio, siga os passos abaixo:</p>
+<ol>
+<li>Acesse a seção de domínios no painel do Coolify.</li>
+<li>Adicione um novo domínio, utilizando o seu endereço IP ou um domínio personalizado, se você já tiver um.</li>
+<li>Configure as entradas de DNS, se necessário, para garantir que o domínio aponte corretamente para sua VPS.</li>
+</ol>
+<h3>Considerações Finais sobre Domínios</h3>
+<p>Ter um domínio personalizado não apenas torna sua aplicação mais profissional, mas também facilita o acesso para usuários e desenvolvedores.</p>
+<ul>
+<li>Verifique se o domínio está ativo e acessível na internet.</li>
+<li>Considere usar serviços de HTTPS para garantir a segurança das conexões.</li>
+</ul>
+<p>Após a configuração, sua aplicação Langflow estará acessível através do domínio configurado, permitindo que você comece a desenvolver e testar suas soluções de inteligência artificial.</p>
+<h2>Passo 11: Realizando o Deploy 🚀</h2>
+<p>Agora que você configurou todas as variáveis de ambiente e o Docker Compose, é hora de realizar o deploy do Langflow. Este é um passo crucial, pois é quando sua aplicação começa a tomar forma e se torna acessível.</p>
+<p>Para iniciar o deploy, siga estas etapas:</p>
+<ol>
+<li>No painel do Coolify, localize o projeto que você criou.</li>
+<li>Clique no botão &#8220;Deploy&#8221;.</li>
+<li>Aguarde enquanto o processo de deploy é realizado. Isso pode levar alguns minutos, dependendo dos recursos da sua VPS e da complexidade do projeto.</li>
+</ol>
+<p>Uma vez que o deploy for concluído, você verá uma mensagem de sucesso, indicando que o Langflow está agora rodando na sua VPS.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-12-f0d0721b-8a8f-4dc0-ba8e-a101c6514df9.png" alt="Realizando o Deploy do Langflow"></p>
+<h2>Passo 12: Aguardando o Deploy ⏳</h2>
+<p>Após iniciar o processo de deploy, é importante ter paciência. O Coolify irá configurar todos os serviços necessários, e isso pode levar algum tempo.</p>
+<p>Durante esse período, é recomendável verificar o log do deploy para identificar possíveis erros ou mensagens de sucesso. Para isso, siga os passos abaixo:</p>
+<ol>
+<li>Na seção de &#8220;Logs&#8221; do painel do Coolify, selecione o projeto que você está implantando.</li>
+<li>Observe as mensagens que aparecem. Se tudo estiver correto, você verá mensagens indicando que os serviços estão sendo iniciados.</li>
+<li>Se houver algum erro, leia a mensagem atentamente para entender o que pode ter dado errado.</li>
+</ol>
+<p>Uma vez que o deploy seja concluído com sucesso, você estará pronto para acessar o Langflow.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-13-cadac47e-0ec7-4576-9d80-8dbf9c511453.png" alt="Aguardando o Deploy"></p>
+<h2>Passo 13: Acessando o Langflow 🔑</h2>
+<p>Com o deploy concluído, o próximo passo é acessar a aplicação Langflow. Você pode fazer isso pelo endereço IP da sua VPS ou pelo domínio que você configurou anteriormente.</p>
+<p>Para acessar, siga estas etapas:</p>
+<ol>
+<li>Abra o navegador e digite o endereço IP da sua VPS seguido da porta 8000 (exemplo: http://seu-ip:8000).</li>
+<li>Se você configurou um domínio, digite o domínio que você criou.</li>
+<li>Na tela de login, insira o nome de usuário e a senha que você criou anteriormente.</li>
+</ol>
+<p>Com isso, você terá acesso ao Langflow e poderá começar a criar seus fluxos de trabalho de inteligência artificial.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-14-3e299291-5d51-4bc7-9291-22e4863a465a.png" alt="Acessando o Langflow"></p>
+<h2>Passo 14: Conclusão e Próximos Passos 🌟</h2>
+<p>Parabéns! Você conseguiu instalar e configurar o Langflow na sua VPS com Coolify. Agora, você pode começar a explorar todas as funcionalidades que o Langflow oferece para o desenvolvimento de soluções em inteligência artificial.</p>
+<p>Para os próximos passos, considere:</p>
+<ul>
+<li>Explorar a documentação do Langflow para entender melhor suas funcionalidades.</li>
+<li>Começar a criar seus próprios fluxos de trabalho e agentes.</li>
+<li>Participar de comunidades online para trocar experiências e aprender com outros desenvolvedores.</li>
+</ul>
+<p>Lembre-se de que a prática é fundamental para dominar o uso do Langflow e integrar a inteligência artificial ao desenvolvimento frontend e design AI.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-15-dd10b786-addc-4d10-b527-9c4bfe0e429d.png" alt="Conclusão e Próximos Passos"></p>
+<h2>FAQ ❓</h2>
+<h3>1. O que é o Langflow?</h3>
+<p>O Langflow é uma ferramenta que permite criar fluxos de trabalho em inteligência artificial, facilitando a criação e gerenciamento de agentes e ferramentas.</p>
+<h3>2. Por que usar o Coolify?</h3>
+<p>O Coolify simplifica a instalação e gerenciamento de aplicações, tornando o deploy mais acessível, mesmo para aqueles sem experiência em Linux.</p>
+<h3>3. Quais são os requisitos para rodar o Langflow?</h3>
+<p>Um servidor VPS com recursos suficientes, preferencialmente com Ubuntu 24.04, e a instalação do Coolify.</p>
+<h3>4. Posso usar o Langflow para projetos comerciais?</h3>
+<p>Sim, o Langflow pode ser utilizado para desenvolver soluções comerciais, desde que você siga as diretrizes de uso e licenciamento.</p>
+<h3>5. Como posso melhorar o desempenho do Langflow na minha VPS?</h3>
+<p>Considere aumentar os recursos da sua VPS, como CPU e RAM, e otimize os fluxos de trabalho que você cria no Langflow.</p>
+<p><img src="../assets/images/2025-01-22-tutorial-instalacao-langflow-coolify-vps-16-1de6468c-40af-4cfa-81e1-d277ec3fd6e4.png" alt="FAQ sobre Langflow">&nbsp;</p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Neste tutorial, vamos explorar como instalar o Langflow em uma VPS utilizando a ferramenta Coolify, uma solução que combina inteligência artificial com desenvolvimento frontend e design AI. Ao final, você terá uma instância funcional do Langflow pronta para uso. Sumário Passo 1: Introdução ao…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Neste tutorial, vamos explorar como instalar o Langflow em uma VPS utilizando a ferramenta Coolify, uma solução que combina inteligência artificial com desenvolvimento frontend e design AI. Ao final, você terá uma instância funcional do Langflow pronta para uso. Sumário Passo 1: Introdução ao…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/01/22/tutorial-instalacao-langflow-coolify-vps/</div>
+  </section>
+
+  <footer class="post">
+    <span>22 de janeiro de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
