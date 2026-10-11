@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Supabase Lança Novos Recursos: Integração de IA, Biblioteca de UI e Melhorias no Supabase Studio — felvieira's blog</title>
+<meta name="description" content="A Supabase tem se destacado como uma poderosa plataforma de desenvolvimento, especialmente para aqueles que buscam alternativas open-source ao Firebase. Com a mais recente atualização de março/abril de 2025, novos recursos e melhorias foram introduzidos, elevando o padrão das ferramentas…">
+<meta property="og:title" content="Supabase Lança Novos Recursos: Integração de IA, Biblioteca de UI e Melhorias no Supabase Studio">
+<meta property="og:description" content="A Supabase tem se destacado como uma poderosa plataforma de desenvolvimento, especialmente para aqueles que buscam alternativas open-source ao Firebase. Com a mais recente atualização de março/abril de 2025, novos recursos e melhorias foram introduzidos, elevando o padrão das ferramentas…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-04-15-supabase-lanca-novos-recursos-integracao-de-ia-biblioteca-de-ui-e-melhorias-no-supabase-studio-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/04/15/supabase-lanca-novos-recursos-integracao-de-ia-biblioteca-de-ui-e-melhorias-no-supabase-studio/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1184">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Supabase Lança Novos Recursos: Integração de IA, Biblioteca de UI e Melhorias no Supabase Studio</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>15 de abril de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">3 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-04-15-supabase-lanca-novos-recursos-integracao-de-ia-biblioteca-de-ui-e-melhorias-no-supabase-studio-cover.png" alt="Supabase Lança Novos Recursos: Integração de IA, Biblioteca de UI e Melhorias no Supabase Studio — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>A Supabase tem se destacado como uma poderosa plataforma de desenvolvimento, especialmente para aqueles que buscam alternativas open-source ao Firebase. Com a mais recente atualização de março/abril de 2025, novos recursos e melhorias foram introduzidos, elevando o padrão das ferramentas disponíveis para desenvolvedores ao redor do mundo.</p>
+<h3><strong>Lançamento do Servidor Supabase MCP</strong></h3>
+<p>O Servidor MCP é uma adição revolucionária ao ecossistema Supabase, trazendo integração nativa com ferramentas de inteligência artificial como <a href="https://www.cursor.com">Cursor</a> e <a href="https://www.claude.com">Claude</a>. Essa inovação permite que desenvolvedores incorporem IA em seus projetos com facilidade, oferecendo uma arquitetura mais conectada e automatizada. Esses aprimoramentos são essenciais para quem deseja explorar o vasto potencial da IA em seus aplicativos.</p>
+<h3><strong>Nova Biblioteca de UI do Supabase</strong></h3>
+<p>O desenvolvimento de interfaces frontend ganhou um forte impulso com a nova <a href="https://www.supabase.com/ui-library">Biblioteca de UI do Supabase</a>, construída sobre o framework <em>shadcn</em>. Esta biblioteca inclui componentes reutilizáveis para projetos em <strong>Next.js</strong>, <strong>React Router</strong> e React vanilla. Destacando-se por funcionalidades como autenticação por senha e chat em tempo real, ela se tornou uma ferramenta indispensável para desenvolvedores que buscam acelerar o ciclo de desenvolvimento.</p>
+<pre>
+// Exemplo de implementação de autenticação com a biblioteca UI
+import { AuthProvider } from 'supabase-ui';
+
+function App() {
+  return (
+    <AuthProvider>
+      <LoginScreen />
+    </AuthProvider>
+  );
+}
+</pre>
+<h3><strong>Melhorias no Supabase Studio</strong></h3>
+<p>O <a href="https://www.supabase.com/studio">Supabase Studio</a> recebeu atualizações significativas que ampliam suas capacidades para gerenciamento de projetos. Novas funcionalidades como <strong>Abas no Editor de Tabelas e SQL</strong>, além de <strong>Relatórios Personalizáveis</strong> e um <strong>Editor SQL Embutido</strong>, proporcionam uma experiência de usuário melhorada, permitindo maior controle e visualização sobre os projetos em desenvolvimento. Com melhorias nos logs, os desenvolvedores têm agora uma análise mais detalhada à disposição.</p>
+<h3><strong>Implantação de Funções Edge pelo Dashboard</strong></h3>
+<p>Com suporte ao <strong>Deno 2.1</strong>, as <a href="https://www.supabase.com/edge-functions">Funções Edge</a> podem ser criadas, testadas e implantadas diretamente pelo painel do Supabase, facilitando o desenvolvimento de lógica backend personalizada. Essa capacidade é crucial para otimização de performance e processamento em tempo real.</p>
+<pre>
+// Exemplo de função Edge para notificações em tempo real
+import { serve } from "https://deno.land/std@2.1.0/http/server.ts";
+
+serve(async (req) => {
+  const data = await req.json();
+  console.log("Nova notificação recebida:", data);
+  return new Response("Notificação processada com sucesso");
+});
+</pre>
+<h3><strong>Transmissão em Tempo Real a partir do Banco de Dados</strong></h3>
+<p>A transmissão em tempo real baseada em alterações no banco de dados é uma das grandes inovações, permitindo o alcance a milhares de usuários simultaneamente, o que é ideal para aplicações que necessitam de alta demanda operacional. Confira mais <a href="https://www.supabase.com/realtime">aqui</a>.</p>
+<h3><strong>Esquemas Declarativos</strong></h3>
+<p>Com os <strong>Esquemas Declarativos</strong>, desenvolvedores agora têm um método claro e eficiente para definir a estrutura do banco de dados, minimizando erros e melhorando a consistência em projetos de grande escala.</p>
+<pre>
+CREATE TABLE profiles (
+  id SERIAL PRIMARY KEY,
+  username TEXT NOT NULL,
+  email TEXT UNIQUE NOT NULL,
+  created_at TIMESTAMP DEFAULT NOW()
+);
+</pre>
+<h3><strong>Servidor de Linguagem Postgres</strong></h3>
+<p>A introdução do suporte ao <strong>Protocolo de Servidor de Linguagem (LSP)</strong> para Postgres é uma adição que eleva os processos de edição com funcionalidades como autocompletar e correção de erros, integrando-se perfeitamente aos editores de código principais. Aprenda mais sobre o protocolo <a href="https://www.postgresql.org/docs/current/protocol.html">aqui</a>.</p>
+<h3><strong>Outros Destaques</strong></h3>
+<ul>
+<li><strong>Chaves Assimétricas para JWT</strong>: Melhorias de segurança com suporte a criptografia de chaves públicas e privadas.</li>
+<li><strong>Visibilidade do Uso de Disco</strong>: Monitoramento eficaz do armazenamento diretamente no painel administrativo.</li>
+<li><strong>Concurso de Hackathon</strong>: Projetos premiados que trazem soluções inovadoras como AI RPG e AI Travel Concierge.</li>
+</ul>
+<p>A Supabase reafirma seu compromisso em proporcionar aos desenvolvedores uma plataforma robusta e inovadora, consolidando sua presença como uma das principais opções para aqueles que buscam uma alternativa poderosa ao Firebase. Explore as possibilidades oferecidas pelas novas funcionalidades visitando a página oficial da <a href="https://www.supabase.com/">Supabase</a>.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A Supabase tem se destacado como uma poderosa plataforma de desenvolvimento, especialmente para aqueles que buscam alternativas open-source ao Firebase. Com a mais recente atualização de março/abril de 2025, novos recursos e melhorias foram introduzidos, elevando o padrão das ferramentas…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A Supabase tem se destacado como uma poderosa plataforma de desenvolvimento, especialmente para aqueles que buscam alternativas open-source ao Firebase. Com a mais recente atualização de março/abril de 2025, novos recursos e melhorias foram introduzidos, elevando o padrão das ferramentas…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/04/15/supabase-lanca-novos-recursos-integracao-de-ia-biblioteca-de-ui-e-melhorias-no-supabase-studio/</div>
+  </section>
+
+  <footer class="post">
+    <span>15 de abril de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

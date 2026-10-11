@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>10 anos de conselhos sobre programação: princípios essenciais para desenvolvedores — felvieira's blog</title>
+<meta name="description" content="## 10 anos de conselhos sobre programação em 60 segundos: princípios essenciais ### **Domine o Debugger** O debugger é sua maior aliada para identificar erros não óbvios. Exemplo: “`python def calcular_saldo(saldo_inicial, transacoes): total = saldo_inicial for transacao in transacoes: total -=…">
+<meta property="og:title" content="10 anos de conselhos sobre programação: princípios essenciais para desenvolvedores">
+<meta property="og:description" content="## 10 anos de conselhos sobre programação em 60 segundos: princípios essenciais ### **Domine o Debugger** O debugger é sua maior aliada para identificar erros não óbvios. Exemplo: “`python def calcular_saldo(saldo_inicial, transacoes): total = saldo_inicial for transacao in transacoes: total -=…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-04-20-10-anos-de-conselhos-sobre-programacao-principios-essenciais-para-desenvolvedores-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/04/20/10-anos-de-conselhos-sobre-programacao-principios-essenciais-para-desenvolvedores/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1201">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>10 anos de conselhos sobre programação: princípios essenciais para desenvolvedores</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>20 de abril de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">1 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-04-20-10-anos-de-conselhos-sobre-programacao-principios-essenciais-para-desenvolvedores-cover.png" alt="10 anos de conselhos sobre programação: princípios essenciais para desenvolvedores — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>## 10 anos de conselhos sobre programação em 60 segundos: princípios essenciais  </p>
+<p>### **Domine o Debugger**<br />
+O debugger é sua maior aliada para identificar erros não óbvios. Exemplo:<br />
+&#8220;`python<br />
+def calcular_saldo(saldo_inicial, transacoes):<br />
+    total = saldo_inicial<br />
+    for transacao in transacoes:<br />
+        total -= transacao[&#8216;valor&#8217;]  # Problema: valor de débito positivo?<br />
+    return total<br />
+&#8220;`<br />
+**Dica:** Use breakpoints no PDB (Python Debugger) ou ferramentas como Visual Studio Code para analisar fluxos de execução.  </p>
+<p>&#8212;</p>
+<p>### **Código Mantenível**<br />
+Priorize legibilidade e manutenção. Exemplo:<br />
+&#8220;`python<br />
+# Versão inadequada<br />
+def processa_dados(usr, dt, vl, tp):<br />
+    return f&#8221;Usuário {usr} no {dt} com {vl} tipo {tp}&#8221;  </p>
+<p># Versão aprimorada<br />
+def gerar_relatorio(usuario, data, valor, tipo_transacao):<br />
+    &#8220;&#8221;&#8221;Retorna relatório formatado com informações claras.&#8221;&#8221;&#8221;<br />
+    return f&#8221;Relatório de {usuario}: {data} &#8211; {valor} ({tipo_transacao})&#8221;<br />
+&#8220;`  </p>
+<p>&#8212;</p>
+<p>### **Melhore o Código Herdado**<br />
+Após resolver um bug, reorganize o código. Exemplo:<br />
+&#8220;`python<br />
+# Antes: Código irrefletido<br />
+if tamanho > 10:<br />
+    print(&#8220;Muito grande&#8221;)<br />
+elif tamanho < 5:  
+    print("Muito pequeno")  
+
+# Depois: Estrutura consistente  
+def classificar_tamanho(tamanho):  
+    if tamanho > 10:<br />
+        return &#8220;EXCESSIVO&#8221;<br />
+    elif tamanho < 5:  
+        return "INSUFICIENTE"  
+    else:  
+        return "ADEQUADO"  
+classificar_tamanho(15)  # Resultado: "EXCESSIVO"  
+```  
+
+---
+
+### **Testar é Obrigatório**  
+Use testes unitários e integração. Exemplo com Python:  
+```python  
+import unittest  
+
+class CalculadoraTests(unittest.TestCase):  
+    def test_somar_positivos(self):  
+        self.assertEqual(8, soma(3, 5))  
+
+    def test_somar_negativos(self):  
+        self.assertEqual(-6, soma(-2, -4))  
+```  
+
+---
+
+### **Nomeação Exata**  
+Evite ambiguidades com nomenclatura. Exemplo:  
+```python  
+# Ruim  
+def p(user):  
+    print(user)  
+
+# Bom  
+def imprimir_perfil(usuario):  
+    print(usuario)  
+```  
+
+---
+
+### **Evite Dúvidas Técnicas**  
+Implemente validações o mais cedo possível. Exemplo:  
+```python  
+# Versão vulnerável  
+def calcular_quotiente(a, b):  
+    return a / b  
+
+# Versão segura  
+def calcular_taxa(a, b):  
+    if b == 0:  
+        raise ValueError("Divisor não pode ser zero")  
+    return a / b  
+```  
+
+---
+
+### **Refatoração Gradual**  
+Aprimore código após identificar duplicações. Exemplo:  
+```python  
+# Antes: Código repetido  
+def enviar_email(user):  
+    print(f"E-mail enviado para {user}...")  
+
+def notificar_admin(user):  
+    print(f"Notificação enviada para administrador: {user}...")  
+
+# Depois: Extração de métodos  
+class Notificador:  
+    def __init__(self, usuario):  
+        self.user = usuario  
+
+    def enviar_email(self):  
+        print(f"E-mail enviado para {self.user}...")  
+
+    def notificar_admin(self):  
+        print(f"Notificação enviada para administrador: {self.user}...")  
+```  
+
+---
+
+### **Testar Casos Limítrofes**  
+Valide cenários críticos. Exemplo:  
+```python  
+import heapq  
+
+def maiores_proximos(nums, k):  
+    if k == 0:  
+        return []  
+    return heapq.nlargest(k, nums)  
+
+# Testar:  
+print(maiores_proximos([], 5))  # Deve retornar []  
+print(maiores_proximos([1], 2))  # Deve retornar [1]  
+```  
+
+---
+
+### **Commits Clarenciantes**  
+Divida mudanças em etapas. Exemplo (Git):  
+```bash  
+git commit -m "Refatoração: Extração de métodos de notificação"  
+git commit -m "Adição: Validação de divisão por zero"  
+```  
+
+---
+
+### **Código Funcional > Preciosismo**<br />
+Prefira soluções simples e eficientes. Exemplo:<br />
+&#8220;`python<br />
+# Preciosismo ruim<br />
+class Fatorial:<br />
+    def __init__(self, numero):<br />
+        self.numero = numero  </p>
+<p>    def calcular(self):<br />
+        return self.__fatorial_recursivo(self.numero)  </p>
+<p>    def __fatorial_recursivo(self, n):<br />
+        return 1 if n == 0 else n * self.__fatorial_recursivo(n-1)  </p>
+<p># Versão adequada<br />
+def calcula_fatorial(n):<br />
+    return 1 if n == 0 else n * calcula_fatorial(n-1)<br />
+calcula_fatorial(5)  # 120<br />
+&#8220;`  </p>
+<p>&#8212; </p>
+<p>**Conclusão:** Priorize qualidade sustentável sobre complexidade desnecessária. Cada decisão impacta a longevidade do código – escolha sempre a simplicidade que resolve problemas reais.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">## 10 anos de conselhos sobre programação em 60 segundos: princípios essenciais ### **Domine o Debugger** O debugger é sua maior aliada para identificar erros não óbvios. Exemplo: “`python def calcular_saldo(saldo_inicial, transacoes): total = saldo_inicial for transacao in transacoes: total -=…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">## 10 anos de conselhos sobre programação em 60 segundos: princípios essenciais ### **Domine o Debugger** O debugger é sua maior aliada para identificar erros não óbvios. Exemplo: “`python def calcular_saldo(saldo_inicial, transacoes): total = saldo_inicial for transacao in transacoes: total -=…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/04/20/10-anos-de-conselhos-sobre-programacao-principios-essenciais-para-desenvolvedores/</div>
+  </section>
+
+  <footer class="post">
+    <span>20 de abril de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

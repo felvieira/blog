@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Novidades Lovable: História 2.0, Dev Mode, Livestream com Clerk e Mais Para Desenvolvimento Ágil — felvieira's blog</title>
+<meta name="description" content="A plataforma Lovable continua a evoluir, oferecendo ferramentas inovadoras que aprimoram a experiência de desenvolvimento de aplicações web. Recentemente, a Lovable lançou atualizações que incluem funcionalidades avançadas de versionamento, um modo completo de desenvolvimento no navegador e uma…">
+<meta property="og:title" content="Novidades Lovable: História 2.0, Dev Mode, Livestream com Clerk e Mais Para Desenvolvimento Ágil">
+<meta property="og:description" content="A plataforma Lovable continua a evoluir, oferecendo ferramentas inovadoras que aprimoram a experiência de desenvolvimento de aplicações web. Recentemente, a Lovable lançou atualizações que incluem funcionalidades avançadas de versionamento, um modo completo de desenvolvimento no navegador e uma…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-04-19-novidades-lovable-historia-2-0-dev-mode-livestream-com-clerk-e-mais-para-desenvolvimento-agil-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/04/19/novidades-lovable-historia-2-0-dev-mode-livestream-com-clerk-e-mais-para-desenvolvimento-agil/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1195">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Novidades Lovable: História 2.0, Dev Mode, Livestream com Clerk e Mais Para Desenvolvimento Ágil</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>19 de abril de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">2 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-04-19-novidades-lovable-historia-2-0-dev-mode-livestream-com-clerk-e-mais-para-desenvolvimento-agil-cover.png" alt="Novidades Lovable: História 2.0, Dev Mode, Livestream com Clerk e Mais Para Desenvolvimento Ágil — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>A plataforma Lovable continua a evoluir, oferecendo ferramentas inovadoras que aprimoram a experiência de desenvolvimento de aplicações web. Recentemente, a Lovable lançou atualizações que incluem funcionalidades avançadas de versionamento, um modo completo de desenvolvimento no navegador e uma série de melhorias que prometem transformar a forma como desenvolvedores e equipes colaboram em seus projetos.</p>
+<h2>History 2.0: Uma Revolução no Versionamento</h2>
+<p>O <strong>History 2.0</strong> é uma das novidades da Lovable, apresentando uma capacidade de navegação aprimorada entre diferentes versões de projetos. Com ele, os desenvolvedores podem marcar versões importantes com bookmarks, facilitando o acesso a essas informações críticas no futuro. As restaurações são simplificadas, e toda a história de mudanças se torna clara e acessível. Esse recurso é essencial para equipes que trabalham em projetos com múltiplas iterações e precisam de uma visão clara de todas as alterações realizadas ao longo do tempo.</p>
+<blockquote>
+<ul>
+<li>Crie um bookmark em um release importante para referência futura.</li>
+<li>Visualize todas as mudanças feitas em determinada sprint e reverta instantaneamente caso precise desfazer algum erro.</li>
+</ul>
+</blockquote>
+<h2>Dev Mode: Desenvolvimento Direto no Navegador</h2>
+<p>Com o novo <strong>Dev Mode</strong>, a Lovable transforma sua interface em um ambiente de desenvolvimento completo (IDE) direto no navegador. Isso elimina a necessidade de integrações complexas com plataformas como GitHub, permitindo que os usuários editem e visualizem seu código diretamente na Lovable.</p>
+<ul>
+<li><strong>Edição de Código Experimental:</strong> Disponível para usuários do plano pago, essa funcionalidade permite a edição de arquivos de código na plataforma. Basta ativar a opção em <em>Account &gt; Settings &gt; Labs</em> para começar.</li>
+<li><strong>Fluxo Simplificado:</strong> Centraliza a edição e o controle de versão, eliminando a necessidade de alternar entre diferentes ferramentas.</li>
+<li><strong>Sincronização entre Dispositivos:</strong> As features ativadas permanecem sincronizadas em qualquer dispositivo, garantindo continuidade no trabalho.</li>
+</ul>
+<pre>
+<code>
+// Exemplo: Código simples para autenticação customizada usando Clerk e Supabase
+import { ClerkProvider, SignedIn, SignedOut } from "@clerk/clerk-react";
+import { supabase } from "./your-supabase-client";
+
+function App() {
+  return (
+    <ClerkProvider>
+      <SignedIn>
+        <YourProtectedApp />
+      </SignedIn>
+      <SignedOut>
+        <SignInComponent />
+      </SignedOut>
+    </ClerkProvider>
+  );
+}
+</code>
+</pre>
+<h2>Melhorias e Correções Recém-Implementadas</h2>
+<ul>
+<li>Erros internos de servidores foram eliminados em modos padrão.</li>
+<li>Correções de bugs de sintaxe SQL que afetavam o chat.</li>
+<li>Ajustes na sincronização de features dos Labs entre dispositivos.</li>
+<li>Resolução de problemas relacionados a migrações e gerenciamento de secrets.</li>
+</ul>
+<h2>Lovable Livestream: Integração com Clerk</h2>
+<p>A Lovable se juntou ao Clerk para oferecer um <em>livestream</em> especial sobre autenticação e gerenciamento de usuários. O evento será no dia 13 de março, às 19h CET, e mostrará a construção de uma aplicação integrada ao Clerk.</p>
+<ul>
+<li>Integração em tempo real entre Lovable e Clerk para autenticação.</li>
+<li>Dicas práticas de gestão de usuários e times.</li>
+<li>Um exemplo adicional, se houver tempo, de integração Clerk e Supabase para autenticação avançada.</li>
+</ul>
+<p>Esta é uma oportunidade valiosa para aprendizados práticos e insights sobre as poderosas capacidades da Lovable em conjunta com o Clerk.</p>
+<hr />
+<p>A Lovable segue à frente em inovação no espaço de plataformas low-code/no-code, sempre expandindo suas capacidades para atender desenvolvedores de todos os níveis. Explore os novos recursos e participe da vibrante comunidade Lovable para não perder nenhuma novidade futura.</p>
+<p>Para mais informações sobre o uso do Clerk, visite o <a href="https://clerk.dev/">site oficial do Clerk</a>. E não deixe de conferir as <a href="https://supabase.com/">funcionalidades do Supabase</a> para complementar suas aplicações.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">A plataforma Lovable continua a evoluir, oferecendo ferramentas inovadoras que aprimoram a experiência de desenvolvimento de aplicações web. Recentemente, a Lovable lançou atualizações que incluem funcionalidades avançadas de versionamento, um modo completo de desenvolvimento no navegador e uma…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">A plataforma Lovable continua a evoluir, oferecendo ferramentas inovadoras que aprimoram a experiência de desenvolvimento de aplicações web. Recentemente, a Lovable lançou atualizações que incluem funcionalidades avançadas de versionamento, um modo completo de desenvolvimento no navegador e uma…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/04/19/novidades-lovable-historia-2-0-dev-mode-livestream-com-clerk-e-mais-para-desenvolvimento-agil/</div>
+  </section>
+
+  <footer class="post">
+    <span>19 de abril de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Como a Inteligência Artificial e os MCPs Estão Revolucionando o Desenvolvimento com AI — felvieira's blog</title>
+<meta name="description" content="Neste artigo, vamos explorar como os Model Context Protocols (MCPs) estão transformando o desenvolvimento frontend e design com AI. Compreenderemos o que são MCPs, por que estão em alta e como podem ser aplicados na sua rotina de codificação. Índice Passo 1: Introdução aos MCPs 🚀 Passo 2: O que é…">
+<meta property="og:title" content="Como a Inteligência Artificial e os MCPs Estão Revolucionando o Desenvolvimento com AI">
+<meta property="og:description" content="Neste artigo, vamos explorar como os Model Context Protocols (MCPs) estão transformando o desenvolvimento frontend e design com AI. Compreenderemos o que são MCPs, por que estão em alta e como podem ser aplicados na sua rotina de codificação. Índice Passo 1: Introdução aos MCPs 🚀 Passo 2: O que é…">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-cover.png">
+<meta property="og:type" content="article">
+<link rel="canonical" href="https://blog.felvieira.com.br/2025/03/21/como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend/">
+<meta name="x-origin" content="wordpress">
+<meta name="x-wp-post-id" content="1057">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Como a Inteligência Artificial e os MCPs Estão Revolucionando o Desenvolvimento com AI</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>21 de março de 2025</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min read</span>
+  </p>
+
+  <img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-cover.png" alt="Como a Inteligência Artificial e os MCPs Estão Revolucionando o Desenvolvimento com AI — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p><html><head></head><body></p>
+<p></p>
+<p>Neste artigo, vamos explorar como os Model Context Protocols (MCPs) estão transformando o desenvolvimento frontend e design com AI. Compreenderemos o que são MCPs, por que estão em alta e como podem ser aplicados na sua rotina de codificação.</p>
+<h2>Índice</h2>
+<ul>
+<li><a href="#passo-1:-introdução-aos-mcps-🚀">Passo 1: Introdução aos MCPs 🚀</a></li>
+<li><a href="#passo-2:-o-que-é-mcp?-🤔">Passo 2: O que é MCP? 🤔</a></li>
+<li><a href="#passo-3:-estágio-atual-das-llms-📈">Passo 3: Estágio Atual das LLMs 📈</a></li>
+<li><a href="#passo-4:-simulando-uma-conversa-com-llms-💬">Passo 4: Simulando uma Conversa com LLMs 💬</a></li>
+<li><a href="#passo-5:-qual-o-problema-do-método-atual?-❌">Passo 5: Qual o Problema do Método Atual? ❌</a></li>
+<li><a href="#passo-6:-a-chegada-dos-mcps-🚀">Passo 6: A Chegada dos MCPs 🚀</a></li>
+<li><a href="#passo-7:-como-funcionam-os-mcps-na-prática?-🔧">Passo 7: Como Funcionam os MCPs na Prática? 🔧</a></li>
+<li><a href="#passo-8:-configurando-seu-ambiente-de-desenvolvimento-🛠️">Passo 8: Configurando seu Ambiente de Desenvolvimento 🛠️</a></li>
+<li><a href="#passo-9:-gerando-token-de-acesso-no-github-🔑">Passo 9: Gerando Token de Acesso no GitHub 🔑</a></li>
+<li><a href="#passo-10:-integrando-mcp-no-cursor-🔗">Passo 10: Integrando MCP no Cursor 🔗</a></li>
+<li><a href="#passo-11:-listando-repositórios-no-github-📂">Passo 11: Listando Repositórios no GitHub 📂</a></li>
+<li><a href="#passo-12:-conclusão-sobre-o-potencial-dos-mcps-🌟">Passo 12: Conclusão sobre o Potencial dos MCPs 🌟</a></li>
+<li><a href="#faq:-perguntas-frequentes-sobre-mcps-❓">FAQ: Perguntas Frequentes sobre MCPs ❓</a></li>
+</ul>
+<h2>Passo 1: Introdução aos MCPs 🚀</h2>
+<p>Os Model Context Protocols (MCPs) estão mudando a forma como interagimos com a inteligência artificial. Eles surgem em um momento em que a tecnologia avança rapidamente, oferecendo novas oportunidades para desenvolvedores e usuários. A ideia é simples: criar um protocolo padronizado para que diferentes modelos de linguagem possam se comunicar com ferramentas de maneira eficiente.</p>
+<p>Esse conceito não é totalmente novo, mas sua popularidade explodiu recentemente. Com a crescente adoção de IAs em diversas aplicações, entender os MCPs é essencial para quem quer se manter à frente no desenvolvimento frontend e design com AI.</p>
+<h3>Por que os MCPs são importantes?</h3>
+<p>Os MCPs oferecem uma estrutura que permite que ferramentas sejam desenvolvidas uma única vez e utilizadas em diferentes modelos de linguagem. Antes, cada provedor de IA tinha suas próprias especificações, o que tornava o desenvolvimento um processo complexo e demorado. Agora, com os MCPs, essa barreira é reduzida, permitindo uma integração mais fluida e eficaz.</p>
+<h2>Passo 2: O que é MCP? 🤔</h2>
+<p>MCP, ou Model Context Protocol, é um padrão desenvolvido pela Antropic que define como os modelos de linguagem devem interagir com ferramentas. Em essência, ele serve como uma ponte entre os modelos de linguagem e as ferramentas que eles podem utilizar.</p>
+<p>Esse protocolo é crucial para a evolução das IAs, pois aumenta suas capacidades e facilita a criação de agentes de IA mais poderosos. Em vez de depender de integrações específicas para cada modelo, os desenvolvedores podem focar em criar ferramentas que funcionem com qualquer modelo que suporte o protocolo MCP.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-1-01186bac-1af1-4e36-bce0-db51a3593697.webp" alt="O que é MCP?"></p>
+<h3>Como os MCPs funcionam?</h3>
+<p>Os MCPs se baseiam em um cliente e um servidor, onde o cliente solicita serviços e o servidor fornece as ferramentas necessárias. Isso significa que as aplicações podem compartilhar e reutilizar funcionalidades, economizando tempo e esforço no desenvolvimento. A padronização é a chave: uma vez que um desenvolvedor cria uma ferramenta que segue as especificações do MCP, ela pode ser utilizada em qualquer aplicação que suporte o protocolo.</p>
+<h2>Passo 3: Estágio Atual das LLMs 📈</h2>
+<p>As LLMs, ou Large Language Models, como ChatGPT e Gemini, passaram por um desenvolvimento significativo nos últimos anos. No entanto, ainda enfrentam limitações em suas capacidades de execução. Elas são essencialmente geradoras de texto e não podem realizar ações no mundo real sem a ajuda de ferramentas externas.</p>
+<p>Até recentemente, a interação com ferramentas era rudimentar e dependia de integrações específicas. Com a introdução dos MCPs, as LLMs agora podem se conectar a uma variedade de ferramentas de forma padronizada, ampliando suas capacidades e tornando-as mais úteis em aplicações práticas.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-2-d09cdda3-e153-4cbc-b781-635621cf5cfd.webp" alt="Estágio Atual das LLMs"></p>
+<h3>Desafios enfrentados pelas LLMs</h3>
+<ul>
+<li>Integração complexa com ferramentas específicas de cada provedor.</li>
+<li>Dificuldade em adaptar-se a mudanças nas APIs das ferramentas.</li>
+<li>Dependência de prompts complexos para executar tarefas.</li>
+</ul>
+<h2>Passo 4: Simulando uma Conversa com LLMs 💬</h2>
+<p>Para entender como os MCPs melhoram a interação com as LLMs, vamos simular uma conversa. Imagine que você deseja saber quem é o atual presidente dos Estados Unidos. Ao fazer essa pergunta, a LLM não apenas gera uma resposta, mas também utiliza ferramentas como web search para buscar informações atualizadas.</p>
+<p>Esse processo é invisível para o usuário, mas é fundamental. A LLM recebe um prompt que a instrui a usar a ferramenta de busca, formulando uma consulta adequada. A resposta final é então gerada com base nas informações coletadas.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-3-e65aa395-9c43-4923-b7da-0c917ad653ca.webp" alt="Simulando uma Conversa com LLMs"></p>
+<h3>Como funciona a comunicação?</h3>
+<p>A comunicação entre o usuário e a LLM segue um fluxo específico. O usuário faz uma pergunta, a LLM processa essa pergunta e decide se deve utilizar uma ferramenta. Se sim, ela formata a consulta de acordo com as instruções do MCP e envia para o servidor, que retorna a resposta. Essa sinergia é o que torna os MCPs tão poderosos.</p>
+<h2>Passo 5: Qual o Problema do Método Atual? ❌</h2>
+<p>Embora as LLMs tenham avançado, o método atual de integração com ferramentas apresenta desafios significativos. Cada provedor desenvolve suas ferramentas de maneira única, o que resulta em um ecossistema fragmentado. Isso significa que um desenvolvedor precisa criar soluções específicas para cada modelo de linguagem, o que consome tempo e recursos valiosos.</p>
+<p>Além disso, se uma API mudar, todo o sistema pode quebrar. Isso torna a manutenção e a escalabilidade um verdadeiro pesadelo para os desenvolvedores.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-4-b72ab74d-7bdd-4c8d-af5b-6600cc855a60.webp" alt="Problema do Método Atual"></p>
+<h3>Implicações para o desenvolvimento</h3>
+<p>Esses desafios têm implicações diretas no desenvolvimento frontend e design com AI. A necessidade de criar integrações específicas para cada modelo limita a inovação e a capacidade de criar soluções robustas. Os MCPs oferecem uma solução para esses problemas, permitindo que os desenvolvedores se concentrem na criação de ferramentas eficazes que podem ser utilizadas em múltiplos contextos.</p>
+<p>Com a adoção dos MCPs, o futuro do desenvolvimento com inteligência artificial parece promissor, abrindo novas oportunidades e simplificando processos complexos.</p>
+<h2>Passo 6: A Chegada dos MCPs 🚀</h2>
+<p>A chegada dos Model Context Protocols (MCPs) marca um ponto de virada no desenvolvimento frontend e design com AI. Esses protocolos não são apenas uma inovação; eles são uma revolução que redefine como desenvolvedores interagem com ferramentas de inteligência artificial. Através dos MCPs, a comunicação entre modelos e ferramentas se torna mais eficiente, permitindo que desenvolvedores aproveitem ao máximo as capacidades das IAs.</p>
+<p>Com a introdução dos MCPs, os desenvolvedores podem agora integrar ferramentas de forma mais simples e rápida. Esse novo modelo elimina a necessidade de criar soluções específicas para cada provedor de IA, permitindo que os desenvolvedores se concentrem em criar ferramentas que funcionem em diferentes contextos.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-5-e8f21dc7-b1c0-4736-adba-3472ffdd4b5f.webp" alt="Chegada dos MCPs"></p>
+<h3>Impacto no Desenvolvimento</h3>
+<p>Os MCPs não apenas simplificam o processo de desenvolvimento, mas também ampliam as possibilidades de criação. Agora, com um protocolo padronizado, as IAs podem acessar uma variedade de ferramentas com facilidade, tornando-se mais versáteis e poderosas. Isso permite que desenvolvedores criem aplicações mais robustas que podem interagir com diversos modelos de linguagem.</p>
+<p>Por exemplo, imagine um desenvolvedor que cria uma ferramenta para análise de dados. Com os MCPs, essa ferramenta pode ser utilizada em múltiplos modelos de linguagem, aumentando sua utilidade e alcance.</p>
+<h2>Passo 7: Como Funcionam os MCPs na Prática? 🔧</h2>
+<p>Para entender como os MCPs funcionam na prática, é crucial observar o fluxo de trabalho entre um cliente e um servidor de MCP. Quando um desenvolvedor integra uma ferramenta usando o MCP, ele cria um cliente que se comunica com um servidor que armazena as especificações e funcionalidades da ferramenta.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-6-8c1d5825-7730-4cf7-b943-498dd6baffbb.webp" alt="Funcionamento dos MCPs"></p>
+<h3>Fluxo de Trabalho</h3>
+<ol>
+<li><strong>Configuração do Cliente:</strong> O desenvolvedor configura um cliente de MCP que se conecta ao servidor.</li>
+<li><strong>Comunicação com o Servidor:</strong> O cliente envia solicitações ao servidor para acessar funcionalidades específicas.</li>
+<li><strong>Interação com Modelos de Linguagem:</strong> O servidor retorna as instruções necessárias para que o modelo de linguagem execute as tarefas solicitadas.</li>
+</ol>
+<p>Esse fluxo de trabalho simplificado permite que os desenvolvedores integrem novas ferramentas com rapidez e eficiência, aumentando sua produtividade e inovação.</p>
+<h2>Passo 8: Configurando seu Ambiente de Desenvolvimento 🛠️</h2>
+<p>Configurar seu ambiente de desenvolvimento para utilizar MCPs é um processo simples e direto. A primeira etapa é escolher uma IDE que suporte a integração com servidores de MCP. O Cursor, por exemplo, é uma excelente escolha, pois foi projetado especificamente para funcionar com MCPs.</p>
+<p>Após instalar a IDE, você precisará configurar os servidores de MCP desejados. Isso pode ser feito diretamente nas configurações da IDE, onde você pode adicionar novos servidores conforme necessário.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-7-953533c4-3879-4a81-800c-9129e6ba8dc3.webp" alt="Configurando Ambiente de Desenvolvimento"></p>
+<h3>Passos para Configuração</h3>
+<ol>
+<li><strong>Baixar e Instalar a IDE:</strong> Acesse o site do Cursor e faça o download da versão mais recente.</li>
+<li><strong>Configurar Servidores de MCP:</strong> Nas configurações da IDE, adicione os servidores de MCP que você deseja utilizar.</li>
+<li><strong>Testar a Integração:</strong> Após a configuração, faça um teste simples para garantir que tudo está funcionando corretamente.</li>
+</ol>
+<p>Esses passos garantem que você esteja pronto para começar a explorar as possibilidades oferecidas pelos MCPs em seu desenvolvimento frontend e design com AI.</p>
+<h2>Passo 9: Gerando Token de Acesso no GitHub 🔑</h2>
+<p>Uma das etapas essenciais para integrar MCPs com ferramentas como o GitHub é gerar um token de acesso. Esse token permite que a sua aplicação se comunique de forma segura com a API do GitHub, garantindo que você tenha as permissões necessárias para executar ações.</p>
+<p>Para gerar um token de acesso, você deve acessar as configurações do GitHub e seguir alguns passos simples. O token deve ser configurado com as permissões adequadas para garantir que sua aplicação possa realizar as operações desejadas.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-8-9e551fc8-a460-4c3c-ade5-cb32a9bd499f.webp" alt="Gerando Token no GitHub"></p>
+<h3>Passos para Gerar o Token</h3>
+<ol>
+<li><strong>Acesse Configurações:</strong> Vá até as configurações do seu perfil no GitHub.</li>
+<li><strong>Desenvolvedor Settings:</strong> Clique em &#8220;Developer settings&#8221; e, em seguida, em &#8220;Personal access tokens&#8221;.</li>
+<li><strong>Gerar Novo Token:</strong> Clique em &#8220;Generate new token&#8221; e selecione as permissões necessárias.</li>
+</ol>
+<p>Uma vez gerado, copie o token e armazene-o em um local seguro. Você precisará dele para conectar sua aplicação ao GitHub através do MCP.</p>
+<h2>Passo 10: Integrando MCP no Cursor 🔗</h2>
+<p>Agora que você configurou seu ambiente de desenvolvimento e gerou seu token de acesso, é hora de integrar o MCP no Cursor. Essa integração permitirá que você utilize o modelo de linguagem para interagir com o GitHub e outras ferramentas de forma mais eficiente.</p>
+<p>No Cursor, a integração é feita de maneira simples. Após inserir o token de acesso, você poderá executar comandos diretamente no seu repositório do GitHub através da interface da IDE.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-9-a6c7a179-e3b5-4a8f-8a58-905fc983d6b4.webp" alt="Integrando MCP no Cursor"></p>
+<h3>Passos para Integração</h3>
+<ol>
+<li><strong>Login no Cursor:</strong> Faça login na sua conta do Cursor e acesse as configurações de MCP.</li>
+<li><strong>Inserir Token:</strong> Cole o token de acesso que você gerou anteriormente.</li>
+<li><strong>Testar Comandos:</strong> Inicie um teste enviando comandos para verificar se a integração está funcionando corretamente.</li>
+</ol>
+<p>Com a integração concluída, você poderá aproveitar ao máximo as capacidades do MCP, facilitando seu fluxo de trabalho e potencializando suas habilidades de desenvolvimento frontend e design com AI.</p>
+<h2>Passo 11: Listando Repositórios no GitHub 📂</h2>
+<p>Uma das funcionalidades mais empolgantes que podemos acessar através dos MCPs é a capacidade de listar repositórios diretamente do GitHub. Isso é especialmente útil para desenvolvedores que precisam gerenciar vários projetos e desejam uma maneira rápida de acessar suas informações sem sair do ambiente de desenvolvimento.</p>
+<p>Para realizar essa tarefa, após a configuração do MCP no Cursor, você pode simplesmente enviar um comando em linguagem natural. O modelo de linguagem, utilizando o protocolo MCP, se encarrega de interagir com a API do GitHub e retornar os dados necessários.</p>
+<p><img src="../assets/images/2025-03-21-como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend-10-fea2c1ef-cf93-4d5d-986b-f31ed7115489.webp" alt="Listando repositórios no GitHub"></p>
+<h3>Como Listar Repositórios</h3>
+<ol>
+<li><strong>Abra o Cursor:</strong> Certifique-se de que você está logado e que o MCP do GitHub está devidamente configurado.</li>
+<li><strong>Envie um Comando:</strong> Digite algo como &#8220;Olá, você consegue listar todos os repositórios do meu GitHub?&#8221;</li>
+<li><strong>Aguarde a Resposta:</strong> O modelo de linguagem fará uma chamada à API do GitHub e retornará uma lista dos seus repositórios.</li>
+</ol>
+<p>Esse processo é rápido e eficiente, permitindo que você se concentre mais no desenvolvimento e menos na gestão de projetos. A integração dos MCPs com ferramentas como o GitHub mostra o potencial da inteligência artificial no desenvolvimento frontend e design com AI.</p>
+<h2>Passo 12: Conclusão sobre o Potencial dos MCPs 🌟</h2>
+<p>Os Model Context Protocols (MCPs) estão redefinindo as fronteiras do desenvolvimento e design com inteligência artificial. Ao permitir que diferentes modelos de linguagem interajam com ferramentas de maneira padronizada, os MCPs abrem um leque de possibilidades que antes eram impensáveis.</p>
+<p>Com a capacidade de acessar e utilizar ferramentas como o GitHub de forma integrada, os desenvolvedores podem aumentar sua produtividade e eficiência. A simplicidade da comunicação entre modelos e ferramentas, mediada pelos MCPs, é uma verdadeira revolução.</p>
+<h3>O Futuro dos MCPs</h3>
+<p>À medida que mais desenvolvedores adotam essa tecnologia, podemos esperar um crescimento exponencial de aplicações e ferramentas que utilizam MCPs. Isso não apenas melhorará a eficiência do desenvolvimento, mas também criará um ecossistema mais colaborativo e inovador.</p>
+<p>Se você ainda não experimentou os MCPs, agora é a hora. A integração com IDEs como o Cursor torna o processo simples e acessível, permitindo que você aproveite ao máximo as capacidades da inteligência artificial.</p>
+<h2>FAQ: Perguntas Frequentes sobre MCPs ❓</h2>
+<h3>1. O que são Model Context Protocols (MCPs)?</h3>
+<p>Os MCPs são protocolos padronizados que permitem a comunicação entre modelos de linguagem e ferramentas. Eles foram desenvolvidos pela Antropic para simplificar a integração de diferentes sistemas.</p>
+<h3>2. Como os MCPs melhoram o desenvolvimento frontend?</h3>
+<p>Os MCPs eliminam a necessidade de criar soluções específicas para cada modelo de linguagem, permitindo que os desenvolvedores integrem ferramentas de forma mais rápida e eficiente.</p>
+<h3>3. Quais ferramentas posso usar com MCPs?</h3>
+<p>Você pode usar uma variedade de ferramentas, incluindo GitHub, Notion e outras APIs, dependendo do que os servidores MCP oferecem. A flexibilidade é uma das grandes vantagens dos MCPs.</p>
+<h3>4. É fácil integrar MCPs no meu ambiente de desenvolvimento?</h3>
+<p>Sim! A integração é simples, especialmente se você estiver usando uma IDE como o Cursor, que suporta facilmente a adição de servidores de MCP.</p>
+<h3>5. O que o futuro reserva para os MCPs?</h3>
+<p>Com a crescente adoção de MCPs, podemos esperar um aumento na criação de ferramentas e aplicações que utilizam essa tecnologia, tornando o desenvolvimento mais eficiente e colaborativo.</p>
+<p>Os MCPs não são apenas uma tendência passageira, mas sim uma evolução significativa na forma como interagimos com a inteligência artificial. A inteligência artificial desenvolvimento frontend design ai está mais acessível e poderosa do que nunca. Prepare-se para explorar novas possibilidades!</p>
+<p></body></html></p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Neste artigo, vamos explorar como os Model Context Protocols (MCPs) estão transformando o desenvolvimento frontend e design com AI. Compreenderemos o que são MCPs, por que estão em alta e como podem ser aplicados na sua rotina de codificação. Índice Passo 1: Introdução aos MCPs 🚀 Passo 2: O que é…</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Neste artigo, vamos explorar como os Model Context Protocols (MCPs) estão transformando o desenvolvimento frontend e design com AI. Compreenderemos o que são MCPs, por que estão em alta e como podem ser aplicados na sua rotina de codificação. Índice Passo 1: Introdução aos MCPs 🚀 Passo 2: O que é…
+
+Leia o post completo: https://blog.felvieira.com.br/2025/03/21/como-inteligencia-artificial-e-mcps-revolucionando-desenvolvimento-frontend/</div>
+  </section>
+
+  <footer class="post">
+    <span>21 de março de 2025</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
