@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA — felvieira's blog</title>
+<meta name="description" content="Estudo de Harvard com 300 milhões de eventos mostra: agentes de IA aumentam commits e PRs, mas a revisão humana absorve o ganho. O que muda quando escrever código deixa de ser o limite.">
+<meta property="og:title" content="Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA">
+<meta property="og:description" content="Estudo de Harvard com 300 milhões de eventos mostra: agentes de IA aumentam commits e PRs, mas a revisão humana absorve o ganho. O que muda quando escrever código deixa de ser o limite.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-10-12-agentes-ia-gargalo-revisao-codigo-cover.png">
+<meta property="og:type" content="article">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+</head>
+<body>
+<nav class="top">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+</nav>
+
+<main class="wrap">
+  <h1>Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>12 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">6 min read</span>
+  </p>
+
+  <img src="../assets/images/2026-10-12-agentes-ia-gargalo-revisao-codigo-cover.png" alt="Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Tem uma cena que se repete em praticamente todo time que adotou agentes de codificação nos últimos meses: a esteira de pull requests parece uma fila de banco em dia de pagamento. Código sobrando, gente revisando a toque de caixa, e ninguém muito seguro se o que está entrando é bom ou só rápido. Um estudo recente de Harvard, com Fiona Chen e James Stratton analisando dados da plataforma Jellyfish — 300 milhões de eventos de trabalho, mais de 700 mil pessoas, 700 empresas de software, de 2021 até março de 2026 — colocou números numa sensação que quem está na trincheira já vinha sentindo no osso.</p>
+
+<p>O achado central é simples de enunciar e incômodo de digerir: depois que os times passam a usar agentes de IA para gerar código, as linhas de código sobem 30%, os commits sobem 20%, os pull requests sobem 23%. Só que a taxa de resolução de issues e épicos no Jira não muda de forma estatisticamente significativa. Mais código. Mesmo tanto de software efetivamente entregue. Não é um empate técnico, é um desalinhamento real entre o que a IA produz e o que a empresa consegue absorver.</p>
+
+<h2>O gargalo trocou de lugar</h2>
+
+<p>Durante anos, o ponto mais lento do fluxo de desenvolvimento foi escrever código. Era ali que a gente travava: pensar na solução, lembrar da sintaxe certa, escrever o teste, debugar o óbvio. Os agentes — Cursor, Claude Code, Copilot, Codex, e a lista só cresce — atacaram exatamente essa etapa, e atacaram bem. O problema é que ninguém redesenhou o resto do fluxo pra lidar com a nova velocidade. Revisão de código, que sempre foi tratada como etapa de passagem, virou o funil.</p>
+
+<p>Os números do estudo mostram isso com clareza: o tempo entre abrir um PR e fazer o merge subiu 49%. Pull requests com pedido de alteração quase dobraram. Comentários por PR subiram 35%. E 14% a mais de trabalhadores passaram a fazer revisão de código, gente que antes não revisava virou revisor porque o volume obrigou. Isso não é sintoma de time desorganizado, é matemática: se a geração de código dez vezes mais rápida e a capacidade humana de ler, entender e confiar em código continua sendo a mesma, a conta não fecha.</p>
+
+<p><img src="../assets/images/2026-10-12-agentes-ia-gargalo-revisao-codigo-1-esteira-revisao.png" alt="Esteira de fábrica onde robôs produzem blocos de código mais rápido do que um inspetor humano consegue revisar, com pilha de blocos acumulados" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<p>E aqui mora o ponto que mais me interessa como desenvolvedor que usa esses agentes todo santo dia: código gerado por IA não é sinônimo de código confiável. É código plausível. Ele compila, passa no teste óbvio, parece com o que um humano escreveria — e às vezes é exatamente isso que faz ele ser perigoso, porque a revisão superficial não pega o que está errado embaixo da superfície. É o que o pessoal já vem chamando de slop code: código tecnicamente funcional, mas sem o raciocínio de quem entende o domínio, que alguém vai ter que peneirar linha por linha depois. A promessa da produtividade infinita esbarra na pessoa que precisa, com responsabilidade de verdade, dizer "isso pode ir pra produção".</p>
+
+<h2>Quem segura a revisão hoje</h2>
+
+<p>Um dado do próprio levantamento é revelador: até março de 2026, 80% das empresas já usavam alguma forma de revisão de código com IA. Parece que o problema estaria resolvido, não é? Só que esses mesmos agentes respondem por apenas 23,3% dos comentários de revisão e 10,8% dos pull requests revisados. Na prática, a esmagadora maioria da carga ainda cai em cima de gente. A IA ajuda a escrever mais rápido do que ajuda a revisar, e esse descompasso é o verdadeiro nó do momento.</p>
+
+<p>Faz sentido quando você para pra pensar em como revisão funciona de verdade. Escrever código é, em boa parte, um problema de geração: dado um contexto, produza uma solução plausível. Revisar é um problema de julgamento: entender a intenção de quem pediu a mudança, avaliar se a solução é a certa entre várias possíveis, prever efeitos colaterais em sistemas que a ferramenta nunca viu rodando em produção. Um agente consegue apontar um bug óbvio de sintaxe ou sugerir um teste faltando. Ele ainda erra feio em avaliar se aquela mudança de arquitetura faz sentido pro produto daqui a seis meses. Isso ainda é trabalho humano, e vai continuar sendo por um bom tempo.</p>
+
+<p><img src="../assets/images/2026-10-12-agentes-ia-gargalo-revisao-codigo-2-controlador-trafego.png" alt="Desenvolvedor como controlador de tráfego aéreo guiando muitos aviões de papel em fila para uma única pista de pouso" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Redesenhando o fluxo em volta da revisão</h2>
+
+<p>Os times que eu vejo lidando melhor com isso não tentaram frear os agentes. Eles mudaram a engenharia do processo ao redor. Algumas práticas que estão virando padrão de fato:</p>
+
+<ul>
+<li><strong>PRs menores e mais frequentes</strong>: em vez de deixar o agente produzir uma mudança gigante de uma vez, o time quebra a tarefa em pedaços pequenos o suficiente pra revisar de verdade, não só carimbar.</li>
+<li><strong>Testes automatizados como pré-filtro</strong>: cobertura de teste deixou de ser meta de qualidade e virou porteiro. Se não passa no teste, nem chega no humano. Isso tira do revisor o trabalho mecânico e deixa pra ele o julgamento.</li>
+<li><strong>Auto-revisão do próprio agente antes do humano</strong>: pedir pro agente criticar o próprio código, rodar um segundo agente como revisor, ou usar checklist automatizado antes de abrir o PR. Reduz ruído, mas não substitui olho humano — só filtra o óbvio.</li>
+<li><strong>Dono explícito de cada mudança</strong>: alguém assina embaixo, mesmo quando quem escreveu foi o agente. Responsabilidade não terceiriza.</li>
+</ul>
+
+<p>Nenhuma dessas práticas é mágica nem nova, aliás. São as mesmas disciplinas de engenharia de sempre — PR pequeno, teste automatizado, dono claro — só que agora aplicadas com urgência redobrada, porque o volume que entra na esteira multiplicou e a esteira não cresceu junto.</p>
+
+<p><img src="../assets/images/2026-10-12-agentes-ia-gargalo-revisao-codigo-3-eclusa-prs.png" alt="Eclusa de canal onde barcos pequenos passam rápido enquanto um navio cargueiro gigante fica preso na comporta" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>O que isso diz sobre produtividade de verdade</h2>
+
+<p>O estudo também derruba um mito que andava circulando: não deu pra atribuir mudança significativa de emprego à adoção desses agentes. Não é que a IA esteja substituindo revisor nem que esteja eliminando vaga em massa — pelo menos não nesses dados, até março de 2026, segundo a cobertura da Ars Technica sobre o trabalho. O que está acontecendo é redistribuição de esforço: menos tempo escrevendo do zero, mais tempo lendo, questionando, aprovando ou rejeitando o que foi gerado. Trabalho de revisão sempre existiu, só que agora ele carrega o peso que antes estava distribuído na escrita.</p>
+
+<p>Pra quem lidera time, a lição prática é direta: medir produtividade em linhas de código, número de commits ou PRs abertos virou métrica de vaidade. O que importa é quanto daquilo vira issue resolvida, feature entregue, bug corrigido de verdade. Se o funil de revisão não acompanhar o ritmo de geração, você só está acumulando trabalho represado com cara de progresso.</p>
+
+<p>No fim das contas, a ferramenta ficou mais rápida, mas quem decide o que é bom continua sendo gente. E talvez seja hora de parar de medir o sucesso da IA generativa pelo volume que ela produz e começar a medir pelo tanto que ela deixa de atravancar quando alguém, do outro lado da tela, precisa confiar no que está lendo.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Estudo de Harvard com 300 milhões de eventos mostra: agentes de IA aumentam commits e PRs, mas a revisão humana absorve o ganho. O que muda quando escrever código deixa de ser o limite.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Estudo de Harvard com 300 milhões de eventos mostra: agentes de IA aumentam commits e PRs, mas a revisão humana absorve o ganho. O que muda quando escrever código deixa de ser o limite.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-12-agentes-ia-gargalo-revisao-codigo.html</div>
+  </section>
+
+  <footer class="post">
+    <span>12 de outubro de 2026</span>
+    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
