@@ -3,8 +3,10 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
 <title>{{TITLE}} — felvieira's blog</title>
 <meta name="description" content="{{EXCERPT}}">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
 <meta property="og:title" content="{{TITLE}}">
 <meta property="og:description" content="{{EXCERPT}}">
 <meta property="og:image" content="{{COVER_IMAGE_URL}}">
@@ -19,6 +21,10 @@
   <a class="brand" href="../">felvieira's blog</a>
   <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
   <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
 </nav>
 
 <main class="wrap">
@@ -27,7 +33,7 @@
     <span class="author">Felipe Vieira</span>
     <span>{{DATE_HUMAN}}</span>
     <span class="tag">{{LANG_LABEL}}</span>
-    <span class="tag">{{READING_TIME}} min read</span>
+    <span class="tag">{{READING_TIME}} min de leitura</span>
   </p>
 
   {{COVER_IMG_TAG}}
@@ -40,7 +46,7 @@
     <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
     <p class="share-hook">{{SHARE_HOOK}}</p>
     <div class="share-actions">
-      <button type="button" class="copy-share">📋 Copiar texto do post</button>
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
       <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
     </div>
     <div class="share-text">{{LINKEDIN_TEXT}}</div>
@@ -48,7 +54,7 @@
 
   <footer class="post">
     <span>{{DATE_HUMAN}}</span>
-    <span><a href="https://github.com/felvieira/blog">felvieira's blog</a></span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
   </footer>
 </main>
 <script src="../assets/js/share.js"></script>

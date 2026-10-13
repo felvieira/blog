@@ -123,7 +123,7 @@ const sourceUrl = config.github_user && config.blog_repo
 // Cover image visible in body (not just og:meta). Required for posts that
 // have a --cover argument — falls back to empty string when absent.
 const coverImgTag = args.cover
-  ? `<img src="../${args.cover}" alt="${(args.title || "").replace(/"/g, "&quot;")} — cover" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">`
+  ? `<img src="../${args.cover}" alt="${(args.title || "").replace(/"/g, "&quot;")} — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">`
   : "";
 
 // LinkedIn share block. --share-hook is the mysterious teaser shown on-page;

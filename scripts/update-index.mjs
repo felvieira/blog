@@ -17,14 +17,18 @@
  *   - index.html: HTML list between <!-- POSTS_START --> and <!-- POSTS_END -->
  *   - README.md: markdown list between <!-- BLOG_INDEX_START --> and <!-- BLOG_INDEX_END -->
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync } from "node:fs";
+import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from "node:fs";
 import { join } from "node:path";
 import { homedir } from "node:os";
+import { execFileSync } from "node:child_process";
 
 const ROOT      = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const POSTS_DIR = join(ROOT, "posts");
 const INDEX     = join(ROOT, "index.html");
 const README    = join(ROOT, "README.md");
+const POSTS_INDEX = join(ROOT, "posts-index.json");
+const INVALID_COVERS = join(ROOT, "assets", "images", "thumbs", ".invalid.json");
+const invalidCovers = existsSync(INVALID_COVERS) ? new Set(JSON.parse(readFileSync(INVALID_COVERS, "utf8"))) : new Set();
 
 // ─── Load blog config (multi-user friendly) ──────────────────────────────────
 function loadBlogConfig() {
@@ -36,6 +40,25 @@ function loadBlogConfig() {
 const config = loadBlogConfig();
 // Build a tolerant regex that strips either "{user}'s blog" or any "X's blog"
 const titleSuffixRe = new RegExp(` — ${config.github_user}'s blog$|—[^—]*'s blog$`);
+
+// Small WebP covers keep the archive light. ImageMagick is optional; when it
+// is unavailable, cards keep their original cover rather than breaking builds.
+const THUMBS_DIR = join(ROOT, "assets", "images", "thumbs");
+function thumbnailFor(cover) {
+  if (!cover || !cover.startsWith("assets/images/")) return cover;
+  if (invalidCovers.has(cover)) return "";
+  const source = join(ROOT, cover);
+  if (!existsSync(source)) return "";
+  const thumb = join(THUMBS_DIR, `${cover.slice("assets/images/".length).replace(/\.[^.]+$/, "")}.webp`);
+  try {
+    if (!existsSync(thumb) || statSync(source).mtimeMs > statSync(thumb).mtimeMs) {
+      execFileSync("magick", [source, "-auto-orient", "-thumbnail", "800x800^", "-gravity", "center", "-extent", "800x800", "-strip", "-quality", "76", thumb], { stdio: "ignore" });
+    }
+    return existsSync(thumb) ? `assets/images/thumbs/${thumb.split(/[\\/]/).pop()}` : cover;
+  } catch {
+    return cover;
+  }
+}
 
 function extractPostMeta(filename) {
   const html  = readFileSync(join(POSTS_DIR, filename), "utf8");
@@ -55,8 +78,18 @@ function extractPostMeta(filename) {
     const tail = og.match(/(assets\/images\/[^"]+)$/);
     cover = tail ? tail[1] : og;
   }
-  const readMin = html.match(/(\d+)\s*min read/)?.[1] ?? "";
-  return { filename, title, lang, excerpt: desc, date, cover, readMin };
+  const readMin = html.match(/(\d+)\s*min(?: read| de leitura)/)?.[1] ?? "";
+  const content = html.match(/<article>([\s\S]*?)<\/article>/)?.[1] ?? "";
+  const topic = classifyTopic(`${title} ${desc} ${content.slice(0, 1500)}`);
+  return { filename, title, lang, excerpt: desc, date, cover: thumbnailFor(cover), readMin, topic };
+}
+
+function classifyTopic(text) {
+  const value = text.toLocaleLowerCase("pt-BR");
+  if (/benchmark|testei|testes|experimento|comfyui|gpu|modelo local|comparativo/.test(value)) return "Experimentos";
+  if (/agente|agent|mcp|llm|ia |inteligência artificial|modelo de ia|openai|claude|gemini|gpt|rag|harness/.test(value)) return "IA e agentes";
+  if (/carreira|vendas|produto|marketing|negócio|empresa|cliente|equipe|liderança/.test(value)) return "Produto e carreira";
+  return "Desenvolvimento";
 }
 
 const posts = readdirSync(POSTS_DIR)
@@ -81,8 +114,8 @@ const featured = posts.slice(0, 3);
 const rest     = posts.slice(3);
 
 function heroCard(p) {
-  return `      <a class="feat-hero${p.cover ? "" : " no-img"}" href="posts/${p.filename}">
-        ${p.cover ? `<div class="feat-hero-img" style="background-image:url('${p.cover}')"></div>` : ""}
+  return `      <a class="feat-hero${p.cover ? "" : " no-img"}" href="posts/${p.filename}" data-topic="${escapeHtml(p.topic)}" data-search="${escapeHtml(`${p.title} ${p.excerpt}`.toLocaleLowerCase("pt-BR"))}">
+        ${p.cover ? `<img class="feat-hero-img" src="${p.cover}" alt="" width="800" height="450" fetchpriority="high">` : ""}
         <div class="feat-hero-body">
           <p class="meta">${metaLine(p)}</p>
           <h2>${escapeHtml(p.title)}</h2>
@@ -92,8 +125,8 @@ function heroCard(p) {
 }
 
 function secondaryCard(p) {
-  return `        <a class="feat-sec${p.cover ? "" : " no-img"}" href="posts/${p.filename}">
-          ${p.cover ? `<div class="feat-sec-img" style="background-image:url('${p.cover}')"></div>` : ""}
+  return `        <a class="feat-sec${p.cover ? "" : " no-img"}" href="posts/${p.filename}" data-topic="${escapeHtml(p.topic)}" data-search="${escapeHtml(`${p.title} ${p.excerpt}`.toLocaleLowerCase("pt-BR"))}">
+          ${p.cover ? `<img class="feat-sec-img" src="${p.cover}" alt="" width="800" height="800" loading="lazy">` : ""}
           <div class="feat-sec-body">
             <p class="meta">${metaLine(p)}</p>
             <h3>${escapeHtml(p.title)}</h3>
@@ -102,8 +135,8 @@ function secondaryCard(p) {
 }
 
 function listItem(p) {
-  return `      <a class="list-item${p.cover ? "" : " no-img"}" href="posts/${p.filename}">
-        ${p.cover ? `<div class="list-thumb" style="background-image:url('${p.cover}')"></div>` : ""}
+  return `      <a class="list-item${p.cover ? "" : " no-img"}" href="posts/${p.filename}" data-topic="${escapeHtml(p.topic)}" data-search="${escapeHtml(`${p.title} ${p.excerpt}`.toLocaleLowerCase("pt-BR"))}">
+        ${p.cover ? `<img class="list-thumb" src="${p.cover}" alt="" width="800" height="533" loading="lazy">` : ""}
         <div class="list-body">
           <h3>${escapeHtml(p.title)}</h3>
           <p class="meta">${metaLine(p)}</p>
@@ -123,8 +156,9 @@ ${featured.slice(1).map(secondaryCard).join("\n")}
 
 const restHtml = rest.length
   ? `    <section class="post-list">
-      <h2 class="section-label">Mais posts</h2>
+      <h2 class="section-label" id="arquivo">Artigos recentes</h2>
 ${rest.map(listItem).join("\n")}
+      <nav class="pagination" aria-label="Paginação dos artigos" hidden></nav>
     </section>`
   : "";
 
@@ -139,7 +173,8 @@ const indexUpdated = indexFile.replace(
 const indexFinal = posts.length > 0
   ? indexUpdated.replace(/\s*<div class="index-item"[^>]*>\s*No posts yet[^<]*<\/div>/, "")
   : indexUpdated;
-writeFileSync(INDEX, indexFinal);
+writeFileSync(INDEX, indexFinal.replace(/<!-- POST_COUNT -->\d+/, `<!-- POST_COUNT -->${posts.length}`).replace(/[ \t]+$/gm, ""));
+writeFileSync(POSTS_INDEX, JSON.stringify(posts.map(({ filename, title, date, topic }) => ({ filename, title, date: dateShort({ date }), topic })), null, 2));
 
 // Build README markdown list
 const readmeList = posts.length === 0
