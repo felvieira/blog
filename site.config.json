@@ -1,0 +1,15 @@
+{
+  "url": "https://felvieira.github.io/blog/",
+  "name": "felvieira's blog",
+  "title": "IA, agentes e desenvolvimento | Felipe Vieira",
+  "description": "Guias, experimentos e aprendizados de Felipe Vieira sobre inteligência artificial, agentes de IA, desenvolvimento de software e produto.",
+  "author": {
+    "name": "Felipe Vieira",
+    "url": "https://links.felvieira.com.br/@felvieira.dev"
+  },
+  "ads": {
+    "enabled": false,
+    "publisherId": "ca-pub-7742549245155822",
+    "minViewportWidth": 1280
+  }
+}

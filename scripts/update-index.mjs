@@ -21,6 +21,7 @@ import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from "
 import { join } from "node:path";
 import { homedir } from "node:os";
 import { execFileSync } from "node:child_process";
+import { updateSeo } from "./update-seo.mjs";
 
 const ROOT      = new URL("..", import.meta.url).pathname.replace(/^\/([A-Z]:)/, "$1");
 const POSTS_DIR = join(ROOT, "posts");
@@ -46,6 +47,7 @@ const titleSuffixRe = new RegExp(` — ${config.github_user}'s blog$|—[^—]*'
 const THUMBS_DIR = join(ROOT, "assets", "images", "thumbs");
 function thumbnailFor(cover) {
   if (!cover || !cover.startsWith("assets/images/")) return cover;
+  if (cover.startsWith("assets/images/thumbs/")) return cover;
   if (invalidCovers.has(cover)) return "";
   const source = join(ROOT, cover);
   if (!existsSync(source)) return "";
@@ -81,7 +83,8 @@ function extractPostMeta(filename) {
   const readMin = html.match(/(\d+)\s*min(?: read| de leitura)/)?.[1] ?? "";
   const content = html.match(/<article>([\s\S]*?)<\/article>/)?.[1] ?? "";
   const topic = classifyTopic(`${title} ${desc} ${content.slice(0, 1500)}`);
-  return { filename, title, lang, excerpt: desc, date, cover: thumbnailFor(cover), readMin, topic };
+  const thumbnail = thumbnailFor(cover);
+  return { filename: encodeURIComponent(filename), title, lang, excerpt: desc, date, cover: thumbnail.startsWith('assets/') ? thumbnail.split('/').map(encodeURIComponent).join('/') : thumbnail, readMin, topic };
 }
 
 function classifyTopic(text) {
@@ -189,6 +192,7 @@ const readmeUpdated = readmeFile.replace(
 writeFileSync(README, readmeUpdated);
 
 console.log(`Index updated: ${posts.length} post(s).`);
+updateSeo();
 
 function escapeHtml(s) {
   return String(s).replace(/[&<>"']/g, c => ({ "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;", "'": "&#39;" }[c]));
