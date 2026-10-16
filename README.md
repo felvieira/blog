@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-10-16** — [Observabilidade para agentes de IA: como saber o que o agente realmente fez](posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html) (🇧🇷 PT)
 - **2026-10-14** — [Testes na era dos agentes de IA: a rede de segurança que virou protagonista](posts/2026-10-14-testes-era-agentes-ia-rede-seguranca.html) (🇧🇷 PT)
 - **2026-10-12** — [Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA](posts/2026-10-12-agentes-ia-gargalo-revisao-codigo.html) (🇧🇷 PT)
 - **2026-10-09** — [Skills vs MCP: quando usar cada um no seu fluxo com agentes de IA](posts/2026-10-09-skills-vs-mcp-quando-usar-cada-um.html) (🇧🇷 PT)

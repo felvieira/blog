@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Observabilidade para agentes de IA: como saber o que o agente realmente fez — felvieira's blog</title>
+<meta name="description" content="Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Observabilidade para agentes de IA: como saber o que o agente realmente fez">
+<meta property="og:description" content="Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Observabilidade para agentes de IA: como saber o que o agente realmente fez">
+<meta name="twitter:description" content="Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.">
+<meta property="article:published_time" content="2026-10-16">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html","url":"https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html","headline":"Observabilidade para agentes de IA: como saber o que o agente realmente fez","description":"Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.","inLanguage":"pt-BR","datePublished":"2026-10-16","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Observabilidade para agentes de IA: como saber o que o agente realmente fez</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>16 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez-cover.png" alt="Observabilidade para agentes de IA: como saber o que o agente realmente fez — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Semana passada, um colega me mostrou orgulhoso o agente que ele tinha montado para organizar tarefas de um repositório. Eu perguntei: "E como você sabe que ele fez direito?". Ele respondeu: "Ué, o resultado saiu certo". Aí eu perguntei: "Mas o que ele fez para chegar lá?". Silêncio. Essa conversa é a razão deste texto.</p>
+
+<p>Quando a gente trabalha com agentes de IA, existe uma tentação enorme de olhar só para a saída final. Deu certo? Ótimo, próximo. Só que um agente não é uma função que recebe uma entrada e devolve uma saída. Ele toma decisões em sequência, chama ferramentas, lê arquivos, tenta de novo, muda de ideia. O caminho importa tanto quanto o destino. E é aí que entra a observabilidade.</p>
+
+<h2>Por que "deu certo" não basta</h2>
+
+<p>Imagine um agente que corrige um teste que estava falhando. O teste passa. Parece vitória. Mas e se ele passou porque o agente apagou a asserção? Ou porque alterou um arquivo de configuração que não deveria tocar? Ou porque rodou o mesmo comando quarenta vezes até algo funcionar por sorte? O resultado final é idêntico nos três casos: verde. A diferença está na trajetória.</p>
+
+<p>Existem pelo menos quatro problemas que um resultado correto pode esconder:</p>
+
+<ul>
+  <li><strong>Efeitos colaterais:</strong> o agente alterou ou apagou algo fora do escopo da tarefa.</li>
+  <li><strong>Desperdício:</strong> chegou ao resultado certo, mas por um caminho caro, cheio de voltas.</li>
+  <li><strong>Sorte:</strong> acertou desta vez, mas o processo é frágil e vai falhar na próxima.</li>
+  <li><strong>Atalhos indesejados:</strong> cumpriu a letra do pedido violando o espírito dele.</li>
+</ul>
+
+<p>Se você não enxerga o caminho, não consegue distinguir um agente confiável de um agente sortudo. E sorte não escala.</p>
+
+<h2>Logs: o básico que quase todo mundo faz mal</h2>
+
+<p>Todo mundo diz que tem logs. Poucos têm logs que respondem perguntas úteis. Um log que diz apenas "tarefa iniciada" e "tarefa concluída" é decoração. O que realmente ajuda é registrar cada passo do agente com contexto suficiente para reconstruir a história depois.</p>
+
+<p>Na prática, eu gosto de guardar, para cada passo:</p>
+
+<ul>
+  <li>um identificador da tarefa e outro do passo, para amarrar tudo;</li>
+  <li>o que o agente decidiu fazer e, quando disponível, a justificativa dele;</li>
+  <li>qual ferramenta foi chamada, com quais argumentos;</li>
+  <li>o que a ferramenta devolveu (ou um resumo, se for muito grande);</li>
+  <li>quanto tempo levou e se houve erro.</li>
+</ul>
+
+<p>Dica de quem já se queimou: use logs estruturados, em formato como JSON, e não texto solto. Texto livre é ótimo para ler uma vez e péssimo para consultar. Com campos bem definidos, você consegue perguntar coisas como "mostre todas as tarefas em que o agente chamou a ferramenta de escrita em arquivo mais de dez vezes".</p>
+
+<p>Outro cuidado: segredos. Argumentos de ferramentas e respostas podem conter tokens, senhas e dados pessoais. Decida cedo o que será mascarado antes de gravar, não depois.</p>
+
+<p><img src="../assets/images/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez-1-caixa-preta.png" alt="Caixa-preta de avião aberta, com linhas de registro luminosas saindo dela" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Traces das chamadas de ferramentas</h2>
+
+<p>Logs contam eventos. Traces contam a estrutura. Se você já usou tracing distribuído em sistemas web, a ideia é a mesma: cada tarefa vira um trace, e cada decisão ou chamada de ferramenta vira um span dentro dele, com início, fim e relação de pai e filho.</p>
+
+<p>Por que isso é tão valioso para agentes? Porque o comportamento deles é aninhado. Uma tarefa gera um plano, o plano gera várias chamadas, uma chamada falha e dispara uma nova tentativa, e talvez o agente delegue um pedaço para outro agente. Em uma lista plana de logs, isso vira um novelo. Em uma visualização de trace, você vê a árvore inteira e aponta rápido onde o tempo foi gasto e onde as coisas desandaram.</p>
+
+<p>Com traces, algumas perguntas ficam fáceis de responder:</p>
+
+<ol>
+  <li>Qual etapa consumiu mais tempo nesta tarefa?</li>
+  <li>Houve repetição de chamadas idênticas, sinal clássico de agente andando em círculos?</li>
+  <li>Em que ponto exato o agente tomou o rumo errado?</li>
+  <li>Alguma ferramenta falhou em silêncio e o agente seguiu como se nada tivesse acontecido?</li>
+</ol>
+
+<p>Esse último ponto merece destaque. Já vi agente receber um erro de uma ferramenta, ignorar e inventar uma resposta plausível. Sem o registro da chamada e da resposta crua, você nunca descobriria.</p>
+
+<h2>Custo por tarefa: a métrica que ninguém olha até a fatura chegar</h2>
+
+<p>Existe uma pergunta simples que muda a conversa em qualquer time: quanto custou essa tarefa? Não o custo médio do mês, mas o custo daquela tarefa específica, com seus tokens de entrada, tokens de saída e chamadas de ferramentas externas.</p>
+
+<p>Medir custo por tarefa, e não só no agregado, revela coisas que a média esconde. Uma tarefa que custa dez vezes mais que as parecidas quase sempre tem uma história: um laço de tentativas, um contexto gigante carregado sem necessidade, uma ferramenta chamada em excesso. O custo vira um detector de anomalias bem barato.</p>
+
+<p>Algumas boas práticas:</p>
+
+<ul>
+  <li>Atribua o custo ao identificador da tarefa, no mesmo lugar onde estão os traces.</li>
+  <li>Defina um teto por tarefa. Ao atingir, o agente para e pede ajuda, em vez de continuar gastando.</li>
+  <li>Compare custo com valor entregue. Tarefa barata que falha continua sendo desperdício.</li>
+  <li>Acompanhe a evolução ao longo do tempo: mudou o modelo, o prompt ou as ferramentas, e o custo subiu? Você precisa saber.</li>
+</ul>
+
+<p><img src="../assets/images/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez-2-linha-do-tempo.png" alt="Linha do tempo de nós conectados com uma lupa examinando uma das chamadas" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Revisão de trajetórias: o hábito que separa times maduros</h2>
+
+<p>Coletar dados é metade do trabalho. A outra metade é olhar para eles. Chamo de revisão de trajetórias o hábito de sentar, de vez em quando, e ler como o agente resolveu algumas tarefas, do começo ao fim, como quem lê o histórico de um colega.</p>
+
+<p>Parece trabalhoso, mas rende muito. Você aprende onde o agente hesita, que ferramentas ele usa mal, quais instruções ele interpreta de forma diferente da que você pretendia. Muitas melhorias de prompt e de ferramentas nascem dessas leituras, não de métricas agregadas.</p>
+
+<p>Um roteiro simples que funciona:</p>
+
+<ol>
+  <li><strong>Amostre com intenção.</strong> Pegue algumas tarefas que deram certo, algumas que falharam e as mais caras. Só olhar as falhas vicia o seu julgamento.</li>
+  <li><strong>Leia o passo a passo.</strong> Pergunte, a cada passo, se um humano competente faria igual.</li>
+  <li><strong>Anote padrões.</strong> Erros isolados são ruído. O mesmo erro três vezes é um problema de projeto.</li>
+  <li><strong>Transforme em ação.</strong> Cada padrão vira um ajuste de instrução, uma nova validação ou um teste.</li>
+</ol>
+
+<p>E atenção às tarefas que deram certo. É nelas que moram os acertos por sorte, e são justamente as que ninguém pensa em revisar.</p>
+
+<h2>Do rastro ao teste</h2>
+
+<p>Uma consequência bonita de ter bons registros é poder transformar trajetórias reais em casos de teste. Aquela tarefa em que o agente se perdeu? Guarde a entrada, descreva o comportamento esperado e rode de novo depois de cada mudança. Você deixa de depender da memória e passa a ter uma coleção viva de situações difíceis.</p>
+
+<p>Também ajuda definir verificações automáticas sobre a trajetória, e não só sobre o resultado. Por exemplo: "o agente nunca deve escrever fora desta pasta", "nenhuma tarefa deve passar de tantas chamadas" ou "toda alteração deve ser precedida de uma leitura do arquivo". Regras assim pegam o atalho indesejado antes que ele vire hábito.</p>
+
+<p><img src="../assets/images/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez-3-painel-de-custo.png" alt="Painel de controle com medidores acompanhando o trabalho e o custo de um robô" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Por onde começar sem se afogar</h2>
+
+<p>Se tudo isso parece muito, comece pequeno. Você não precisa de uma plataforma sofisticada no primeiro dia. Um bom começo é:</p>
+
+<ul>
+  <li>gerar um identificador por tarefa e carregá-lo em todos os registros;</li>
+  <li>gravar toda chamada de ferramenta com argumentos, resposta e duração;</li>
+  <li>somar o custo ao final de cada tarefa;</li>
+  <li>reservar um horário fixo, talvez meia hora por semana, para ler algumas trajetórias.</li>
+</ul>
+
+<p>Só isso já coloca você muito à frente de quem confia apenas no "deu certo". Depois, quando as perguntas ficarem mais sofisticadas, você evolui as ferramentas. Observabilidade é um hábito antes de ser um produto.</p>
+
+<h2>Confiança se constrói com evidência</h2>
+
+<p>No fim das contas, a questão é confiança. Delegar trabalho a um agente é como delegar a uma pessoa nova no time: no começo você acompanha de perto, depois vai soltando conforme ela mostra consistência. A diferença é que, com o agente, a evidência não vem de conversa de corredor. Ela vem dos registros que você tomou o cuidado de guardar.</p>
+
+<p>Então, da próxima vez que alguém disser que o agente funcionou, faça a pergunta que fiz ao meu colega: o que ele fez para chegar lá? Se você tiver a resposta na ponta dos dedos, parabéns, você está operando um agente. Se não tiver, está torcendo. E torcida é ótima para futebol, mas péssima para sistemas em produção.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Resultado certo não prova processo certo. Logs, traces de ferramentas e custo por tarefa para você parar de torcer e começar a operar seus agentes.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html</div>
+  </section>
+
+  <footer class="post">
+    <span>16 de outubro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
