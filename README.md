@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-10-21** — [Agentes de IA com limites: como desenhar autonomia sem perder o controle](posts/2026-10-21-agentes-ia-com-limites.html) (🇧🇷 PT)
 - **2026-10-16** — [Observabilidade para agentes de IA: como saber o que o agente realmente fez](posts/2026-10-16-observabilidade-agentes-ia-o-que-o-agente-fez.html) (🇧🇷 PT)
 - **2026-10-14** — [Testes na era dos agentes de IA: a rede de segurança que virou protagonista](posts/2026-10-14-testes-era-agentes-ia-rede-seguranca.html) (🇧🇷 PT)
 - **2026-10-12** — [Mais código, mesmo software: o gargalo da revisão na era dos agentes de IA](posts/2026-10-12-agentes-ia-gargalo-revisao-codigo.html) (🇧🇷 PT)
