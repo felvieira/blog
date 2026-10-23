@@ -1,0 +1,284 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Interfaces com IA no frontend: o estado também precisa ser desenhado — felvieira's blog</title>
+<meta name="description" content="Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Interfaces com IA no frontend: o estado também precisa ser desenhado">
+<meta property="og:description" content="Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Interfaces com IA no frontend: o estado também precisa ser desenhado">
+<meta name="twitter:description" content="Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.">
+<meta property="article:published_time" content="2026-10-23">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html","url":"https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html","headline":"Interfaces com IA no frontend: o estado também precisa ser desenhado","description":"Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.","inLanguage":"pt-BR","datePublished":"2026-10-23","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Interfaces com IA no frontend: o estado também precisa ser desenhado</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>23 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">12 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-10-23-interfaces-ia-frontend-estado-desenhado-cover.png" alt="Interfaces com IA no frontend: o estado também precisa ser desenhado — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Uma interface com IA costuma ser apresentada como uma conversa: campo de texto, botão de envio e uma área onde a resposta aparece. Esse desenho parece suficiente enquanto tudo funciona em poucos segundos. O problema começa quando a resposta demora, chega em partes, falha no meio ou precisa ser revisada antes de virar uma ação.</p>
+
+<p>Nesses momentos, o produto revela se foi realmente desenhado ou se apenas conectou uma tela a um serviço. Um botão travado não explica o que está acontecendo. Um carregamento infinito não informa se a resposta ainda virá. Uma mensagem genérica de erro não ajuda a recuperar o trabalho já feito.</p>
+
+<p>Produtos com IA precisam tratar cada etapa da conversa como um estado explícito de interface. O servidor pode estar gerando tokens, consultando dados, validando permissões ou interrompendo uma operação. O usuário, porém, não enxerga esses processos diretamente. Ele precisa enxergar uma representação clara, honesta e acionável do que pode fazer agora.</p>
+
+<p>A tese é simples: <strong>o estado interno do sistema pode ser complexo, mas o estado apresentado ao usuário precisa ser compreensível</strong>. Essa tradução é parte central do produto, não um detalhe visual acrescentado depois.</p>
+
+<p><img src="../assets/images/2026-10-23-interfaces-ia-frontend-estado-desenhado-1-mapa-estados.png" alt="Mapa visual dos estados de uma interface com IA, da espera à resposta e à recuperação de erro" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Comece pelo mapa de estados</h2>
+
+<p>Antes de escolher componentes, liste os estados que a conversa pode assumir. Um modelo inicial pode conter:</p>
+
+<ul>
+<li><strong>Inativo:</strong> não há uma operação em andamento e o campo está pronto para uma nova mensagem.</li>
+<li><strong>Preparando:</strong> a mensagem foi enviada, mas a resposta ainda não começou.</li>
+<li><strong>Respondendo:</strong> o conteúdo está chegando em partes.</li>
+<li><strong>Concluído:</strong> existe uma resposta completa disponível.</li>
+<li><strong>Interrompido:</strong> a pessoa ou o sistema parou a geração antes do fim.</li>
+<li><strong>Falha recuperável:</strong> a operação não terminou, mas é possível tentar novamente ou editar a solicitação.</li>
+<li><strong>Revisão necessária:</strong> a resposta sugere uma ação ou contém conteúdo que exige confirmação humana.</li>
+</ul>
+
+<p>Esse mapa não precisa aparecer com esses nomes na tela. Ele serve para impedir que a equipe implemente apenas o caminho feliz. Para cada estado, responda quatro perguntas:</p>
+
+<ol>
+<li>O que a pessoa vê?</li>
+<li>O que ela pode fazer?</li>
+<li>O que o sistema pode fazer em segundo plano?</li>
+<li>Qual evento leva a conversa para o próximo estado?</li>
+</ol>
+
+<p>Uma representação curta ajuda a encontrar lacunas. Por exemplo: <code>inativo → preparando → respondendo → concluído</code>. A partir daí, acrescente as transições que normalmente são esquecidas: <code>respondendo → interrompido</code>, <code>respondendo → falha recuperável</code> e <code>concluído → revisão necessária</code>.</p>
+
+<p>O valor desse mapa não está em criar uma estrutura sofisticada. Está em tornar decisões discutíveis visíveis. Se ninguém sabe o que acontece quando a conexão cai durante a resposta, esse comportamento ainda não foi desenhado.</p>
+
+<h2>O que acontece no servidor não é o que o usuário precisa enxergar</h2>
+
+<p>O servidor pode executar várias etapas para produzir uma resposta: receber a mensagem, verificar a identidade, validar limites, buscar contexto, chamar um modelo, filtrar o resultado e persistir o histórico. O usuário não precisa ver uma lista de tarefas técnicas. Precisa saber, com precisão suficiente, se a mensagem foi recebida, se a resposta começou, se ainda está em andamento e qual ação está disponível.</p>
+
+<p>Essa diferença evita dois extremos. De um lado, a interface pode esconder tudo atrás de um círculo girando. De outro, pode despejar detalhes técnicos que não ajudam a tomar decisões. O bom desenho traduz o processo sem fingir uma precisão que o produto não tem.</p>
+
+<p>Durante a preparação, uma mensagem como <em>Preparando sua resposta</em> é mais útil que um indicador sem texto. Quando o conteúdo começa a chegar, a interface pode informar que a resposta está sendo escrita e oferecer um controle para interromper. Se o serviço estiver consultando uma fonte específica, vale mostrar isso somente quando essa informação for verdadeira e útil, como <em>Consultando os documentos selecionados</em>.</p>
+
+<p>Evite inventar etapas para dar a impressão de atividade. Se o produto não sabe se o modelo está “pensando”, não mostre uma animação que sugira esse estado. Transparência também é uma forma de confiabilidade.</p>
+
+<h2>Streaming exige um estado próprio</h2>
+
+<p>Uma resposta parcial não é uma resposta concluída. Essa diferença precisa aparecer no comportamento e na linguagem da interface.</p>
+
+<p>Enquanto o conteúdo chega, o usuário deve conseguir distinguir três coisas:</p>
+
+<ul>
+<li>o que já foi recebido;</li>
+<li>o que ainda pode mudar;</li>
+<li>qual ação interrompe a geração.</li>
+</ul>
+
+<p>O botão de envio pode mudar para <strong>Parar</strong>. O cursor ou outro indicador discreto pode mostrar que a resposta continua em andamento. Ao final, a interface remove o estado de atividade e apresenta as ações disponíveis para uma resposta completa, como copiar, editar a solicitação ou pedir uma nova versão.</p>
+
+<p>Não desabilite toda a tela sem necessidade. Em muitos produtos, a pessoa deve poder rolar a conversa, consultar uma mensagem anterior ou preparar uma observação enquanto a resposta é gerada. Bloqueie apenas as ações que realmente causariam conflito, como enviar a mesma solicitação duas vezes ou iniciar uma operação incompatível.</p>
+
+<p>Também é importante decidir o que acontece quando o usuário abandona a tela. A geração deve continuar? A resposta será salva? O retorno aparecerá quando a pessoa voltar? Não existe uma resposta universal. Existe, porém, a obrigação de escolher uma política e comunicá-la. Uma conversa de baixo risco pode continuar em segundo plano. Uma ação que altera dados deve exigir mais controle e talvez seja interrompida ao sair.</p>
+
+<h2>Interrupção não é erro</h2>
+
+<p>Quando a pessoa clica em <strong>Parar</strong>, o resultado deve ser tratado como uma resposta interrompida, não como uma falha técnica. O conteúdo parcial continua sendo útil em alguns casos. A interface pode informar que a geração foi interrompida e oferecer opções como continuar, editar a solicitação ou descartar o trecho.</p>
+
+<p>Essa distinção preserva a agência do usuário. Se todo cancelamento virar uma mensagem vermelha de erro, a interface ensina que interromper foi uma decisão inválida. Em uma conversa, parar pode ser exatamente o comportamento esperado: a resposta começou a seguir uma direção errada ou já trouxe informação suficiente.</p>
+
+<p>No lado técnico, o cancelamento precisa alcançar o servidor sempre que possível. Cancelar apenas a animação no navegador não interrompe necessariamente a operação que continua consumindo recursos. O cliente pode enviar um sinal de cancelamento associado à requisição; o servidor deve verificar esse sinal e encerrar o trabalho quando a operação permitir.</p>
+
+<p>O servidor também precisa lidar com uma condição comum: a resposta de cancelamento pode chegar depois de um último trecho de conteúdo. Por isso, o frontend deve aceitar uma pequena diferença entre o momento em que o usuário pediu para parar e o último conteúdo recebido. O estado final precisa ser consistente, sem duplicar ou apagar silenciosamente a resposta parcial.</p>
+
+<p><img src="../assets/images/2026-10-23-interfaces-ia-frontend-estado-desenhado-2-paineis-seguranca.png" alt="Ponte visual entre a pessoa e a IA com barreiras de segurança, confirmação e recuperação" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Erro recuperável precisa preservar o trabalho</h2>
+
+<p>Uma falha de rede no fim da geração é frustrante porque a pessoa pode perder uma resposta quase completa. A interface deve distinguir pelo menos três situações:</p>
+
+<ul>
+<li><strong>Falha antes de qualquer conteúdo:</strong> a mensagem foi enviada, mas nenhuma resposta apareceu.</li>
+<li><strong>Falha durante a resposta:</strong> parte do conteúdo já chegou.</li>
+<li><strong>Falha depois da conclusão:</strong> o conteúdo foi recebido, mas alguma etapa de salvamento ou sincronização falhou.</li>
+</ul>
+
+<p>Cada situação pede uma recuperação diferente. Na primeira, <strong>Tentar novamente</strong> pode repetir a solicitação. Na segunda, a pessoa pode continuar a partir do trecho parcial, pedir uma nova resposta ou copiar o que já recebeu. Na terceira, é melhor preservar o conteúdo na tela e explicar que o histórico ainda não foi salvo, em vez de apresentar uma conversa vazia.</p>
+
+<p>O botão de nova tentativa também precisa evitar ambiguidades. Ele repetirá exatamente a solicitação original? Usará o mesmo contexto? Pode gerar uma resposta diferente? A interface não precisa explicar toda a implementação, mas não deve dar a impressão de que está recuperando a mesma resposta quando, na prática, está iniciando uma nova geração.</p>
+
+<p>Mensagens como <em>Algo deu errado</em> são insuficientes quando aparecem sozinhas. Uma mensagem útil combina três elementos: o que foi afetado, o que foi preservado e qual é o próximo passo. Por exemplo: <em>A resposta foi interrompida antes de terminar. O trecho recebido foi preservado. Tente novamente ou edite sua mensagem.</em></p>
+
+<p>Erros de permissão, limite, conteúdo inválido e indisponibilidade temporária também não devem compartilhar o mesmo tratamento. O usuário não precisa conhecer códigos internos, mas precisa saber se deve corrigir a entrada, aguardar, solicitar acesso ou tentar outra ação.</p>
+
+<h2>Resposta parcial não deve parecer uma decisão final</h2>
+
+<p>O risco do streaming não é apenas visual. Uma resposta parcial pode apresentar uma frase incompleta, omitir uma ressalva importante ou sugerir uma ação antes de explicar suas condições. Se o produto permite executar algo a partir do texto recebido, nunca trate o primeiro trecho como uma autorização implícita.</p>
+
+<p>Ações sensíveis devem permanecer indisponíveis até que a resposta esteja completa e passe pelas validações necessárias. Mesmo assim, “completa” não significa automaticamente “confiável”. A interface pode separar a resposta informativa da ação derivada dela. Uma sugestão pode aparecer durante a geração; um botão que altera dados deve aguardar confirmação e validação.</p>
+
+<p>Em respostas longas, vale marcar visualmente o conteúdo como provisório enquanto a geração continua. Ao concluir, a interface pode retirar essa marca e liberar ações secundárias. Se a geração for interrompida, mantenha o rótulo de trecho parcial para que ninguém confunda o conteúdo com uma resposta revisada.</p>
+
+<h2>Revisão humana precisa ser uma etapa desenhada</h2>
+
+<p>Nem toda saída precisa de aprovação. Uma sugestão de título para um rascunho pode ser aplicada automaticamente se a pessoa puder desfazer a alteração. Já uma mensagem enviada a um cliente, uma mudança financeira ou uma alteração em dados permanentes exige confirmação explícita.</p>
+
+<p>Use três critérios para decidir:</p>
+
+<ol>
+<li><strong>Impacto:</strong> a ação pode causar dano, custo, exposição ou perda de dados?</li>
+<li><strong>Reversibilidade:</strong> existe uma forma simples e completa de desfazer?</li>
+<li><strong>Expectativa:</strong> uma pessoa razoável esperaria que o sistema agisse sozinho?</li>
+</ol>
+
+<p>Quanto maior o impacto e menor a reversibilidade, mais forte deve ser a confirmação. Uma confirmação boa nomeia a ação concreta, mostra o alvo e permite revisar os dados antes de prosseguir. <em>Aplicar sugestão</em> é vago; <em>Atualizar o endereço de entrega para este valor</em> é verificável.</p>
+
+<p>Quando a revisão for obrigatória, trate-a como estado, não como um aviso perdido no fim da resposta. A conversa pode mostrar <strong>Aguardando sua revisão</strong>, destacar o trecho que será usado e oferecer <strong>Confirmar</strong>, <strong>Editar</strong> e <strong>Cancelar</strong>. Se houver mais de uma alteração, a pessoa deve conseguir entender cada uma antes de aprovar o conjunto.</p>
+
+<p>Também não esconda incertezas. Se a resposta depende de uma interpretação, uma fonte incompleta ou um dado que precisa ser conferido, essa condição deve aparecer perto da ação correspondente. O objetivo não é assustar o usuário, mas evitar que uma sugestão pareça uma decisão já tomada.</p>
+
+<h2>Acessibilidade faz parte do estado</h2>
+
+<p>Uma mudança visual não é suficiente para comunicar que a resposta começou ou terminou. Pessoas que usam leitores de tela, teclado ou configurações de movimento reduzido precisam receber as mesmas informações por outros canais.</p>
+
+<ul>
+<li>Associe mensagens de estado a uma região que possa ser anunciada sem roubar o foco.</li>
+<li>Informe quando a geração começou, terminou, foi interrompida ou falhou.</li>
+<li>Não mova o foco automaticamente para cada trecho recebido.</li>
+<li>Garanta que <strong>Parar</strong>, <strong>Tentar novamente</strong> e <strong>Confirmar</strong> funcionem pelo teclado.</li>
+<li>Não dependa apenas de cor para separar resposta provisória, erro e confirmação.</li>
+<li>Respeite a preferência por reduzir movimento e evite animações que não acrescentam informação.</li>
+</ul>
+
+<p>Há uma tensão importante no streaming: anunciar cada palavra tornaria a experiência impraticável. Em vez disso, atualize a região de anúncio em momentos significativos, como o início da resposta, a conclusão, a interrupção e a falha. O conteúdo completo deve continuar acessível no fluxo normal da página.</p>
+
+<p>O foco também merece uma regra clara. Depois do envio, ele pode permanecer no campo para facilitar uma nova mensagem, ou ir para a área da resposta quando isso fizer sentido para o contexto. O que não funciona é deixar o navegador decidir de forma diferente a cada transição.</p>
+
+<h2>Segurança aparece nos estados e nas ações</h2>
+
+<p>Uma interface clara não substitui controles de segurança. Ela os torna compreensíveis. O frontend não deve ser a única barreira para ações protegidas: permissões, validações e confirmações precisam ser verificadas no servidor.</p>
+
+<p>O estado exibido também não pode revelar informações que o usuário não deveria conhecer. Uma mensagem de erro detalhada demais pode expor dados internos, nomes de serviços ou instruções que facilitam abuso. Mostre o que ajuda a recuperar a operação e registre detalhes técnicos no canal apropriado.</p>
+
+<p>Trate o conteúdo recebido como dado, mesmo quando ele parece uma instrução. Texto gerado, documentos recuperados e mensagens externas não devem ganhar autoridade apenas por aparecerem na conversa. Antes de executar qualquer ação, o produto precisa separar conteúdo informativo de comando autorizado, verificar a identidade da pessoa e aplicar as regras de permissão.</p>
+
+<p>Para operações sensíveis, associe a confirmação ao contexto atual. Se a pessoa mudou o registro, o destinatário ou os valores depois de revisar a sugestão, a aprovação anterior não deve continuar válida por conveniência. O servidor precisa verificar novamente os dados no momento da execução.</p>
+
+<h2>Como testar sem depender apenas do caminho feliz</h2>
+
+<p>Testar uma interface com IA é testar transições, não apenas a aparência da resposta. Um cenário mínimo deve cobrir:</p>
+
+<ul>
+<li>envio de uma mensagem válida;</li>
+<li>espera prolongada antes do primeiro trecho;</li>
+<li>resposta recebida em vários trechos;</li>
+<li>interrupção durante a geração;</li>
+<li>falha antes do primeiro trecho;</li>
+<li>falha depois de parte da resposta;</li>
+<li>tentativa novamente sem duplicar a mensagem;</li>
+<li>perda temporária de conexão;</li>
+<li>revisão e cancelamento de uma ação sensível;</li>
+<li>uso completo pelo teclado e anúncio das mudanças de estado.</li>
+</ul>
+
+<p>Para cada cenário, verifique o que aparece, o que fica habilitado, o que é preservado e qual evento encerra o estado. Simule respostas lentas e interrompa a conexão em pontos diferentes. Uma falha reproduzida no meio de uma resposta costuma revelar mais que dezenas de execuções rápidas.</p>
+
+<p>Também teste respostas vazias, conteúdo muito longo, caracteres inesperados e mensagens repetidas. O objetivo não é prever toda a criatividade do modelo, mas garantir que o contêiner, os controles e as transições continuem seguros quando a saída não seguir o formato ideal.</p>
+
+<p>O teste mais valioso pode ser uma observação curta com alguém que não participou da implementação. Peça à pessoa para explicar o que está acontecendo, parar uma resposta e recuperar uma falha. Se ela não souber se perdeu o trabalho ou se a ação já foi executada, o estado da interface ainda está ambíguo.</p>
+
+<p><img src="../assets/images/2026-10-23-interfaces-ia-frontend-estado-desenhado-3-revisao-humana.png" alt="Pessoa revisando uma sugestão da IA antes de confirmar uma ação" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Um desenho simples para começar nesta semana</h2>
+
+<p>Você não precisa redesenhar o produto inteiro para melhorar a confiabilidade. Comece por uma única jornada e torne suas transições explícitas.</p>
+
+<ol>
+<li><strong>Escolha o fluxo principal:</strong> uma pergunta, uma resposta e, se existir, uma ação derivada.</li>
+<li><strong>Liste os estados reais:</strong> inclua espera, resposta parcial, interrupção, falha e revisão.</li>
+<li><strong>Desenhe cada estado em uma tela:</strong> escreva a mensagem visível e marque os controles disponíveis.</li>
+<li><strong>Defina a política de cancelamento:</strong> diga o que é preservado, o que é encerrado e o que acontece no servidor.</li>
+<li><strong>Defina a recuperação:</strong> especifique quando repetir, editar, continuar ou descartar.</li>
+<li><strong>Separe sugestão de ação:</strong> determine quais resultados podem ser automáticos e quais exigem confirmação.</li>
+<li><strong>Faça uma rodada de teclado:</strong> percorra o fluxo sem mouse e verifique os anúncios de estado.</li>
+<li><strong>Simule lentidão e falha:</strong> confirme que a interface continua honesta quando nada acontece por alguns segundos.</li>
+</ol>
+
+<p>Ao terminar, use este checklist:</p>
+
+<ul>
+<li>O usuário sabe que a mensagem foi recebida?</li>
+<li>Ele sabe se a resposta ainda está sendo gerada?</li>
+<li>Existe um controle claro para interromper?</li>
+<li>O conteúdo parcial é distinguido do conteúdo concluído?</li>
+<li>Uma falha preserva o trabalho possível?</li>
+<li>A tentativa novamente evita duplicação e explica o que será repetido?</li>
+<li>Ações com impacto têm confirmação proporcional ao risco?</li>
+<li>A interface funciona sem depender de cor, movimento ou foco automático?</li>
+<li>O servidor valida permissões e confirmações, sem confiar apenas no navegador?</li>
+<li>As transições foram exercitadas com lentidão, interrupção e perda de conexão?</li>
+</ul>
+
+<p>Uma interface com IA confiável não é a que parece ocupada enquanto espera. É a que mantém a pessoa orientada quando a resposta demora, muda de direção, chega pela metade ou precisa de julgamento humano. Desenhar esses estados desde o início reduz ambiguidades, preserva o trabalho e deixa claro quem decide o próximo passo: o sistema, o servidor ou o usuário.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Uma interface com IA não termina no botão de enviar: streaming, espera, erro, interrupção e revisão precisam de estados visíveis. Veja um desenho simples para tornar o produto confiável.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-23-interfaces-ia-frontend-estado-desenhado.html</div>
+  </section>
+
+  <footer class="post">
+    <span>23 de outubro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
