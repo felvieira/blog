@@ -1,0 +1,244 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA — felvieira's blog</title>
+<meta name="description" content="RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA">
+<meta property="og:description" content="RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA">
+<meta name="twitter:description" content="RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.">
+<meta property="article:published_time" content="2026-10-23">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html","url":"https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html","headline":"RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA","description":"RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.","inLanguage":"pt-BR","datePublished":"2026-10-23","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>23 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">15 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-10-23-rag-obsoleto-alternativas-busca-ia-cover.png" alt="RAG ficou obsoleto? Nove formas de dar conhecimento a uma IA — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>RAG ficou obsoleto? A resposta curta é: não. O que ficou insuficiente, em alguns cenários, é o RAG simples, com uma busca vetorial única, um <code>top-k</code> fixo e a esperança de que os melhores trechos apareçam sozinhos.</p>
+
+<p>RAG continua sendo uma peça excelente para conectar um modelo a documentos que não cabem na memória do modelo. O artigo que apresentou o <a href="https://arxiv.org/abs/2005.11401">RAG original</a> já tratava essa combinação como uma memória paramétrica, formada pelo modelo, com uma memória externa, consultada durante a resposta. Hoje, porém, essa memória pode ser uma tabela, uma wiki, um grafo, uma ferramenta ou um documento inteiro.</p>
+
+<p>As nove opções abaixo não são nove substitutos isolados. Elas se combinam. O ponto é escolher com calma: qual é o formato da fonte, qual é o tamanho e a velocidade de mudança, que tipo de pergunta aparece, quão importante é a atualização, que evidência precisa ser mostrada, qual latência cabe, qual é o orçamento, como funciona o controle de acesso e qual é o risco de uma resposta errada.</p>
+
+<p><img src="../assets/images/2026-10-23-rag-obsoleto-alternativas-busca-ia-1-busca-vetorial-contexto.png" alt="Lupa vetorial ao lado de uma janela de contexto longo, representando duas formas de fornecer conhecimento à IA." style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>1. RAG tradicional: o ponto de partida</h2>
+
+<p><strong>Como funciona.</strong> A ingestão coleta os documentos, divide cada arquivo em trechos, transforma cada trecho em um vetor de significado, grava esses vetores em um índice e, na pergunta, recupera os <code>top-k</code> mais parecidos. Esses trechos entram no contexto do modelo, que redige a resposta com base neles e, idealmente, devolve a referência da origem.</p>
+
+<p><strong>Onde ganha.</strong> É uma escolha prática para muitos documentos com perguntas locais: “qual é o prazo da garantia?”, “como abrir um chamado?” ou “qual é a regra para reembolso?”. A recuperação evita enviar todo o acervo em cada pergunta e permite incorporar documentos novos sem treinar novamente o modelo.</p>
+
+<p><strong>Onde falha.</strong> Um trecho pode perder o assunto quando é separado do título, da tabela ou da seção que o explicava. O <code>top-k</code> pode ser pequeno demais, a pergunta pode usar uma expressão diferente da fonte e documentos antigos podem continuar no índice. Também é fácil aplicar o controle de acesso depois da busca, tarde demais, ou juntar evidências contraditórias. RAG não elimina alucinações: se a evidência não vier, vier errada ou for ambígua, o modelo ainda pode inventar uma resposta convincente.</p>
+
+<p><strong>Custo dominante.</strong> Médio, variando conforme o volume, o modelo de embeddings, o banco vetorial e a infraestrutura. O peso maior costuma estar na ingestão, na atualização do índice e no armazenamento, não apenas na geração final.</p>
+
+<p><strong>Exemplo.</strong> Uma central de suporte com milhares de manuais pode indexar procedimentos por produto, recuperar os trechos relevantes e responder com o nome do documento, a seção e a data de revisão. Se os testes mostrarem muitos erros de contexto, vale combinar RAG com busca lexical, resumos ou navegação hierárquica.</p>
+
+<h2>2. Long Context: enviar o documento inteiro</h2>
+
+<p><strong>Como funciona.</strong> Em vez de recuperar trechos, o sistema coloca um documento inteiro, ou um conjunto pequeno de documentos, no contexto do modelo. A abordagem funciona quando o corpus cabe com folga na janela disponível. “Com folga” importa: ainda é preciso espaço para a pergunta, instruções, histórico e resposta.</p>
+
+<p><strong>Onde ganha.</strong> Preserva relações entre seções, exceções, tabelas e definições que uma divisão em trechos pode quebrar. Para revisar um contrato curto, comparar duas políticas ou responder perguntas sobre um manual de poucas páginas, enviar o material completo pode ser mais simples e mais confiável do que construir uma cadeia de ingestão.</p>
+
+<p><strong>Onde falha.</strong> A capacidade nominal da janela não é a mesma coisa que a recuperação efetiva da evidência. Um modelo pode aceitar centenas de milhares de tokens e ainda deixar passar um detalhe importante. O efeito <em>Lost in the Middle</em>, estudado em <a href="https://arxiv.org/abs/2307.03172">avaliações sobre a posição da evidência em contextos longos</a>, mostra que a informação no meio do contexto pode ser usada pior do que a informação no começo ou no fim. Repetir documentos também aumenta ruído, latência e chance de contradição.</p>
+
+<p><strong>Custo dominante.</strong> Baixo para um corpus pequeno e estável, mas pode ficar alto conforme o volume, o modelo e a infraestrutura. O custo vem dos tokens enviados, da latência e da necessidade de repetir ou armazenar o mesmo contexto em muitas perguntas.</p>
+
+<p><strong>Exemplo.</strong> Uma equipe jurídica analisa um contrato de 80 páginas durante uma sessão de perguntas concentrada. O documento inteiro pode bastar. Já um repositório com anos de contratos, aditivos e versões provavelmente precisa de recuperação, filtros por data e controle de acesso.</p>
+
+<h2>3. Wiki-Based: conhecimento curado e navegável</h2>
+
+<p><strong>Como funciona.</strong> Uma wiki organiza páginas com títulos, categorias, links de retorno, histórico de revisão e navegação. Ela pode ser pública ou privada. Não é um algoritmo único: a aplicação pode usar busca lexical, uma API, links entre páginas, SQL, RAG ou uma mistura desses mecanismos. A <a href="https://www.mediawiki.org/wiki/API:Search">API de busca do MediaWiki</a>, por exemplo, oferece busca textual, filtros de espaço nominal e ordenação por relevância.</p>
+
+<p><strong>Onde ganha.</strong> A força está na autoria, na taxonomia e na manutenção editorial. Em vez de transformar todo conhecimento em uma pilha anônima de trechos, a empresa consegue dizer quem mantém uma página, quando ela foi revisada, quais conceitos se relacionam e qual caminho de navegação o leitor deve seguir.</p>
+
+<p><strong>Onde falha.</strong> Uma wiki não descobre fatos internos que nunca foram documentados. Páginas abandonadas ficam desatualizadas, e o controle de acesso granular pode ser mais difícil quando uma página mistura informações para públicos diferentes. Também não se deve confundir o conhecimento geral da Wikipedia com uma fonte confiável para dados, regras e decisões da sua empresa.</p>
+
+<p><strong>Custo dominante.</strong> Médio, condicionado ao volume, ao fluxo editorial e à infraestrutura de busca. O custo principal não é apenas técnico: é manter responsáveis, revisão, taxonomia e políticas claras para páginas antigas.</p>
+
+<p><strong>Exemplo.</strong> Uma empresa de engenharia mantém uma wiki privada com padrões de arquitetura, decisões registradas e procedimentos operacionais. O assistente pode começar pela página certa, seguir os links relacionados e usar RAG apenas para trechos extensos. Para uma FAQ pequena e bem mantida, a wiki com busca e revisão talvez já seja suficiente.</p>
+
+<h2>4. Agentic Search: buscar em várias rodadas</h2>
+
+<p><strong>Como funciona.</strong> Um agente decide se precisa buscar, escolhe onde buscar, divide a pergunta em etapas, faz novas consultas a partir do que encontrou, compara evidências e encerra quando um critério de parada é atingido. Esse fluxo troca uma recuperação fixa por uma política adaptativa.</p>
+
+<p><strong>Onde ganha.</strong> É útil em perguntas de múltiplos saltos, nas quais a resposta depende de descobrir uma entidade antes de procurar a próxima relação. Pesquisas sobre <a href="https://aclanthology.org/2023.acl-long.557/">recuperação intercalada com raciocínio em perguntas multi-hop</a> exploram justamente essa alternância: o que buscar na próxima rodada depende do que já foi descoberto.</p>
+
+<p><strong>Onde falha.</strong> Sem limites, a latência e o custo ficam imprevisíveis. Uma busca ruim pode contaminar a etapa seguinte, criando erro em cascata. Fontes externas também podem conter instruções maliciosas para o agente, um risco conhecido como <code>prompt injection</code>. É necessário separar conteúdo da fonte de instruções do sistema, limitar domínios e chamadas, registrar cada passo e definir quando o agente deve admitir que não encontrou evidência.</p>
+
+<p><strong>Custo dominante.</strong> Alto, dependendo do volume, do modelo e da infraestrutura, porque cada pergunta pode gerar várias chamadas de busca e várias chamadas ao modelo. O trabalho de definir limites, observabilidade e recuperação de falhas também pesa.</p>
+
+<p><strong>Exemplo.</strong> Para investigar por que uma entrega atrasou, o agente pode consultar o pedido, cruzar o código de transporte, verificar a ocorrência e então procurar a política aplicável. O trabalho de <a href="https://arxiv.org/abs/2310.11511">busca adaptativa com reflexão</a> reforça a ideia de recuperar apenas quando necessário e avaliar a qualidade do que foi recuperado. Isso melhora o processo em tarefas específicas, mas não transforma o agente em uma garantia automática de verdade.</p>
+
+<h2>5. GraphRAG: entidades, relações e visão do conjunto</h2>
+
+<p><strong>Como funciona.</strong> O sistema extrai entidades e relações dos documentos, constrói um grafo e agrupa entidades próximas em comunidades. Depois, gera resumos dessas comunidades e usa os resumos para responder perguntas locais ou globais. O trabalho da Microsoft sobre <a href="https://www.microsoft.com/en-us/research/publication/from-local-to-global-a-graph-rag-approach-to-query-focused-summarization/">GraphRAG e resumo orientado por consulta</a> descreve essa passagem do detalhe local para uma visão do conjunto.</p>
+
+<p><strong>Onde ganha.</strong> O grafo ajuda quando a pergunta é sobre padrões, conexões ou temas espalhados por um corpus grande: “quais problemas aparecem em várias áreas?”, “quais projetos dependem do mesmo fornecedor?” ou “quais grupos de clientes são afetados por esta mudança?”. A estrutura explícita facilita percorrer relações que uma similaridade entre trechos pode não capturar.</p>
+
+<p><strong>Onde falha.</strong> Extração de entidades e relações pode produzir fatos errados. Além disso, a indexação inicial, a atualização do grafo, a geração de resumos e a governança das relações custam tempo e infraestrutura. Um grafo desatualizado pode parecer mais organizado do que uma fonte bruta, mas continuar errado.</p>
+
+<p><strong>Custo dominante.</strong> Alto, condicionado ao volume, ao modelo e à infraestrutura. O custo aparece na extração, no armazenamento, na atualização incremental e na revisão das relações. Para uma FAQ simples, GraphRAG normalmente é complexidade sem ganho medido.</p>
+
+<p><strong>Exemplo.</strong> Uma empresa farmacêutica investiga relações entre compostos, estudos, efeitos adversos e fornecedores ao longo de milhões de tokens. O grafo pode revelar comunidades e conexões que uma pergunta vetorial isolada perderia. Para “qual é o prazo de reembolso?”, um índice simples é melhor.</p>
+
+<p><img src="../assets/images/2026-10-23-rag-obsoleto-alternativas-busca-ia-2-grafo-resumos.png" alt="Mapa de entidades conectado a camadas de resumos, representando GraphRAG e recuperação hierárquica." style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>6. Hybrid Search: lexical e semântica juntas</h2>
+
+<p><strong>Como funciona.</strong> A busca híbrida combina busca lexical, como BM25, com busca vetorial. A primeira privilegia palavras e expressões exatas; a segunda procura proximidade de significado. Os resultados podem ser unidos por fusão de posições e, opcionalmente, reordenados por um modelo de <em>reranking</em>.</p>
+
+<p><strong>Onde ganha.</strong> É especialmente útil quando a pergunta mistura semântica com nomes próprios, siglas, códigos de erro, identificadores e números de versão. Uma busca vetorial pode entender “falha de autenticação”, mas perder o código exato <code>TS-999</code>. O BM25 pode encontrar o código, enquanto os vetores ampliam a busca para descrições equivalentes. A explicação da <a href="https://www.anthropic.com/engineering/contextual-retrieval">busca híbrida com BM25, embeddings e reranking</a> mostra como essas camadas podem ser combinadas.</p>
+
+<p><strong>Onde falha.</strong> Dois índices significam duas superfícies para monitorar. A fusão de resultados, o tamanho das listas e o reranker exigem ajuste. Mais camadas também podem aumentar a latência. Não é correto afirmar que a busca híbrida sempre supera uma busca única: o resultado depende do idioma, do domínio, da qualidade dos índices e das perguntas reais.</p>
+
+<p><strong>Custo dominante.</strong> Médio, variando conforme volume, modelos e infraestrutura. O custo dominante costuma ser manter o índice lexical e o vetorial, além do reranker quando ele é necessário.</p>
+
+<p><strong>Exemplo.</strong> Uma base de suporte recebe perguntas como “como configurar o serviço de identidade?” e “o que significa o erro <code>AUTH-4037</code>?”. A busca híbrida cobre os dois casos sem obrigar a equipe a escolher entre correspondência exata e entendimento semântico.</p>
+
+<h2>7. SQL e recuperação estruturada: calcular antes de explicar</h2>
+
+<p><strong>Como funciona.</strong> Quando a fonte tem esquema, chaves, tipos e regras bem definidos, a recuperação pode usar filtros, junções e agregações determinísticas. O banco calcula; o modelo explica o resultado. Para saber o faturamento mensal, por exemplo, o sistema deve somar os lançamentos no banco, não procurar um parágrafo parecido em um documento.</p>
+
+<p><strong>Onde ganha.</strong> Números, contagens, médias, totais e filtros temporais ficam mais auditáveis quando saem de uma consulta. A documentação do PostgreSQL sobre <a href="https://www.postgresql.org/docs/current/tutorial-agg.html">funções de agregação SQL</a> mostra como operações como <code>count</code>, <code>sum</code>, <code>avg</code>, <code>max</code> e <code>min</code> produzem resultados sobre várias linhas.</p>
+
+<p><strong>Onde falha.</strong> O custo está no esquema, na construção e validação das consultas e nas permissões. Um sistema de texto para SQL livre pode escolher a coluna errada, interpretar mal uma data ou consultar dados demais. Use conexão somente leitura, parâmetros, limites de linhas, listas de tabelas permitidas e validação antes da execução. A resposta numérica deve vir da consulta executada, não de trechos semelhantes.</p>
+
+<p><strong>Custo dominante.</strong> Médio, dependendo do volume, do modelo e da infraestrutura do banco. Consultas bem indexadas podem ser baratas; governança, auditoria e manutenção do esquema são o investimento contínuo.</p>
+
+<p><strong>Exemplo.</strong> Para “qual foi o faturamento de março por região?”, o sistema filtra o período, agrupa por região e retorna os números. O modelo transforma o resultado em uma explicação, informa o período e aponta os filtros usados, mas não recalcula o valor na imaginação.</p>
+
+<h2>8. MCP e ferramentas: dados vivos sob permissão</h2>
+
+<p><strong>Como funciona.</strong> O MCP padroniza como um servidor expõe recursos e ferramentas para um sistema de IA. A especificação descreve <a href="https://modelcontextprotocol.io/specification/2025-06-18/server">recursos e ferramentas MCP</a>: recursos fornecem dados ou contexto, enquanto ferramentas executam funções. O modelo ou o hospedeiro escolhe chamadas de acordo com as permissões disponíveis.</p>
+
+<p><strong>Onde ganha.</strong> É uma boa opção para dados vivos, sistemas operacionais e funções que não fazem sentido copiar para um índice: consultar o estoque atual, buscar o status de um pedido ou ler um calendário autorizado. O mesmo contrato pode conectar diferentes clientes a serviços diferentes.</p>
+
+<p><strong>Onde falha.</strong> MCP é transporte e interface, não algoritmo de ranqueamento e nem certificado de veracidade. Uma ferramenta pode retornar dados atrasados, incompletos ou incorretos. Chamadas externas também falham, ficam indisponíveis ou exigem autenticação. Recursos de leitura devem ser tratados de forma diferente de ferramentas que alteram estado, enviam mensagens, criam registros ou geram efeitos financeiros.</p>
+
+<p><strong>Custo dominante.</strong> Médio, podendo ser alto conforme o volume, o modelo e a infraestrutura. O custo inclui chamadas adicionais, disponibilidade, observabilidade e segurança. Para cada ferramenta de escrita, defina confirmação explícita, escopo mínimo e registro de auditoria.</p>
+
+<p><strong>Exemplo.</strong> O assistente pode consultar o saldo de estoque como leitura e, separadamente, preparar uma ordem de compra. A consulta pode ser automática; a ação com efeito externo deve exigir autorização clara e mostrar os dados que serão usados.</p>
+
+<h2>9. Recuperação hierárquica: do resumo ao detalhe</h2>
+
+<p><strong>Como funciona.</strong> O índice é organizado em níveis: resumos gerais, comunidades ou seções, e trechos originais. A consulta começa pelo nível mais amplo e navega até o detalhe necessário. O método <a href="https://arxiv.org/abs/2401.18059">RAPTOR</a>, por exemplo, cria uma árvore de resumos ao agrupar e resumir trechos recursivamente.</p>
+
+<p><strong>Onde ganha.</strong> Essa estrutura ajuda em documentos longos e perguntas que exigem visão geral e detalhe ao mesmo tempo. Um relatório pode ser localizado pelo resumo executivo, refinado pela seção de resultados e confirmado no parágrafo original. O sistema não precisa escolher entre entender o tema inteiro e recuperar uma frase isolada.</p>
+
+<p><strong>Onde falha.</strong> Resumos custam para gerar e atualizar. A compressão também pode apagar uma exceção, uma condição ou uma nuance importante. Se o resumo estiver errado, ele pode direcionar a navegação para o lugar errado. Por isso, a resposta final deve voltar ao texto original quando a precisão importar.</p>
+
+<p><strong>Custo dominante.</strong> Médio a alto, condicionado ao volume, ao modelo e à infraestrutura. A despesa vem da geração dos resumos, da atualização de vários níveis e da manutenção dos vínculos entre resumo e fonte.</p>
+
+<p><strong>Exemplo.</strong> Uma equipe analisa relatórios anuais extensos e pergunta tanto “quais foram os principais riscos?” quanto “qual nota explica o risco de liquidez?”. A camada superior responde à primeira; a navegação até o trecho original sustenta a segunda.</p>
+
+<p><img src="../assets/images/2026-10-23-rag-obsoleto-alternativas-busca-ia-3-painel-decisao.png" alt="Painel de decisão que conecta banco estruturado, ferramentas e busca híbrida para uma IA." style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Uma matriz compacta para escolher</h2>
+
+<ul>
+<li><strong>Documentos numerosos e perguntas locais:</strong> RAG tradicional; custo dominante médio de ingestão, índice e atualização; melhor caso é localizar trechos específicos com referência.</li>
+<li><strong>Corpus pequeno e estável:</strong> Long Context; custo dominante baixo no volume pequeno, mas crescente em tokens e latência; melhor caso é enviar documentos inteiros sem quebrar contexto.</li>
+<li><strong>Conhecimento editorial e navegável:</strong> Wiki-Based; custo dominante médio de manutenção e revisão; melhor caso é uma base com autoria, categorias e histórico.</li>
+<li><strong>Perguntas com vários saltos:</strong> Agentic Search; custo dominante alto por múltiplas chamadas e controle operacional; melhor caso é investigar, buscar, verificar e parar com critério.</li>
+<li><strong>Relações e padrões em corpus grande:</strong> GraphRAG; custo dominante alto de extração, atualização e governança; melhor caso é responder perguntas locais e globais sobre conexões.</li>
+<li><strong>Nomes, siglas, IDs e significado:</strong> Hybrid Search; custo dominante médio de dois índices, fusão e eventual reranking; melhor caso é combinar correspondência exata e semântica.</li>
+<li><strong>Dados com esquema e números:</strong> SQL; custo dominante médio de esquema, permissões e consultas; melhor caso é filtrar, juntar e agregar com resultado determinístico.</li>
+<li><strong>Dados vivos e ações autorizadas:</strong> MCP e ferramentas; custo dominante médio ou alto de chamadas, segurança e disponibilidade; melhor caso é consultar sistemas atuais e separar leitura de ação.</li>
+<li><strong>Documentos longos com visão geral e detalhe:</strong> recuperação hierárquica; custo dominante médio a alto de resumos e atualização; melhor caso é navegar do panorama até a evidência original.</li>
+</ul>
+
+<h2>Três cenários que deixam a escolha mais concreta</h2>
+
+<p><strong>FAQ de políticas.</strong> Imagine uma empresa com centenas de páginas de políticas, códigos internos e perguntas curtas. O ponto de partida pode ser uma busca híbrida com BM25 e vetores, seguida de reranking para reduzir os trechos enviados ao modelo. Títulos, datas de vigência e grupos autorizados devem acompanhar cada resultado. Se as políticas forem poucas e a equipe mantiver uma wiki organizada, a wiki com busca pode bastar antes de qualquer arquitetura mais pesada.</p>
+
+<p><strong>BI e faturamento.</strong> Para perguntas sobre receita, margem, quantidade de pedidos ou faturamento mensal, use SQL somente leitura, com consultas parametrizadas e limites. O banco calcula filtros, junções e agregações; o modelo explica o resultado em linguagem natural e informa o período, as dimensões e eventuais dados ausentes. Um RAG sobre relatórios pode complementar a explicação, mas não deve substituir a consulta que produziu o número.</p>
+
+<p><strong>Investigação multi-hop.</strong> Para descobrir relações entre incidentes, serviços, responsáveis e mudanças de código, um agente pode consultar várias fontes em rodadas controladas. Se o corpus for grande e as relações forem centrais para a pergunta, um grafo pode organizar entidades e comunidades. O agente decide quais caminhos explorar; o grafo oferece estrutura; os documentos originais fornecem a evidência. Limites de chamadas, autorização por fonte, registro dos passos e critério de parada são obrigatórios.</p>
+
+<h2>Quando Long Context ou uma wiki já bastam</h2>
+
+<p>Long Context é uma boa escolha quando há poucos documentos, eles cabem com folga, mudam pouco e a tarefa depende de relações que seriam quebradas pela divisão em trechos. É também uma maneira rápida de validar uma ideia antes de investir em ingestão e índices. Quando o mesmo material é consultado muitas vezes ou começa a crescer, o custo de repetir tokens e a dificuldade de localizar evidência tendem a pedir recuperação.</p>
+
+<p>Uma wiki basta quando o conhecimento é curado, tem dono, possui uma taxonomia compreensível e precisa ser lido e mantido por pessoas. Ela pode oferecer busca, links, revisão e API sem transformar cada página em um índice vetorial. Se a pergunta exige cálculos, dados vivos ou fatos que nunca foram documentados, a wiki não resolve sozinha; nesse caso, conecte a fonte adequada em vez de encher páginas com cópias frágeis.</p>
+
+<h2>Checklist de avaliação</h2>
+
+<p>Antes de escolher a arquitetura, monte um conjunto de perguntas reais, incluindo perguntas fáceis, ambíguas, sem resposta e com documentos conflitantes. Depois, avalie o comportamento observável:</p>
+
+<ul>
+<li><strong>Recuperação da evidência:</strong> o sistema encontrou o documento e o trecho corretos?</li>
+<li><strong>Resposta fundamentada:</strong> a resposta usa apenas o que a fonte sustenta?</li>
+<li><strong>Citação:</strong> a pessoa consegue abrir a origem, entender o contexto e verificar a data?</li>
+<li><strong>Atualização:</strong> uma mudança na fonte aparece no prazo necessário?</li>
+<li><strong>Autorização:</strong> cada pessoa vê apenas o que pode consultar, inclusive em índices, grafos e ferramentas?</li>
+<li><strong>Latência p95:</strong> o tempo no pior grupo de respostas atende ao produto?</li>
+<li><strong>Custo por resposta:</strong> o gasto de tokens, chamadas, armazenamento e operação cabe no orçamento?</li>
+<li><strong>Abstenção:</strong> o sistema admite que a fonte não sustenta a resposta, em vez de preencher a lacuna?</li>
+</ul>
+
+<p>O resultado desses testes vale mais do que a moda do momento. RAG não ficou obsoleto; ele deixou de ser uma resposta universal. Comece pelo mecanismo mais simples que passa nas perguntas reais, com evidência e autorização corretas. Combine padrões apenas quando o ganho aparecer nos números: melhor recuperação, melhor fundamento, atualização aceitável, latência dentro do limite e custo que faça sentido.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">RAG não ficou obsoleto: ele é uma peça de uma arquitetura maior. Compare nove formas de fornecer conhecimento a uma IA e escolha a combinação mais simples que passa nos seus testes.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-23-rag-obsoleto-alternativas-busca-ia.html</div>
+  </section>
+
+  <footer class="post">
+    <span>23 de outubro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
