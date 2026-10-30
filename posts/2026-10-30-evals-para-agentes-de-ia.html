@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Evals para agentes de IA: como saber se a mudança melhorou ou piorou — felvieira's blog</title>
+<meta name="description" content="Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Evals para agentes de IA: como saber se a mudança melhorou ou piorou">
+<meta property="og:description" content="Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Evals para agentes de IA: como saber se a mudança melhorou ou piorou">
+<meta name="twitter:description" content="Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.">
+<meta property="article:published_time" content="2026-10-30">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html","url":"https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html","headline":"Evals para agentes de IA: como saber se a mudança melhorou ou piorou","description":"Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.","inLanguage":"pt-BR","datePublished":"2026-10-30","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Evals para agentes de IA: como saber se a mudança melhorou ou piorou</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>30 de outubro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-10-30-evals-para-agentes-de-ia-cover.png" alt="Evals para agentes de IA: como saber se a mudança melhorou ou piorou — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Faz uns meses que me pego fazendo o mesmo ritual. Mexo no prompt do agente, rodo duas ou três conversas de teste, leio as respostas e penso: "ficou melhor". Depois alguém me manda um caso que antes funcionava e agora quebrou. Aí percebo que eu só tinha olhado para os exemplos que eu mesmo escolhi, do jeito que eu mesmo gosto de perguntar.</p>
+
+<p>Este texto é sobre como sair desse ciclo. A ferramenta se chama <em>evals</em>: uma forma barata e repetível de responder à pergunta "essa mudança melhorou ou piorou o meu agente?". Não precisa de infraestrutura sofisticada. Precisa de disciplina e de uma planilha honesta.</p>
+
+<h2>Por que "parece melhor" engana</h2>
+
+<p>Agentes são sistemas variáveis. A mesma pergunta pode render respostas diferentes em duas execuções seguidas. Então, quando eu testo à mão, três coisas atrapalham.</p>
+
+<ul>
+<li><strong>Amostra minúscula.</strong> Três conversas não representam o que os usuários de verdade vão fazer.</li>
+<li><strong>Viés de quem escreveu a mudança.</strong> Eu ajustei o prompt pensando num problema específico, então testo justamente esse problema e fico feliz quando ele some.</li>
+<li><strong>Memória seletiva.</strong> Lembro da resposta bonita e esqueço da que escorregou. Em agentes que usam ferramentas, um erro no meio do caminho pode passar despercebido se o texto final soar confiante.</li>
+</ul>
+
+<p>O resultado é que cada ajuste conserta uma coisa e quebra outra, e ninguém percebe até o usuário reclamar. Evals existem para transformar essa sensação vaga em um registro que dá para consultar.</p>
+
+<h2>Comece pequeno e com casos reais</h2>
+
+<p>A tentação é montar um conjunto enorme e perfeito. Não faça isso. Um conjunto pequeno, que você realmente roda, vale mais que um grande que ninguém tem paciência de manter.</p>
+
+<p>As melhores fontes de casos são as mais mundanas: conversas reais que deram errado, pedidos que o suporte repete toda semana, perguntas que você já sabe que são difíceis. Se o agente ainda não está em produção, escreva os casos como se fosse um usuário cansado e apressado, não como um desenvolvedor educado. Gente de verdade escreve com erro de digitação, omite contexto e muda de assunto no meio.</p>
+
+<p>Cada caso precisa de três ingredientes: a entrada (a mensagem do usuário e, se for o caso, o estado inicial), o que se espera como resultado e uma etiqueta dizendo que tipo de situação aquilo cobre. As etiquetas ajudam depois, quando você quiser saber se a piora está concentrada em algum tipo de tarefa.</p>
+
+<p><img src="../assets/images/2026-10-30-evals-para-agentes-de-ia-1-balanca.png" alt="Lupa sobre um único cartão de teste enquanto outros cartões esperam ao fundo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Critérios objetivos primeiro, julgamento por modelo depois</h2>
+
+<p>Existem duas grandes maneiras de dizer se um caso passou.</p>
+
+<p>A primeira é a verificação objetiva, feita por código. O agente chamou a ferramenta certa? O JSON de saída é válido? A resposta contém o número do pedido correto? Ele recusou quando devia recusar? Essas checagens são rápidas, baratas, determinísticas e não discutem com você. Sempre que um critério puder ser escrito assim, escreva assim.</p>
+
+<p>A segunda é o julgamento por modelo: outro modelo lê a resposta e a avalia seguindo um roteiro. Serve para o que é difícil de codificar, como tom adequado, clareza ou se a explicação faz sentido. Funciona, mas pede cuidados:</p>
+
+<ul>
+<li>Escreva o roteiro de avaliação com critérios concretos ("a resposta menciona o prazo? sim ou não"), não com adjetivos ("a resposta é boa?").</li>
+<li>Prefira perguntas de sim ou não a notas de 1 a 10. Notas oscilam e ninguém sabe o que significa um 7.</li>
+<li>Leia por conta própria uma amostra dos veredictos. Se o avaliador discorda de você com frequência, o problema está no roteiro dele, não no agente.</li>
+<li>Se possível, use um modelo ou configuração diferente do que está sendo avaliado, para reduzir a tendência de elogiar o próprio estilo.</li>
+</ul>
+
+<p>Minha regra prática: objetivo para tudo que dá, julgamento por modelo para o resto, e revisão humana nos casos em que os dois discordam.</p>
+
+<h2>Rode a cada mudança, sem exceção</h2>
+
+<p>Um eval só protege se for rodado sempre. Trocou uma frase do prompt? Rode. Atualizou a versão do modelo? Rode. Adicionou uma ferramenta nova ou mudou a descrição de uma existente? Rode também, porque descrições de ferramentas influenciam o comportamento mais do que parece.</p>
+
+<p>Como as respostas variam, vale executar cada caso algumas vezes e olhar a taxa de acerto, não um resultado único. Se um caso passa duas vezes em três, isso é informação: ele é frágil, e frágil merece atenção mesmo que hoje "passe".</p>
+
+<p>Se o conjunto roda em poucos minutos, você vai querer rodá-lo. Se leva uma hora, vai começar a pular. Mantenha o custo de execução baixo de propósito.</p>
+
+<h2>Registre as regressões</h2>
+
+<p>Aqui está a parte que mais me ajudou. Toda vez que o agente falha em algo real, esse caso entra no conjunto. Ele vira uma espécie de cicatriz: o erro aconteceu uma vez e nunca mais deve passar despercebido.</p>
+
+<p>Mantenha um registro simples, com data, o que mudou (prompt, modelo, ferramenta), quais casos passaram a falhar e quais passaram a funcionar. Com o tempo isso vira um histórico valioso. Você descobre padrões, como "toda vez que encurto o prompt, os casos de recusa pioram", e deixa de repetir os mesmos tropeços.</p>
+
+<p>E quando uma mudança melhora um grupo de casos e piora outro, o registro obriga você a decidir de forma consciente se a troca vale a pena, em vez de descobrir por acidente.</p>
+
+<p><img src="../assets/images/2026-10-30-evals-para-agentes-de-ia-2-conjunto.png" alt="Prateleira organizada com pastas de casos de teste marcadas com aprovado e reprovado" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Armadilhas que eu já pisei</h2>
+
+<p><strong>Overfitting no conjunto.</strong> Se você ajusta o prompt até todos os casos passarem, pode ter apenas decorado aqueles casos. Sinal de alerta: o prompt começa a ganhar instruções muito específicas, quase com o texto de um exemplo. Uma defesa é separar uns poucos casos que você nunca usa para ajustar e só consulta de vez em quando, como uma prova surpresa. Outra é renovar o conjunto com casos novos vindos do uso real.</p>
+
+<p><strong>Métricas vaidosas.</strong> Uma porcentagem geral bonita esconde muita coisa. Noventa por cento de acerto pode significar que os casos fáceis estão ótimos e os que importam estão quebrados. Olhe por etiqueta, e dê mais peso aos casos em que um erro custa caro: ações irreversíveis, dados sensíveis, informação financeira. Também desconfie de métricas que medem o que é fácil, como tamanho da resposta ou velocidade, quando o que importa é resolver o problema do usuário.</p>
+
+<p><strong>Avaliador complacente.</strong> Um modelo juiz mal instruído aprova quase tudo. Se o seu eval nunca reprova nada, ele não está medindo nada. Teste-o de propósito com respostas ruins que você escreveu e confirme que ele as reprova.</p>
+
+<p><strong>Conjunto que apodrece.</strong> O produto muda, os casos ficam velhos e passam a cobrar um comportamento que ninguém mais quer. Revise de tempos em tempos e apague sem culpa o que perdeu o sentido.</p>
+
+<h2>Passo a passo para começar com 20 casos</h2>
+
+<p>Se você nunca fez isso, aqui vai um roteiro para uma tarde.</p>
+
+<ol>
+<li><strong>Junte 20 situações reais.</strong> Tire de conversas antigas, tickets de suporte ou do seu próprio uso. Misture: uns casos comuns, uns difíceis, uns em que o agente deve recusar ou pedir esclarecimento.</li>
+<li><strong>Escreva o resultado esperado de cada um.</strong> Em uma frase. Se você não consegue dizer o que seria uma boa resposta, o caso ainda está mal definido.</li>
+<li><strong>Dê uma etiqueta para cada caso.</strong> Poucas categorias bastam.</li>
+<li><strong>Escreva as checagens objetivas.</strong> Para cada caso, anote o que dá para verificar por código: ferramenta chamada, campos presentes, palavras que devem ou não aparecer.</li>
+<li><strong>Adicione um juiz só onde precisar.</strong> Para os critérios subjetivos, escreva perguntas de sim ou não e teste o juiz com exemplos que você sabe que são bons e ruins.</li>
+<li><strong>Rode o agente atual e guarde o resultado.</strong> Isso é a sua linha de base. Qualquer mudança futura será comparada com ela.</li>
+<li><strong>Faça uma mudança de cada vez.</strong> Altere uma coisa, rode de novo e compare caso a caso, não só o total.</li>
+<li><strong>Anote o que aconteceu.</strong> Uma linha no registro: o que mudou, o que melhorou, o que piorou, o que você decidiu.</li>
+<li><strong>Alimente o conjunto.</strong> Cada falha nova que aparecer vira o caso 21, depois o 22, e assim por diante.</li>
+</ol>
+
+<p>Vai sair imperfeito, e tudo bem. Um conjunto de 20 casos rodado com regularidade já pega uma quantidade surpreendente de regressões e muda a qualidade das conversas sobre o agente. Em vez de "acho que melhorou", passa a ser "esses quatro casos passaram a funcionar e esses dois pararam".</p>
+
+<p><img src="../assets/images/2026-10-30-evals-para-agentes-de-ia-3-regressao.png" alt="Pequeno robô segurando uma bandeira para parar uma fileira de dominós antes da queda" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>O que muda na prática</h2>
+
+<p>Depois que adotei esse hábito, a maior diferença foi emocional. Mexer no agente deixou de dar medo. Eu sei que, se quebrar algo, vou descobrir em minutos, não em semanas. Isso me deixa mais ousado para testar ideias, trocar de modelo e simplificar prompts que cresceram demais.</p>
+
+<p>Evals não garantem que o agente seja bom. Eles garantem que você vai perceber quando ele deixar de ser. Comece com 20 casos, seja honesto com os resultados e deixe o conjunto crescer junto com o seu agente.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Parece melhor não é métrica. Veja como montar um conjunto pequeno de casos reais e rodar a cada mudança no seu agente de IA.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-10-30-evals-para-agentes-de-ia.html</div>
+  </section>
+
+  <footer class="post">
+    <span>30 de outubro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
