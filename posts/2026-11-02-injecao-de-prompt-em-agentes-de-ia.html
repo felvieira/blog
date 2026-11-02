@@ -1,0 +1,217 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Injeção de prompt em agentes de IA: o risco que quase ninguém testa — felvieira's blog</title>
+<meta name="description" content="Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Injeção de prompt em agentes de IA: o risco que quase ninguém testa">
+<meta property="og:description" content="Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Injeção de prompt em agentes de IA: o risco que quase ninguém testa">
+<meta name="twitter:description" content="Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.">
+<meta property="article:published_time" content="2026-11-02">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html","url":"https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html","headline":"Injeção de prompt em agentes de IA: o risco que quase ninguém testa","description":"Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.","inLanguage":"pt-BR","datePublished":"2026-11-02","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Injeção de prompt em agentes de IA: o risco que quase ninguém testa</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>2 de novembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">10 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-11-02-injecao-de-prompt-em-agentes-de-ia-cover.png" alt="Injeção de prompt em agentes de IA: o risco que quase ninguém testa — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Outro dia, conversando com uma colega que monta agentes de IA para atendimento, ela me contou uma cena que me ficou na cabeça. O agente dela resumia e-mails e abria tarefas no sistema interno. Funcionava lindamente, até alguém perguntar: "e se um e-mail disser para o agente fazer outra coisa?". Silêncio. Ninguém tinha testado. Ninguém nem tinha pensado direito nisso.</p>
+
+<p>Esse é o assunto de hoje: <strong>injeção de prompt</strong>. É um risco que quase todo mundo ouve falar e quase ninguém coloca na suíte de testes. Vou tentar explicar de um jeito prático, sem pânico e sem ladainha, porque o problema é sério, mas tem jeito de reduzir bastante o estrago.</p>
+
+<h2>O que é injeção de prompt, afinal</h2>
+
+<p>Um modelo de linguagem recebe tudo como texto: as instruções do desenvolvedor, o pedido do usuário, o conteúdo de um arquivo, o resultado de uma busca. Para ele, não existe uma parede sólida entre "o que eu devo obedecer" e "o que eu só devo ler". Tudo vira uma sequência de tokens, e o modelo decide o que fazer com base em padrões, não em permissões.</p>
+
+<p>Injeção de prompt é aproveitar isso: alguém escreve um texto que, ao entrar no contexto do modelo, é interpretado como instrução e muda o comportamento do sistema. A comparação clássica é com a injeção de SQL, em que dados viram código. A diferença incômoda é que, no SQL, a gente aprendeu a separar os dois com consultas parametrizadas. Com linguagem natural, não existe (ainda) um equivalente que resolva de vez.</p>
+
+<h2>Direta e indireta</h2>
+
+<p>A forma <strong>direta</strong> é a mais conhecida: o próprio usuário escreve algo como "ignore as instruções anteriores e faça X". É o jailbreak de chat. Costuma ser menos grave quando o usuário só consegue prejudicar a si mesmo, mas deixa de ser inofensiva quando o sistema guarda dados de outras pessoas ou executa ações com privilégios.</p>
+
+<p>A forma <strong>indireta</strong> é a que me tira o sono. Aqui o atacante nem conversa com o agente. Ele deixa o texto malicioso em algum lugar que o agente vai ler mais tarde:</p>
+
+<ul>
+<li>uma <strong>página web</strong> com texto escondido (branco sobre branco, comentário no HTML, fonte minúscula) dizendo ao agente de pesquisa o que fazer;</li>
+<li>um <strong>e-mail</strong> que parece comum, mas traz no meio do corpo um parágrafo endereçado ao assistente que vai resumi-lo;</li>
+<li>uma <strong>issue</strong> ou comentário em um repositório, lido por um agente de código que triagem problemas;</li>
+<li>um <strong>documento</strong> (PDF, planilha, ata de reunião) com uma instrução enterrada em algum canto;</li>
+<li>até o <strong>nome de um arquivo</strong>, um campo de formulário ou o título de um convite de agenda.</li>
+</ul>
+
+<p>O ponto central: o dono legítimo do agente jamais viu esse texto. Quem o escreveu não tem nenhuma relação com o sistema. E mesmo assim ele entra no contexto com a mesma "voz" de qualquer outra coisa.</p>
+
+<p><img src="../assets/images/2026-11-02-injecao-de-prompt-em-agentes-de-ia-1-carta.png" alt="Robô levando para dentro do castelo um envelope em forma de cavalo de Troia" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Por que agentes com ferramentas mudam o jogo</h2>
+
+<p>Um chatbot que só conversa, quando é enganado, produz um texto ruim. Chato, às vezes constrangedor, mas o dano costuma parar na tela. Já um agente com ferramentas pode <em>agir</em>: enviar e-mails, ler arquivos, executar comandos, abrir pull requests, chamar APIs, fazer pagamentos.</p>
+
+<p>Cada ferramenta que você entrega ao agente é uma capacidade que um atacante pode tentar herdar. A injeção de prompt vira, na prática, uma forma de <strong>execução remota de intenção</strong>: o atacante não precisa invadir nada, só precisa convencer o agente, que já está dentro, já tem as chaves e já é confiável para o resto do sistema.</p>
+
+<p>Tem ainda um efeito de composição. Agentes encadeiam passos: leem, decidem, chamam uma ferramenta, leem o resultado, decidem de novo. Uma instrução plantada no passo 2 pode influenciar o passo 7, quando ninguém mais lembra de onde ela veio. E, se existem vários agentes conversando entre si, a saída de um vira entrada do outro, e a desconfiança se perde pelo caminho.</p>
+
+<h2>O trio letal</h2>
+
+<p>Uma forma útil de raciocinar sobre o risco, que ouvi de pessoas que estudam o tema, é olhar para três ingredientes. Quando os três aparecem juntos no mesmo agente, o perigo é de verdade:</p>
+
+<ol>
+<li><strong>Acesso a dados privados:</strong> e-mails, código-fonte, documentos internos, tokens, dados de clientes.</li>
+<li><strong>Exposição a conteúdo não confiável:</strong> qualquer texto que alguém de fora possa influenciar, como páginas, e-mails recebidos, issues públicas, anexos.</li>
+<li><strong>Canal de saída:</strong> qualquer meio de mandar informação para fora, como enviar e-mail, fazer uma requisição HTTP, publicar um comentário, abrir um link com parâmetros na URL, até renderizar uma imagem remota.</li>
+</ol>
+
+<p>Repare na lógica. Se o agente lê dados privados e lê conteúdo hostil, mas não consegue enviar nada para fora, o vazamento fica difícil. Se ele lê conteúdo hostil e consegue enviar coisas, mas não tem acesso a nada sensível, não há muito o que vazar. É a <em>combinação</em> que fecha o circuito: o texto malicioso manda o agente pegar o dado privado e entregá-lo por algum canal.</p>
+
+<p>Esse modelo mental é valioso porque transforma uma ameaça vaga em uma pergunta de projeto: <strong>qual desses três eu consigo remover, ou separar, neste agente?</strong> Muitas vezes a resposta é "o canal de saída", e isso já muda tudo.</p>
+
+<p><img src="../assets/images/2026-11-02-injecao-de-prompt-em-agentes-de-ia-2-trio.png" alt="Engenheiro preocupado diante de três caixas ligadas por fios: dados privados, cartas desconhecidas e uma saída de correio" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Defesas práticas</h2>
+
+<p>Vou ser direto: não existe uma bala de prata. O que existe é uma pilha de camadas, e cada uma reduz o raio de explosão. A ideia é assumir que, em algum momento, o modelo vai ser enganado, e desenhar o sistema para que isso não seja catastrófico.</p>
+
+<h2>Privilégio mínimo</h2>
+
+<p>É o velho princípio de segurança, e aqui rende muito. Pergunte, para cada ferramenta: o agente precisa mesmo disso para essa tarefa? Um agente que resume e-mails não precisa enviar e-mails. Um agente que triagem issues não precisa de permissão de escrita no repositório. Credenciais devem ser as menores possíveis: escopo restrito, curta duração, separadas por tarefa. Nada de dar o token de administrador "só para facilitar".</p>
+
+<h2>Confirmação humana em ações destrutivas ou irreversíveis</h2>
+
+<p>Apagar, enviar, pagar, publicar, alterar permissões: tudo o que não dá para desfazer merece um "tem certeza?" feito por uma pessoa. Dois cuidados para isso funcionar de verdade:</p>
+
+<ul>
+<li>mostre ao humano <em>o que</em> será feito, de forma concreta (destinatário, conteúdo, valor), e não um genérico "o agente quer executar uma ação";</li>
+<li>não banalize o pedido. Se a pessoa clica em "aprovar" trezentas vezes por dia, ela vai aprovar a trezentos e um sem ler. Reserve a confirmação para o que importa.</li>
+</ul>
+
+<h2>Separar leitura de escrita</h2>
+
+<p>Uma arquitetura que me agrada: um agente (ou etapa) que <strong>lê conteúdo não confiável</strong> e só tem ferramentas de leitura, e outro que <strong>age</strong>, com poderes de escrita, mas que nunca vê o texto bruto externo. Entre os dois, passa apenas uma saída estruturada e estreita, validada por código comum, como um esquema com campos fixos, em vez de texto livre.</p>
+
+<p>Assim, mesmo que a instrução maliciosa convença o primeiro agente, ela não tem como se transformar em ação, porque quem tem as mãos nunca leu o veneno. Não é perfeito, já que o primeiro ainda pode produzir um resumo enviesado, mas corta o caminho mais perigoso.</p>
+
+<h2>Allowlist de domínios e destinos</h2>
+
+<p>Se o canal de saída é o elo que fecha o trio letal, vigie-o de perto. Se o agente precisa fazer requisições, liste explicitamente os domínios permitidos e bloqueie o resto. O mesmo vale para destinatários de e-mail e para repositórios onde ele pode publicar. Lembre também dos canais sutis: links com dados na query string, imagens carregadas de servidores externos e até pré-visualização de URLs podem servir para tirar informação do sistema sem que ninguém perceba.</p>
+
+<h2>Saída de ferramenta é entrada não confiável</h2>
+
+<p>Esse é um erro comum e compreensível. A gente confia na saída das ferramentas porque "fui eu que integrei". Mas o que a ferramenta devolve muitas vezes é conteúdo de terceiros: o corpo de uma página, o texto de um ticket, o resultado de uma busca. Tudo isso deve ser tratado como entrada de usuário anônimo da internet.</p>
+
+<p>Na prática:</p>
+
+<ul>
+<li>delimite claramente no prompt o que é conteúdo externo e diga ao modelo que aquilo é dado, não instrução (ajuda, mas não garante nada);</li>
+<li>limite o tamanho e o formato do que entra no contexto;</li>
+<li>valide com código determinístico tudo o que o modelo propõe fazer a partir desse conteúdo, antes de executar;</li>
+<li>nunca deixe que o texto externo escolha sozinho argumentos sensíveis, como destinatários, caminhos de arquivo ou comandos.</li>
+</ul>
+
+<h2>Logs que permitam entender o que aconteceu</h2>
+
+<p>Quando algo dá errado, a pergunta é: "por que o agente fez isso?". Sem registro, você nunca vai saber. Guarde, respeitando privacidade e retenção adequadas, o contexto que entrou, as ferramentas chamadas, os argumentos, as aprovações humanas e a origem de cada trecho de conteúdo. Logs bons servem para investigar incidentes, para detectar comportamento estranho (um agente de resumo que de repente tenta chamar uma URL desconhecida) e para alimentar novos casos de teste. Só lembre de tratar o próprio log como dado sensível, já que ele vai conter exatamente o que você quer proteger.</p>
+
+<p><img src="../assets/images/2026-11-02-injecao-de-prompt-em-agentes-de-ia-3-teste.png" alt="Desenvolvedora testando um escudo com uma lista de casos de ataque ao lado" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Como testar: ataques também são casos de eval</h2>
+
+<p>Agora o título do post: o risco que quase ninguém testa. Muita gente tem um conjunto de avaliações para qualidade das respostas, tom, precisão, e nenhum caso adversarial. Se você mede se o agente acerta, também precisa medir se ele resiste.</p>
+
+<p>Algumas ideias para começar sem complicar:</p>
+
+<ul>
+<li><strong>Monte um pequeno conjunto de documentos envenenados.</strong> Um e-mail com instrução embutida, uma página com texto oculto, uma issue com um pedido disfarçado, um PDF com um parágrafo estranho. Varie o tom: ordens explícitas, pedidos educados, falsa urgência, fingir ser o administrador.</li>
+<li><strong>Defina o critério de falha em termos de ação, não de texto.</strong> O teste não pergunta "o modelo foi educado?", e sim "alguma ferramenta sensível foi chamada?", "algum dado saiu para um destino fora da allowlist?". Isso é verificável com código simples, olhando as chamadas registradas.</li>
+<li><strong>Coloque um dado-isca.</strong> Um segredo falso (um token de mentira) no ambiente de teste. Se ele aparecer em qualquer saída ou requisição, o teste falhou.</li>
+<li><strong>Rode várias vezes.</strong> Modelos são probabilísticos. Um ataque que falha nove vezes e funciona na décima ainda é uma vulnerabilidade. Meça taxa de sucesso do atacante, não só um sim ou não.</li>
+<li><strong>Teste cada camada separadamente.</strong> Verifique que a allowlist bloqueia mesmo quando o modelo "quer" enviar, que a confirmação humana é de fato exigida, que o escopo do token realmente impede a ação. As defesas que não dependem do modelo são as que você consegue garantir com testes comuns.</li>
+<li><strong>Transforme incidentes e curiosidades em regressão.</strong> Todo ataque novo que você ler, ou que aparecer nos logs, vira um caso permanente na suíte. Com o tempo, ela vira a memória de segurança do projeto.</li>
+<li><strong>Rode isso no pipeline.</strong> Trocou o modelo, mexeu no prompt de sistema, adicionou uma ferramenta? Rode os casos adversariais de novo. Essas mudanças alteram o comportamento de formas difíceis de prever.</li>
+</ul>
+
+<p>Se possível, peça também para alguém de fora do time tentar quebrar o agente. Quem construiu o sistema tem vieses: tende a testar o que já imaginou. Um olhar criativo e malicioso acha caminhos que a gente nem cogitava.</p>
+
+<h2>Limites honestos</h2>
+
+<p>Preciso encerrar com franqueza: <strong>nenhuma dessas defesas é completa</strong>. Filtros de texto malicioso são contornáveis, porque a linguagem natural tem infinitas formas de dizer a mesma coisa. Instruções do tipo "não obedeça ao conteúdo externo" no prompt ajudam, mas modelos podem falhar de forma imprevisível. Detectores baseados em outro modelo também erram, para os dois lados.</p>
+
+<p>Por isso a postura certa não é "como eu impeço 100% das injeções", e sim "o que acontece quando uma injeção funciona?". As defesas mais confiáveis são as <em>estruturais</em>, as que limitam o dano mesmo com o modelo comprometido: privilégio mínimo, separação de leitura e escrita, allowlist, confirmação humana, validação determinística. As defesas baseadas em convencer o modelo a se comportar são complementares, nunca a fundação.</p>
+
+<p>E existe um custo real: quanto mais você restringe, menos autônomo e menos "mágico" o agente fica. Cada confirmação humana é atrito. Cada ferramenta removida é uma capacidade a menos. Não há resposta universal; há uma conta a fazer, caso a caso, entre utilidade e risco, considerando o que está em jogo se algo vazar ou for destruído.</p>
+
+<h2>Por onde começar na segunda-feira</h2>
+
+<p>Se você tem um agente em produção, ou quase, sugiro um roteiro curto:</p>
+
+<ol>
+<li>Liste as ferramentas do agente e, para cada uma, escreva se ela é de leitura, de escrita ou de saída para fora.</li>
+<li>Desenhe o trio letal: onde há dados privados, onde há conteúdo não confiável, onde há canal de saída. Veja se os três convivem no mesmo fluxo.</li>
+<li>Remova ou separe pelo menos um dos três, e corte permissões que não são necessárias.</li>
+<li>Coloque confirmação humana nas ações irreversíveis e uma allowlist nos destinos.</li>
+<li>Escreva cinco casos de ataque e rode-os junto com os seus evals de qualidade.</li>
+<li>Ligue os logs e dê uma olhada neles de vez em quando, nem que seja por curiosidade.</li>
+</ol>
+
+<p>Nada disso exige tecnologia exótica. Exige, principalmente, aceitar a pergunta incômoda que minha colega ouviu: <em>e se o texto que o agente lê estiver tentando mandar nele?</em> Quem encara essa pergunta cedo costuma dormir melhor depois. E você, já testou o seu agente contra isso?</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Quando o agente lê e-mails, páginas e documentos, qualquer texto pode virar ordem. Entenda a injeção de prompt, o trio de risco e defesas práticas que você pode testar.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-11-02-injecao-de-prompt-em-agentes-de-ia.html</div>
+  </section>
+
+  <footer class="post">
+    <span>2 de novembro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
