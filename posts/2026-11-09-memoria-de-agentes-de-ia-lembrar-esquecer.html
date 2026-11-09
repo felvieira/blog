@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Memória de agentes de IA: o que lembrar, o que esquecer e quem decide — felvieira's blog</title>
+<meta name="description" content="Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Memória de agentes de IA: o que lembrar, o que esquecer e quem decide">
+<meta property="og:description" content="Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Memória de agentes de IA: o que lembrar, o que esquecer e quem decide">
+<meta name="twitter:description" content="Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.">
+<meta property="article:published_time" content="2026-11-09">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html","url":"https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html","headline":"Memória de agentes de IA: o que lembrar, o que esquecer e quem decide","description":"Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.","inLanguage":"pt-BR","datePublished":"2026-11-09","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Memória de agentes de IA: o que lembrar, o que esquecer e quem decide</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>9 de novembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">7 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer-cover.png" alt="Memória de agentes de IA: o que lembrar, o que esquecer e quem decide — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Todo mundo que já trabalhou com um agente de IA por mais de uma tarde conhece a cena. Você explica o projeto, combina como as coisas funcionam, e no dia seguinte ele age como se nunca tivesse te visto. Aí vem a tentação óbvia: então vou fazer ele lembrar de tudo. E é aí que muita gente se enrola. Lembrar de tudo não é o mesmo que lembrar bem.</p>
+
+<p>Neste texto quero conversar sobre três perguntas que, na minha experiência, definem se a memória de um agente ajuda ou atrapalha: o que vale guardar, o que deve ser jogado fora e, principalmente, quem decide isso.</p>
+
+<h2>Curto prazo e longo prazo: duas memórias bem diferentes</h2>
+
+<p>A memória de curto prazo do agente é o <strong>contexto</strong>: tudo o que está diante dele naquela conversa. Instruções, trechos de arquivos, respostas de ferramentas, o que você acabou de dizer. Funciona como a mesa de trabalho. Tem um tamanho limitado, e tudo o que está em cima dela compete por atenção.</p>
+
+<p>Já a memória de longo prazo vive fora da conversa. Pode ser um arquivo de notas em texto, um documento de convenções do projeto, um banco de dados com registros pesquisáveis. Ela só entra na mesa quando alguém a busca e a coloca lá. Pense nela como o arquivo da sala ao lado: guarda muita coisa, mas nada ali ajuda o agente se ninguém for buscar.</p>
+
+<p>Essa distinção parece simples, mas muda a pergunta de projeto. Não é mais "o que o agente deve saber?", e sim "o que merece ser levado para a mesa em cada momento?". Guardar é barato. Atenção é cara.</p>
+
+<h2>Por que lembrar demais piora o agente</h2>
+
+<p>Parece contraintuitivo, mas uma memória cheia demais costuma gerar um agente pior. Vejo três problemas se repetindo.</p>
+
+<ul>
+<li><strong>Ruído:</strong> quando a mesa está lotada de detalhes irrelevantes, o que importa fica diluído. O agente passa a dar o mesmo peso a uma decisão estrutural e a um comentário solto de três semanas atrás.</li>
+<li><strong>Informação velha:</strong> uma nota que era verdadeira ontem pode ser falsa hoje. O agente não sente o tempo passar. Se a memória diz que o projeto usa certa biblioteca e você já trocou, ele vai insistir no erro com toda a confiança do mundo.</li>
+<li><strong>Instruções conflitantes:</strong> em algum momento você disse uma coisa, depois mudou de ideia e disse outra. Se as duas ficaram gravadas, o agente tem que adivinhar qual vale. Às vezes acerta, às vezes escolhe a errada, e o pior é que você nem sabe qual das duas ele seguiu.</li>
+</ul>
+
+<p>Resumindo: memória sem curadoria vira lixo acumulado, e o agente trata o lixo como verdade.</p>
+
+<p><img src="../assets/images/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer-1-contexto-curto-e-longo.png" alt="Robô entre uma mesa com notas soltas e um arquivo organizado, representando memória de curto e longo prazo" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>O que vale a pena gravar</h2>
+
+<p>Uma boa regra para decidir: grave aquilo que seria caro de redescobrir e que continua valendo depois da tarefa atual. Na prática, isso cai em três famílias.</p>
+
+<ol>
+<li><strong>Decisões:</strong> escolhas feitas e o motivo. "Optamos por guardar os dados localmente porque o app precisa funcionar sem internet." O motivo é a parte mais valiosa, porque evita que alguém (ou o próprio agente) reabra a discussão sem saber por que ela foi fechada.</li>
+<li><strong>Preferências:</strong> como você gosta de trabalhar. Tom de resposta, nível de detalhe, se prefere mudanças pequenas e revisáveis ou refatorações grandes. Isso poupa você de repetir a mesma instrução toda vez.</li>
+<li><strong>Convenções:</strong> nomes de pastas, padrão de commits, estilo de código, comandos para rodar os testes. São regras estáveis que o agente não consegue inferir sozinho de forma confiável.</li>
+</ol>
+
+<p>Repare que as três têm algo em comum: são coisas que mudam devagar. Memória de longo prazo combina com informação de ritmo lento.</p>
+
+<h2>O que descartar sem dó</h2>
+
+<p>Do outro lado, há material que quase nunca merece virar memória permanente.</p>
+
+<ul>
+<li><strong>Logs brutos:</strong> saídas de terminal, listas enormes de mensagens, rastros de execução. Servem no momento do problema e depois só atrapalham. Se precisar de algo deles, guarde a conclusão, não o rastro.</li>
+<li><strong>Tentativas falhas:</strong> o caminho que não funcionou geralmente é irrelevante depois que você achou o que funciona. Há uma exceção valiosa: se a falha for uma armadilha fácil de cair de novo, guarde uma linha curta dizendo "não faça X, porque Y". Uma linha, não o relato inteiro.</li>
+<li><strong>Estado temporário:</strong> em que arquivo você estava mexendo, qual era o próximo passo de hoje. Isso é rascunho, e rascunho tem prazo de validade de horas.</li>
+</ul>
+
+<p>Um teste simples antes de gravar qualquer coisa: se eu ler isso daqui a três meses, vou entender e vou querer que o agente saiba? Se a resposta for hesitante, provavelmente não precisa ficar.</p>
+
+<p><img src="../assets/images/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer-2-excesso-de-memoria.png" alt="Robô sobrecarregado com pilhas de notas, algumas velhas, mostrando como excesso de memória atrapalha" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Memória precisa de prazo de validade e de revisão</h2>
+
+<p>Mesmo o que valia a pena guardar envelhece. Por isso toda memória duradoura deveria carregar duas coisas: uma data e, quando fizer sentido, uma condição de expiração. "Vale enquanto estivermos usando tal ferramenta" é uma boa condição. Quando a ferramenta sai, a nota sai junto.</p>
+
+<p>Depois da data, entra o hábito de revisar. Não precisa ser nada sofisticado. Uma passada periódica pelas notas, perguntando para cada uma: isso ainda é verdade? ainda é útil? está em conflito com alguma outra? O que falhar nesse teste é atualizado ou removido. Dá para pedir ao próprio agente que faça uma primeira triagem e aponte candidatas à remoção, desde que a decisão final não seja dele.</p>
+
+<p>Outro cuidado que ajuda muito: prefira poucas notas curtas e bem escritas a um depósito gigante. Quando duas notas dizem coisas parecidas, junte. Quando uma contradiz outra, resolva o conflito na hora, em vez de deixar as duas convivendo.</p>
+
+<h2>Quem decide: o humano precisa conseguir auditar</h2>
+
+<p>Chegamos à pergunta que dá título ao texto. Se o agente grava o que quiser, sem você ver, a memória vira uma caixa-preta. Um dia ele começa a se comportar de um jeito estranho e você não tem como descobrir por quê. A causa pode ser uma nota errada gravada meses atrás, e ninguém sabe que ela existe.</p>
+
+<p>Por isso defendo um princípio: <strong>a memória do agente tem que ser legível por você</strong>. Texto simples, em arquivos que você consegue abrir, ler e editar com as próprias mãos. Isso vale mais do que qualquer mecanismo sofisticado de busca que ninguém consegue inspecionar.</p>
+
+<p>Na prática, algumas escolhas ajudam bastante:</p>
+
+<ul>
+<li>Deixe o agente <em>propor</em> uma gravação e mostre o que vai ser guardado, em vez de gravar em silêncio.</li>
+<li>Registre de onde veio cada nota: foi você que pediu, ou o agente que deduziu? Notas deduzidas merecem mais desconfiança.</li>
+<li>Facilite o caminho inverso: apagar ou corrigir uma nota deve ser tão fácil quanto criar.</li>
+<li>Reserve um momento regular para olhar o que foi guardado, como quem organiza uma gaveta.</li>
+</ul>
+
+<p>Isso também tem uma dimensão de privacidade. Se o agente guarda coisas sobre você ou sobre o seu trabalho, você precisa saber o que é, onde está e como remover. Quem decide o que fica não pode ser a máquina sozinha.</p>
+
+<p><img src="../assets/images/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer-3-humano-audita-memoria.png" alt="Pessoa revisando o caderno de memória de um robô amigável e riscando itens" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Um jeito simples de começar</h2>
+
+<p>Se você quer sair do zero sem complicar, eu faria assim: um único arquivo de texto com três seções, decisões, preferências e convenções. Cada item com uma frase, uma data e o motivo. O agente lê esse arquivo no início de cada sessão e sugere acréscimos ao final, que você aprova ou recusa. Uma vez por mês, você relê tudo e poda o que ficou velho.</p>
+
+<p>É pouco, é manual e funciona. Depois, se a necessidade crescer, você pode migrar para algo mais estruturado, como um banco com busca. Mas mesmo lá o princípio continua: memória boa é curada, datada e auditável.</p>
+
+<h2>No fim, esquecer também é uma habilidade</h2>
+
+<p>A gente costuma pensar em memória como acumular. Para agentes, a parte difícil é o contrário: saber o que deixar ir. Um agente que lembra pouco, mas lembra o que importa e está certo, vale muito mais do que um que carrega tudo e se confunde com o próprio passado.</p>
+
+<p>Então, da próxima vez que pensar em dar mais memória ao seu agente, pergunte primeiro: o que eu quero que ele esqueça, e quem vai ficar de olho nisso? Se a resposta for "eu", você já está no caminho certo.</p>
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Dar mais memória ao agente nem sempre ajuda. Veja o que vale gravar, o que deve ser descartado e por que o humano precisa auditar.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html</div>
+  </section>
+
+  <footer class="post">
+    <span>9 de novembro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
