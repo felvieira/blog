@@ -39,7 +39,8 @@ export function enhancePage(html, filename, config, fallbackImage = "") {
     let asset = image.match(/assets\/images\/[^?#]+/)?.[0];
     if (asset && !existsSync(join(ROOT, asset))) asset = decodeURIComponent(asset);
     const thumbnail = asset?.startsWith("assets/images/thumbs/") ? asset : asset?.replace("assets/images/", "assets/images/thumbs/").replace(/\.[^.]+$/, ".webp");
-    image = thumbnail && existsSync(join(ROOT, thumbnail)) ? new URL(thumbnail.split('/').map(encodeURIComponent).join('/'), config.url).href : "";
+    const preferredAsset = thumbnail && existsSync(join(ROOT, thumbnail)) ? thumbnail : asset;
+    image = preferredAsset && existsSync(join(ROOT, preferredAsset)) ? new URL(preferredAsset.split('/').map(encodeURIComponent).join('/'), config.url).href : "";
   }
   image ||= fallbackImage;
   const author = { "@type": "Person", name: config.author.name, url: config.author.url };
