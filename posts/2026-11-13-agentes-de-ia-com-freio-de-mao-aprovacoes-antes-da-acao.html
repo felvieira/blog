@@ -1,0 +1,413 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>Agentes de IA com freio de mão: como desenhar aprovações antes da ação — felvieira's blog</title>
+<meta name="description" content="Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="Agentes de IA com freio de mão: como desenhar aprovações antes da ação">
+<meta property="og:description" content="Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="Agentes de IA com freio de mão: como desenhar aprovações antes da ação">
+<meta name="twitter:description" content="Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-cover.png">
+<meta property="og:image:alt" content="Agentes de IA com freio de mão: como desenhar aprovações antes da ação">
+<meta name="twitter:image" content="https://felvieira.github.io/blog/assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-cover.png">
+<meta property="article:published_time" content="2026-11-13">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html","url":"https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html","headline":"Agentes de IA com freio de mão: como desenhar aprovações antes da ação","description":"Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.","inLanguage":"pt-BR","datePublished":"2026-11-13","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"image":["https://felvieira.github.io/blog/assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-cover.png"],"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>Agentes de IA com freio de mão: como desenhar aprovações antes da ação</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>13 de novembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">16 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-cover.png" alt="Agentes de IA com freio de mão: como desenhar aprovações antes da ação — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<p>Um agente de IA pode parecer muito competente justamente no momento em que está prestes a fazer algo que você não gostaria que ele fizesse sozinho.</p>
+
+<p>Ele pode editar um arquivo importante, enviar uma mensagem para um cliente, alterar o status de um pedido ou executar um comando no ambiente de produção. Em todos esses casos, a questão não é apenas se o agente <em>consegue</em> realizar a tarefa. A questão é se ele deve realizá-la agora, com aqueles dados, usando aquela ferramenta e sem uma decisão humana no meio do caminho.</p>
+
+<p>É aí que entra o freio de mão: pontos de aprovação desenhados antes da ação.</p>
+
+<p>Freio de mão não significa transformar o agente em um assistente que pede licença para cada passo. Também não significa colocar um botão “Confirmar” em toda tela e considerar o problema resolvido. Uma boa aprovação é uma decisão de produto: ela aparece quando há risco ou impacto suficientes para justificar a interrupção, mostra o que realmente será feito e permite que a pessoa decida sem precisar reconstruir o raciocínio do agente.</p>
+
+<p>O objetivo é equilibrar três coisas que costumam entrar em conflito: autonomia para o agente trabalhar, segurança para impedir ações indesejadas e uma experiência de uso que não pareça um formulário de autorização a cada minuto.</p>
+
+<p><img src="../assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-1-ponte-de-aprovacao.png" alt="Agente de IA atravessando pontos de aprovação antes de executar uma ação" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Três estados diferentes: informar, pedir confirmação e exigir aprovação</h2>
+
+<p>O primeiro erro de projeto é tratar todos os avisos como se fossem iguais. Uma interface pode informar que algo aconteceu, pedir uma confirmação simples ou bloquear uma ação até que uma pessoa aprove. Esses três estados têm consequências diferentes e devem usar componentes, linguagem e regras diferentes.</p>
+
+<p><strong>Informar</strong> é comunicar uma ação de baixo risco ou já concluída. O agente pode ter organizado uma lista, preenchido um rascunho ou consultado dados sem alterar nada. A interface mostra o resultado, mas não interrompe o fluxo.</p>
+
+<p>Um cartão pode dizer:</p>
+
+<ul>
+<li><strong>Rascunho preparado:</strong> organizei os três arquivos relacionados ao componente de navegação.</li>
+<li><strong>Consulta concluída:</strong> encontrei 18 registros com status “pendente”.</li>
+<li><strong>Alteração aplicada:</strong> atualizei o texto do botão em dois arquivos.</li>
+</ul>
+
+<p>Informar não é esconder. A pessoa pode consultar os detalhes, mas não precisa tomar uma decisão para o trabalho continuar.</p>
+
+<p><strong>Pedir confirmação</strong> é interromper uma ação que ainda é relativamente simples, previsível e reversível. O agente está prestes a fazer algo que o usuário provavelmente deseja, mas vale conferir o alvo, o escopo ou algum parâmetro importante.</p>
+
+<p>Por exemplo, antes de mover cinco arquivos para uma pasta, a interface pode apresentar a lista e pedir uma confirmação objetiva. Antes de criar um compromisso, pode mostrar data, horário e participantes. A confirmação funciona bem quando o contexto já está claro e o custo de um engano é limitado.</p>
+
+<p><strong>Exigir aprovação</strong> é diferente. A ação não deve acontecer sem uma decisão explícita de alguém autorizado. Isso se aplica quando há impacto externo, risco financeiro, exposição de informação, alteração difícil de desfazer ou possibilidade de afetar outras pessoas.</p>
+
+<p>Enviar uma mensagem para um cliente, apagar registros, publicar conteúdo, executar um comando com efeito amplo e alterar permissões são exemplos de ações que normalmente merecem aprovação. Nesses casos, não basta um aviso discreto no rodapé. O sistema precisa deixar claro que a ação está bloqueada até uma decisão.</p>
+
+<p>Uma regra prática:</p>
+
+<ul>
+<li>Se a ação apenas observa, calcula ou prepara, informar costuma ser suficiente.</li>
+<li>Se a ação é limitada, esperada e facilmente desfeita, confirmação pode bastar.</li>
+<li>Se a ação comunica, compromete, remove, publica, gasta ou altera algo sensível, aprovação explícita é o caminho mais seguro.</li>
+</ul>
+
+<p>Essa distinção também evita um problema comum: usar a palavra “aprovar” para tudo. Quando cada clique recebe o mesmo peso, a pessoa aprende a clicar no botão principal sem ler. O resultado é uma interface cheia de barreiras que, paradoxalmente, reduz a atenção justamente onde ela seria mais necessária.</p>
+
+<h2>O risco não está apenas na ferramenta</h2>
+
+<p>Classificar uma ação pelo nome da ferramenta é insuficiente. “Editar arquivo” pode significar corrigir uma vírgula em um rascunho ou substituir a configuração de autenticação de um serviço. “Enviar mensagem” pode significar responder a uma conversa interna ou disparar um comunicado para milhares de pessoas.</p>
+
+<p>O risco nasce da combinação entre ação, alvo, dados, alcance e reversibilidade.</p>
+
+<p>Uma classificação útil considera pelo menos estes eixos:</p>
+
+<ul>
+<li><strong>Impacto:</strong> o que pode mudar para o usuário, para a equipe ou para terceiros?</li>
+<li><strong>Alcance:</strong> a ação afeta um item, um grupo pequeno ou todo o sistema?</li>
+<li><strong>Sensibilidade:</strong> há dados pessoais, financeiros, estratégicos ou credenciais envolvidos?</li>
+<li><strong>Reversibilidade:</strong> existe uma forma confiável de desfazer a ação?</li>
+<li><strong>Intenção:</strong> o pedido está claro ou o agente está inferindo algo importante?</li>
+<li><strong>Imediatismo:</strong> o efeito ocorre agora ou inicia uma cadeia difícil de interromper?</li>
+<li><strong>Autorização:</strong> a pessoa que está usando a interface pode permitir essa ação?</li>
+</ul>
+
+<p>Uma correção em um arquivo não publicado, com histórico de versões e escopo explícito, tende a ser menos arriscada do que uma alteração equivalente em um arquivo carregado por um serviço ativo. Uma mensagem de teste para um endereço interno não tem o mesmo peso de uma mensagem para clientes. A mesma ferramenta pode exigir nenhuma intervenção em um contexto e aprovação obrigatória em outro.</p>
+
+<p>Em vez de criar uma tabela abstrata que o usuário nunca vê, o produto pode transformar essa classificação em regras simples:</p>
+
+<ol>
+<li>O agente pode consultar dados sem aprovação quando a consulta respeita as permissões existentes.</li>
+<li>O agente pode preparar rascunhos sem aprovação, desde que não os publique ou envie.</li>
+<li>O agente pode fazer alterações locais e reversíveis sem aprovação, mostrando o resultado e oferecendo desfazer.</li>
+<li>O agente precisa de aprovação para ações externas, destrutivas, financeiras ou que envolvam dados sensíveis.</li>
+<li>Quanto mais incerta a intenção ou maior o alcance, mais explícita deve ser a revisão.</li>
+</ol>
+
+<p>A classificação também deve ser dinâmica. Uma ação que começa pequena pode crescer. O agente pode descobrir que precisa editar 42 arquivos em vez de dois, que uma mensagem será enviada a uma lista maior ou que o comando produzirá uma alteração permanente. Quando o escopo muda, a aprovação anterior deixa de valer automaticamente.</p>
+
+<p><img src="../assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-2-painel-de-risco.png" alt="Pessoa e agente de IA avaliando o risco de uma ação em conjunto" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>O cartão de aprovação precisa responder às perguntas certas</h2>
+
+<p>Uma aprovação ruim apresenta apenas um verbo: “Executar”. O usuário precisa adivinhar o que será executado, em qual lugar, com quais dados e com qual consequência. Uma aprovação boa funciona como um contrato curto entre o agente e a pessoa.</p>
+
+<p>Antes de decidir, o usuário deve conseguir responder:</p>
+
+<ul>
+<li>O que o agente pretende fazer?</li>
+<li>Por que ele acredita que essa é a próxima ação?</li>
+<li>Qual ferramenta será usada?</li>
+<li>Quais dados serão enviados ou modificados?</li>
+<li>Quais itens estão dentro do escopo?</li>
+<li>Qual efeito é esperado?</li>
+<li>O que pode dar errado?</li>
+<li>É possível revisar ou desfazer?</li>
+</ul>
+
+<p>Isso não exige mostrar toda a cadeia interna de raciocínio do modelo. A interface não precisa despejar pensamentos intermediários nem uma narrativa interminável. Ela precisa mostrar uma justificativa operacional: intenção, parâmetros relevantes, entradas, efeito e limites.</p>
+
+<p>Considere um agente que recebeu o pedido “atualize o texto da página inicial”. Em vez de mostrar somente “O agente quer editar arquivos”, a interface pode apresentar:</p>
+
+<ul>
+<li><strong>Plano:</strong> substituir a frase do cabeçalho da página inicial e manter o restante do conteúdo.</li>
+<li><strong>Arquivos:</strong> <code>src/pages/home.tsx</code> e <code>src/content/home.json</code>.</li>
+<li><strong>Ferramenta:</strong> editor de arquivos do projeto.</li>
+<li><strong>Alteração:</strong> trocar “Controle suas tarefas” por “Organize seu trabalho com clareza”.</li>
+<li><strong>Efeito esperado:</strong> o novo texto aparecerá na próxima compilação da aplicação.</li>
+<li><strong>Reversão:</strong> restaurar a versão anterior pelo histórico de alterações.</li>
+</ul>
+
+<p>Se houver trechos longos, mostre um resumo e permita abrir a diferença completa. O resumo ajuda na decisão rápida; a diferença preserva a possibilidade de inspeção. Esconder detalhes atrás de quatro camadas de cliques transforma transparência em decoração.</p>
+
+<p>Para uma mensagem, os dados essenciais são outros:</p>
+
+<ul>
+<li>destinatários e quantidade de pessoas;</li>
+<li>canal de envio;</li>
+<li>remetente usado;</li>
+<li>assunto e conteúdo final;</li>
+<li>anexos ou links;</li>
+<li>momento do envio;</li>
+<li>possibilidade de cancelar ou editar antes da entrega.</li>
+</ul>
+
+<p>O botão principal deve usar um verbo específico. “Aprovar e enviar” é melhor do que “Continuar”. “Aplicar alterações” é melhor do que “Confirmar”. O texto do botão deve revelar o efeito da decisão, não apenas o movimento dentro da interface.</p>
+
+<p>Também vale separar a aprovação da navegação. “Ver detalhes” não deve aprovar; fechar o painel não deve rejeitar; pressionar a tecla Enter não deve executar uma ação de alto impacto sem uma condição clara. Em ações relevantes, o sistema precisa evitar que uma decisão seja tomada por acidente.</p>
+
+<h2>Plano primeiro, execução depois</h2>
+
+<p>O agente não deve misturar planejamento e execução quando a ação exigir aprovação. Primeiro, ele interpreta o pedido, reúne informações permitidas e monta um plano. Depois, apresenta esse plano. Só então, após a decisão, usa a ferramenta que produzirá o efeito.</p>
+
+<p>Essa separação torna o sistema mais previsível. O usuário consegue revisar uma intenção antes de lidar com as consequências dela. O agente também pode detectar que o plano ficou amplo demais e pedir uma nova orientação antes de avançar.</p>
+
+<p>Imagine o pedido “limpe os dados antigos”. Um plano responsável não executa uma exclusão imediatamente. Ele pode propor:</p>
+
+<ol>
+<li>Localizar registros sem atividade há mais de 24 meses.</li>
+<li>Encontrar 137 registros que correspondem ao critério.</li>
+<li>Separar os registros que possuem retenção obrigatória.</li>
+<li>Exportar uma cópia para o armazenamento autorizado.</li>
+<li>Remover apenas os 129 registros restantes.</li>
+</ol>
+
+<p>Nesse ponto, a aprovação deve destacar que a ação é destrutiva, mostrar a quantidade, explicar o critério e indicar o que ficará de fora. “Limpar dados” é uma intenção vaga; “remover 129 registros sem atividade há mais de 24 meses, preservando oito itens retidos” é uma operação revisável.</p>
+
+<p>O plano também deve ter limites. Se o agente pode editar arquivos, informe quais diretórios estão incluídos. Se pode executar comandos, mostre o comando completo ou uma representação equivalente e indique o ambiente. Se pode alterar registros, mostre o filtro utilizado e a quantidade afetada.</p>
+
+<p>Uma interface madura mostra ainda o que o agente <em>não</em> fará:</p>
+
+<ul>
+<li>não enviará a mensagem antes da aprovação;</li>
+<li>não modificará arquivos fora dos dois caminhos listados;</li>
+<li>não alterará registros que estejam protegidos;</li>
+<li>não executará o comando em produção sem uma aprovação específica.</li>
+</ul>
+
+<p>Esses limites reduzem a ambiguidade e ajudam o usuário a perceber quando o plano saiu do trilho.</p>
+
+<h2>Ferramentas e dados devem aparecer no momento da decisão</h2>
+
+<p>O nome da ferramenta não é um detalhe técnico irrelevante. Ele informa o tipo de acesso que será usado e o caminho pelo qual o efeito acontecerá. Um agente que “altera o cadastro” pode estar usando uma integração com o sistema principal, um arquivo local ou uma operação administrativa com permissões muito diferentes.</p>
+
+<p>Mostre a ferramenta em linguagem compreensível e, quando necessário, permita consultar detalhes técnicos. Por exemplo:</p>
+
+<ul>
+<li><strong>Editor de arquivos:</strong> modifica somente os arquivos listados no projeto aberto.</li>
+<li><strong>Mensagens:</strong> envia pelo canal corporativo conectado à conta escolhida.</li>
+<li><strong>Base de dados:</strong> atualiza os registros que correspondem ao filtro apresentado.</li>
+<li><strong>Terminal:</strong> executa o comando no ambiente selecionado, com as permissões disponíveis.</li>
+</ul>
+
+<p>Os dados também precisam ser tratados como parte da aprovação. Não basta dizer “vou usar os dados do cliente”. Mostre quais campos serão lidos ou enviados, especialmente quando houver informação pessoal, financeira ou confidencial.</p>
+
+<p>Se um agente vai enviar uma mensagem com o nome, o pedido e o valor de uma compra, esses campos devem estar visíveis. Se vai anexar um arquivo, mostre o nome, o tamanho e o destino. Se vai enviar dados para uma ferramenta externa, deixe claro o que sai do ambiente atual.</p>
+
+<p>Quando houver informação sensível, a interface pode resumir o conteúdo sem expô-lo desnecessariamente, mas não deve ocultar sua existência. “Contém dados pessoais” é um alerta importante; “dados diversos” não é.</p>
+
+<h2>Rejeitar não é apenas clicar em “não”</h2>
+
+<p>Uma rejeição encerra a ação atual, mas não precisa encerrar o trabalho. O melhor fluxo preserva o contexto e ajuda a pessoa a corrigir o plano.</p>
+
+<p>Há pelo menos três formas úteis de rejeição:</p>
+
+<ul>
+<li><strong>Rejeitar e encerrar:</strong> o agente descarta o plano e não tenta novamente.</li>
+<li><strong>Rejeitar com orientação:</strong> a pessoa explica o que deve mudar, e o agente prepara um novo plano.</li>
+<li><strong>Rejeitar parte do escopo:</strong> a pessoa remove itens específicos e aprova o restante, quando isso for seguro.</li>
+</ul>
+
+<p>Se o agente propõe editar dez arquivos e o usuário não quer tocar em <code>config/producao.yml</code>, a interface pode permitir remover esse arquivo do plano e recalcular as alterações. Se o texto de uma mensagem está correto, mas os destinatários estão errados, o usuário deve conseguir corrigir a lista sem começar a conversa do zero.</p>
+
+<p>A rejeição precisa deixar claro o que não aconteceu. Depois de recusar o envio, informe que nenhuma mensagem foi entregue. Depois de recusar uma exclusão, informe que os registros continuam intactos. Esse retorno evita a dúvida perigosa entre “o agente ignorou minha decisão” e “a ação foi parcialmente executada”.</p>
+
+<p>Se houve execução parcial antes da falha ou da rejeição, a interface deve dizer exatamente quais itens foram afetados. Nunca use uma confirmação genérica quando o resultado foi incompleto.</p>
+
+<h2>Editar o plano é melhor do que editar a justificativa</h2>
+
+<p>Em ações que exigem revisão, a pessoa não deveria precisar conversar em linguagem vaga para corrigir cada detalhe. A interface pode oferecer controles diretos para os parâmetros mais importantes: destinatários, arquivos, registros, horário, ambiente, quantidade e mensagem final.</p>
+
+<p>Isso não transforma o agente em um formulário tradicional. O agente continua interpretando a intenção e montando o plano, mas o usuário ganha pontos claros de intervenção.</p>
+
+<p>Por exemplo, um plano de execução de comando pode permitir:</p>
+
+<ul>
+<li>trocar o ambiente de produção por um ambiente de teste;</li>
+<li>reduzir o conjunto de arquivos;</li>
+<li>alterar o limite de registros;</li>
+<li>incluir uma opção de simulação;</li>
+<li>pedir uma prévia do resultado antes da execução.</li>
+</ul>
+
+<p>Depois de qualquer edição relevante, o plano deve ser recalculado e apresentado novamente. Não mantenha a aprovação anterior como se nada tivesse mudado. A pessoa aprovou uma versão específica do plano, não uma intenção abstrata que o agente pode modificar livremente.</p>
+
+<h2>Expiração, mudança de contexto e aprovação válida</h2>
+
+<p>Uma aprovação não deve durar para sempre. O contexto pode mudar: os dados podem ser atualizados, as permissões podem expirar, o destinatário pode deixar de ser válido ou o plano pode ficar antigo.</p>
+
+<p>Defina uma validade para aprovações sensíveis. Ao expirar, o agente deve preparar uma nova versão e pedir revisão novamente. Não basta exibir um aviso depois de executar.</p>
+
+<p>A aprovação também deve ser invalidada quando:</p>
+
+<ul>
+<li>o escopo da ação aumentar;</li>
+<li>os dados relevantes forem alterados;</li>
+<li>a ferramenta ou o ambiente mudar;</li>
+<li>os destinatários mudarem;</li>
+<li>o conteúdo final for editado;</li>
+<li>as permissões da pessoa forem revogadas;</li>
+<li>o sistema detectar uma condição de risco diferente.</li>
+</ul>
+
+<p>Uma aprovação deve estar ligada a uma versão concreta do plano. Na prática, isso pode ser representado por um identificador interno, um resumo das entradas e um registro do momento em que a decisão ocorreu. O usuário não precisa ver todos esses detalhes o tempo inteiro, mas o sistema precisa deles para impedir que uma decisão antiga seja reutilizada em uma ação nova.</p>
+
+<p>Expiração não deve parecer uma punição. A interface pode explicar: “Este plano foi criado há muito tempo e os dados podem ter mudado. Atualizamos a prévia; revise antes de continuar.” O foco é proteger a decisão, não culpar a pessoa.</p>
+
+<h2>Reexecução exige uma nova leitura do resultado</h2>
+
+<p>Quando uma ação falha, é tentador oferecer um botão “Tentar novamente” que repete exatamente a operação. Isso pode ser seguro em uma consulta idempotente, mas perigoso em mensagens, pagamentos, criação de registros ou comandos com efeito cumulativo.</p>
+
+<p>Antes de reexecutar, o sistema precisa saber se a primeira tentativa produziu algum efeito. Para uma mensagem, deve informar se foi enviada, recusada ou se o estado é desconhecido. Para uma alteração em arquivos, deve comparar a versão atual com a versão que recebeu aprovação. Para uma atualização de dados, deve verificar quantos registros já foram alterados.</p>
+
+<p>O botão pode assumir formas diferentes:</p>
+
+<ul>
+<li><strong>Reexecutar com segurança:</strong> quando o sistema consegue garantir que o efeito não será duplicado.</li>
+<li><strong>Revisar e tentar novamente:</strong> quando o resultado parcial ou desconhecido exige uma nova análise.</li>
+<li><strong>Preparar uma nova operação:</strong> quando a ação original já aconteceu e uma nova execução teria outro significado.</li>
+</ul>
+
+<p>Em caso de dúvida, prefira revisar. Uma experiência ligeiramente mais lenta é melhor do que enviar duas mensagens, criar dois registros ou aplicar duas vezes uma alteração difícil de desfazer.</p>
+
+<p><img src="../assets/images/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao-3-trilha-reversivel.png" alt="Trilha reversível mostrando como revisar e desfazer ações de um agente de IA" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Registrar decisões sem construir um painel burocrático</h2>
+
+<p>Registrar aprovações é importante para entender o que aconteceu, investigar erros e oferecer continuidade. Mas registrar tudo na interface principal é uma forma rápida de transformar o produto em um painel administrativo.</p>
+
+<p>A solução é separar o momento da decisão do histórico detalhado. Durante a aprovação, mostre apenas o necessário para decidir. Depois, mantenha um registro acessível com:</p>
+
+<ul>
+<li>qual ação foi proposta;</li>
+<li>qual versão do plano foi apresentada;</li>
+<li>quem aprovou, rejeitou ou editou;</li>
+<li>quando a decisão ocorreu;</li>
+<li>quais ferramentas e dados foram envolvidos;</li>
+<li>qual foi o resultado real;</li>
+<li>se houve falha, execução parcial ou reexecução.</li>
+</ul>
+
+<p>Esse registro deve distinguir intenção, decisão e efeito. “O agente propôs apagar 129 registros” não significa que “129 registros foram apagados”. “A pessoa aprovou o envio” não garante que o serviço de mensagens tenha concluído a entrega. Uma linha do histórico para cada etapa evita reconstruções confusas.</p>
+
+<p>Também é útil registrar o motivo quando a pessoa rejeita ou altera um plano, mas isso não deve ser obrigatório em toda situação. Exigir uma justificativa formal para cada recusa adiciona atrito e incentiva respostas vazias. Peça contexto quando ele realmente ajudar: em uma operação sensível, em uma revisão de equipe ou quando o sistema precisa melhorar o próximo plano.</p>
+
+<p>Na interface cotidiana, o histórico pode aparecer como uma frase curta: “Aprovado por você às 14h32; 12 arquivos alterados”. Um detalhe expansível revela a ferramenta, a versão do plano e o resultado. A transparência continua disponível sem ocupar a tela inteira.</p>
+
+<h2>Como evitar a fadiga de aprovação</h2>
+
+<p>Se o agente pede aprovação para tudo, o usuário perde o senso de prioridade. Se nunca pede, a pessoa deixa de confiar nele. O equilíbrio vem de combinar risco, contexto e reversibilidade.</p>
+
+<p>Algumas decisões ajudam:</p>
+
+<ul>
+<li>agrup ar operações de baixo risco que fazem parte do mesmo plano, em vez de interromper a cada item;</li>
+<li>manter aprovação obrigatória para ações externas, destrutivas ou sensíveis;</li>
+<li>usar prévias e desfazer para alterações locais e reversíveis;</li>
+<li>não pedir aprovação novamente para cada passo interno de uma ação já aprovada, desde que o escopo não mude;</li>
+<li>interromper imediatamente quando surgir uma nova ferramenta, um novo ambiente ou um alcance maior;</li>
+<li>permitir que a pessoa defina preferências para classes de ação, sem transformar essa preferência em autorização irrestrita.</li>
+</ul>
+
+<p>Há uma diferença importante entre “não perguntar novamente nesta sessão” e “nunca perguntar”. A primeira opção pode ser adequada para uma sequência previsível de alterações de baixo risco. A segunda cria uma permissão ampla demais e difícil de entender.</p>
+
+<p>Preferências de autonomia também devem ser específicas. Em vez de “deixe o agente fazer tudo sozinho”, prefira regras como “pode editar arquivos dentro da pasta de rascunhos sem aprovação” ou “pode consultar registros, mas nunca alterar dados sem aprovação”. Quanto mais concreta a permissão, menor a chance de uma interpretação perigosa.</p>
+
+<h2>Autonomia conquistada por contexto e reversibilidade</h2>
+
+<p>Autonomia não deve ser um atributo fixo do agente. Ela deve ser conquistada pela qualidade do contexto e pela capacidade de corrigir o efeito.</p>
+
+<p>Um agente pode agir com mais autonomia quando conhece bem o escopo, tem dados suficientes, usa uma ferramenta limitada e consegue desfazer o resultado. Pode agir com menos autonomia quando a intenção é ambígua, o alvo é amplo, os dados são sensíveis ou o efeito é permanente.</p>
+
+<p>Essa lógica produz uma progressão saudável:</p>
+
+<ol>
+<li>O agente observa e explica o que encontrou.</li>
+<li>O agente prepara um plano concreto.</li>
+<li>O usuário revisa e aprova ações relevantes.</li>
+<li>O sistema mostra o resultado e oferece reversão quando possível.</li>
+<li>Com contexto suficiente, ações semelhantes podem exigir menos interrupções.</li>
+</ol>
+
+<p>O ganho de confiança não vem de uma promessa de que o agente “entende tudo”. Vem de limites visíveis, decisões localizadas e resultados verificáveis. A pessoa sabe quando o agente está apenas informando, quando está aguardando confirmação e quando não pode prosseguir sem aprovação.</p>
+
+<h2>Um padrão simples para começar</h2>
+
+<p>Para cada ação que o agente pode executar, descreva cinco coisas antes de desenhar o componente:</p>
+
+<ol>
+<li><strong>Intenção:</strong> qual objetivo do usuário a ação atende?</li>
+<li><strong>Ferramenta:</strong> qual mecanismo produz o efeito?</li>
+<li><strong>Dados:</strong> quais informações serão lidas, enviadas ou alteradas?</li>
+<li><strong>Impacto:</strong> quem ou o que será afetado?</li>
+<li><strong>Reversão:</strong> como desfazer, corrigir ou investigar o resultado?</li>
+</ol>
+
+<p>Depois, escolha o nível de intervenção. Informar quando o agente apenas consulta ou prepara. Pedir confirmação quando a ação é limitada e reversível. Exigir aprovação quando há impacto externo, risco sensível, escopo amplo ou efeito difícil de desfazer.</p>
+
+<p>Por fim, desenhe o caminho completo, não apenas o modal de aprovação: plano, revisão, edição, rejeição, expiração, execução, falha, resultado e histórico. É nesse percurso que a confiança se forma.</p>
+
+<p>O melhor agente não é o que age sempre sozinho. É o que sabe quando avançar, quando mostrar o próximo passo e quando parar com clareza. O freio de mão bem projetado não reduz a autonomia: ele torna possível aumentá-la sem transformar cada erro em uma surpresa irreversível.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Um guia prático para desenhar pontos de aprovação em agentes de IA, equilibrando autonomia, segurança e uma boa experiência no frontend.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html</div>
+  </section>
+
+  <footer class="post">
+    <span>13 de novembro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>

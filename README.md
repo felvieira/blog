@@ -13,6 +13,7 @@ Eu mando texto ou assunto pro Claude → ele gera HTML + imagens (via skill 17 f
 ## Posts
 
 <!-- BLOG_INDEX_START -->
+- **2026-11-13** — [Agentes de IA com freio de mão: como desenhar aprovações antes da ação](posts/2026-11-13-agentes-de-ia-com-freio-de-mao-aprovacoes-antes-da-acao.html) (🇧🇷 PT)
 - **2026-11-10** — [Launch Studio: vídeos de produto feitos com código e agentes de IA](posts/2026-11-10-launch-studio-videos-produto-codigo-agentes-ia.html) (🇧🇷 PT)
 - **2026-11-09** — [Memória de agentes de IA: o que lembrar, o que esquecer e quem decide](posts/2026-11-09-memoria-de-agentes-de-ia-lembrar-esquecer.html) (🇧🇷 PT)
 - **2026-11-04** — [7 ferramentas de IA que entraram no meu radar](posts/2026-11-04-7-ferramentas-de-ia-que-entraram-no-meu-radar.html) (🇧🇷 PT)
