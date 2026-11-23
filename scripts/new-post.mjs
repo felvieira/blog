@@ -38,16 +38,18 @@ function loadBlogConfig() {
   if (!existsSync(configPath)) {
     // Best-effort fallback so the script doesn't break a user who hasn't
     // configured the kit yet. URLs end up relative — Pages still serves them.
-    return { github_user: "user", blog_repo: "blog", pages_url: "" };
+    const siteConfigPath = join(ROOT, "site.config.json");
+    const site = existsSync(siteConfigPath) ? JSON.parse(readFileSync(siteConfigPath, "utf8")) : {};
+    return { github_user: "user", blog_repo: "blog", pages_url: site.url || "" };
   }
   return JSON.parse(readFileSync(configPath, "utf8"));
 }
 
 const config = loadBlogConfig();
-const pagesBase = config.pages_url
+const pagesBase = (config.pages_url
   || (config.github_user && config.blog_repo
         ? `https://${config.github_user}.github.io/${config.blog_repo}`
-        : "");
+        : "")).replace(/\/+$/, "");
 
 // ─── Parse args ──────────────────────────────────────────────────────────────
 const args = Object.fromEntries(
