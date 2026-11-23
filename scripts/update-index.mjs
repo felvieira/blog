@@ -65,7 +65,7 @@ function thumbnailFor(cover) {
 function extractPostMeta(filename) {
   const html  = readFileSync(join(POSTS_DIR, filename), "utf8");
   const title = (html.match(/<title>([^<]+)<\/title>/)?.[1] ?? filename)
-                   .replace(titleSuffixRe, "");
+                   .replace(titleSuffixRe, "").trimEnd();
   const lang  = html.match(/<html lang="([^"]+)"/)?.[1] ?? "en";
   const desc  = html.match(/<meta name="description" content="([^"]+)"/)?.[1] ?? "";
   const date  = filename.match(/^(\d{4}-\d{2}-\d{2})/)?.[1] ?? "";
