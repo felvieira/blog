@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<script>try{const t=localStorage.getItem("felvieira-blog-theme");document.documentElement.dataset.theme=t==="light"||t==="dark"?t:(matchMedia("(prefers-color-scheme: dark)").matches?"dark":"light")}catch{}</script>
+<title>O orçamento invisível dos agentes de IA: contexto, tempo e risco — felvieira's blog</title>
+<meta name="description" content="Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.">
+<link rel="icon" type="image/svg+xml" href="../assets/favicon.svg">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400..700&family=Source+Serif+4:ital,opsz,wght@0,8..60,400..700;1,8..60,400..700&display=swap">
+<link rel="stylesheet" href="../assets/css/post.css">
+<!-- SEO_START -->
+<link rel="canonical" href="https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html">
+<meta name="author" content="Felipe Vieira">
+<meta name="robots" content="index, follow, max-image-preview:large">
+<meta property="og:site_name" content="felvieira&#39;s blog">
+<meta property="og:title" content="O orçamento invisível dos agentes de IA: contexto, tempo e risco">
+<meta property="og:description" content="Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.">
+<meta property="og:url" content="https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html">
+<meta property="og:type" content="article">
+<meta property="og:locale" content="pt_BR">
+<meta name="twitter:card" content="summary_large_image">
+<meta name="twitter:title" content="O orçamento invisível dos agentes de IA: contexto, tempo e risco">
+<meta name="twitter:description" content="Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.">
+<meta property="og:image" content="https://felvieira.github.io/blog/assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-cover.png">
+<meta property="og:image:alt" content="O orçamento invisível dos agentes de IA: contexto, tempo e risco">
+<meta name="twitter:image" content="https://felvieira.github.io/blog/assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-cover.png">
+<meta property="article:published_time" content="2026-11-27">
+<meta property="article:author" content="https://links.felvieira.com.br/@felvieira.dev">
+<link rel="sitemap" type="application/xml" href="https://felvieira.github.io/blog/sitemap.xml">
+<meta name="google-adsense-account" content="ca-pub-7742549245155822">
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"BlogPosting","@id":"https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html#article","mainEntityOfPage":"https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html","url":"https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html","headline":"O orçamento invisível dos agentes de IA: contexto, tempo e risco","description":"Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.","inLanguage":"pt-BR","datePublished":"2026-11-27","author":{"@type":"Person","name":"Felipe Vieira","url":"https://links.felvieira.com.br/@felvieira.dev"},"image":["https://felvieira.github.io/blog/assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-cover.png"],"isPartOf":{"@id":"https://felvieira.github.io/blog/#blog"}}</script>
+<script src="../assets/js/ads.js" defer></script>
+<!-- SEO_END -->
+</head>
+<body>
+<nav class="top" google-side-rail-overlap="false">
+  <a class="brand" href="../">felvieira's blog</a>
+  <a href="https://github.com/felvieira" style="margin-left:auto">GitHub</a>
+  <a class="nav-cta" href="https://github.com/felvieira/claude-skills-fv">Dev Team Kit</a>
+  <div class="theme-switch" role="group" aria-label="Escolher tema">
+    <button type="button" data-theme-choice="light">Claro</button>
+    <button type="button" data-theme-choice="dark">Escuro</button>
+  </div>
+</nav>
+
+<main class="wrap" google-side-rail-overlap="false">
+  <h1>O orçamento invisível dos agentes de IA: contexto, tempo e risco</h1>
+  <p class="meta">
+    <span class="author">Felipe Vieira</span>
+    <span>27 de novembro de 2026</span>
+    <span class="tag">🇧🇷 Português</span>
+    <span class="tag">8 min de leitura</span>
+  </p>
+
+  <img src="../assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-cover.png" alt="O orçamento invisível dos agentes de IA: contexto, tempo e risco — capa" width="1200" height="675" fetchpriority="high" style="width:100%; height:auto; border-radius:8px; margin: 24px 0 32px; border: 1px solid var(--border)">
+
+  <article>
+<h2>Agentes de IA não precisam de mais ferramentas</h2>
+
+<p>Existe uma tentação comum quando um agente começa a falhar: adicionar outra integração.</p>
+
+<p>Se ele não consulta dados, conectamos uma API. Se não executa tarefas, adicionamos um servidor MCP. Se ainda erra, colocamos mais contexto, mais funções e mais automações.</p>
+
+<p>O resultado costuma ser um agente com muitas capacidades e poucas fronteiras. Ele sabe fazer várias coisas, mas não sabe quando deve fazer cada uma, quais dados pode receber, o que precisa devolver ou quando deve parar.</p>
+
+<p>O problema não é falta de ferramentas. É falta de contrato.</p>
+
+<p>Uma ferramenta disponível pode ser chamada. Uma ferramenta contratada pode ser chamada dentro de condições explícitas. Essa diferença parece pequena, mas muda segurança, previsibilidade, auditoria e manutenção.</p>
+
+<p><img src="../assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-1-contrato-de-ferramenta.png" alt="Agente de IA escolhendo uma ferramenta dentro de limites claros" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Ferramenta disponível não é ferramenta contratada</h2>
+
+<p>Imagine um agente com acesso a uma função chamada <code>enviar_email</code>. A descrição diz apenas: “Envia um email”.</p>
+
+<p>Essa ferramenta está disponível. O agente talvez descubra sozinho que precisa escolher destinatários, assunto, conteúdo, remetente e momento de envio. Também precisa decidir se pode enviar mensagens externas sem revisão humana.</p>
+
+<p>Agora imagine a mesma ferramenta com um contrato:</p>
+
+<ul>
+<li><strong>Quando usar:</strong> somente depois de uma aprovação explícita para comunicação externa.</li>
+<li><strong>Entrada:</strong> destinatário, assunto, texto e identificador da aprovação.</li>
+<li><strong>Saída:</strong> identificador da mensagem e estado do envio.</li>
+<li><strong>Efeitos colaterais:</strong> envia uma mensagem real e não pode desfazer o envio.</li>
+<li><strong>Limites:</strong> apenas domínios autorizados e uma mensagem por aprovação.</li>
+<li><strong>Erro:</strong> não envia nada quando faltar aprovação, destinatário válido ou conteúdo.</li>
+</ul>
+
+<p>Essa ferramenta está contratada. O agente não precisa improvisar sua fronteira de atuação.</p>
+
+<p>Contrato não é documentação bonita para preencher depois. É parte da interface. Ele transforma uma intenção vaga em uma operação verificável.</p>
+
+<p>O mesmo vale para uma ferramenta de leitura. “Consultar pedidos” pode significar consultar todos os pedidos, apenas pedidos de uma conta, dados resumidos ou informações pessoais completas.</p>
+
+<p>Uma versão contratada pode dizer: “Consulta pedidos do cliente autenticado, retorna identificador, estado, data e valor, e nunca expõe endereço ou dados de pagamento”.</p>
+
+<p>Essa definição reduz espaço para interpretação. Também facilita trocar a implementação sem alterar o comportamento esperado pelo agente.</p>
+
+<h2>O contrato mínimo cabe em seis perguntas</h2>
+
+<p>Não é preciso criar um padrão enorme para cada integração. Um contrato pequeno já resolve grande parte dos riscos.</p>
+
+<ol>
+<li><strong>Quando usar?</strong> Descreva intenção e condição de uso. Diga quando a ferramenta é adequada e quando outra ferramenta deve ser escolhida.</li>
+<li><strong>Qual entrada?</strong> Liste campos obrigatórios, formatos, valores permitidos e origem dos dados.</li>
+<li><strong>Qual saída?</strong> Defina estrutura, estados possíveis e significado de cada campo.</li>
+<li><strong>Quais efeitos colaterais?</strong> Informe o que muda fora do agente, como envio, cobrança, criação, alteração ou exclusão.</li>
+<li><strong>Quais limites?</strong> Declare escopo, volume, frequência, contas, ambientes e recursos permitidos.</li>
+<li><strong>Como falha?</strong> Explique erros esperados, ações seguras e situações que exigem intervenção humana.</li>
+</ol>
+
+<p>Considere uma ferramenta hipotética para criar uma tarefa:</p>
+
+<p><code>criar_tarefa(titulo, responsavel, prazo, idempotency_key)</code></p>
+
+<p>O contrato precisa dizer se o prazo usa horário local ou UTC. Precisa dizer se o responsável é obrigatório. Precisa explicar o que acontece quando a tarefa já existe com a mesma chave de idempotência.</p>
+
+<p>Também precisa diferenciar falha de validação, falta de permissão, indisponibilidade temporária e criação concluída. Retornar apenas “deu certo” ou “deu errado” força o agente a adivinhar.</p>
+
+<p>Saída previsível permite decisões previsíveis:</p>
+
+<p><code>{ estado: "criada", tarefa_id: "t-123", repetida: false }</code></p>
+
+<p>Ou:</p>
+
+<p><code>{ estado: "repetida", tarefa_id: "t-123", repetida: true }</code></p>
+
+<p>O agente não precisa criar uma segunda tarefa só porque uma tentativa anterior terminou sem resposta clara.</p>
+
+<p><img src="../assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-2-orcamento-de-contexto.png" alt="Reservatório finito representando o orçamento de contexto de um agente" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Permissão precisa fazer parte do contrato</h2>
+
+<p>Uma ferramenta não deve explicar apenas o que consegue fazer. Deve declarar para quem, em qual ambiente e sob qual autorização pode fazer isso.</p>
+
+<p>“Atualizar cadastro” é uma capacidade ampla demais. O contrato precisa restringir o objeto e o contexto:</p>
+
+<ul>
+<li>atualizar somente cadastro do usuário autenticado;</li>
+<li>alterar apenas telefone e endereço;</li>
+<li>bloquear mudanças em email, identidade e dados financeiros;</li>
+<li>exigir confirmação antes de salvar;</li>
+<li>registrar quem solicitou, quem aprovou e qual versão foi aplicada.</li>
+</ul>
+
+<p>Permissão também pode ser temporal. Uma ferramenta pode operar em ambiente de teste, mas ficar indisponível em produção. Pode ler dados durante uma investigação, mas não exportá-los. Pode preparar uma ação, mas não executá-la.</p>
+
+<p>Essa separação é especialmente importante em automações com efeitos externos. O agente pode montar uma cobrança, uma publicação ou uma alteração de configuração. A execução pode exigir aprovação humana.</p>
+
+<p>Um fluxo seguro pode dividir a operação em duas ferramentas:</p>
+
+<ul>
+<li><code>preparar_publicacao</code> cria rascunho, valida texto e mostra destino;</li>
+<li><code>publicar_aprovado</code> exige identificador do rascunho e aprovação registrada.</li>
+</ul>
+
+<p>O agente continua útil, mas não transforma uma interpretação incerta em ação irreversível.</p>
+
+<p>A aprovação humana também precisa de contrato. Defina o que a pessoa está aprovando, por quanto tempo a aprovação vale, quais campos podem mudar depois e o que invalida a decisão.</p>
+
+<p>Uma aprovação para enviar uma mensagem a um destinatário não deveria autorizar automaticamente outra mensagem para uma lista inteira.</p>
+
+<h2>Idempotência evita que erro vire duplicação</h2>
+
+<p>Agentes operam em ambientes com rede instável, limites de tempo e respostas incompletas. Uma chamada pode ter sido concluída mesmo quando o agente não recebeu a resposta.</p>
+
+<p>Se a ferramenta não for idempotente, a tentativa de recuperação pode duplicar uma cobrança, criar duas tarefas ou enviar o mesmo aviso várias vezes.</p>
+
+<p>Para operações de escrita, use uma chave que identifique a intenção:</p>
+
+<p><code>criar_pagamento(valor, cliente_id, idempotency_key)</code></p>
+
+<p>O contrato deve informar que chamadas repetidas com a mesma chave retornam o resultado original. Também deve rejeitar a reutilização da chave com parâmetros diferentes.</p>
+
+<p>Idempotência não resolve todos os problemas. Ainda é preciso definir limites, expiração da chave e comportamento em falhas parciais. Mas ela transforma repetição de uma ameaça em uma propriedade controlada.</p>
+
+<h2>Observabilidade precisa mostrar intenção e efeito</h2>
+
+<p>Um log que registra apenas “ferramenta chamada” não explica muito. Para revisar uma decisão, precisamos saber qual intenção chegou, quais dados foram usados, qual permissão foi aplicada e qual efeito aconteceu.</p>
+
+<p>Registre, conforme o nível de sensibilidade permitido:</p>
+
+<ul>
+<li>identificador da execução;</li>
+<li>ferramenta e versão do contrato;</li>
+<li>agente, usuário ou serviço solicitante;</li>
+<li>entrada validada, sem expor segredos;</li>
+<li>aprovação relacionada;</li>
+<li>resultado e duração;</li>
+<li>erro classificado;</li>
+<li>efeito externo confirmado ou não confirmado.</li>
+</ul>
+
+<p>Não é necessário despejar todo contexto em cada log. O objetivo é reconstruir a operação sem coletar dados que não precisam estar ali.</p>
+
+<p>Mensagens de erro também fazem parte da interface. “Erro interno” não orienta o próximo passo. “Permissão insuficiente para alterar ambiente de produção” permite interromper, pedir aprovação ou escolher outro caminho.</p>
+
+<p><img src="../assets/images/2026-11-24-orcamento-invisivel-agentes-ia-contexto-tempo-risco-3-circuito-de-risco.png" alt="Agente de IA atravessando checkpoints de contexto, tempo e risco" style="width:100%; height:auto; border-radius:8px; margin: 24px 0; border: 1px solid var(--border)"></p>
+
+<h2>Reversão deve existir antes da primeira execução</h2>
+
+<p>Nem toda ação pode ser desfeita. O contrato precisa dizer isso claramente.</p>
+
+<p>Quando houver reversão, defina a operação correspondente:</p>
+
+<p><code>criar_regra</code> pode ter <code>remover_regra</code> ou <code>restaurar_versao_anterior</code>.</p>
+
+<p>Quando não houver reversão, reduza o alcance da ação. Prefira rascunho, simulação, lote pequeno ou ambiente de teste. Exija aprovação para o passo que cruza a fronteira.</p>
+
+<p>Também existem efeitos parcialmente reversíveis. Uma alteração de configuração pode ser restaurada, mas o período de indisponibilidade não pode ser recuperado. Um email pode ser marcado como enviado, mas não retirado da caixa de entrada.</p>
+
+<p>O contrato deve tornar esse custo visível antes da execução, não depois do incidente.</p>
+
+<h2>Revise ferramentas como código de produção</h2>
+
+<p>Contratos envelhecem. A API muda, permissões aumentam, campos ganham novos significados e uma ferramenta passa a ser usada em contextos que ninguém imaginou.</p>
+
+<p>Revise cada ferramenta quando:</p>
+
+<ul>
+<li>o comportamento real divergir do contrato;</li>
+<li>um novo efeito colateral aparecer;</li>
+<li>o agente escolher a ferramenta em situações erradas;</li>
+<li>houver mudança de API, escopo ou permissão;</li>
+<li>o custo de observar ou reverter a operação aumentar;</li>
+<li>uma ferramenta mais simples cobrir a mesma necessidade.</li>
+</ul>
+
+<p>Manter ferramenta não significa mantê-la disponível para sempre. Uma integração pode ser aposentada quando não possui dono, não tem métricas úteis, depende de credenciais antigas ou oferece risco maior que seu benefício.</p>
+
+<p>Antes de remover, procure todos os chamadores. Bloqueie novas chamadas. Emita aviso claro para consumidores. Migre para o contrato substituto. Preserve registros necessários para auditoria. Só depois remova a implementação.</p>
+
+<p>Versão de contrato ajuda durante a transição. O agente pode continuar usando a versão anterior enquanto consumidores migram, desde que a diferença seja explícita e o prazo de retirada esteja definido.</p>
+
+<p>Não aposente uma ferramenta apenas escondendo-a da lista. Revogue permissões, desligue credenciais, remova rotas e confirme que nenhum fluxo ainda depende dela.</p>
+
+<h2>Checklist para contratar uma ferramenta</h2>
+
+<p>Antes de entregar uma nova integração a um agente, responda:</p>
+
+<ul>
+<li>Qual problema específico esta ferramenta resolve?</li>
+<li>Quando o agente deve usá-la?</li>
+<li>Quando ele deve escolher outra ferramenta ou pedir ajuda?</li>
+<li>Quais entradas são obrigatórias e quais são proibidas?</li>
+<li>Qual saída permite decidir o próximo passo sem adivinhação?</li>
+<li>Quais dados sensíveis entram e saem?</li>
+<li>Quais efeitos acontecem fora do sistema?</li>
+<li>Quais permissões limitam a operação?</li>
+<li>Quais ações exigem aprovação humana?</li>
+<li>Chamadas repetidas são seguras?</li>
+<li>Como o sistema registra intenção, autorização, resultado e erro?</li>
+<li>Existe simulação, rascunho ou reversão?</li>
+<li>Qual limite impede volume ou escopo excessivo?</li>
+<li>Quem revisa o contrato?</li>
+<li>Como a ferramenta será desativada?</li>
+</ul>
+
+<p>Se essas respostas não cabem em uma página, o problema talvez não seja a falta de documentação. Talvez a ferramenta esteja tentando fazer coisas demais.</p>
+
+<p>Agentes melhores não nascem de catálogos maiores. Nascem de fronteiras mais claras.</p>
+
+<p>Uma ferramenta contratada sabe quando entra, o que recebe, o que devolve, o que muda e quando deve falhar. Isso dá ao agente menos espaço para improvisar e dá ao time mais espaço para confiar.</p>
+
+<p>Antes de adicionar a próxima integração, escreva o contrato da atual. Muitas vezes, a maior melhoria de um agente não está em dar mais uma capacidade a ele. Está em tornar a capacidade que já existe previsível.</p>
+
+  </article>
+
+  <section class="share-block">
+    <p class="share-label">📣 Gostou? Compartilha no LinkedIn</p>
+    <p class="share-hook">Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.</p>
+    <div class="share-actions">
+      <button type="button" class="copy-share">📋 Copiar resumo e link</button>
+      <a class="share-linkedin" href="https://www.linkedin.com/feed/?shareActive=true" target="_blank" rel="noopener">in Abrir LinkedIn</a>
+    </div>
+    <div class="share-text">Agentes de IA não gastam apenas tokens: cada decisão consome contexto, tempo e margem para errar. Veja como tornar esse orçamento visível.
+
+Leia o post completo: https://felvieira.github.io/blog/posts/2026-11-27-orcamento-invisivel-agentes-ia-contexto-tempo-risco.html</div>
+  </section>
+
+  <footer class="post">
+    <span>27 de novembro de 2026</span>
+    <span><a href="../">Todos os artigos</a> · <a href="https://links.felvieira.com.br/@felvieira.dev">Meus links</a></span>
+  </footer>
+</main>
+<script src="../assets/js/share.js"></script>
+</body>
+</html>
